@@ -1,0 +1,7 @@
+{
+  "expectedHtml": "<a class=\"cui-tag cui-tag--brand cui-tag--small cui-tag--linked\" href=\"?scope=customer&amp;active=1\" data-cui-component=\"tag\" data-cui-tone=\"brand\"><span class=\"cui-tag__label\">Customer-facing</span></a>\n",
+  "href": "?scope=customer&active=1",
+  "label": "Customer-facing",
+  "size": "small",
+  "tone": "brand"
+}

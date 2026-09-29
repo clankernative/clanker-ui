@@ -1,0 +1,47 @@
+.cui-form-field {
+  display: grid;
+  gap: var(--cui-form-field-gap, var(--cui-space-2, 0.5rem));
+  min-inline-size: 0;
+  max-inline-size: var(--cui-form-field-measure, 42rem);
+}
+.cui-form-field__label {
+  display: block;
+  color: var(--cui-form-field-label-text, var(--cui-text, currentColor));
+  font-size: var(--cui-form-field-label-size, var(--cui-font-size-small, 0.875rem));
+  font-weight: var(--cui-form-field-label-weight, var(--cui-font-weight-medium, 500));
+  line-height: 1.25;
+}
+.cui-form-field__required { color: var(--cui-form-field-required-text, var(--cui-danger, #b42318)); }
+.cui-form-field__control {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--cui-form-field-height, 2.5rem);
+  padding: var(--cui-form-field-control-padding, var(--cui-space-2, 0.5rem) var(--cui-space-3, 0.75rem));
+  border: 1px solid var(--cui-form-field-border, var(--cui-border, #8a8f98));
+  border-radius: var(--cui-form-field-radius, var(--cui-radius-control, 0.375rem));
+  background: var(--cui-form-field-background, var(--cui-surface, #fff));
+  box-shadow: var(--cui-form-field-shadow, none);
+  color: var(--cui-form-field-text, var(--cui-text, #17191c));
+  font: inherit;
+  line-height: 1.4;
+}
+.cui-form-field__control::placeholder { color: var(--cui-form-field-placeholder-text, var(--cui-text-muted, #626a73)); opacity: 1; }
+.cui-form-field__control:hover:not(:disabled, :focus-visible) { border-color: var(--cui-form-field-hover-border, var(--cui-border-strong, #626a73)); }
+.cui-form-field__control:focus-visible {
+  border-color: var(--cui-form-field-focus-border, var(--cui-accent, #2457c5));
+  outline: var(--cui-form-field-focus-width, 2px) solid var(--cui-form-field-focus-ring, var(--cui-accent, #2457c5));
+  outline-offset: var(--cui-form-field-focus-offset, 2px);
+}
+.cui-form-field__control--textarea { min-block-size: 7rem; max-block-size: 24rem; resize: vertical; }
+.cui-form-field--invalid .cui-form-field__control { border-color: var(--cui-form-field-error-border, var(--cui-danger, #b42318)); }
+.cui-form-field__description { display: grid; gap: var(--cui-space-1, 0.25rem); }
+.cui-form-field__hint, .cui-form-field__error {
+  margin: 0;
+  font-size: var(--cui-form-field-message-size, var(--cui-font-size-small, 0.875rem));
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.cui-form-field__hint { color: var(--cui-form-field-hint-text, var(--cui-text-secondary, #4b5563)); }
+.cui-form-field__error { color: var(--cui-form-field-error-text, var(--cui-danger, #b42318)); font-weight: var(--cui-font-weight-medium, 500); }
+@media (prefers-reduced-motion: reduce) { .cui-form-field__control { transition: none; } }

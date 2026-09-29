@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "name": "alert",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Explains contextual information, success, warnings, or failures with an optional recovery navigation link.",
+  "keywords": ["alert", "callout", "error", "message", "recovery"],
+  "agent": {
+    "useWhen": "A page region needs a short explanation, consequence, or real recovery destination; opt into polite or assertive announcement only when the host inserts a dynamic message.",
+    "avoidWhen": "The message is a transient toast, field validation, empty result, dismissible notice, command, or lifecycle-driven interaction.",
+    "composeWith": ["button", "form-field", "icon"]
+  },
+  "contract": {
+    "role": "section",
+    "variants": ["info", "success", "warning", "danger"],
+    "requiredFields": ["title", "body", "tone"],
+    "invariants": [
+      "Configuration explicitly selects one of info, success, warning, or danger and announcement policy; title, body, and optional recovery text/destination are app-owned presentation data.",
+      "Title and body are required nonblank plain text and are escaped; markup, template expressions, and event attributes are never admitted from values.",
+      "The tone selects a decorative icon from the closed package catalog: info uses info, success uses check, warning and danger use alert. Text remains meaningful without color or icon.",
+      "recoveryLabel and recoveryHref must be supplied together and render as one real navigation link; unsafe destinations are rejected. No command or dismissal is created.",
+      "Announcement defaults to none; only explicit polite or assertive choices create the corresponding role and aria-live value. Announcement choice is configuration, not a browser-managed lifecycle.",
+      "The section contains a fixed level-two title heading, description, decorative icon, and optional recovery link in source order; compose it where an h2 is appropriate. The app owns any dynamic replacement lifecycle.",
+      "There is no browser-local state, dismissal, event output, script, or hidden follow-up behavior. The fragment requires exactly one [[attributes]], [[icon]], [[title]], [[body]], and [[recovery]] slot and is expanded in one pass."
+    ]
+  },
+  "tokens": [
+    "--cui-alert-body-gap", "--cui-alert-danger-background", "--cui-alert-danger-border", "--cui-alert-danger-text",
+    "--cui-alert-gap", "--cui-alert-info-background", "--cui-alert-info-border", "--cui-alert-info-text",
+    "--cui-alert-measure", "--cui-alert-padding", "--cui-alert-radius", "--cui-alert-recovery-focus-offset", "--cui-alert-recovery-focus-ring", "--cui-alert-recovery-focus-width",
+    "--cui-alert-success-background", "--cui-alert-success-border", "--cui-alert-success-text",
+    "--cui-alert-title-size", "--cui-alert-title-weight", "--cui-alert-warning-background", "--cui-alert-warning-border", "--cui-alert-warning-text"
+  ],
+  "dependencies": ["icon"],
+  "assets": {
+    "template": "components/alert/fragment.html",
+    "styles": "components/alert/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/alert/fixtures/info.json",
+    "components/alert/fixtures/success.json",
+    "components/alert/fixtures/warning.json",
+    "components/alert/fixtures/danger.json",
+    "components/alert/fixtures/recovery.json",
+    "components/alert/fixtures/escaped.json",
+    "components/alert/fixtures/polite.json",
+    "components/alert/fixtures/assertive.json"
+  ]
+}

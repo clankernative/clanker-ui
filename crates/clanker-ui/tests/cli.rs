@@ -24,7 +24,15 @@ fn an_agent_can_discover_and_verify_static_components() {
         .iter()
         .map(|component| component["id"].as_str().unwrap())
         .collect::<Vec<_>>();
-    for name in ["badge", "divider", "status-indicator"] {
+    for name in [
+        "badge",
+        "divider",
+        "status-indicator",
+        "tag",
+        "alert",
+        "progress",
+        "form-field",
+    ] {
         let expected = format!("@clanker/vanilla/{name}");
         assert!(ids.contains(&expected.as_str()));
         let (ok, described) = run(&["describe", name, "--lock", lock]);
@@ -42,7 +50,7 @@ fn an_agent_can_discover_and_verify_static_components() {
             .as_array()
             .unwrap()
             .len(),
-        5
+        9
     );
 }
 

@@ -121,14 +121,14 @@ pub fn render(instance: &StatusIndicatorInstance, fragment: &str) -> Result<Stri
             )
         })
         .unwrap_or_default();
-    let output = fragment
-        .replace("[[attributes]]", &attributes)
-        .replace("[[label]]", &escape_html(&instance.label))
-        .replace("[[detail]]", &detail);
-    if output.contains("[[") {
-        return Err("status-indicator fragment contains an unsupported slot".into());
-    }
-    Ok(output)
+    crate::fragment::fill(
+        fragment,
+        &[
+            ("[[attributes]]", &attributes),
+            ("[[label]]", &escape_html(&instance.label)),
+            ("[[detail]]", &detail),
+        ],
+    )
 }
 
 #[cfg(test)]

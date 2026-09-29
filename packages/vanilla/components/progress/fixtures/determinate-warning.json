@@ -1,0 +1,10 @@
+{
+  "expectedHtml": "<div class=\"cui-progress cui-progress--warning cui-progress--regular cui-progress--determinate\" data-cui-component=\"progress\" data-cui-tone=\"warning\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Waiting for approval</span><span class=\"cui-progress__suffix\">Review pending</span></div><progress class=\"cui-progress__track\" value=\"65\" max=\"100\" aria-label=\"Waiting for approval\"></progress></div>\n",
+  "label": "Waiting for approval",
+  "maximum": 100,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "Review pending",
+  "tone": "warning",
+  "value": 65
+}

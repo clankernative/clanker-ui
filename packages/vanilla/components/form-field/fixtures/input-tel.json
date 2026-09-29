@@ -1,0 +1,10 @@
+{
+  "autocomplete": "tel",
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"phone\">Telephone</label><input class=\"cui-form-field__control\" id=\"phone\" name=\"phone\" type=\"tel\" value=\"\" autocomplete=\"tel\" maxlength=\"40\" readonly></div>\n",
+  "id": "phone",
+  "inputType": "tel",
+  "label": "Telephone",
+  "maxLength": 40,
+  "name": "phone",
+  "readonly": true
+}

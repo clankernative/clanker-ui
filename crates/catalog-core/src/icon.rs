@@ -116,13 +116,10 @@ pub fn render(
             None => " aria-hidden=\"true\"".into(),
         }
     );
-    let output = fragment
-        .replace("[[attributes]]", &attributes)
-        .replace("[[geometry]]", geometry);
-    if output.contains("[[") {
-        return Err("icon fragment contains an unsupported slot".into());
-    }
-    Ok(output)
+    crate::fragment::fill(
+        fragment,
+        &[("[[attributes]]", &attributes), ("[[geometry]]", geometry)],
+    )
 }
 
 #[cfg(test)]
@@ -156,6 +153,17 @@ mod tests {
         assert!(labeled.contains("role=\"img\""));
         assert!(labeled.contains("aria-label=\"Status &amp; &lt;check&gt;&quot;\""));
         assert!(!labeled.contains("aria-hidden"));
+    }
+
+    #[test]
+    fn slot_looking_labels_cannot_inject_geometry_into_attributes() {
+        let instance = IconInstance {
+            label: Some("[[geometry]] & <check>".into()),
+            ..icon()
+        };
+        let rendered = render(&instance, FRAGMENT, &icons()).unwrap();
+        assert!(rendered.contains("aria-label=\"[[geometry]] &amp; &lt;check&gt;\""));
+        assert_eq!(rendered.matches("<path").count(), 1);
     }
 
     #[test]

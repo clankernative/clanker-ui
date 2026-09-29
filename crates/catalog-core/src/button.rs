@@ -172,7 +172,11 @@ pub fn safe_href(value: &str) -> bool {
             return matches!(scheme.to_ascii_lowercase().as_str(), "http" | "https")
                 && value[scheme.len()..].starts_with("://")
                 && !value.contains(char::is_whitespace)
-                && url::Url::parse(value).is_ok_and(|url| url.host_str().is_some());
+                && url::Url::parse(value).is_ok_and(|url| {
+                    url.host_str().is_some()
+                        && url.username().is_empty()
+                        && url.password().is_none()
+                });
         }
     }
     !value.contains(char::is_whitespace)
@@ -213,6 +217,8 @@ mod tests {
             " https://example.test/",
             "/path\nwith-break",
             "https://example.test/with space",
+            "https://user:secret@example.test/",
+            "https://user@example.test/",
         ] {
             let mut button = instance();
             button.destination = Destination::Link {

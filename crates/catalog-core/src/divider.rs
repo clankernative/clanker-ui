@@ -110,13 +110,10 @@ pub fn render(instance: &DividerInstance, fragment: &str) -> Result<String, Stri
             )
         })
         .unwrap_or_default();
-    let output = fragment
-        .replace("[[attributes]]", &attributes)
-        .replace("[[label]]", &label);
-    if output.contains("[[") {
-        return Err("divider fragment contains an unsupported slot".into());
-    }
-    Ok(output)
+    crate::fragment::fill(
+        fragment,
+        &[("[[attributes]]", &attributes), ("[[label]]", &label)],
+    )
 }
 
 #[cfg(test)]

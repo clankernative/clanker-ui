@@ -1,0 +1,6 @@
+{
+  "expectedHtml": "<span class=\"cui-tag cui-tag--neutral cui-tag--small\" data-cui-component=\"tag\" data-cui-tone=\"neutral\"><span class=\"cui-tag__label\">Compact metadata</span></span>\n",
+  "label": "Compact metadata",
+  "size": "small",
+  "tone": "neutral"
+}

@@ -16,6 +16,8 @@
     "variants": ["small", "medium", "large"],
     "requiredFields": [],
     "invariants": [
+      "Configuration supplies a closed icon name, size and optional accessible label; there is no browser-local state or event output.",
+      "Composition belongs to the surrounding app control or text; replacing an icon during a server patch requires no component lifecycle hook.",
       "Icon names are a closed set loaded from the package icons.json resource; arbitrary SVG is never accepted.",
       "Icons are decorative and hidden from assistive technology by default.",
       "A standalone meaningful icon requires a nonblank text label and is exposed as role img with aria-label.",

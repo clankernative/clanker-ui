@@ -1,14 +1,14 @@
 # Clanker Native UI
 
-**Status:** provisional package and build-time Native adapter for five components. The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready.
+**Status:** provisional package and build-time Native adapter for nine components. The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready.
 
-Clanker Native UI is an optional, agent-first component discovery and assembly system. It helps an app-building agent find a component that fits a user's intent, read its contract, compose it for the app's target, and verify the result. The vanilla package provides Button, Icon, Badge, Divider, and Status Indicator with target-specific HTML and CSS. Native JavaScript interactions and Datastar integration are later slices. Other authors could publish their own packages and target adapters, including React catalogs, without making React a dependency of Clanker Native.
+Clanker Native UI is an optional, agent-first component discovery and assembly system. It helps an app-building agent find a component that fits a user's intent, read its contract, compose it for the app's target, and verify the result. The vanilla package provides Button, Icon, Badge, Divider, Status Indicator, Tag, Alert, Progress, and Form Field with target-specific HTML and CSS. Native controls integrate with the host's existing Datastar form and patch transport; component-owned browser modules and signals remain a later slice. Other authors could publish their own packages and target adapters, including React catalogs, without making React a dependency of Clanker Native.
 
 Clanker Native remains usable without Clanker Native UI. Apps keep ownership of their domain models, queries, commands, routes, presentation, and design flavor. Clanker Native UI describes and supplies UI components; it does not become a second app-operation catalog or an arbitrary callback SDK.
 
 ## Try the local proof
 
-The Rust workspace has a pure `catalog-core` crate and a `clanker-ui` discovery CLI. Clanker Native's build owns target-specific expansion into its private staging area. The ready vanilla components are `button`, `icon`, `badge`, `divider`, and `status-indicator`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/clanker-ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
+The Rust workspace has a pure `catalog-core` crate and a `clanker-ui` discovery CLI. Clanker Native's build owns target-specific expansion into its private staging area. The ready vanilla components are `button`, `icon`, `badge`, `divider`, `status-indicator`, `tag`, `alert`, `progress`, and `form-field`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/clanker-ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
 
 From this directory:
 
@@ -44,6 +44,38 @@ The new static declarations use literal text only; they do not yet accept typed 
 ```
 
 Badge requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, `danger`, and `running`, and can suppress or override its decorative icon with `show-icon` or a closed-catalog `icon` name. Divider defaults to a horizontal, unlabelled separator; it accepts a `start`, `center`, or `end` label alignment and rejects labels on vertical separators. Status Indicator requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, and `danger`, plus optional `detail`, `size` (`small` or `large`), and `pulse`; it is static, not an ARIA live region. Each component is noninteractive, checks unknown attributes, and uses app-overridable `--cui-*` tokens. A real GoLinks build in `../golinks-clanker-ui-button` exercises all three. [Desktop](docs/screenshots/golinks-static-desktop.png) and [mobile](docs/screenshots/golinks-static-mobile.png) captures show the local proof with an empty sample list, not production data.
+
+## Form Field, Tag, Alert, and Progress
+
+The `0.3.0` package adds four Native controls. The local GoLinks proof has a **UI Demo** navigation entry at `/ui-demo`, covering all nine components, long copy, field errors and readonly values, tag counts and links, alert recovery, and measured/unknown progress. Sample task and error states are labeled illustrative; its create form uses the real app-owned command in the local instance. The dashboard and detail forms also use Form Field, including checked `link.url` and `link.description` value bindings. No generated component markup is pasted into the app. [Desktop](docs/screenshots/golinks-demo-desktop.png), [mobile](docs/screenshots/golinks-demo-mobile.png), and [Tag/Alert/Progress detail](docs/screenshots/golinks-demo-new-components.png) captures use a disposable local instance with two test links, not production data.
+
+```html
+<cui-form-field id="edit-url" name="url" label="Destination URL" input-type="url" value="{{ link.url }}" required="true" />
+<cui-form-field id="edit-description" name="description" label="Description" kind="textarea" value="{{ link.description }}" />
+<cui-tag label="Engineering" tone="brand" count="12" count-label="12 links" />
+<cui-alert tone="warning" title="Review your links" body="Some destinations may be out of date." recovery-label="Open dashboard" recovery-route="links" />
+<cui-progress label="Importing links" state="determinate" value="42" maximum="100" suffix="42 of 100 links" />
+```
+
+- **Form Field:** required stable `id`, `name`, and visible `label`; native input types `text`, `email`, `url`, `number`, `password`, `search`, `date`, and `tel`, or `kind="textarea"`. Optional `hint`, `error`, `placeholder`, `autocomplete`, `required`, `readonly`, bounded `maxlength`, and textarea `rows`. Hint/error IDs derive from the field ID; an error sets `aria-invalid`. Disabled named controls and hidden controls are deliberately not exposed. The host still checks the control against the command's input carrier; a supported visual input type is not permission to bind it to every command field. Do not preload a password with a stored secret.
+- **Tag:** tones `neutral`, `brand`, `info`, `success`, `warning`, `danger`; sizes `small`, `medium`, `large`; optional closed `icon`. `count` requires `count-label`. Use an admitted `href` or app-owned `route` for navigation. An otherwise static tag can have `remove-href`/`remove-route` paired with `remove-label`; this is navigation, not client-side dismissal. Nested links are rejected.
+- **Alert:** required `title`, `body`, and `tone` (`info`, `success`, `warning`, `danger`). The title is a fixed `h2`; compose it at an appropriate heading level. A recovery destination (`recovery-href` or `recovery-route`) requires `recovery-label`. Announcement defaults to none; explicit `announcement="polite"` or `"assertive"` opts into live semantics. No dismissal or command lifecycle is claimed.
+- **Progress:** required task `label` and explicit `state`. Determinate progress requires finite literal `value` and `maximum`, with `maximum > 0` and `0 <= value <= maximum`; invalid values fail rather than clamp. Indeterminate progress omits both numbers and any `suffix`. Optional `detail`, semantic `tone`, and `size="regular"` or `"compact"`. Numeric page bindings are not admitted in this slice: the host would need a checked runtime range boundary before promising them.
+
+## Ownership and patch contracts
+
+A component contract distinguishes configuration, app-owned presentation data, browser-local state, native outputs, composition, and lifecycle in its manifest invariants. Typed Rust instances enforce the portable contract; the Native adapter separately enforces declaration and host admission. Fixture verification does not prove that arbitrary app data meets a nonblank-label requirement: app queries must supply meaningful accessible text.
+
+| Component | State owner | Output and lifecycle |
+| --- | --- | --- |
+| Button | App supplies busy/disabled data; no component signal | Native activation, submission, or admitted navigation; no mount hook |
+| Icon, Badge, Divider, Status Indicator | App supplies presentation; no internal state | Ordinary markup; no events or announcement lifecycle |
+| Tag | App supplies metadata/filter state | Optional navigation only; removal does not silently dismiss |
+| Alert | App supplies message/recovery state | Optional navigation and explicit announcement policy |
+| Progress | App owns measured task state | Native progress semantics; no polling or invented numeric state |
+| Form Field | Browser owns its current draft; app owns initial value and validation | Native control change and surrounding form submission; no separate command transport |
+
+Keep editable controls outside app-owned `data-live` query regions. The host patches live data independently, replaces the submitted form on success, and preserves a rejected draft. Stable IDs and non-overlapping region ownership matter; components do not add a second Datastar state catalog. All fragments use single-pass substitution so slot-looking text remains text. A future browser-local component must define its signal namespace, reset/retention rules, controlled bindings, outputs, no-JS behavior, and patch cleanup before registration; these native/static ports do not prove that lifecycle.
 
 ## What an agent should do
 
@@ -109,7 +141,7 @@ Start by importing **catalog knowledge for one component**: purpose, category, d
 Prove the system in bounded steps:
 
 1. Define the local package/component manifest and lock for one component. Test opt-in discovery, omission of unmarked files, and diagnostics for malformed declared entries without claiming 54 usable Native components.
-2. Implement **button** and **icon**, then the independent static **badge**, **divider**, and **status-indicator** slices with app-owned token overrides, closed icon catalog, rendering fixtures, Native admission, and a real app proof. Port an interactive component only after the native browser-module lifecycle and no-JS fallback work.
+2. Implement **button** and **icon**, then the independent static **badge**, **divider**, and **status-indicator** slices, followed by **tag**, **alert**, **progress**, and native **form-field**, with app-owned token overrides, closed icon catalog, golden rendering fixtures, Native admission, and a real app proof. Port an interactive component only after the native browser-module lifecycle and no-JS fallback work.
 3. Prove the CLI in this folder without modifying Clanker Native: read a locally locked package, preview and materialize deterministic output into a separate staging directory, reject conflicts, and validate the complete output graph. Do not silently copy into an app or fetch an unpinned Git branch during a build.
 4. After that proof, validate and extend the optional Clanker Native adapter around its existing UI packaging seam (`../platform/crates/xtask/src/build_native.rs`), generated template handles, page/form checks, and pinned resource catalog. Validate a real app build and browser flow before claiming integration. The current host accepts relative, admitted `ui/` JavaScript imports, not an external package catalog (`../platform/crates/day2/src/web_resources.rs`). Keep Native's runtime admission and app operation catalog authoritative.
 5. Expand the migrated catalog by tier—static controls, layout/data, then overlays and focused interactions—and only then test an independently authored package or second rendering target. Add semantic ranking if structured search and the generated category tree prove insufficient.

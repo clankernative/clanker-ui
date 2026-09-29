@@ -16,6 +16,8 @@
     "variants": ["neutral", "info", "success", "warning", "danger", "running"],
     "requiredFields": ["label", "tone"],
     "invariants": [
+      "Configuration supplies tone and decorative icon options; the visible label is app-owned presentation data, currently literal-only in Native declarations.",
+      "The component owns no browser-local state, events, commands or patch lifecycle; it composes beside the app-owned subject and is replaced as ordinary server-rendered content.",
       "A visible nonblank label is always present and status remains understandable without color.",
       "Badges are static, noninteractive content and do not announce changes.",
       "Icons are decorative; the badge label carries the meaning.",

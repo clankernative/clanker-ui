@@ -1,0 +1,9 @@
+{
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"seats\">Number of seats <span class=\"cui-form-field__required\" aria-hidden=\"true\">*</span></label><input class=\"cui-form-field__control\" id=\"seats\" name=\"seats\" type=\"number\" value=\"3\" required></div>\n",
+  "id": "seats",
+  "inputType": "number",
+  "label": "Number of seats",
+  "name": "seats",
+  "required": true,
+  "value": "3"
+}

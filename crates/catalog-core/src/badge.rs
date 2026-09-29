@@ -129,14 +129,14 @@ pub fn render(
         instance.tone.as_str(),
         instance.tone.as_str()
     );
-    let output = fragment
-        .replace("[[attributes]]", &attributes)
-        .replace("[[icon]]", &icon_markup)
-        .replace("[[label]]", &escape(&instance.label));
-    if output.contains("[[") {
-        return Err("badge fragment contains an unsupported slot".into());
-    }
-    Ok(output)
+    crate::fragment::fill(
+        fragment,
+        &[
+            ("[[attributes]]", &attributes),
+            ("[[icon]]", &icon_markup),
+            ("[[label]]", &escape(&instance.label)),
+        ],
+    )
 }
 
 #[cfg(test)]

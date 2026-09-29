@@ -16,6 +16,9 @@
     "variants": ["primary", "secondary", "danger", "quiet"],
     "requiredFields": [],
     "invariants": [
+      "Configuration selects kind, appearance, icon and literal destination; labels and checked busy/disabled page bindings are app-owned presentation inputs.",
+      "The component owns no Datastar signals or persistent state. Output is a native button activation, form submission, or admitted navigation; the app owns handlers, commands, routes and authorization.",
+      "The component has no mount/unmount lifecycle or browser module; a server patch replaces presentation, not app behavior.",
       "A visible nonblank label names the action; an icon is decorative.",
       "Action buttons do not submit; submit buttons belong inside an admitted command form.",
       "Links have safe destinations; disabled links have no href.",

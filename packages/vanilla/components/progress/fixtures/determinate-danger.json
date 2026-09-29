@@ -1,0 +1,10 @@
+{
+  "expectedHtml": "<div class=\"cui-progress cui-progress--danger cui-progress--regular cui-progress--determinate\" data-cui-component=\"progress\" data-cui-tone=\"danger\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Storage quota used</span><span class=\"cui-progress__suffix\">Approaching limit</span></div><progress class=\"cui-progress__track\" value=\"92\" max=\"100\" aria-label=\"Storage quota used\"></progress></div>\n",
+  "label": "Storage quota used",
+  "maximum": 100,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "Approaching limit",
+  "tone": "danger",
+  "value": 92
+}

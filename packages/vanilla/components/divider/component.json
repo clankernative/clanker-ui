@@ -16,6 +16,8 @@
     "variants": ["horizontal", "vertical"],
     "requiredFields": [],
     "invariants": [
+      "Configuration supplies orientation, alignment and optional literal label; there is no server-data binding, browser-local state or event output.",
+      "The app owns grouped content and composition; server patches replace the separator as ordinary markup without mount or unmount hooks.",
       "Dividers are noninteractive and expose role separator with their horizontal or vertical aria-orientation.",
       "Horizontal dividers may have a nonblank text label aligned start, center, or end; vertical dividers cannot have labels. Label alignment is start, center, or end, defaulting to center.",
       "Unlabelled horizontal dividers render as one uninterrupted rule.",

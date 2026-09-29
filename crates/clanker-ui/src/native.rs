@@ -1,8 +1,12 @@
 use crate::ports::{Bundle, LoadedPackage, PackageSource};
+use catalog_core::alert::{self, AlertInstance};
 use catalog_core::badge::{self, BadgeInstance};
 use catalog_core::divider::{self, Alignment, DividerInstance, Orientation};
+use catalog_core::form_field::{self, FieldKind, FormFieldInstance};
 use catalog_core::icon::{self, IconInstance, IconSize};
+use catalog_core::progress::{self, ProgressInstance};
 use catalog_core::status_indicator::{self, StatusIndicatorInstance};
+use catalog_core::tag::{self, TagInstance};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
@@ -249,6 +253,101 @@ impl NativeAdapter {
                         ));
                     }
                     covered.insert(tone.into());
+                    continue;
+                }
+                if ["tag", "alert", "progress"].contains(&component.name.as_str()) {
+                    let bytes = source.asset(package, fixture_path)?;
+                    let icons: BTreeMap<String, String> =
+                        serde_json::from_slice(&source.asset(package, "icons.json")?)
+                            .map_err(|error| format!("icons.json: {error}"))?;
+                    let (rendered, expected, variants) = match component.name.as_str() {
+                        "tag" if component.contract.role == "metadata-label" => {
+                            let fixture: StaticFixture<TagInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                tag::render(&fixture.instance, &template, &icons)?,
+                                fixture.expected_html,
+                                vec![
+                                    fixture.instance.tone.as_str(),
+                                    fixture.instance.size.as_str(),
+                                ],
+                            )
+                        }
+                        "alert" if component.contract.role == "section" => {
+                            let fixture: StaticFixture<AlertInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                alert::render(&fixture.instance, &template, &icons)?,
+                                fixture.expected_html,
+                                vec![fixture.instance.tone.as_str()],
+                            )
+                        }
+                        "progress" if component.contract.role == "progressbar" => {
+                            let fixture: StaticFixture<ProgressInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                progress::render(&fixture.instance, &template)?,
+                                fixture.expected_html,
+                                vec![
+                                    fixture.instance.state.as_str(),
+                                    fixture.instance.tone.as_str(),
+                                    fixture.instance.size.as_str(),
+                                ],
+                            )
+                        }
+                        _ => return Err(format!("{} has an incompatible role", component.name)),
+                    };
+                    if rendered != expected {
+                        return Err(format!(
+                            "{fixture_path}: rendered HTML differs from expected fixture"
+                        ));
+                    }
+                    for variant in variants {
+                        if !component
+                            .contract
+                            .variants
+                            .iter()
+                            .any(|item| item == variant)
+                        {
+                            return Err(format!(
+                                "{fixture_path}: unsupported {} variant {variant}",
+                                component.name
+                            ));
+                        }
+                        covered.insert(variant.into());
+                    }
+                    continue;
+                }
+                if component.name == "form-field"
+                    && component.contract.role == "native form control"
+                {
+                    let fixture: StaticFixture<FormFieldInstance> =
+                        serde_json::from_slice(&source.asset(package, fixture_path)?)
+                            .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    let variant = if fixture.instance.kind == FieldKind::Textarea {
+                        "textarea"
+                    } else {
+                        fixture.instance.input_type.unwrap_or_default().as_str()
+                    };
+                    if !component
+                        .contract
+                        .variants
+                        .iter()
+                        .any(|item| item == variant)
+                    {
+                        return Err(format!("{fixture_path}: unsupported form field kind"));
+                    }
+                    let rendered = form_field::render(&fixture.instance, &template)
+                        .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    if rendered != fixture.expected_html {
+                        return Err(format!(
+                            "{fixture_path}: rendered HTML differs from expected fixture"
+                        ));
+                    }
+                    covered.insert(variant.into());
                     continue;
                 }
                 if component.contract.role != "button" {

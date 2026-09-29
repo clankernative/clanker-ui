@@ -1,0 +1,6 @@
+{
+  "expectedHtml": "<span class=\"cui-tag cui-tag--danger cui-tag--medium\" data-cui-component=\"tag\" data-cui-tone=\"danger\"><span class=\"cui-tag__label\">Restricted</span></span>\n",
+  "label": "Restricted",
+  "size": "medium",
+  "tone": "danger"
+}

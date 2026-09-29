@@ -16,6 +16,8 @@
     "variants": ["neutral", "info", "success", "warning", "danger"],
     "requiredFields": ["label"],
     "invariants": [
+      "Configuration supplies tone, size and pulse; label and detail are app-owned presentation data, currently literal-only in Native declarations.",
+      "The component owns no Datastar signal, event output, command or browser lifecycle; the app decides when data changes and which region is patched.",
       "A visible nonblank label always communicates status in text; color is never the only signal.",
       "The dot is decorative and hidden from assistive technology; the component does not create a live region or announce changes.",
       "Detail is optional supporting visible text and must be nonblank when provided.",
