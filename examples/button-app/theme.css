@@ -1,0 +1,7 @@
+@layer clanker.app {
+  :root {
+    --cui-accent: #6840a2;
+    --cui-accent-hover: #513083;
+    --cui-radius: .625rem;
+  }
+}

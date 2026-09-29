@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "instances": [
+    {
+      "id": "save-record",
+      "component": "@clanker/vanilla/button",
+      "label": { "kind": "literal", "value": "Save <record>" },
+      "destination": { "kind": "submit" },
+      "variant": "primary",
+      "size": "standard",
+      "leadingIcon": "check"
+    },
+    {
+      "id": "cancel-edit",
+      "component": "@clanker/vanilla/button",
+      "label": { "kind": "literal", "value": "Cancel edit" },
+      "destination": { "kind": "link", "href": { "kind": "route", "name": "links" } },
+      "variant": "secondary"
+    },
+    {
+      "id": "delete-record",
+      "component": "@clanker/vanilla/button",
+      "label": { "kind": "field", "path": "links.delete_label" },
+      "destination": { "kind": "action" },
+      "variant": "danger",
+      "size": "compact",
+      "disabled": true
+    },
+    {
+      "id": "dismiss-notice",
+      "component": "@clanker/vanilla/button",
+      "label": { "kind": "literal", "value": "Dismiss" },
+      "destination": { "kind": "action" },
+      "variant": "quiet",
+      "edgeAligned": true,
+      "busy": true,
+      "busyLabel": { "kind": "literal", "value": "Dismissing" }
+    }
+  ]
+}

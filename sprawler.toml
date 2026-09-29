@@ -1,0 +1,66 @@
+# Architecture policy for the standalone Clanker Native UI proof.
+# The pack checks dependency direction between the Rust modules below; it does not
+# inspect effects inside a module or validate the component package's HTML/CSS.
+extends = ["ddd-hexagonal"]
+name = "clanker-native-ui"
+root = "."
+extensions = [".rs"]
+exclude = ["**/target/**", "**/node_modules/**", "**/dist/**", "**/bin/**", "**/obj/**", "**/.venv/**"]
+
+# Keep each crate as its own context. The Native planner uses ports and belongs
+# to application; DirectorySink performs filesystem writes and is driven.
+# Specific file mappings avoid masking adapter/use-case dependencies.
+[[map]]
+glob = "crates/{ctx}/tests/**"
+tier = "app"
+layer = "test"
+
+[[map]]
+glob = "crates/catalog-core/src/**"
+tier = "app"
+ctx = "catalog-core"
+layer = "core"
+
+[[map]]
+glob = "crates/clanker-ui/src/ports.rs"
+tier = "app"
+ctx = "clanker-ui"
+layer = "port"
+
+[[map]]
+glob = "crates/clanker-ui/src/application.rs"
+tier = "app"
+ctx = "clanker-ui"
+layer = "application"
+
+[[map]]
+glob = "crates/clanker-ui/src/local.rs"
+tier = "app"
+ctx = "clanker-ui"
+layer = "driven"
+
+[[map]]
+glob = "crates/clanker-ui/src/native.rs"
+tier = "app"
+ctx = "clanker-ui"
+layer = "application"
+
+[[map]]
+glob = "crates/clanker-ui/src/directory_sink.rs"
+tier = "app"
+ctx = "clanker-ui"
+layer = "driven"
+
+# main.rs handles CLI input and wires concrete adapters to the application.
+# lib.rs exports the modules; it is not domain behavior.
+[[map]]
+glob = "crates/clanker-ui/src/main.rs"
+tier = "app"
+ctx = "clanker-ui"
+layer = "root"
+
+[[map]]
+glob = "crates/clanker-ui/src/lib.rs"
+tier = "app"
+ctx = "clanker-ui"
+layer = "root"

@@ -1,0 +1,19 @@
+.cui-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  inline-size: var(--cui-icon-size, 1.25rem);
+  block-size: var(--cui-icon-size, 1.25rem);
+  color: var(--cui-icon-color, currentColor);
+  stroke-width: var(--cui-icon-stroke-width, 1.9);
+  vertical-align: middle;
+}
+
+.cui-icon--small {
+  inline-size: var(--cui-icon-small-size, 1rem);
+  block-size: var(--cui-icon-small-size, 1rem);
+}
+
+.cui-icon--large {
+  inline-size: var(--cui-icon-large-size, 1.5rem);
+  block-size: var(--cui-icon-large-size, 1.5rem);
+}

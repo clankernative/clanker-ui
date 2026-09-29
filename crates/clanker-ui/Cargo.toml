@@ -1,0 +1,13 @@
+[package]
+name = "clanker-ui"
+version.workspace = true
+edition.workspace = true
+default-run = "clanker-ui"
+
+[dependencies]
+catalog-core = { path = "../catalog-core" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+clap.workspace = true
+tempfile = "3"
