@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "package": "@clanker/vanilla",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "path": "../../packages/vanilla",
-  "digest": "sha256:728cf96459ff8d28c138680e85b96cdfc5e1a30f0ee638375f4db2a3642338f0"
+  "digest": "sha256:ce96d5ec57e942baff775dd7730ec162431b4b935c2eafab820e902e5e0d3c17"
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "@clanker/vanilla",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "summary": "Semantic HTML controls for Clanker Native",
   "theme": "theme/default.css",
   "resources": [
@@ -14,6 +14,11 @@
     "components/tag/fragment.html",
     "components/alert/fragment.html",
     "components/progress/fragment.html",
-    "components/form-field/fragment.html"
+    "components/form-field/fragment.html",
+    "components/avatar/fragment.html",
+    "components/empty-state/fragment.html",
+    "components/metric/fragment.html",
+    "components/skeleton/fragment.html",
+    "components/page-header/fragment.html"
   ]
 }

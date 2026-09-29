@@ -32,6 +32,11 @@ fn an_agent_can_discover_and_verify_static_components() {
         "alert",
         "progress",
         "form-field",
+        "avatar",
+        "empty-state",
+        "metric",
+        "skeleton",
+        "page-header",
     ] {
         let expected = format!("@clanker/vanilla/{name}");
         assert!(ids.contains(&expected.as_str()));
@@ -43,6 +48,16 @@ fn an_agent_can_discover_and_verify_static_components() {
     assert!(ok, "{graph}");
     assert_eq!(graph["data"]["components"][0], "@clanker/vanilla/icon");
     assert_eq!(graph["data"]["components"][1], "@clanker/vanilla/badge");
+    let (ok, metric_graph) = run(&["graph", "metric", "--lock", lock]);
+    assert!(ok, "{metric_graph}");
+    assert_eq!(
+        metric_graph["data"]["components"][0],
+        "@clanker/vanilla/icon"
+    );
+    assert_eq!(
+        metric_graph["data"]["components"][1],
+        "@clanker/vanilla/metric"
+    );
     let (ok, verified) = run(&["verify", "--lock", lock]);
     assert!(ok, "{verified}");
     assert_eq!(
@@ -50,7 +65,7 @@ fn an_agent_can_discover_and_verify_static_components() {
             .as_array()
             .unwrap()
             .len(),
-        9
+        14
     );
 }
 

@@ -1,0 +1,7 @@
+{
+  "initials": "ET",
+  "label": "Emilia Torres",
+  "size": "extra-small",
+  "tone": "neutral",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--extra-small cui-avatar--neutral\" role=\"img\" aria-label=\"Emilia Torres\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">ET</span></span>\n"
+}

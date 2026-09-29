@@ -1,13 +1,18 @@
 //! Pure package and component rules. No filesystem, process, or browser dependencies.
 
 pub mod alert;
+pub mod avatar;
 pub mod badge;
 pub mod button;
 pub mod divider;
+pub mod empty_state;
 pub mod form_field;
 pub mod fragment;
 pub mod icon;
+pub mod metric;
+pub mod page_header;
 pub mod progress;
+pub mod skeleton;
 pub mod status_indicator;
 pub mod tag;
 

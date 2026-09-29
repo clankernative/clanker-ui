@@ -1,10 +1,15 @@
 use crate::ports::{Bundle, LoadedPackage, PackageSource};
 use catalog_core::alert::{self, AlertInstance};
+use catalog_core::avatar::{self, AvatarInstance};
 use catalog_core::badge::{self, BadgeInstance};
 use catalog_core::divider::{self, Alignment, DividerInstance, Orientation};
+use catalog_core::empty_state::{self, EmptyStateInstance};
 use catalog_core::form_field::{self, FieldKind, FormFieldInstance};
 use catalog_core::icon::{self, IconInstance, IconSize};
+use catalog_core::metric::{self, MetricInstance};
+use catalog_core::page_header::{self, PageHeaderInstance};
 use catalog_core::progress::{self, ProgressInstance};
+use catalog_core::skeleton::{self, SkeletonInstance};
 use catalog_core::status_indicator::{self, StatusIndicatorInstance};
 use catalog_core::tag::{self, TagInstance};
 use serde::{Deserialize, Serialize};
@@ -296,6 +301,113 @@ impl NativeAdapter {
                                     fixture.instance.tone.as_str(),
                                     fixture.instance.size.as_str(),
                                 ],
+                            )
+                        }
+                        _ => return Err(format!("{} has an incompatible role", component.name)),
+                    };
+                    if rendered != expected {
+                        return Err(format!(
+                            "{fixture_path}: rendered HTML differs from expected fixture"
+                        ));
+                    }
+                    for variant in variants {
+                        if !component
+                            .contract
+                            .variants
+                            .iter()
+                            .any(|item| item == variant)
+                        {
+                            return Err(format!(
+                                "{fixture_path}: unsupported {} variant {variant}",
+                                component.name
+                            ));
+                        }
+                        covered.insert(variant.into());
+                    }
+                    continue;
+                }
+                if ["avatar", "empty-state", "metric", "skeleton", "page-header"]
+                    .contains(&component.name.as_str())
+                {
+                    let bytes = source.asset(package, fixture_path)?;
+                    let (rendered, expected, variants) = match component.name.as_str() {
+                        "avatar" if component.contract.role == "identity" => {
+                            let fixture: StaticFixture<AvatarInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                avatar::render(&fixture.instance, &template)?,
+                                fixture.expected_html,
+                                vec![
+                                    fixture.instance.size.as_str(),
+                                    fixture.instance.tone.as_str(),
+                                ],
+                            )
+                        }
+                        "empty-state" if component.contract.role == "section" => {
+                            let fixture: StaticFixture<EmptyStateInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                empty_state::render(&fixture.instance, &template)?,
+                                fixture.expected_html,
+                                vec![
+                                    fixture.instance.alignment.as_str(),
+                                    fixture.instance.heading_level.as_str(),
+                                ],
+                            )
+                        }
+                        "metric" if component.contract.role == "metric" => {
+                            let fixture: StaticFixture<MetricInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            let icons: BTreeMap<String, String> =
+                                serde_json::from_slice(&source.asset(package, "icons.json")?)
+                                    .map_err(|error| format!("icons.json: {error}"))?;
+                            let mut variants = vec![fixture.instance.appearance.as_str()];
+                            if let Some(trend) = fixture.instance.trend {
+                                variants.push(trend.as_str());
+                            }
+                            if let Some(tone) = fixture.instance.trend_tone {
+                                variants.push(tone.as_str());
+                            }
+                            (
+                                metric::render(&fixture.instance, &template, &icons)?,
+                                fixture.expected_html,
+                                variants,
+                            )
+                        }
+                        "skeleton" if component.contract.role == "presentation" => {
+                            let fixture: StaticFixture<SkeletonInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                skeleton::render(&fixture.instance, &template)?,
+                                fixture.expected_html,
+                                vec![
+                                    fixture.instance.shape.as_str(),
+                                    fixture.instance.size.as_str(),
+                                    fixture.instance.width.as_str(),
+                                    if fixture.instance.animated {
+                                        "animated"
+                                    } else {
+                                        "static"
+                                    },
+                                ],
+                            )
+                        }
+                        "page-header" if component.contract.role == "page-heading" => {
+                            let fixture: StaticFixture<PageHeaderInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                page_header::render(&fixture.instance, &template)?,
+                                fixture.expected_html,
+                                vec![if fixture.instance.description.is_some() {
+                                    "described"
+                                } else {
+                                    "title-only"
+                                }],
                             )
                         }
                         _ => return Err(format!("{} has an incompatible role", component.name)),

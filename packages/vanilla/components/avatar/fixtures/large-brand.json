@@ -1,0 +1,7 @@
+{
+  "initials": "👩‍💻",
+  "label": "Developer identity",
+  "size": "large",
+  "tone": "brand",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--large cui-avatar--brand\" role=\"img\" aria-label=\"Developer identity\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">👩‍💻</span></span>\n"
+}

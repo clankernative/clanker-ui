@@ -10,13 +10,13 @@ Clanker Native UI is a provisional **agent-first component catalog and build-tim
 - `packages/vanilla/components/<name>/`: component manifest, fragment/template, CSS, and self-authored fixtures. The app owns token overrides; don't edit package defaults to theme one app.
 - `examples/`: small local package/CLI proof. `README.md` describes the architecture and its current limitations.
 - `../platform/crates/xtask/src/native_ui.rs`: the **separate Native host adapter** in the local platform worktree. It checks the app lock and package digest, expands supported `<cui-… />` declarations in a private captured snapshot, and stages CSS before ordinary template/resource admission. This is not a general runtime renderer.
-- `../golinks-clanker-ui-button/`: a local integration worktree. Its `ui/clanker-ui.lock.json` points to this sibling package and pins its declared bytes. `/ui-demo` is the visual review page for all nine components; the create/edit flows exercise Form Field. Its `FRONTEND.md` explains the experiment and rebuild caveat. These sibling paths are not portable CI provisioning.
+- `../golinks-clanker-ui-button/`: a local integration worktree. Its `ui/clanker-ui.lock.json` points to this sibling package and pins its declared bytes. `/ui-demo` is the visual review page for all fourteen components; the create/edit flows exercise Form Field. Its `FRONTEND.md` explains the experiment and rebuild caveat. These sibling paths are not portable CI provisioning.
 - `../../internal-tools-toolframe/src/components/`: F# reference contracts, component manifests, fixtures, styles, and tests. **Read but do not copy F# constructors or Scriban templates into this Rust/HTML target.** Port semantics, accessibility, visual tokens, and tested behavior to a Native contract.
 
 ## How to use a component
 
 1. Run `cargo run --locked --offline -- find <term> --lock examples/button-app/clanker-ui.lock.json` and `describe <name>`; inspect its `component.json`, fixtures, and `graph <name>` before selecting it. Search is literal, not semantic. The lock names the exact package version and declared input digest.
-2. In a Native app, use a supported `<cui-button … />`, `<cui-icon … />`, `<cui-badge … />`, `<cui-divider … />`, `<cui-status-indicator … />`, `<cui-tag … />`, `<cui-alert … />`, `<cui-progress … />`, or `<cui-form-field … />` declaration in an app-owned template. Button supports checked typed page fields and routes; Form Field supports checked value bindings. Tag/Alert navigation uses admitted destinations or app route helpers. Progress numbers remain checked literals. The original four passive components take literal text only. Bind forms and commands through the host's existing rules. A component must not create a command or own a route.
+2. In a Native app, use a supported `<cui-button … />`, `<cui-icon … />`, `<cui-badge … />`, `<cui-divider … />`, `<cui-status-indicator … />`, `<cui-tag … />`, `<cui-alert … />`, `<cui-progress … />`, `<cui-form-field … />`, `<cui-avatar … />`, `<cui-empty-state … />`, `<cui-metric … />`, `<cui-skeleton … />`, or `<cui-page-header … />` declaration in an app-owned template. Button supports checked typed page fields and routes; Form Field supports checked value bindings. Tag/Alert navigation uses admitted destinations or app route helpers. Progress numbers remain checked literals. The original four passive components take literal text only. Bind forms and commands through the host's existing rules. A component must not create a command or own a route.
 3. Keep app-specific `--cui-*` overrides in `ui/clanker-theme.css`. The host must validate and stage the package's styles and app overrides; do not paste generated HTML/CSS into the app.
 4. Update the app lock explicitly when any declared package byte changes; a local package edit alone does **not** trigger an app rebuild. Check the output HTML, keyboard behavior, accessibility semantics, responsive layout, and no-JS behavior in a real host build.
 
@@ -31,10 +31,10 @@ Clanker Native UI is a provisional **agent-first component catalog and build-tim
 ## Ownership and demo rules
 
 - Read each manifest's ownership invariants and typed Rust instance before binding data. Configuration is not browser-local state. App/server task data is not a component signal.
-- These nine ports emit native/static HTML, not component-owned Datastar signals or mount hooks. Form Field uses the browser's draft and the host's existing command transport.
+- These fourteen ports emit native/static HTML, not component-owned Datastar signals or mount hooks. Form Field uses the browser's draft and the host's existing command transport.
 - Keep editable forms out of `data-live` data regions; success may replace the submitted form, while rejection must preserve its draft. Stable IDs must also reserve the derived `-hint`/`-error` IDs.
 - Demonstrate each migrated component in the real GoLinks `/ui-demo` page, with app-owned theme, labelled sample data, invalid states, narrow layout, and accessible native outputs. Do not paste generated HTML or package CSS into the app.
-- A numeric Progress binding needs runtime range validation before admission. A removal Tag is navigation, not a dismissal command. Alert announcements must be explicit.
+- A numeric Progress binding needs runtime range validation before admission. A removal Tag is navigation, not a dismissal command. Alert announcements must be explicit. Avatar is initials-only (literal one-to-three Unicode graphemes); Page Header is title/description-only with a fixed h1. Skeleton is decorative; the app owns loading text and aria-busy. Metric direction and favorability are independent; its announcement text is not a live region.
 
 ## Local checks and cautions
 
