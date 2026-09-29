@@ -1,14 +1,14 @@
 # Clanker Native UI
 
-**Status:** provisional package and build-time Native button/Icon adapter. The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready.
+**Status:** provisional package and build-time Native adapter for five components. The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready.
 
-Clanker Native UI is an optional, agent-first component discovery and assembly system. It helps an app-building agent find a component that fits a user's intent, read its contract, compose it for the app's target, and verify the result. The first package provides a semantic HTML button, a standalone SVG icon contract, and component CSS. Native JavaScript interactions and Datastar integration are later slices. Other authors could publish their own packages and target adapters, including React catalogs, without making React a dependency of Clanker Native.
+Clanker Native UI is an optional, agent-first component discovery and assembly system. It helps an app-building agent find a component that fits a user's intent, read its contract, compose it for the app's target, and verify the result. The vanilla package provides Button, Icon, Badge, Divider, and Status Indicator with target-specific HTML and CSS. Native JavaScript interactions and Datastar integration are later slices. Other authors could publish their own packages and target adapters, including React catalogs, without making React a dependency of Clanker Native.
 
 Clanker Native remains usable without Clanker Native UI. Apps keep ownership of their domain models, queries, commands, routes, presentation, and design flavor. Clanker Native UI describes and supplies UI components; it does not become a second app-operation catalog or an arbitrary callback SDK.
 
 ## Try the local proof
 
-The Rust workspace has a pure `catalog-core` crate and a `clanker-ui` discovery CLI. Clanker Native's build owns target-specific expansion into its private staging area. The ready vanilla components are `button` and standalone `icon`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/clanker-ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
+The Rust workspace has a pure `catalog-core` crate and a `clanker-ui` discovery CLI. Clanker Native's build owns target-specific expansion into its private staging area. The ready vanilla components are `button`, `icon`, `badge`, `divider`, and `status-indicator`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/clanker-ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
 
 From this directory:
 
@@ -19,6 +19,8 @@ cargo run --locked --offline -- graph button --lock examples/button-app/clanker-
 cargo run --locked --offline -- verify --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- find icon --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- describe icon --lock examples/button-app/clanker-ui.lock.json
+cargo run --locked --offline -- list --lock examples/button-app/clanker-ui.lock.json
+cargo run --locked --offline -- graph badge --lock examples/button-app/clanker-ui.lock.json
 ```
 
 `lock --lock <file> --package <path>` pins a local package relative to the lock file; changing its declared bytes requires `--update`. The CLI emits versioned JSON and nonzero status on failure. Its `verify` checks manifest shape, declared inputs, token references, and self-authored fixtures; it is not a substitute for Native's independent admission. Word matching is literal, not embedding-based search. The old `build` and `compose` commands still produce isolated generated files for the earlier proof, but **do not use them to integrate an app**.
@@ -29,9 +31,19 @@ A Native app pins the package in `ui/clanker-ui.lock.json` and declares a button
 <cui-button kind="submit" variant="primary" icon="plus" label="Create" />
 ```
 
-The Native build checks the package digest, expands each declaration in a private snapshot, adds package CSS and optional `ui/clanker-theme.css` overrides to staged `ui/app.css`, then applies normal template, form, and resource admission. Local dev invokes the same build; neither the package nor the CLI runs at request time. The app contains no generated button HTML or CSS. The local GoLinks proof in `../golinks-clanker-ui-button` uses this path; its sibling package location must be replaced with a provisioned, pinned source before CI can build it elsewhere.
+The Native build checks the package digest, expands each declaration in a private snapshot, adds package CSS and optional `ui/clanker-theme.css` overrides to staged `ui/app.css`, then applies normal template, form, and resource admission. Local dev invokes the same build; neither the package nor the CLI runs at request time. The app contains no generated component HTML or CSS. The local GoLinks proof in `../golinks-clanker-ui-button` uses this path; its sibling package location must be replaced with a provisioned, pinned source before CI can build it elsewhere.
 
 Button attributes are `kind` (`action`, `submit`, `link`), `label`, `variant` (`primary`, `secondary`, `danger`, `quiet`), `size` (`compact`, `standard`), optional `icon`, `edge-aligned`, `disabled`, `busy`, and `busy-label`. A link uses a safe `href` or app-owned `route`. Labels may be app-authored literals or complete typed page-field interpolations. Dynamic states select interactive or noninteractive markup from checked Bool fields; busy requires a replacement label. Disabled or busy links have no href. The standalone `<cui-icon name="search" size="medium" label="Search" />` contract uses the same closed 100-glyph catalog. Icons are decorative/hidden from assistive technology by default; standalone meaningful icons require a nonblank `label` and render as `role="img"`. Icon fragment HTML and CSS are package assets; the target adapter supplies SVG attributes and geometry through the exact `[[attributes]]` and `[[geometry]]` slots. The button does not create a command, form fields, or route. JavaScript-bearing components, multi-package assembly, and production package distribution remain future work.
+
+The new static declarations use literal text only; they do not yet accept typed page-field interpolation:
+
+```html
+<cui-badge tone="neutral" label="Active links" show-icon="false" />
+<cui-divider orientation="horizontal" label="Details" alignment="start" />
+<cui-status-indicator tone="neutral" label="No links match your filters." />
+```
+
+Badge requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, `danger`, and `running`, and can suppress or override its decorative icon with `show-icon` or a closed-catalog `icon` name. Divider defaults to a horizontal, unlabelled separator; it accepts a `start`, `center`, or `end` label alignment and rejects labels on vertical separators. Status Indicator requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, and `danger`, plus optional `detail`, `size` (`small` or `large`), and `pulse`; it is static, not an ARIA live region. Each component is noninteractive, checks unknown attributes, and uses app-overridable `--cui-*` tokens. A real GoLinks build in `../golinks-clanker-ui-button` exercises all three. [Desktop](docs/screenshots/golinks-static-desktop.png) and [mobile](docs/screenshots/golinks-static-mobile.png) captures show the local proof with an empty sample list, not production data.
 
 ## What an agent should do
 
@@ -97,7 +109,7 @@ Start by importing **catalog knowledge for one component**: purpose, category, d
 Prove the system in bounded steps:
 
 1. Define the local package/component manifest and lock for one component. Test opt-in discovery, omission of unmarked files, and diagnostics for malformed declared entries without claiming 54 usable Native components.
-2. Implement the **button** and a standalone **icon** in the vanilla package with app-owned token override, semantic button/link behavior, a closed decorative glyph catalog, and rendering fixtures. Port an interactive component only after the native browser-module lifecycle and no-JS fallback work.
+2. Implement **button** and **icon**, then the independent static **badge**, **divider**, and **status-indicator** slices with app-owned token overrides, closed icon catalog, rendering fixtures, Native admission, and a real app proof. Port an interactive component only after the native browser-module lifecycle and no-JS fallback work.
 3. Prove the CLI in this folder without modifying Clanker Native: read a locally locked package, preview and materialize deterministic output into a separate staging directory, reject conflicts, and validate the complete output graph. Do not silently copy into an app or fetch an unpinned Git branch during a build.
 4. After that proof, validate and extend the optional Clanker Native adapter around its existing UI packaging seam (`../platform/crates/xtask/src/build_native.rs`), generated template handles, page/form checks, and pinned resource catalog. Validate a real app build and browser flow before claiming integration. The current host accepts relative, admitted `ui/` JavaScript imports, not an external package catalog (`../platform/crates/day2/src/web_resources.rs`). Keep Native's runtime admission and app operation catalog authoritative.
 5. Expand the migrated catalog by tier—static controls, layout/data, then overlays and focused interactions—and only then test an independently authored package or second rendering target. Add semantic ranking if structured search and the generated category tree prove insufficient.

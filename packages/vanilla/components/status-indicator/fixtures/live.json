@@ -1,0 +1,8 @@
+{
+  "label": "Synchronizing production records with the external catalog",
+  "tone": "info",
+  "detail": "248 records processed in the current run",
+  "size": "large",
+  "pulse": true,
+  "expectedHtml": "<span class=\"cui-status-indicator cui-status-indicator--info cui-status-indicator--large cui-status-indicator--pulse\" data-cui-component=\"status-indicator\"><span class=\"cui-status-indicator__dot\" aria-hidden=\"true\"></span><span class=\"cui-status-indicator__label\">Synchronizing production records with the external catalog</span><span class=\"cui-status-indicator__detail\">248 records processed in the current run</span></span>\n"
+}

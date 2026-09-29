@@ -1,5 +1,8 @@
 use crate::ports::{Bundle, LoadedPackage, PackageSource};
+use catalog_core::badge::{self, BadgeInstance};
+use catalog_core::divider::{self, Alignment, DividerInstance, Orientation};
 use catalog_core::icon::{self, IconInstance, IconSize};
+use catalog_core::status_indicator::{self, StatusIndicatorInstance};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
@@ -20,6 +23,26 @@ struct IconFixture {
     name: String,
     size: IconSize,
     label: Option<String>,
+    expected_html: String,
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct DividerFixture {
+    variant: String,
+    orientation: Orientation,
+    #[serde(default)]
+    alignment: Alignment,
+    #[serde(default)]
+    label: Option<String>,
+    expected_html: String,
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct StaticFixture<T> {
+    #[serde(flatten)]
+    instance: T,
     expected_html: String,
 }
 
@@ -65,12 +88,14 @@ impl NativeAdapter {
                 .map_err(|_| format!("{} template is not UTF-8", component.name))?;
             let css = String::from_utf8(source.asset(package, &component.assets.styles)?)
                 .map_err(|_| format!("{} styles are not UTF-8", component.name))?;
-            for field in &component.contract.required_fields {
-                if !template.contains(&format!("{{{{ {field} }}}}")) {
-                    return Err(format!(
-                        "{} missing required template field {field}",
-                        component.name
-                    ));
+            if component.name == "button" {
+                for field in &component.contract.required_fields {
+                    if !template.contains(&format!("{{{{ {field} }}}}")) {
+                        return Err(format!(
+                            "{} missing required template field {field}",
+                            component.name
+                        ));
+                    }
                 }
             }
             if component.contract.role == "button"
@@ -114,7 +139,7 @@ impl NativeAdapter {
                     if icons.len() != 100 {
                         return Err("icon catalog must contain exactly 100 glyphs".into());
                     }
-                    for (name, _) in &icons {
+                    for name in icons.keys() {
                         icon::render(
                             &IconInstance {
                                 name: name.clone(),
@@ -149,6 +174,81 @@ impl NativeAdapter {
                         ));
                     }
                     covered.insert(fixture.size.as_str().to_string());
+                    continue;
+                }
+                if component.name == "divider" && component.contract.role == "separator" {
+                    let fixture: DividerFixture =
+                        serde_json::from_slice(&source.asset(package, fixture_path)?)
+                            .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    if fixture.variant != fixture.orientation.as_str()
+                        || !component.contract.variants.contains(&fixture.variant)
+                    {
+                        return Err(format!("{fixture_path}: invalid divider orientation"));
+                    }
+                    let rendered = divider::render(
+                        &DividerInstance {
+                            orientation: fixture.orientation,
+                            alignment: fixture.alignment,
+                            label: fixture.label,
+                        },
+                        &template,
+                    )
+                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    if rendered != fixture.expected_html {
+                        return Err(format!(
+                            "{fixture_path}: rendered HTML differs from expected fixture"
+                        ));
+                    }
+                    covered.insert(fixture.variant);
+                    continue;
+                }
+                if component.name == "badge" && component.contract.role == "status-label" {
+                    let fixture: StaticFixture<BadgeInstance> =
+                        serde_json::from_slice(&source.asset(package, fixture_path)?)
+                            .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    let icons: BTreeMap<String, String> =
+                        serde_json::from_slice(&source.asset(package, "icons.json")?)
+                            .map_err(|error| format!("icons.json: {error}"))?;
+                    let tone = fixture.instance.tone.as_str();
+                    if !component
+                        .contract
+                        .variants
+                        .iter()
+                        .any(|variant| variant == tone)
+                    {
+                        return Err(format!("{fixture_path}: unsupported badge tone"));
+                    }
+                    let rendered = badge::render(&fixture.instance, &template, &icons)
+                        .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    if rendered != fixture.expected_html {
+                        return Err(format!(
+                            "{fixture_path}: rendered HTML differs from expected fixture"
+                        ));
+                    }
+                    covered.insert(tone.into());
+                    continue;
+                }
+                if component.name == "status-indicator" && component.contract.role == "text" {
+                    let fixture: StaticFixture<StatusIndicatorInstance> =
+                        serde_json::from_slice(&source.asset(package, fixture_path)?)
+                            .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    let tone = fixture.instance.tone.as_str();
+                    if !component
+                        .contract
+                        .variants
+                        .iter()
+                        .any(|variant| variant == tone)
+                    {
+                        return Err(format!("{fixture_path}: unsupported status tone"));
+                    }
+                    let rendered = status_indicator::render(&fixture.instance, &template)
+                        .map_err(|error| format!("{fixture_path}: {error}"))?;
+                    if rendered != fixture.expected_html {
+                        return Err(format!(
+                            "{fixture_path}: rendered HTML differs from expected fixture"
+                        ));
+                    }
+                    covered.insert(tone.into());
                     continue;
                 }
                 if component.contract.role != "button" {

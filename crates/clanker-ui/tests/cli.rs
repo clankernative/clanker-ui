@@ -12,6 +12,41 @@ fn run(args: &[&str]) -> (bool, Value) {
 }
 
 #[test]
+fn an_agent_can_discover_and_verify_static_components() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/button-app");
+    let lock = root.join("clanker-ui.lock.json");
+    let lock = lock.to_str().unwrap();
+    let (ok, listed) = run(&["list", "--lock", lock]);
+    assert!(ok, "{listed}");
+    let ids = listed["data"]["components"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|component| component["id"].as_str().unwrap())
+        .collect::<Vec<_>>();
+    for name in ["badge", "divider", "status-indicator"] {
+        let expected = format!("@clanker/vanilla/{name}");
+        assert!(ids.contains(&expected.as_str()));
+        let (ok, described) = run(&["describe", name, "--lock", lock]);
+        assert!(ok, "{described}");
+        assert_eq!(described["data"]["component"]["status"], "ready");
+    }
+    let (ok, graph) = run(&["graph", "badge", "--lock", lock]);
+    assert!(ok, "{graph}");
+    assert_eq!(graph["data"]["components"][0], "@clanker/vanilla/icon");
+    assert_eq!(graph["data"]["components"][1], "@clanker/vanilla/badge");
+    let (ok, verified) = run(&["verify", "--lock", lock]);
+    assert!(ok, "{verified}");
+    assert_eq!(
+        verified["data"]["verifiedComponents"]
+            .as_array()
+            .unwrap()
+            .len(),
+        5
+    );
+}
+
+#[test]
 fn an_agent_can_find_verify_preview_and_stage_a_button() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/button-app");
     let lock = root.join("clanker-ui.lock.json");

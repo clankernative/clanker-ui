@@ -1,7 +1,10 @@
 //! Pure package and component rules. No filesystem, process, or browser dependencies.
 
+pub mod badge;
 pub mod button;
+pub mod divider;
 pub mod icon;
+pub mod status_indicator;
 
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};

@@ -16,7 +16,7 @@ Clanker Native UI is a provisional **agent-first component catalog and build-tim
 ## How to use a component
 
 1. Run `cargo run --locked --offline -- find <term> --lock examples/button-app/clanker-ui.lock.json` and `describe <name>`; inspect its `component.json`, fixtures, and `graph <name>` before selecting it. Search is literal, not semantic. The lock names the exact package version and declared input digest.
-2. In a Native app, use a supported `<cui-button … />` or `<cui-icon … />` declaration in an app-owned template. Bind labels, typed page fields, routes, forms, and commands through the host's existing rules. A component must not create a command or own a route.
+2. In a Native app, use a supported `<cui-button … />`, `<cui-icon … />`, `<cui-badge … />`, `<cui-divider … />`, or `<cui-status-indicator … />` declaration in an app-owned template. Button supports checked typed page fields and routes; the other four currently take literal text only. Bind forms and commands through the host's existing rules. A component must not create a command or own a route.
 3. Keep app-specific `--cui-*` overrides in `ui/clanker-theme.css`. The host must validate and stage the package's styles and app overrides; do not paste generated HTML/CSS into the app.
 4. Update the app lock explicitly when any declared package byte changes; a local package edit alone does **not** trigger an app rebuild. Check the output HTML, keyboard behavior, accessibility semantics, responsive layout, and no-JS behavior in a real host build.
 
@@ -30,7 +30,7 @@ Clanker Native UI is a provisional **agent-first component catalog and build-tim
 
 ## Local checks and cautions
 
-- In this repo: `cargo fmt --check`, `cargo test --locked --offline`, and `cargo run --locked --offline -- verify --lock examples/button-app/clanker-ui.lock.json` (refresh the example lock after declared package changes).
+- In this repo: `cargo fmt --all --check`, `cargo test --locked --offline`, and `cargo run --locked --offline -- verify --lock examples/button-app/clanker-ui.lock.json` (refresh the example lock after declared package changes). `.github/workflows/ci.yml` runs the corresponding portable checks on PRs.
 - In the platform checkout: use the repository's pinned Rust toolchain (`cargo +1.98.1 test --manifest-path ../platform/crates/xtask/Cargo.toml native_ui --offline` from here). The adapter is a separate repository and must be tested there.
 - For GoLinks: regenerate its lock against the changed package, run its Native build through the local platform, and inspect the staged/served page. A sibling path is a local experiment, not a distributable dependency.
 - Preserve pre-existing changes in sibling worktrees. A green local check does not mean the sibling-path lock is portable to CI or that the host/app changes have a reviewable PR.

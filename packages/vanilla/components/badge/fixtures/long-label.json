@@ -1,0 +1,5 @@
+{
+  "tone": "neutral",
+  "label": "Waiting for deployment approval from the operations team",
+  "expectedHtml": "<span class=\"cui-badge cui-badge--neutral\" data-cui-component=\"badge\" data-cui-tone=\"neutral\"><span class=\"cui-badge__label\">Waiting for deployment approval from the operations team</span></span>\n"
+}

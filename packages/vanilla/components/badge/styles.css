@@ -1,0 +1,50 @@
+.cui-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cui-badge-gap, var(--cui-space-1, .25rem));
+  max-inline-size: 100%;
+  padding: var(--cui-badge-padding, .125rem var(--cui-space-2, .375rem));
+  border: 1px solid transparent;
+  border-radius: var(--cui-badge-radius, 999px);
+  font-size: var(--cui-badge-size, .75rem);
+  font-weight: var(--cui-badge-weight, 600);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.cui-badge--neutral {
+  border-color: var(--cui-badge-neutral-border, var(--cui-border, #66738f));
+  background: var(--cui-badge-neutral-background, var(--cui-surface, #f5f6fa));
+  color: var(--cui-badge-neutral-text, var(--cui-muted, #45516e));
+}
+.cui-badge--info {
+  border-color: var(--cui-badge-info-border, #2563eb);
+  background: var(--cui-badge-info-background, #dbeafe);
+  color: var(--cui-badge-info-text, #1e40af);
+}
+.cui-badge--running {
+  border-color: var(--cui-badge-running-border, #2563eb);
+  background: var(--cui-badge-running-background, #dbeafe);
+  color: var(--cui-badge-running-text, #1e40af);
+}
+.cui-badge--success {
+  border-color: var(--cui-badge-success-border, #15803d);
+  background: var(--cui-badge-success-background, #dcfce7);
+  color: var(--cui-badge-success-text, #166534);
+}
+.cui-badge--warning {
+  border-color: var(--cui-badge-warning-border, #a16207);
+  background: var(--cui-badge-warning-background, #fef3c7);
+  color: var(--cui-badge-warning-text, #854d0e);
+}
+.cui-badge--danger {
+  border-color: var(--cui-badge-danger-border, var(--cui-danger, #991b1b));
+  background: var(--cui-badge-danger-background, #fee2e2);
+  color: var(--cui-badge-danger-text, var(--cui-danger, #991b1b));
+}
+.cui-badge__icon { display: inline-flex; flex: none; }
+.cui-badge__icon svg { display: block; inline-size: var(--cui-icon-small-size, 1rem); block-size: var(--cui-icon-small-size, 1rem); }
+.cui-badge--running .cui-badge__icon { animation: cui-badge-spin 1.5s linear infinite; }
+@keyframes cui-badge-spin { to { transform: rotate(-1turn); } }
+@media (prefers-reduced-motion: reduce) {
+  .cui-badge--running .cui-badge__icon { animation: none; }
+}
