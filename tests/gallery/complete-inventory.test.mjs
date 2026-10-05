@@ -53,6 +53,16 @@ test('gallery Native inventory and specimen branches cover exactly the 45 admitt
   assert.match(template, /45 Native-admitted component contracts/);
 });
 
+test('gallery sidebar links cover the Native inventory exactly once', async () => {
+  const sidebar = await readFile(path.join(galleryRoot, 'ui/components/catalog-navigation.html'), 'utf8');
+  const inventory = await readFile(path.join(galleryRoot, 'shared/ComponentDocs.roc'), 'utf8');
+  const links = [...sidebar.matchAll(/routes\.components\(name="([a-z0-9-]+)"\)/g)].map(([, name]) => name).sort();
+  const docs = [...inventory.matchAll(/doc\("([a-z0-9-]+)"/g)].map(([, name]) => name).sort();
+  assert.deepEqual(links, docs, 'every Native component is discoverable from the sidebar, without duplicates or unsupported routes');
+  assert.deepEqual(links, nativeNames);
+  for (const name of adapterRequired) assert.ok(!links.includes(name), `${name} stays in the separate browser fixture lab`);
+});
+
 test('the nine adapter-required contracts stay out of Native branches and are called out separately', async () => {
   const template = await readFile(path.join(galleryRoot, 'ui/pages/components.html'), 'utf8');
   const query = await readFile(path.join(galleryRoot, 'queries/components/Components.roc'), 'utf8');
