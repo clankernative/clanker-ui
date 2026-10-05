@@ -1,0 +1,11 @@
+{
+  "detail": "The application may now present its own completion state.",
+  "expectedHtml": "<div class=\"cui-progress cui-progress--success cui-progress--regular cui-progress--determinate cui-progress--complete\" data-cui-component=\"progress\" data-cui-tone=\"success\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Data synchronization complete</span><span class=\"cui-progress__suffix\">All records synchronized</span></div><progress class=\"cui-progress__track\" value=\"100\" max=\"100\" aria-label=\"Data synchronization complete\"></progress><p class=\"cui-progress__detail\">The application may now present its own completion state.</p></div>\n",
+  "label": "Data synchronization complete",
+  "maximum": 100,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "All records synchronized",
+  "tone": "success",
+  "value": 100
+}

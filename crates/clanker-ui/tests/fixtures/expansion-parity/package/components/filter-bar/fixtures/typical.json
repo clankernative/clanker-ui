@@ -1,0 +1,12 @@
+{
+  "children": {
+    "actions": "<button type=\"submit\">Apply</button>",
+    "applied": "<span>Owner: All</span>",
+    "controls": "<label>Owner <select name=\"owner\"><option>All</option></select></label>"
+  },
+  "expectedHtml": "<div class=\"cui-filter-bar\" data-cui-component=\"filter-bar\" role=\"group\" aria-label=\"Filters &amp; results\"><div class=\"cui-filter-bar__controls\"><label>Owner <select name=\"owner\"><option>All</option></select></label><button type=\"submit\">Apply</button></div><span>Owner: All</span><p class=\"cui-filter-bar__summary\" role=\"status\">Showing &lt;12 records</p></div>\n",
+  "options": {
+    "label": "Filters & results",
+    "resultSummary": "Showing <12 records"
+  }
+}

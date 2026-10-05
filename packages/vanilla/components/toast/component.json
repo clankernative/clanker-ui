@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "name": "toast",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Presents a bounded set of transient feedback messages with safe navigation actions.",
+  "keywords": [
+    "toast",
+    "notification",
+    "feedback",
+    "message"
+  ],
+  "agent": {
+    "useWhen": "A page needs a short, dismissible transient update or progress message with an optional real destination.",
+    "avoidWhen": "The content is durable page guidance or field validation, or the component is expected to own a command or generate app/server messages. Native readiness covers literal static-page declarations, not runtime bindings or live-region replacement.",
+    "composeWith": [
+      "icon",
+      "button"
+    ]
+  },
+  "contract": {
+    "role": "region",
+    "variants": [
+      "info",
+      "success",
+      "warning",
+      "danger",
+      "progress",
+      "inline",
+      "top-center",
+      "top-end",
+      "bottom-center",
+      "bottom-end",
+      "reset",
+      "preserve",
+      "remove"
+    ],
+    "requiredFields": [
+      "label",
+      "messages"
+    ],
+    "invariants": [
+      "A toast region contains one to eight messages; titles and bodies are nonblank plain text escaped at render.",
+      "Tone is info, success, warning, danger, or progress and selects only closed locked icon geometry.",
+      "Action href and label are paired; destinations must be safe navigation URLs. App code owns canonical message creation and meaning.",
+      "Dismiss labels are localized by the caller and default to Dismiss notification; a null dismissLabel omits the usable dismiss control.",
+      "Optional timeout is an integer from 1000 through 60000 milliseconds; its timer pauses during focus, hover, and hidden-document periods and is cleaned up on teardown.",
+      "History policy is reset, preserve, or remove and restoration uses owned DOM snapshots, never HTML strings.",
+      "Without JavaScript all messages remain visible; there are no network requests, commands, or route ownership.",
+      "The fragment has exactly one [[toastRegion]] substitution slot."
+    ]
+  },
+  "tokens": [
+    "--cui-toast-background",
+    "--cui-toast-border",
+    "--cui-toast-danger",
+    "--cui-toast-focus-ring",
+    "--cui-toast-gap",
+    "--cui-toast-info",
+    "--cui-toast-inset",
+    "--cui-toast-padding",
+    "--cui-toast-progress",
+    "--cui-toast-radius",
+    "--cui-toast-shadow",
+    "--cui-toast-success",
+    "--cui-toast-timeout",
+    "--cui-toast-tone",
+    "--cui-toast-warning",
+    "--cui-toast-width"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-toast-background",
+      "role": "background",
+      "purpose": "Controls background color for  toast."
+    },
+    {
+      "name": "--cui-toast-border",
+      "role": "border",
+      "purpose": "Controls border color for  toast."
+    },
+    {
+      "name": "--cui-toast-danger",
+      "role": "text",
+      "purpose": "Controls danger state for  toast."
+    },
+    {
+      "name": "--cui-toast-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  toast."
+    },
+    {
+      "name": "--cui-toast-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for toast."
+    },
+    {
+      "name": "--cui-toast-info",
+      "role": "text",
+      "purpose": "Controls information state for  toast."
+    },
+    {
+      "name": "--cui-toast-inset",
+      "role": "position",
+      "purpose": "Controls visual treatment for  toast."
+    },
+    {
+      "name": "--cui-toast-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for toast."
+    },
+    {
+      "name": "--cui-toast-progress",
+      "role": "sizing",
+      "purpose": "Runtime progress value displayed by Toast; this is data, not a theme setting."
+    },
+    {
+      "name": "--cui-toast-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for toast."
+    },
+    {
+      "name": "--cui-toast-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for toast."
+    },
+    {
+      "name": "--cui-toast-success",
+      "role": "text",
+      "purpose": "Controls success state for  toast."
+    },
+    {
+      "name": "--cui-toast-timeout",
+      "role": "motion",
+      "purpose": "Duration used by Toast runtime behavior before its configured timeout expires."
+    },
+    {
+      "name": "--cui-toast-tone",
+      "role": "color",
+      "purpose": "Runtime tone selection for toast; this selects component state rather than a theme color."
+    },
+    {
+      "name": "--cui-toast-warning",
+      "role": "text",
+      "purpose": "Controls warning state for  toast."
+    },
+    {
+      "name": "--cui-toast-width",
+      "role": "sizing",
+      "purpose": "Controls width for toast."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
+  "assets": {
+    "template": "components/toast/fragment.html",
+    "styles": "components/toast/styles.css",
+    "scripts": [
+      "components/toast/install.js"
+    ]
+  },
+  "fixtures": [
+    "components/toast/fixtures/inline-golden.json",
+    "components/toast/fixtures/top-center-golden.json",
+    "components/toast/fixtures/top-end-golden.json",
+    "components/toast/fixtures/bottom-center-golden.json",
+    "components/toast/fixtures/bottom-end-golden.json",
+    "components/toast/fixtures/preserve-golden.json",
+    "components/toast/fixtures/remove-golden.json"
+  ]
+}

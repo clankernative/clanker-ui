@@ -1,0 +1,7 @@
+{
+  "initials": "A&<",
+  "label": "Person [[avatar]] \"<one>\" & 'two'",
+  "size": "medium",
+  "tone": "neutral",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--medium cui-avatar--neutral\" role=\"img\" aria-label=\"Person [[avatar]] &quot;&lt;one&gt;&quot; &amp; &#39;two&#39;\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">A&amp;&lt;</span></span>\n"
+}

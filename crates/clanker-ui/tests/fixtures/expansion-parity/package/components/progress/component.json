@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "name": "progress",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Shows accessible determinate or indeterminate task progress with visible task copy.",
+  "keywords": ["progress", "loading", "completion", "task"],
+  "agent": {
+    "useWhen": "A task has measurable completion or an active wait with no reliable estimate.",
+    "avoidWhen": "The operation completes immediately or completion and failure need a final alert or recovery action.",
+    "composeWith": ["alert", "button", "status-indicator"]
+  },
+  "contract": {
+    "role": "progressbar",
+    "variants": ["determinate", "indeterminate", "info", "success", "warning", "danger", "regular", "compact"],
+    "requiredFields": ["label", "state"],
+    "invariants": [
+      "The application owns task data and server-rendered updates; this component owns no command, route, polling, browser-side numeric state, or JavaScript lifecycle.",
+      "A visible nonblank label is required and is also the accessible name of the native progress element.",
+      "Determinate state requires finite value and maximum with maximum > 0 and 0 <= value <= maximum; values are rejected rather than clamped.",
+      "Indeterminate state is explicit and omits both value and maximum; suffix is only allowed for determinate state.",
+      "Optional detail and suffix are plain text and HTML-encoded. Tone selects info, success, warning, or danger; size selects regular or compact track height.",
+      "The adapter fragment contains exactly one [[attributes]], [[label]], [[progress]], [[suffix]], and [[detail]] slot; substitutions are single-pass so user text cannot inject slots."
+    ]
+  },
+  "tokens": [
+    "--cui-progress-danger", "--cui-progress-detail-text", "--cui-progress-height", "--cui-progress-info",
+    "--cui-progress-label-text", "--cui-progress-radius", "--cui-progress-success", "--cui-progress-track",
+    "--cui-progress-warning", "--cui-progress-compact-height", "--cui-progress-gap"
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/progress/fragment.html",
+    "styles": "components/progress/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/progress/fixtures/determinate-info.json",
+    "components/progress/fixtures/determinate-success.json",
+    "components/progress/fixtures/determinate-warning.json",
+    "components/progress/fixtures/determinate-danger.json",
+    "components/progress/fixtures/indeterminate.json",
+    "components/progress/fixtures/compact.json",
+    "components/progress/fixtures/long-copy.json",
+    "components/progress/fixtures/escaped-copy.json",
+    "components/progress/fixtures/zero.json",
+    "components/progress/fixtures/complete.json"
+  ]
+}

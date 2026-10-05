@@ -1,0 +1,5 @@
+{
+  "options": {},
+  "children": { "body": "<h2>Title</h2><p>Body</p>" },
+  "expectedHtml": "<div class=\"cui-stack cui-stack--gap-standard cui-stack--align-stretch\" data-cui-component=\"stack\"><h2>Title</h2><p>Body</p></div>\n"
+}

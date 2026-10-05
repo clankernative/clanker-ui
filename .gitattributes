@@ -1,0 +1,2 @@
+# Frozen expansion parity snapshots retain the renderer's exact bytes.
+crates/clanker-ui/tests/fixtures/expansion-parity/**/expected/**/*.html whitespace=-blank-at-eol

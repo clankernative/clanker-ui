@@ -1,0 +1,30 @@
+{
+  "expectedHtml": "<nav class=\"cui-progress-steps cui-progress-steps--vertical cui-progress-steps--detailed\" data-cui-component=\"progress-steps\" aria-label=\"Avancement de la demande\"><ol class=\"cui-progress-steps__list\"><li class=\"cui-progress-steps__item cui-progress-steps__item--complete\"><a class=\"cui-progress-steps__target\" href=\"/demande/1\"><span class=\"cui-progress-steps__marker\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"check\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m20 6-11 11-5-5\"></path></svg>\n</span><span class=\"cui-progress-steps__content\"><span class=\"cui-progress-steps__sr-only\">Terminé: </span><span class=\"cui-progress-steps__label\">Demande</span></span></a></li><li class=\"cui-progress-steps__item cui-progress-steps__item--error\"><span class=\"cui-progress-steps__target\" aria-current=\"step\"><span class=\"cui-progress-steps__marker\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"alert\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n<path d=\"M12 8v4.5\"></path>\n<path d=\"M12 16h.01\"></path></svg>\n</span><span class=\"cui-progress-steps__content\"><span class=\"cui-progress-steps__sr-only\">Action requise: </span><span class=\"cui-progress-steps__label\">Vérification &lt;à corriger&gt;</span><span class=\"cui-progress-steps__detail\">Choisir une équipe &amp; un rôle</span></span></span></li><li class=\"cui-progress-steps__item cui-progress-steps__item--upcoming\"><span class=\"cui-progress-steps__target\"><span class=\"cui-progress-steps__marker\" aria-hidden=\"true\">3</span><span class=\"cui-progress-steps__content\"><span class=\"cui-progress-steps__sr-only\">À venir: </span><span class=\"cui-progress-steps__label\">Approbation</span></span></span></li></ol></nav>\n",
+  "options": {
+    "appearance": "detailed",
+    "items": [
+      {
+        "href": "/demande/1",
+        "label": "Demande",
+        "state": "complete"
+      },
+      {
+        "detail": "Choisir une équipe & un rôle",
+        "label": "Vérification <à corriger>",
+        "state": "error"
+      },
+      {
+        "label": "Approbation",
+        "state": "upcoming"
+      }
+    ],
+    "label": "Avancement de la demande",
+    "orientation": "vertical",
+    "stateLabels": {
+      "complete": "Terminé",
+      "current": "En cours",
+      "error": "Action requise",
+      "upcoming": "À venir"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+@layer clanker.components {
+  .cui-container { box-sizing: border-box; inline-size: 100%; margin-inline: auto; }
+  .cui-container--reading { max-inline-size: var(--cui-container-width-reading, 65ch); }
+  .cui-container--compact { max-inline-size: var(--cui-container-width-compact, 48rem); }
+  .cui-container--standard { max-inline-size: var(--cui-container-width-standard, 72rem); }
+  .cui-container--wide { max-inline-size: var(--cui-container-width-wide, 90rem); }
+  .cui-container--full { max-inline-size: none; }
+  .cui-container--gutter-none { padding-inline: 0; }
+  .cui-container--gutter-compact { padding-inline: var(--cui-container-gutter-compact, 1rem); }
+  .cui-container--gutter-standard { padding-inline: var(--cui-container-gutter-standard, clamp(1rem, 4vw, 2rem)); }
+  .cui-container--gutter-generous { padding-inline: var(--cui-container-gutter-generous, 3rem); }
+}

@@ -1,0 +1,9 @@
+{
+  "disabled": true,
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"reference\">Reference</label><input class=\"cui-form-field__control\" id=\"reference\" name=\"reference\" type=\"text\" value=\"Managed externally\" disabled></div>\n",
+  "id": "reference",
+  "inputType": "text",
+  "label": "Reference",
+  "name": "reference",
+  "value": "Managed externally"
+}

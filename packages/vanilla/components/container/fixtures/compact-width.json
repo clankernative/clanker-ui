@@ -1,0 +1,5 @@
+{
+  "options": { "width": "compact" },
+  "children": { "body": "<p>Layout fixture.</p>" },
+  "expectedHtml": "<div class=\"cui-container cui-container--compact cui-container--gutter-standard\" data-cui-component=\"container\"><p>Layout fixture.</p></div>\n"
+}

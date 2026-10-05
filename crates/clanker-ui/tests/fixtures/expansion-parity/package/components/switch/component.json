@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1, "name": "switch", "status": "ready", "target": "native-html", "category": "layout",
+  "summary": "Switches a group between one column and one complete row.", "keywords": ["switch", "row", "responsive", "group", "equal"],
+  "agent": {"useWhen":"A group should stack below a container width and become one complete row above it.","avoidWhen":"Items should wrap independently or form a card grid; use Cluster or Grid.","composeWith":["button","form-field","card","container"]},
+  "contract": {"role":"responsive-row-layout","variants":["natural","equal"],"requiredFields":[],"invariants":["Child source order is preserved at every size.","Row expansion occurs at the chosen container boundary; never expands immediately.","Neutral wrappers add no landmarks, controls, scripts, routes, or commands."]},
+  "tokens":["--cui-switch-gap-compact","--cui-switch-gap-generous","--cui-switch-gap-none","--cui-switch-gap-spacious","--cui-switch-gap-standard"], "dependencies":[],
+  "assets":{"template":"components/switch/fragment.html","styles":"components/switch/styles.css","scripts":[]},
+  "fixtures":["components/switch/fixtures/natural.json","components/switch/fixtures/equal.json"]
+}

@@ -1,0 +1,57 @@
+{
+  "expectedHtml": "<section class=\"cui-date-calendar\" id=\"release-calendar\" data-cui-component=\"date-calendar\" data-cui-date-calendar data-cui-date-interactive=\"false\" data-cui-date-disabled=\"false\" data-cui-date-selection-mode=\"range\" data-cui-date-selection-start=\"2026-08-18\" data-cui-date-selection-end=\"2026-08-24\" data-cui-date-month=\"2026-08-01\" data-cui-date-first-day=\"1\" data-cui-date-today=\"2026-08-25\" data-cui-date-month-labels=\"[&quot;January&quot;,&quot;February&quot;,&quot;March&quot;,&quot;April&quot;,&quot;May&quot;,&quot;June&quot;,&quot;July&quot;,&quot;August&quot;,&quot;September&quot;,&quot;October&quot;,&quot;November&quot;,&quot;December&quot;]\" data-cui-date-weekday-short=\"[&quot;Su&quot;,&quot;Mo&quot;,&quot;Tu&quot;,&quot;We&quot;,&quot;Th&quot;,&quot;Fr&quot;,&quot;Sa&quot;]\" data-cui-date-weekday-full=\"[&quot;Sunday&quot;,&quot;Monday&quot;,&quot;Tuesday&quot;,&quot;Wednesday&quot;,&quot;Thursday&quot;,&quot;Friday&quot;,&quot;Saturday&quot;]\" data-cui-date-minimum=\"2026-08-01\" data-cui-date-maximum=\"2026-09-30\" role=\"group\" aria-label=\"Release calendar\"><header class=\"cui-date-calendar__header\"><span aria-hidden=\"true\"></span><h2 id=\"release-calendar-heading\" data-cui-date-month-label aria-live=\"polite\">August 2026</h2><span aria-hidden=\"true\"></span></header><table class=\"cui-date-calendar__grid\" role=\"grid\" aria-labelledby=\"release-calendar-heading\"><thead><tr><th scope=\"col\"><abbr title=\"Monday\">Mo</abbr></th><th scope=\"col\"><abbr title=\"Tuesday\">Tu</abbr></th><th scope=\"col\"><abbr title=\"Wednesday\">We</abbr></th><th scope=\"col\"><abbr title=\"Thursday\">Th</abbr></th><th scope=\"col\"><abbr title=\"Friday\">Fr</abbr></th><th scope=\"col\"><abbr title=\"Saturday\">Sa</abbr></th><th scope=\"col\"><abbr title=\"Sunday\">Su</abbr></th></tr></thead><tbody data-cui-date-grid-body><tr><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside cui-date-calendar__cell--unavailable\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"27 July 2026\">27</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside cui-date-calendar__cell--unavailable\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"28 July 2026\">28</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside cui-date-calendar__cell--unavailable\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"29 July 2026\">29</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside cui-date-calendar__cell--unavailable\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"30 July 2026\">30</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside cui-date-calendar__cell--unavailable\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"31 July 2026\">31</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"1 August 2026\">1</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"2 August 2026\">2</span></td></tr><tr><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"3 August 2026\">3</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"4 August 2026\">4</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"5 August 2026\">5</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"6 August 2026\">6</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"7 August 2026\">7</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"8 August 2026\">8</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"9 August 2026\">9</span></td></tr><tr><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"10 August 2026\">10</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"11 August 2026\">11</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"12 August 2026\">12</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"13 August 2026\">13</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"14 August 2026\">14</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"15 August 2026\">15</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"16 August 2026\">16</span></td></tr><tr><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"17 August 2026\">17</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--selected cui-date-calendar__cell--range-start cui-date-calendar__cell--in-range\" role=\"gridcell\" aria-selected=\"true\"><span class=\"cui-date-calendar__day\" aria-label=\"18 August 2026\">18</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--in-range\" role=\"gridcell\" aria-selected=\"true\"><span class=\"cui-date-calendar__day\" aria-label=\"19 August 2026\">19</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--in-range\" role=\"gridcell\" aria-selected=\"true\"><span class=\"cui-date-calendar__day\" aria-label=\"20 August 2026\">20</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--in-range\" role=\"gridcell\" aria-selected=\"true\"><span class=\"cui-date-calendar__day\" aria-label=\"21 August 2026\">21</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--in-range cui-date-calendar__cell--unavailable\" role=\"gridcell\" aria-selected=\"true\"><span class=\"cui-date-calendar__day\" aria-label=\"22 August 2026\">22</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--in-range\" role=\"gridcell\" aria-selected=\"true\"><span class=\"cui-date-calendar__day\" aria-label=\"23 August 2026\">23</span></td></tr><tr><td class=\"cui-date-calendar__cell cui-date-calendar__cell--selected cui-date-calendar__cell--range-end cui-date-calendar__cell--in-range\" role=\"gridcell\" aria-selected=\"true\"><span class=\"cui-date-calendar__day\" aria-label=\"24 August 2026\">24</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--today\" role=\"gridcell\" aria-selected=\"false\" aria-current=\"date\"><span class=\"cui-date-calendar__day\" aria-label=\"25 August 2026\">25</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"26 August 2026\">26</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"27 August 2026\">27</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"28 August 2026\">28</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"29 August 2026\">29</span></td><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"30 August 2026\">30</span></td></tr><tr><td class=\"cui-date-calendar__cell\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"31 August 2026\">31</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"1 September 2026\">1</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"2 September 2026\">2</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"3 September 2026\">3</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"4 September 2026\">4</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"5 September 2026\">5</span></td><td class=\"cui-date-calendar__cell cui-date-calendar__cell--outside\" role=\"gridcell\" aria-selected=\"false\"><span class=\"cui-date-calendar__day\" aria-label=\"6 September 2026\">6</span></td></tr></tbody></table><div hidden><data data-cui-date-unavailable value=\"2026-08-22\"></data></div></section>\n",
+  "options": {
+    "disabled": false,
+    "firstDay": 1,
+    "id": "release-calendar",
+    "interactive": false,
+    "label": "Release calendar",
+    "maximum": "2026-09-30",
+    "minimum": "2026-08-01",
+    "month": "2026-08-01",
+    "monthLabels": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "nextLabel": "Next month",
+    "previousLabel": "Previous month",
+    "selection": {
+      "end": "2026-08-24",
+      "kind": "range",
+      "start": "2026-08-18"
+    },
+    "selectionMode": "range",
+    "today": "2026-08-25",
+    "unavailableDates": [
+      "2026-08-22"
+    ],
+    "weekdayFullLabels": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "weekdayShortLabels": [
+      "Su",
+      "Mo",
+      "Tu",
+      "We",
+      "Th",
+      "Fr",
+      "Sa"
+    ]
+  }
+}

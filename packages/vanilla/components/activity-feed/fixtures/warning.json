@@ -1,0 +1,14 @@
+{
+  "options": {
+    "label": "Recent changes",
+    "entries": [
+      {
+        "title": "Approval pending",
+        "occurredAt": "2025-01-15T09:30:00Z",
+        "timeLabel": "9:30 AM",
+        "tone": "warning"
+      }
+    ]
+  },
+  "expectedHtml": "<div class=\"cui-activity-feed\" data-cui-component=\"activity-feed\"><ol class=\"cui-activity-feed__list\" aria-label=\"Recent changes\"><li class=\"cui-activity-feed__item\"><span class=\"cui-activity-feed__marker cui-activity-feed__tone--warning\" aria-hidden=\"true\"></span><div class=\"cui-activity-feed__content\"><div class=\"cui-activity-feed__title\">Approval pending</div><div class=\"cui-activity-feed__meta\"><time class=\"cui-activity-feed__time\" datetime=\"2025-01-15T09:30:00Z\">9:30 AM</time></div></div></li></ol></div>\n"
+}

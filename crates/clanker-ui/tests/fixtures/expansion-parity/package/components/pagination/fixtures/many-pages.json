@@ -1,0 +1,48 @@
+{
+  "expectedHtml": "<nav class=\"cui-pagination cui-pagination--outlined\" data-cui-component=\"pagination\" aria-label=\"Results pages\"><ol class=\"cui-pagination__list\"><li class=\"cui-pagination__item cui-pagination__item--previous\"><span class=\"cui-pagination__disabled\" aria-disabled=\"true\">Previous</span></li><li class=\"cui-pagination__item cui-pagination__item--page\"><a class=\"cui-pagination__link\" href=\"/results?page=1\">1</a></li><li class=\"cui-pagination__item cui-pagination__item--gap\"><span class=\"cui-pagination__gap\" aria-hidden=\"true\">…</span></li><li class=\"cui-pagination__item cui-pagination__item--page\"><a class=\"cui-pagination__link\" href=\"/results?page=8\">8</a></li><li class=\"cui-pagination__item cui-pagination__item--current\"><span class=\"cui-pagination__current\" aria-current=\"page\">9</span></li><li class=\"cui-pagination__item cui-pagination__item--page\"><a class=\"cui-pagination__link\" href=\"/results?page=10\">10</a></li><li class=\"cui-pagination__item cui-pagination__item--gap\"><span class=\"cui-pagination__gap\" aria-hidden=\"true\">…</span></li><li class=\"cui-pagination__item cui-pagination__item--page\"><a class=\"cui-pagination__link\" href=\"/results?page=42\">42</a></li><li class=\"cui-pagination__item cui-pagination__item--next\"><a class=\"cui-pagination__link\" href=\"/results?page=10\" rel=\"next\">Next</a></li></ol></nav>\n",
+  "items": [
+    {
+      "kind": "previous",
+      "label": "Previous"
+    },
+    {
+      "href": "/results?page=1",
+      "kind": "page",
+      "label": "1"
+    },
+    {
+      "kind": "gap",
+      "label": "…"
+    },
+    {
+      "href": "/results?page=8",
+      "kind": "page",
+      "label": "8"
+    },
+    {
+      "kind": "current",
+      "label": "9"
+    },
+    {
+      "href": "/results?page=10",
+      "kind": "page",
+      "label": "10"
+    },
+    {
+      "kind": "gap",
+      "label": "…"
+    },
+    {
+      "href": "/results?page=42",
+      "kind": "page",
+      "label": "42"
+    },
+    {
+      "href": "/results?page=10",
+      "kind": "next",
+      "label": "Next"
+    }
+  ],
+  "label": "Results pages",
+  "variant": "outlined"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "check",
+  "size": "large",
+  "label": null,
+  "expectedHtml": "<svg class=\"cui-icon cui-icon--large\" data-cui-component=\"icon\" data-cui-icon=\"check\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m20 6-11 11-5-5\"></path></svg>\n"
+}

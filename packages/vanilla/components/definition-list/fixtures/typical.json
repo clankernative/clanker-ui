@@ -1,0 +1,9 @@
+{
+  "items": [
+    {"term": "Owner", "value": "Platform operations"},
+    {"term": "Region", "value": "Europe West"}
+  ],
+  "density": "standard",
+  "dividers": true,
+  "expectedHtml": "<dl class=\"cui-definition-list cui-definition-list--standard\" data-cui-component=\"definition-list\"><div class=\"cui-definition-list__item\"><dt class=\"cui-definition-list__term\">Owner</dt><dd class=\"cui-definition-list__value\">Platform operations</dd></div><div class=\"cui-definition-list__item\"><dt class=\"cui-definition-list__term\">Region</dt><dd class=\"cui-definition-list__value\">Europe West</dd></div></dl>\n"
+}

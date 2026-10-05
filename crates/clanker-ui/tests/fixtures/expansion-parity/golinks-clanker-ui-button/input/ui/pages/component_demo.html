@@ -1,0 +1,250 @@
+<div id="golinks-app">
+  <div id="page-heading" class="header">
+    <cui-page-header title="Component demo" description="Clanker Native UI in GoLinks. Twenty components, sample states, the existing app theme, and native controls.">
+      <cui-slot name="actions"><cui-button kind="link" route="links" label="Open dashboard" /></cui-slot>
+    </cui-page-header>
+    <nav class="nav" aria-label="Go Links">
+      <a data-nav="dashboard" href="{{ routes.links() }}">Dashboard</a>
+      <a href="{{ routes.component_demo() }}" aria-current="page">UI Demo</a>
+    </nav>
+  </div>
+
+  <div class="cui-demo">
+    <nav class="actions" aria-label="Component examples">
+      <a href="#page-heading">Page Header</a>
+      <a href="#layouts">Layouts</a>
+      <a href="#avatars">Avatar</a>
+      <a href="#empty-states">Empty State</a>
+      <a href="#metrics">Metric</a>
+      <a href="#skeletons">Skeleton</a>
+      <a href="#form-fields">Form Field</a>
+      <a href="#tags">Tag</a>
+      <a href="#alerts">Alert</a>
+      <a href="#progress">Progress</a>
+      <a href="#existing-components">Existing components</a>
+    </nav>
+
+    <section class="cui-demo-section" aria-labelledby="page-header-title">
+      <h2 id="page-header-title">Page Header</h2>
+      <p class="subtitle">The page header owns this page’s only h1 and description. Its named actions slot admits the GoLinks-owned dashboard link; navigation remains app-owned.</p>
+    </section>
+
+    <section id="layouts" class="cui-demo-section" aria-labelledby="layouts-title">
+      <h2 id="layouts-title">Layout components</h2>
+      <p class="subtitle">Six neutral layout components arrange admitted child markup. Their responsive behavior comes from package components, not app-authored layout CSS.</p>
+      <cui-stack gap="spacious">
+        <cui-container width="reading" gutter="generous"><cui-stack gap="standard"><h3>Container and Stack</h3><p>A reading-width region with generous gutters and a standard vertical rhythm. The outer container keeps long copy comfortable.</p><cui-stack gap="compact" alignment="center"><cui-badge label="Nested stack" tone="info" /><span>Compact spacing, centered alignment.</span></cui-stack></cui-stack></cui-container>
+        <cui-cluster justification="between" alignment="center" gap="standard"><cui-cluster alignment="center" gap="compact"><cui-icon name="link" label="Link" /><h3>Cluster: paired actions</h3></cui-cluster><cui-button kind="link" route="links" label="Open dashboard" /></cui-cluster>
+        <cui-grid columns="three" minimum="narrow" collapse-at="standard" gap="standard">
+          <cui-card title="Card with body content" subtitle="Optional subtitle" padding="standard" heading-level="h3"><p>Default child markup remains the card body. This card uses the component’s native heading level.</p><cui-slot name="actions"><cui-button kind="link" route="links" label="View links" /></cui-slot></cui-card>
+          <cui-card title="Compact card" padding="compact" heading-level="h3"><p>Card padding and heading level are explicit options.</p></cui-card>
+          <cui-card title="Unpadded card" padding="none" heading-level="h4"><p>Cards compose within a responsive grid without custom wrappers.</p></cui-card>
+        </cui-grid>
+        <cui-split ratio="start-dominant" gap="standard" alignment="start" collapse-at="standard">
+          <cui-slot name="start"><cui-card title="Start region" padding="standard" heading-level="h3"><p>The start region is deliberately wider on large containers, then stacks before it gets cramped.</p></cui-card></cui-slot>
+          <cui-slot name="end"><cui-card title="End region" padding="compact" heading-level="h3"><p>Named regions preserve source order. This narrow column demonstrates container-driven recovery.</p><cui-alert tone="warning" title="Narrow-column recovery" body="Longer content wraps inside the stacked region without forcing page overflow." appearance="accent" heading-level="h4" recovery-label="Review links" recovery-route="links" /></cui-card></cui-slot>
+        </cui-split>
+      </cui-stack>
+    </section>
+
+    <section id="avatars" class="cui-demo-section" aria-labelledby="avatars-title">
+      <h2 id="avatars-title">Avatar</h2>
+      <p class="subtitle">Named identities with initials fallback. Initials-only examples are sample people, not accounts. HTTPS images load directly in the browser; the server does not fetch them.</p>
+      <cui-cluster alignment="end" gap="generous">
+        <div class="cui-demo-avatar-example"><cui-avatar initials="AL" label="Avery Lane, sample person" size="extra-small" /><span>Extra small</span></div>
+        <div class="cui-demo-avatar-example"><cui-avatar initials="MK" label="Morgan Kim, sample person" size="small" tone="brand" /><span>Small · brand</span></div>
+        <div class="cui-demo-avatar-example"><cui-avatar initials="SR" label="Sam Rivera, sample person" tone="success" /><span>Medium · success</span></div>
+        <div class="cui-demo-avatar-example"><cui-avatar initials="JP" label="Jordan Park, sample person" size="large" /><span>Large</span></div>
+        <div class="cui-demo-avatar-example"><cui-avatar initials="ÉL" label="Émile Laurent, sample person" size="extra-large" tone="brand" /><span>Extra large</span></div>
+        <div class="cui-demo-avatar-example"><cui-avatar initials="ET" label="Sample photo, not an account" src="https://i.pravatar.cc/160?img=12" /><span>HTTPS sample photo</span></div>
+        <div class="cui-demo-avatar-example"><cui-avatar initials="ET" label="Packaged sample photo, not an account" image-asset="avatar_sample" /><span>Admitted local photo</span></div>
+        <div class="cui-demo-avatar-example"><cui-avatar initials="ET" label="Broken sample photo fallback" src="https://invalid.example.test/cui-avatar-does-not-exist.png" /><span>Broken image · initials fallback</span></div>
+      </cui-cluster>
+    </section>
+
+    <section id="empty-states" class="cui-demo-section" aria-labelledby="empty-states-title">
+      <h2 id="empty-states-title">Empty State</h2>
+      <p class="subtitle">An empty result explains what is missing and offers admitted navigation. These examples are illustrative; the live list below uses the same component when no links match.</p>
+      <div class="cui-demo-stack">
+        <cui-empty-state title="No sample results" body="Change your search or create a link to start a useful directory." heading-level="h3" action-href="#form-fields" action-label="Create a test link" />
+        <cui-empty-state title="A fresh collection" body="There is nothing to review yet. This centered state intentionally has no action." alignment="center" heading-level="h3" />
+        <cui-empty-state title="No archived examples" body="A smaller heading fits an empty state nested under a section. The app still owns the destination." heading-level="h4" action-route="links" action-label="Open dashboard" />
+      </div>
+    </section>
+
+    <section id="metrics" class="cui-demo-section" aria-labelledby="metrics-title">
+      <h2 id="metrics-title">Metric</h2>
+      <p class="subtitle">Illustrative formatted values, not current GoLinks totals. Direction and favorability are independent: a falling error rate is positive, while rising errors are negative. No metric is a live announcement.</p>
+      <div class="cui-demo-metrics">
+        <cui-metric label="Sample links reviewed" value="128" detail="Illustrative weekly total" trend="up" trend-tone="positive" trend-label="12 more than last week" icon="link" />
+        <cui-metric label="Sample errors" value="2" detail="Illustrative daily count" trend="down" trend-tone="positive" trend-label="3 fewer than yesterday" appearance="contained" />
+        <cui-metric label="Sample review queue" value="24" trend="up" trend-tone="negative" trend-label="8 more waiting" appearance="contained" />
+        <cui-metric label="Sample completion rate" value="92%" trend="down" trend-tone="negative" trend-label="2 percentage points lower" />
+        <cui-metric label="Sample active collections" value="6" trend="flat" trend-tone="neutral" trend-label="No change" trend-announcement="The sample collection count is unchanged; neither favorable nor unfavorable" />
+        <cui-metric label="A longer sample metric label that must wrap cleanly" value="1,234,567" detail="A formatted text value; the component does not calculate or parse the number." appearance="contained" />
+      </div>
+    </section>
+
+    <section id="skeletons" class="cui-demo-section" aria-labelledby="skeletons-title">
+      <h2 id="skeletons-title">Skeleton</h2>
+      <p class="subtitle">Decorative loading shapes, always hidden from assistive technology. The app supplies the busy region and meaningful loading text. These are illustrative placeholders, not an actual pending request.</p>
+      <p class="cui-demo-caption">Loading sample content (illustrative). Reduced motion removes the animation.</p>
+      <div class="cui-demo-skeleton-layout" role="group" aria-label="Illustrative content loading" aria-busy="true">
+        <cui-skeleton shape="circle" size="large" />
+        <div class="cui-demo-stack">
+          <cui-skeleton shape="text" size="small" width="short" />
+          <cui-skeleton shape="text" width="medium" />
+          <cui-skeleton shape="rectangle" size="large" />
+        </div>
+      </div>
+      <h3>Static placeholders</h3>
+      <div class="cui-demo-skeleton-layout">
+        <cui-skeleton shape="circle" size="small" animated="false" />
+        <div class="cui-demo-stack">
+          <cui-skeleton shape="text" size="large" width="full" animated="false" />
+          <cui-skeleton shape="rectangle" size="small" width="medium" animated="false" />
+        </div>
+      </div>
+    </section>
+
+    <section id="form-fields" class="cui-demo-section" aria-labelledby="form-fields-title">
+      <h2 id="form-fields-title">Form Field</h2>
+      <p class="subtitle">The component owns the label, control, and accessible descriptions. GoLinks owns the form and command.</p>
+      <div class="grid cui-demo-fields">
+        <div class="card">
+          <div class="card-header"><h3>Create a test link</h3></div>
+          <div class="card-body">
+            <p class="form-hint">This submits the existing GoLinks create command. Use a unique name; it creates a real link in this local instance.</p>
+            <form id="demo-create-link" data-command="golinks.create" class="form">
+              <cui-form-field id="demo-name" name="name" label="Name" required="true" maxlength="255" placeholder="cui-review-link" autocomplete="off" hint="Use a short name without spaces. Required fields are marked *." />
+              <cui-form-field id="demo-url" name="url" label="Destination URL" input-type="url" required="true" placeholder="https://example.com/docs" autocomplete="off" />
+              <cui-form-field id="demo-description" name="description" label="Description" kind="textarea" placeholder="Describe your test link" hint="Optional. Multiline text stays plain text." />
+              <cui-divider />
+              <div class="actions"><cui-button kind="submit" variant="primary" icon="plus" label="Create test link" /></div>
+            </form>
+          </div>
+        </div>
+        <div class="form cui-demo-field-states">
+          <h3>Review states</h3>
+          <cui-form-field id="demo-error" name="demo_error" label="Name with a validation error" value="team handbook" hint="Illustrative state, not a submitted field." error="Names cannot contain spaces. Try team-handbook." />
+          <cui-form-field id="demo-readonly" name="demo_readonly" label="Read-only value" value="engineering-handbook" readonly="true" hint="Read-only controls remain focusable. These review fields are outside the command form." />
+          <cui-form-field id="demo-disabled" name="demo_disabled" label="Disabled sample field" value="Not editable or submitted" disabled="true" hint="An inactive native control, outside the command form. Disabled named controls cannot supply command inputs." />
+          <cui-form-field id="demo-disabled-notes" name="demo_disabled_notes" label="Disabled sample notes" kind="textarea" value="Illustrative inactive textarea." disabled="true" />
+          <cui-form-field id="demo-email" name="demo_email" label="Email input" input-type="email" placeholder="you@example.com" autocomplete="email" />
+          <cui-form-field id="demo-long-label" name="demo_notes" label="A longer field label that should wrap without crowding its control" kind="textarea" value="Plain text: <script> is not markup." rows="3" />
+        </div>
+      </div>
+      <h3>Native input types</h3>
+      <div class="grid">
+        <div class="form">
+          <cui-form-field id="demo-number" name="demo_number" label="Number" input-type="number" value="3" />
+          <cui-form-field id="demo-date" name="demo_date" label="Date" input-type="date" value="2026-09-29" />
+          <cui-form-field id="demo-tel" name="demo_tel" label="Telephone" input-type="tel" placeholder="Enter a telephone number" />
+        </div>
+        <div class="form">
+          <cui-form-field id="demo-search" name="demo_search" label="Search input" input-type="search" placeholder="Try the native clear control" />
+          <cui-form-field id="demo-password" name="demo_password" label="Password" input-type="password" autocomplete="new-password" hint="No stored secret is preloaded." />
+        </div>
+      </div>
+    </section>
+
+    <section id="tags" class="cui-demo-section" aria-labelledby="tags-title">
+      <h2 id="tags-title">Tag</h2>
+      <p class="subtitle">Metadata is distinct from operational status. Linked tags navigate; a removal affordance is an app-owned destination, not client-side dismissal.</p>
+      <div class="actions">
+        <cui-tag label="Metadata" tone="neutral" />
+        <cui-tag label="Engineering" tone="brand" icon="tag" />
+        <cui-tag label="Reference" tone="info" />
+        <cui-tag label="Reviewed" tone="success" />
+        <cui-tag label="Needs review" tone="warning" />
+        <cui-tag label="Restricted" tone="danger" />
+      </div>
+      <div class="actions">
+        <cui-tag label="Small" size="small" />
+        <cui-tag label="Medium" size="medium" count="12" count-label="12 sample links" />
+        <cui-tag label="Large" size="large" />
+        <cui-tag label="Open dashboard" tone="brand" route="links" />
+        <cui-tag label="Sample filter" remove-href="#tags" remove-label="Review sample filter" />
+      </div>
+      <p class="cui-demo-caption">The sample filter link returns to this section; it does not remove data.</p>
+      <cui-tag label="A longer metadata label that wraps at narrow widths instead of pushing the page sideways" icon="tag" />
+    </section>
+
+    <section id="alerts" class="cui-demo-section" aria-labelledby="alerts-title">
+      <h2 id="alerts-title">Alert</h2>
+      <p class="subtitle">These are illustrative messages, not current GoLinks incidents. Announcements are opt-in; these static examples do not interrupt assistive technology.</p>
+      <div class="cui-demo-stack">
+        <cui-alert tone="info" title="A place for useful context" body="Share the consequence or next step, not just a color-coded status." appearance="soft" />
+        <cui-alert tone="success" title="Outlined treatment" body="A success message can remain clear without a filled surface." appearance="outlined" heading-level="h3" />
+        <cui-alert tone="warning" title="Accent treatment" body="The accent appearance emphasizes a message while preserving the GoLinks palette." appearance="accent" heading-level="h4" />
+        <cui-alert tone="success" title="Your changes are saved" body="A successful outcome stays understandable without its decorative icon." />
+        <cui-alert tone="warning" title="This link needs review" body="Its destination may be out of date. Review the link before sharing it with your team." recovery-label="Review links" recovery-route="links" />
+        <cui-alert tone="danger" title="The link could not be saved" body="This is an illustrative error state. Explain what went wrong and offer a real recovery destination." recovery-label="Return to the form" recovery-href="#form-fields" />
+      </div>
+    </section>
+
+    <section id="progress" class="cui-demo-section" aria-labelledby="progress-title">
+      <h2 id="progress-title">Progress</h2>
+      <p class="subtitle">Illustrative task data. Determinate values are checked, not clamped. Unknown progress uses a native indeterminate element, not a fake percentage.</p>
+      <div class="cui-demo-stack cui-demo-progress">
+        <cui-progress label="Illustrative import goal" state="determinate" value="42" maximum="100" suffix="42 of 100 links" detail="Example progress, not current app activity." />
+        <cui-progress label="Importing sample links" state="determinate" value="42" maximum="100" suffix="42 of 100 links" detail="Regular track, information tone." />
+        <cui-progress label="Import complete" state="determinate" value="100" maximum="100" suffix="100 of 100 links" tone="success" />
+        <cui-progress label="Waiting for review" state="determinate" value="3" maximum="10" suffix="3 of 10 reviewed" tone="warning" size="compact" detail="Compact track; the app supplies the measured values." />
+        <cui-progress label="Import interrupted" state="determinate" value="24" maximum="100" tone="danger" detail="A recovery action belongs in an Alert, not the progress element." />
+        <cui-progress label="Preparing the import" state="indeterminate" detail="No reliable completion estimate is available." />
+        <cui-progress label="Not started" state="determinate" value="0" maximum="100" suffix="0 of 100 links" size="compact" />
+      </div>
+    </section>
+
+    <section id="existing-components" class="cui-demo-section" aria-labelledby="existing-title">
+      <h2 id="existing-title">Existing components</h2>
+      <p class="subtitle">The first five ports use the same theme and compose with the new components.</p>
+      <h3>Button and Icon</h3>
+      <div class="actions">
+        <cui-button kind="link" route="links" variant="primary" icon="link" label="Open dashboard" />
+        <cui-button kind="action" variant="secondary" label="Disabled" disabled="true" />
+        <cui-button kind="action" variant="quiet" label="Save" busy="true" busy-label="Saving…" />
+        <cui-icon name="search" size="large" label="Search" />
+      </div>
+      <h3>Badge</h3>
+      <div class="actions">
+        <cui-badge label="Metadata" tone="neutral" />
+        <cui-badge label="Information" tone="info" />
+        <cui-badge label="Saved" tone="success" />
+        <cui-badge label="Needs attention" tone="warning" />
+        <cui-badge label="Failed" tone="danger" />
+        <cui-badge label="Running" tone="running" />
+      </div>
+      <h3>Status Indicator and Divider</h3>
+      <div class="actions">
+        <cui-status-indicator label="Available" tone="success" />
+        <cui-divider orientation="vertical" />
+        <cui-status-indicator label="Waiting" tone="warning" detail="Sample state" />
+      </div>
+      <cui-divider label="End of examples" />
+    </section>
+
+    <section class="cui-demo-section" aria-labelledby="demo-links-title">
+      <h2 id="demo-links-title">Live app data</h2>
+      <p class="subtitle">This region follows the existing GoLinks list query. Server updates do not replace an in-progress form draft. The disposable cui-photo-sample link uses description “AL” as checked initials and its HTTPS destination as the image source.</p>
+      <div id="demo-links" data-live>
+        {% for link in component_demo.items %}
+        <div class="cui-demo-live-link">
+          <p><a href="{{ routes.link(link_id=link.id) }}">go/{{ link.name }}</a> — {{ link.description }}</p>
+          <cui-metric label="{{ link.name }}" value="{{ link.visit_count }}" detail="Committed visits to this local test link" icon="link" />
+          <cui-progress label="Committed visits (illustrative goal: 100)" state="determinate" value="{{ link.visit_count }}" maximum="100" suffix="Current sample link visits; scale ends at 100" detail="Bound to this link’s checked U64 count; values above 100 are intentionally not clamped." />
+          <cui-tag label="{{ link.name }}" count="{{ link.visit_count }}" count-label="Committed visits" />
+          <cui-badge label="{{ link.name }}" tone="info" />
+          <cui-icon name="link" label="{{ link.name }}" />
+          <cui-status-indicator label="{{ link.owner }}" tone="success" detail="{{ link.name }}" />
+          <cui-divider label="{{ link.name }}" />
+          {% if link.name == 'cui-photo-sample' %}<cui-avatar initials="{{ link.description }}" label="{{ link.name }}" src="{{ link.url }}" />{% endif %}
+        </div>
+        {% else %}
+        <cui-empty-state title="No links match" body="Try another search or create a test link above." heading-level="h3" action-href="#form-fields" action-label="Create a test link" />
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>

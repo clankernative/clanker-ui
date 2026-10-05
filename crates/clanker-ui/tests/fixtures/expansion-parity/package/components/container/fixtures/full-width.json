@@ -1,0 +1,5 @@
+{
+  "options": { "width": "full", "gutter": "none" },
+  "children": { "body": "<article>Edge to edge</article>" },
+  "expectedHtml": "<div class=\"cui-container cui-container--full cui-container--gutter-none\" data-cui-component=\"container\"><article>Edge to edge</article></div>\n"
+}

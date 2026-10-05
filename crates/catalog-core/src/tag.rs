@@ -178,7 +178,12 @@ pub fn render(
     }
     let element = if let Some(href) = &instance.href {
         classes.push("cui-tag--linked".into());
-        format!("<a class=\"{}\" href=\"{}\" data-cui-component=\"tag\" data-cui-tone=\"{}\">{content}</a>", classes.join(" "), escape_html(href), instance.tone.as_str())
+        format!(
+            "<a class=\"{}\" href=\"{}\" data-cui-component=\"tag\" data-cui-tone=\"{}\">{content}</a>",
+            classes.join(" "),
+            escape_html(href),
+            instance.tone.as_str()
+        )
     } else if let (Some(href), Some(label)) = (&instance.remove_href, &instance.remove_label) {
         let close_icon = icon::render(
             &IconInstance {
@@ -189,7 +194,13 @@ pub fn render(
             "<svg [[attributes]]>[[geometry]]</svg>",
             icons,
         )?;
-        format!("<span class=\"{}\" data-cui-component=\"tag\" data-cui-tone=\"{}\">{content}<a class=\"cui-tag__remove\" href=\"{}\" aria-label=\"{}\">{close_icon}</a></span>", classes.join(" "), instance.tone.as_str(), escape_html(href), escape_html(label))
+        format!(
+            "<span class=\"{}\" data-cui-component=\"tag\" data-cui-tone=\"{}\">{content}<a class=\"cui-tag__remove\" href=\"{}\" aria-label=\"{}\">{close_icon}</a></span>",
+            classes.join(" "),
+            instance.tone.as_str(),
+            escape_html(href),
+            escape_html(label)
+        )
     } else {
         format!(
             "<span class=\"{}\" data-cui-component=\"tag\" data-cui-tone=\"{}\">{content}</span>",

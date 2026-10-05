@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "name": "breadcrumbs",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Renders a labelled breadcrumb trail of safe linked ancestors and one current page.",
+  "keywords": [
+    "navigation",
+    "breadcrumb",
+    "hierarchy",
+    "current-page"
+  ],
+  "agent": {
+    "useWhen": "A page has a navigable hierarchy with one or more ancestor destinations and a current location.",
+    "avoidWhen": "The trail is not hierarchical, the current item must be a link, or destinations are not safe internal/HTTP(S) hrefs.",
+    "composeWith": [
+      "page-header"
+    ]
+  },
+  "contract": {
+    "role": "labelled navigation landmark",
+    "variants": [
+      "standard"
+    ],
+    "requiredFields": [
+      "items"
+    ],
+    "invariants": [
+      "At least one linked ancestor is followed by exactly one nonlinked current page.",
+      "Ancestor hrefs use the closed safe destination policy; labels and href attributes are escaped.",
+      "All labels are nonblank plain text; no arbitrary URLs, HTML, routes, or scripts are admitted.",
+      "The fragment contains exactly one [[attributes]], [[label]], and [[items]] slot; expansion is exact and single-pass."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-breadcrumbs-current",
+    "--cui-breadcrumbs-current-weight",
+    "--cui-breadcrumbs-focus",
+    "--cui-breadcrumbs-gap",
+    "--cui-breadcrumbs-link",
+    "--cui-breadcrumbs-separator",
+    "--cui-breadcrumbs-size",
+    "--cui-breadcrumbs-text",
+    "--cui-link",
+    "--cui-text",
+    "--cui-text-muted",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-breadcrumbs-current",
+      "role": "color",
+      "purpose": "Controls visual treatment for  breadcrumbs."
+    },
+    {
+      "name": "--cui-breadcrumbs-current-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for breadcrumbs."
+    },
+    {
+      "name": "--cui-breadcrumbs-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for  breadcrumbs."
+    },
+    {
+      "name": "--cui-breadcrumbs-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for breadcrumbs."
+    },
+    {
+      "name": "--cui-breadcrumbs-link",
+      "role": "text",
+      "purpose": "Controls visual treatment for  breadcrumbs."
+    },
+    {
+      "name": "--cui-breadcrumbs-separator",
+      "role": "color",
+      "purpose": "Controls visual treatment for  breadcrumbs."
+    },
+    {
+      "name": "--cui-breadcrumbs-size",
+      "role": "sizing",
+      "purpose": "Controls size for breadcrumbs."
+    },
+    {
+      "name": "--cui-breadcrumbs-text",
+      "role": "text",
+      "purpose": "Controls text color for  breadcrumbs."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/breadcrumbs/fragment.html",
+    "styles": "components/breadcrumbs/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/breadcrumbs/fixtures/typical.json",
+    "components/breadcrumbs/fixtures/long-content.json",
+    "components/breadcrumbs/fixtures/deep-trail.json"
+  ],
+  "templateAuthoring": {
+    "schemaVersion": 1,
+    "rootTag": "cui-breadcrumbs",
+    "elements": [
+      {
+        "tag": "cui-breadcrumbs",
+        "form": "paired",
+        "allowedParents": [],
+        "attributes": [
+          {
+            "name": "label",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Must be nonblank plain text."
+            ]
+          }
+        ],
+        "content": "helpers",
+        "allowedChildren": [
+          "cui-crumb"
+        ],
+        "controlFlow": [],
+        "rules": [
+          "Only direct cui-crumb helpers are allowed; no loops, conditionals, or other markup in the trail."
+        ]
+      },
+      {
+        "tag": "cui-crumb",
+        "form": "self-closing",
+        "allowedParents": [
+          "cui-breadcrumbs"
+        ],
+        "attributes": [
+          {
+            "name": "label",
+            "required": true,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "A literal or one whole checked string field; must be nonblank plain text."
+            ]
+          },
+          {
+            "name": "href",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "named-route"
+            ],
+            "rules": [
+              "Required for ancestors; use a safe internal literal destination or one whole named route call."
+            ]
+          },
+          {
+            "name": "current",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "If present, must be literal true; current crumb cannot have href."
+            ]
+          }
+        ],
+        "content": "none",
+        "allowedChildren": [],
+        "controlFlow": [],
+        "rules": [
+          "Provide one or more linked ancestors followed by exactly one current crumb, which must be last and have no href."
+        ]
+      }
+    ],
+    "rules": [
+      "At least one ancestor and exactly one current item are required.",
+      "Host route registration, route argument/type checks, destination safety, and final template admission remain host-owned; this metadata does not authorize arbitrary routes or URLs.",
+      "Labels and destinations are emitted as escaped text and attributes."
+    ],
+    "examples": [
+      {
+        "name": "customer-trail",
+        "summary": "A customer detail breadcrumb with a linked list ancestor and a current customer.",
+        "template": "<cui-breadcrumbs label=\"Breadcrumb\">\n  <cui-crumb label=\"Customers\" href=\"{{ routes.customers_index() }}\" />\n  <cui-crumb label=\"{{ customer.name }}\" current=\"true\" />\n</cui-breadcrumbs>",
+        "requirements": [
+          "Register customers_index route if using the ancestor link.",
+          "App provides customer.name as a nonblank string field."
+        ]
+      }
+    ]
+  }
+}

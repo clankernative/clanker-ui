@@ -1,0 +1,7 @@
+{
+  "label": "Date range",
+  "appearance": "joined",
+  "fullWidth": false,
+  "children": ["<button class=\"cui-button\" type=\"button\">24 hours</button>", "<button class=\"cui-button\" type=\"button\">7 days</button>"],
+  "expectedHtml": "<div class=\"cui-button-group cui-button-group--joined\" data-cui-component=\"button-group\" role=\"group\" aria-label=\"Date range\"><button class=\"cui-button\" type=\"button\">24 hours</button><button class=\"cui-button\" type=\"button\">7 days</button></div>\n"
+}

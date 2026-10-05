@@ -1,0 +1,18 @@
+{
+  "expectedHtml": "<fieldset id=\"channels\" class=\"cui-checkbox-group cui-checkbox-group--inline\" data-cui-component=\"checkbox-group\"><legend class=\"cui-checkbox-group__legend\">Channels</legend><div class=\"cui-checkbox-group__choices\"><label class=\"cui-checkbox-group__choice\" for=\"channels-choice-1\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"channels-choice-1\" name=\"channels\" value=\"chat\"><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">Chat</span></span></label><label class=\"cui-checkbox-group__choice\" for=\"channels-choice-2\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"channels-choice-2\" name=\"channels\" value=\"email\"><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">Email</span></span></label></div></fieldset>\n",
+  "options": {
+    "choices": [
+      {
+        "label": "Chat",
+        "value": "chat"
+      },
+      {
+        "label": "Email",
+        "value": "email"
+      }
+    ],
+    "layout": "inline",
+    "legend": "Channels",
+    "name": "channels"
+  }
+}

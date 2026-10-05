@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "name": "button-group",
+  "status": "ready",
+  "target": "native-html",
+  "category": "actions",
+  "summary": "Groups two to six related native button controls.",
+  "keywords": [
+    "button",
+    "group",
+    "actions"
+  ],
+  "agent": {
+    "useWhen": "Two to six actions operate on the same scope or selection.",
+    "avoidWhen": "Actions are unrelated or represent application navigation.",
+    "composeWith": [
+      "button",
+      "cluster",
+      "form-field"
+    ]
+  },
+  "contract": {
+    "role": "named role=group containing two to six host-admitted buttons",
+    "variants": [
+      "joined",
+      "spaced"
+    ],
+    "requiredFields": [
+      "label",
+      "body"
+    ],
+    "invariants": [
+      "The nonblank accessible label is escaped; buttons are provided only as host-admitted children.",
+      "The Native host must enforce that admitted children are buttons.",
+      "Default appearance is joined and fullWidth defaults false.",
+      "Joined controls may horizontally scroll on narrow widths; spaced controls wrap whole buttons.",
+      "Fragment slots are exactly [[attributes]] and [[buttons]]."
+    ]
+  },
+  "tokens": [
+    "--cui-border-strong",
+    "--cui-button-group-gap",
+    "--cui-button-group-radius",
+    "--cui-button-group-shadow",
+    "--cui-radius-control"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-button-group-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for button group."
+    },
+    {
+      "name": "--cui-button-group-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for button group."
+    },
+    {
+      "name": "--cui-button-group-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for button group."
+    }
+  ],
+  "dependencies": [
+    "button"
+  ],
+  "assets": {
+    "template": "components/button-group/fragment.html",
+    "styles": "components/button-group/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/button-group/fixtures/typical-golden.json",
+    "components/button-group/fixtures/spaced-full-width-golden.json"
+  ]
+}

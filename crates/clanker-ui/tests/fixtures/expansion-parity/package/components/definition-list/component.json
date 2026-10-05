@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "definition-list",
+  "status": "draft",
+  "target": "native-html",
+  "category": "data",
+  "summary": "Presents stable entity metadata as a responsive semantic definition list.",
+  "keywords": ["metadata", "details", "key value"],
+  "agent": {"useWhen": "A detail view presents one entity's stable metadata or configuration values.", "avoidWhen": "Users compare repeated records across columns or the content is prose.", "composeWith": ["badge", "button", "card"]},
+  "contract": {"role": "native dl with paired dt and dd values", "variants": ["standard", "compact"], "requiredFields": ["items"], "invariants": ["One to 100 items; terms are nonblank plain text and all serialized values are control-free text.", "Rich values are admitted only through the host-owned rich-value path; serialized JSON never carries raw HTML.", "Responsive narrow layouts stack terms above values; no content is hidden or truncated.", "Fragment slots are exactly [[attributes]] and [[items]], filled as escaped text except explicit admitted values."]},
+  "tokens": ["--cui-definition-list-gap", "--cui-definition-list-padding", "--cui-definition-list-compact-padding", "--cui-definition-list-border", "--cui-definition-list-term-measure", "--cui-definition-list-term-text", "--cui-definition-list-value-text"],
+  "dependencies": [], "assets": {"template": "components/definition-list/fragment.html", "styles": "components/definition-list/styles.css", "scripts": []},
+  "fixtures": ["components/definition-list/fixtures/typical-golden.json", "components/definition-list/fixtures/compact-plain-golden.json"]
+}

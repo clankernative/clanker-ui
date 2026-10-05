@@ -1,0 +1,19 @@
+{
+  "expectedHtml": "<fieldset id=\"alerts\" class=\"cui-checkbox-group cui-checkbox-group--stacked\" data-cui-component=\"checkbox-group\" disabled><legend class=\"cui-checkbox-group__legend\">Alerts</legend><div class=\"cui-checkbox-group__choices\"><label class=\"cui-checkbox-group__choice\" for=\"alerts-choice-1\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"alerts-choice-1\" name=\"alerts\" value=\"email\" checked disabled><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">Email</span></span></label><label class=\"cui-checkbox-group__choice\" for=\"alerts-choice-2\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"alerts-choice-2\" name=\"alerts\" value=\"sms\" disabled><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">SMS</span></span></label></div></fieldset>\n",
+  "options": {
+    "choices": [
+      {
+        "checked": true,
+        "label": "Email",
+        "value": "email"
+      },
+      {
+        "label": "SMS",
+        "value": "sms"
+      }
+    ],
+    "disabled": true,
+    "legend": "Alerts",
+    "name": "alerts"
+  }
+}

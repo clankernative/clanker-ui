@@ -1,0 +1,63 @@
+@layer clanker.components {
+  .cui-cover {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: var(--cui-cover-gap-standard);
+    min-inline-size: 0;
+  }
+
+  .cui-cover--height-compact {
+    min-block-size: var(--cui-cover-height-compact, 20rem);
+  }
+
+  .cui-cover--height-standard {
+    min-block-size: var(--cui-cover-height-standard, 32rem);
+  }
+
+  .cui-cover--height-fill {
+    min-block-size: 100%;
+  }
+
+  .cui-cover--height-viewport {
+    min-block-size: calc(100dvh - var(--cui-cover-viewport-offset, 2rem));
+  }
+
+  .cui-cover--gap-none {
+    gap: var(--cui-cover-gap-none, 0);
+  }
+
+  .cui-cover--gap-compact {
+    gap: var(--cui-cover-gap-compact);
+  }
+
+  .cui-cover--gap-standard {
+    gap: var(--cui-cover-gap-standard);
+  }
+
+  .cui-cover--gap-spacious {
+    gap: var(--cui-cover-gap-spacious);
+  }
+
+  .cui-cover--gap-generous {
+    gap: var(--cui-cover-gap-generous);
+  }
+
+  .cui-cover__top {
+    grid-row: 1;
+  }
+
+  .cui-cover__primary {
+    grid-row: 2;
+    align-self: center;
+  }
+
+  .cui-cover__bottom {
+    grid-row: 3;
+  }
+
+  .cui-cover__top,
+  .cui-cover__primary,
+  .cui-cover__bottom {
+    min-inline-size: 0;
+  }
+}

@@ -5,16 +5,32 @@
   "target": "native-html",
   "category": "feedback",
   "summary": "Pairs a compact semantic status marker with explicit text and optional detail.",
-  "keywords": ["status", "availability", "state", "health"],
+  "keywords": [
+    "status",
+    "availability",
+    "state",
+    "health"
+  ],
   "agent": {
     "useWhen": "A compact row, header, or metadata value needs an explicit current state; provide visible status text and choose a semantic tone, optional detail, size, and pulse.",
     "avoidWhen": "The message needs explanation, recovery guidance, a live announcement, or a pill-shaped category; use an alert or badge instead.",
-    "composeWith": ["badge", "divider"]
+    "composeWith": [
+      "badge",
+      "divider"
+    ]
   },
   "contract": {
     "role": "text",
-    "variants": ["neutral", "info", "success", "warning", "danger"],
-    "requiredFields": ["label"],
+    "variants": [
+      "neutral",
+      "info",
+      "success",
+      "warning",
+      "danger"
+    ],
+    "requiredFields": [
+      "label"
+    ],
     "invariants": [
       "Configuration supplies tone, size and pulse; label and detail are app-owned presentation data, currently literal-only in Native declarations.",
       "The component owns no Datastar signal, event output, command or browser lifecycle; the app decides when data changes and which region is patched.",
@@ -27,6 +43,8 @@
     ]
   },
   "tokens": [
+    "--cui-danger-text",
+    "--cui-info-text",
     "--cui-status-indicator-danger",
     "--cui-status-indicator-detail-text",
     "--cui-status-indicator-gap",
@@ -36,10 +54,70 @@
     "--cui-status-indicator-pulse-duration",
     "--cui-status-indicator-size",
     "--cui-status-indicator-success",
+    "--cui-status-indicator-tone",
     "--cui-status-indicator-warning",
+    "--cui-success-text",
     "--cui-text",
     "--cui-text-muted",
-    "--cui-text-secondary"
+    "--cui-text-secondary",
+    "--cui-warning-text"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-status-indicator-danger",
+      "role": "text",
+      "purpose": "Controls danger state for  status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-detail-text",
+      "role": "text",
+      "purpose": "Controls text color for supporting detail status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-info",
+      "role": "text",
+      "purpose": "Controls information state for  status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-label-text",
+      "role": "text",
+      "purpose": "Controls label text for  status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-neutral",
+      "role": "color",
+      "purpose": "Controls neutral state for  status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-pulse-duration",
+      "role": "motion",
+      "purpose": "Controls animation duration for status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-size",
+      "role": "sizing",
+      "purpose": "Controls size for status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-success",
+      "role": "text",
+      "purpose": "Controls success state for  status indicator."
+    },
+    {
+      "name": "--cui-status-indicator-tone",
+      "role": "color",
+      "purpose": "Runtime tone selection for status indicator; this selects component state rather than a theme color."
+    },
+    {
+      "name": "--cui-status-indicator-warning",
+      "role": "text",
+      "purpose": "Controls warning state for  status indicator."
+    }
   ],
   "dependencies": [],
   "assets": {

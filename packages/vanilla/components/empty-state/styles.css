@@ -16,7 +16,7 @@
 }
 .cui-empty-state__title {
   margin: 0;
-  color: var(--cui-empty-state-title-text, var(--cui-empty-state-text, var(--cui-text, #172033)));
+  color: var(--cui-empty-state-title-text, var(--cui-heading-text, var(--cui-empty-state-text, var(--cui-text, #172033))));
   font-size: var(--cui-empty-state-title-size, clamp(1.125rem, 1rem + .75cqi, 1.5rem));
   font-weight: var(--cui-empty-state-title-weight, 700);
   line-height: var(--cui-empty-state-title-line-height, 1.15);

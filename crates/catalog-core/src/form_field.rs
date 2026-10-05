@@ -77,6 +77,8 @@ pub struct FormFieldInstance {
     pub required: bool,
     #[serde(default)]
     pub readonly: bool,
+    #[serde(default)]
+    pub disabled: bool,
 }
 
 fn escape_html(value: &str) -> String {
@@ -245,6 +247,7 @@ pub fn render(instance: &FormFieldInstance, fragment: &str) -> Result<String, St
     };
     let required_attr = if instance.required { " required" } else { "" };
     let readonly_attr = if instance.readonly { " readonly" } else { "" };
+    let disabled_attr = if instance.disabled { " disabled" } else { "" };
     let max_length = instance
         .max_length
         .map(|length| format!(" maxlength=\"{length}\""))
@@ -261,7 +264,7 @@ pub fn render(instance: &FormFieldInstance, fragment: &str) -> Result<String, St
         .unwrap_or_default();
     let control = match instance.kind {
         FieldKind::Input => format!(
-            "<input class=\"cui-form-field__control\" id=\"{}\" name=\"{}\" type=\"{}\" value=\"{}\"{}{}{}{}{}{}{}>",
+            "<input class=\"cui-form-field__control\" id=\"{}\" name=\"{}\" type=\"{}\" value=\"{}\"{}{}{}{}{}{}{}{}>",
             escape_html(&instance.id),
             escape_html(&instance.name),
             instance.input_type.unwrap_or_default().as_str(),
@@ -272,10 +275,11 @@ pub fn render(instance: &FormFieldInstance, fragment: &str) -> Result<String, St
             described_by,
             invalid_attr,
             required_attr,
-            readonly_attr
+            readonly_attr,
+            disabled_attr
         ),
         FieldKind::Textarea => format!(
-            "<textarea class=\"cui-form-field__control cui-form-field__control--textarea\" id=\"{}\" name=\"{}\" rows=\"{}\"{}{}{}{}{}{}{}>{}</textarea>",
+            "<textarea class=\"cui-form-field__control cui-form-field__control--textarea\" id=\"{}\" name=\"{}\" rows=\"{}\"{}{}{}{}{}{}{}{}>{}</textarea>",
             escape_html(&instance.id),
             escape_html(&instance.name),
             instance.rows.unwrap_or(3),
@@ -286,6 +290,7 @@ pub fn render(instance: &FormFieldInstance, fragment: &str) -> Result<String, St
             invalid_attr,
             required_attr,
             readonly_attr,
+            disabled_attr,
             escape_html(&instance.value)
         ),
     };
@@ -334,6 +339,7 @@ mod tests {
             max_length: None,
             required: false,
             readonly: false,
+            disabled: false,
         }
     }
 
@@ -368,6 +374,9 @@ mod tests {
         field.required = false;
         field.readonly = true;
         assert!(render(&field, FRAGMENT).unwrap().contains(" readonly"));
+        field.readonly = false;
+        field.disabled = true;
+        assert!(render(&field, FRAGMENT).unwrap().contains(" disabled"));
     }
 
     #[test]
@@ -447,7 +456,11 @@ mod tests {
     #[test]
     fn rejects_unknown_props_invalid_tokens_states_and_fragment_slots() {
         assert!(serde_json::from_str::<FormFieldInstance>(
-            r#"{"id":"x","name":"x","label":"X","disabled":true}"#
+            r#"{"id":"x","name":"x","label":"X","unknown":true}"#
+        )
+        .is_err());
+        assert!(serde_json::from_str::<FormFieldInstance>(
+            r#"{"id":"x","name":"x","label":"X","disabled":"true"}"#
         )
         .is_err());
         assert!(serde_json::from_str::<FormFieldInstance>(
@@ -542,6 +555,18 @@ mod tests {
             (
                 include_str!(
                     "../../../packages/vanilla/components/form-field/fixtures/textarea.json"
+                ),
+                None,
+            ),
+            (
+                include_str!(
+                    "../../../packages/vanilla/components/form-field/fixtures/disabled-input.json"
+                ),
+                Some(InputType::Text),
+            ),
+            (
+                include_str!(
+                    "../../../packages/vanilla/components/form-field/fixtures/disabled-textarea.json"
                 ),
                 None,
             ),

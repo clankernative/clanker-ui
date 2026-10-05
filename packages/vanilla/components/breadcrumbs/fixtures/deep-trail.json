@@ -1,0 +1,25 @@
+{
+  "expectedHtml": "<nav class=\"cui-breadcrumbs\" data-cui-component=\"breadcrumbs\" aria-label=\"Page hierarchy\"><ol class=\"cui-breadcrumbs__list\"><li class=\"cui-breadcrumbs__item\"><a class=\"cui-breadcrumbs__link\" href=\"/\">Home</a></li><li class=\"cui-breadcrumbs__item\"><a class=\"cui-breadcrumbs__link\" href=\"/teams\">Teams</a></li><li class=\"cui-breadcrumbs__item\"><a class=\"cui-breadcrumbs__link\" href=\"/teams/platform\">Platform</a></li><li class=\"cui-breadcrumbs__item\"><a class=\"cui-breadcrumbs__link\" href=\"/teams/platform/components\">Components</a></li><li class=\"cui-breadcrumbs__item\"><span class=\"cui-breadcrumbs__current\" aria-current=\"page\">Select field</span></li></ol></nav>\n",
+  "items": [
+    {
+      "href": "/",
+      "label": "Home"
+    },
+    {
+      "href": "/teams",
+      "label": "Teams"
+    },
+    {
+      "href": "/teams/platform",
+      "label": "Platform"
+    },
+    {
+      "href": "/teams/platform/components",
+      "label": "Components"
+    },
+    {
+      "label": "Select field"
+    }
+  ],
+  "label": "Page hierarchy"
+}

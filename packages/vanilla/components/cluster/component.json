@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "name": "cluster",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Arranges peer content in a wrapping horizontal group.",
+  "keywords": [
+    "cluster",
+    "horizontal",
+    "wrapping",
+    "actions"
+  ],
+  "agent": {
+    "useWhen": "Peer controls or short regions should share a horizontal row and wrap on narrow screens.",
+    "avoidWhen": "Content needs a vertical reading flow or a fixed track layout.",
+    "composeWith": [
+      "stack",
+      "card",
+      "button",
+      "tag"
+    ]
+  },
+  "contract": {
+    "role": "neutral-wrapping-row",
+    "variants": [
+      "wrap",
+      "nowrap"
+    ],
+    "requiredFields": [],
+    "invariants": [
+      "Defaults to wrapping, centered alignment, start justification, and compact gap.",
+      "Gap and alignment only affect direct admitted children.",
+      "The component does not create navigation, commands, keyboard behavior, or JavaScript."
+    ]
+  },
+  "tokens": [
+    "--cui-cluster-gap-compact",
+    "--cui-cluster-gap-generous",
+    "--cui-cluster-gap-none",
+    "--cui-cluster-gap-spacious",
+    "--cui-cluster-gap-standard"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-cluster-gap-compact",
+      "role": "spacing",
+      "purpose": "Controls compact for spacing between elements cluster."
+    },
+    {
+      "name": "--cui-cluster-gap-generous",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements cluster."
+    },
+    {
+      "name": "--cui-cluster-gap-none",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements cluster."
+    },
+    {
+      "name": "--cui-cluster-gap-spacious",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements cluster."
+    },
+    {
+      "name": "--cui-cluster-gap-standard",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements cluster."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/cluster/fragment.html",
+    "styles": "components/cluster/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/cluster/fixtures/typical.json",
+    "components/cluster/fixtures/nowrap.json"
+  ]
+}

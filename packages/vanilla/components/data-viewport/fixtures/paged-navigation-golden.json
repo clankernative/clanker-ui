@@ -1,0 +1,37 @@
+{
+  "children": {
+    "navigation": "<nav aria-label=\"Illustrative pagination\"><a href=\"/simulator?page=2\" data-cui-viewport-navigation>Next illustrative page</a></nav>"
+  },
+  "expectedHtml": "<section class=\"cui-data-viewport cui-data-viewport--compact cui-data-viewport--paged cui-data-viewport--table\" id=\"recent-activity\" role=\"region\" aria-labelledby=\"recent-activity-label\" data-cui-component=\"data-viewport\" data-cui-patch-region data-cui-viewport-mode=\"paged\"><h2 class=\"cui-visually-hidden\" id=\"recent-activity-label\">Recent activity</h2><div class=\"cui-data-viewport__scroller\" id=\"recent-activity-scroll\" tabindex=\"0\" data-cui-scroll data-cui-scroll-key=\"recent-activity-scroll\" aria-labelledby=\"recent-activity-label\"><table class=\"cui-data-viewport__table\" aria-rowcount=\"3\"><caption class=\"cui-visually-hidden\">Recent activity</caption><thead><tr><th scope=\"col\">Event</th><th scope=\"col\">Owner</th><th scope=\"col\">Status</th></tr></thead><tbody id=\"recent-activity-items\"><tr class=\"cui-data-viewport__row\" id=\"activity-1\" data-cui-patch-item data-cui-viewport-item><td data-label=\"Event\">Quarterly review</td><td data-label=\"Owner\">Mina Chen</td><td data-label=\"Status\">Open</td></tr><tr class=\"cui-data-viewport__row cui-data-viewport__row--highlighted\" id=\"activity-2\" data-cui-patch-item data-cui-viewport-item><td data-label=\"Event\">Access request</td><td data-label=\"Owner\">Sam Rivera</td><td data-label=\"Status\">Complete</td></tr></tbody></table></div><p class=\"cui-data-viewport__status\" data-cui-viewport-status data-cui-window-error-label=\"The visible window could not be updated.\" data-cui-navigation-error-label=\"Navigation could not be requested.\" role=\"status\" aria-live=\"polite\" hidden></p><footer id=\"recent-activity-navigation\" class=\"cui-data-viewport__navigation\"><nav aria-label=\"Illustrative pagination\"><a href=\"/simulator?page=2\" data-cui-viewport-navigation>Next illustrative page</a></nav></footer></section>\n",
+  "options": {
+    "columns": [
+      "Event",
+      "Owner",
+      "Status"
+    ],
+    "height": "compact",
+    "id": "recent-activity",
+    "label": "Recent activity",
+    "mode": "paged",
+    "pagination": "Previous · Page 1 · Next",
+    "rows": [
+      {
+        "cells": [
+          "Quarterly review",
+          "Mina Chen",
+          "Open"
+        ],
+        "id": "activity-1"
+      },
+      {
+        "cells": [
+          "Access request",
+          "Sam Rivera",
+          "Complete"
+        ],
+        "highlighted": true,
+        "id": "activity-2"
+      }
+    ]
+  }
+}

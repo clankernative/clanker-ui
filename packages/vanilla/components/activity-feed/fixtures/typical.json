@@ -1,0 +1,6 @@
+{
+  "label": "Release activity",
+  "compact": false,
+  "entries": [{"title":"Release <ready>","detail":"Version 2 & live","actor":"ops","occurredAt":"2024-02-29T12:30:00Z","timeLabel":"Today at 12:30 UTC","tone":"success","href":"/releases/2"}],
+  "expectedHtml": "<div class=\"cui-activity-feed\" data-cui-component=\"activity-feed\"><ol class=\"cui-activity-feed__list\" aria-label=\"Release activity\"><li class=\"cui-activity-feed__item\"><span class=\"cui-activity-feed__marker cui-activity-feed__tone--success\" aria-hidden=\"true\"></span><div class=\"cui-activity-feed__content\"><div class=\"cui-activity-feed__title\"><a class=\"cui-activity-feed__link\" href=\"/releases/2\">Release &lt;ready&gt;</a></div><p class=\"cui-activity-feed__detail\">Version 2 &amp; live</p><div class=\"cui-activity-feed__meta\"><span class=\"cui-activity-feed__actor\">ops</span><time class=\"cui-activity-feed__time\" datetime=\"2024-02-29T12:30:00Z\">Today at 12:30 UTC</time></div></div></li></ol></div>\n"
+}

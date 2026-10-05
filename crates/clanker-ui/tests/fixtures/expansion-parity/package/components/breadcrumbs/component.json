@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "breadcrumbs",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Renders a labelled breadcrumb trail of safe linked ancestors and one current page.",
+  "keywords": ["navigation", "breadcrumb", "hierarchy", "current-page"],
+  "agent": {"useWhen": "A page has a navigable hierarchy with one or more ancestor destinations and a current location.", "avoidWhen": "The trail is not hierarchical, the current item must be a link, or destinations are not safe internal/HTTP(S) hrefs.", "composeWith": ["page-header"]},
+  "contract": {"role": "labelled navigation landmark", "variants": ["standard"], "requiredFields": ["items"], "invariants": ["At least one linked ancestor is followed by exactly one nonlinked current page.", "Ancestor hrefs use the closed safe destination policy; labels and href attributes are escaped.", "All labels are nonblank plain text; no arbitrary URLs, HTML, routes, or scripts are admitted.", "The fragment contains exactly one [[attributes]], [[label]], and [[items]] slot; expansion is exact and single-pass."]},
+  "tokens": ["--cui-breadcrumbs-text", "--cui-breadcrumbs-size", "--cui-breadcrumbs-gap", "--cui-breadcrumbs-separator", "--cui-breadcrumbs-link", "--cui-breadcrumbs-focus", "--cui-breadcrumbs-current", "--cui-breadcrumbs-current-weight"],
+  "dependencies": [], "assets": {"template": "components/breadcrumbs/fragment.html", "styles": "components/breadcrumbs/styles.css", "scripts": []},
+  "fixtures": ["components/breadcrumbs/fixtures/typical.json", "components/breadcrumbs/fixtures/long-content.json", "components/breadcrumbs/fixtures/deep-trail.json"]
+}

@@ -5,16 +5,40 @@
   "target": "native-html",
   "category": "data",
   "summary": "Presents compact metadata, counts, and application links, with an optional real removal link for static filters.",
-  "keywords": ["tag", "chip", "filter", "label", "metadata", "count"],
+  "keywords": [
+    "tag",
+    "chip",
+    "filter",
+    "label",
+    "metadata",
+    "count"
+  ],
   "agent": {
     "useWhen": "Compact metadata, filter values, or categories belong beside primary content; use a count only when it has an accessible label, and use a link only for navigation.",
     "avoidWhen": "The label communicates operational status, needs a sentence of explanation, or needs a command, form control, transient dismissal, or browser-local interaction.",
-    "composeWith": ["badge", "cluster", "divider", "icon"]
+    "composeWith": [
+      "badge",
+      "cluster",
+      "divider",
+      "icon"
+    ]
   },
   "contract": {
     "role": "metadata-label",
-    "variants": ["neutral", "brand", "info", "success", "warning", "danger", "small", "medium", "large"],
-    "requiredFields": ["label"],
+    "variants": [
+      "neutral",
+      "brand",
+      "info",
+      "success",
+      "warning",
+      "danger",
+      "small",
+      "medium",
+      "large"
+    ],
+    "requiredFields": [
+      "label"
+    ],
     "invariants": [
       "Configuration selects tone, size, optional closed-catalog decorative icon, and static destination; visible label, count, and accessible count label are app-owned data.",
       "A visible nonblank label is always present; tone never carries meaning by color alone.",
@@ -27,19 +51,252 @@
     ]
   },
   "tokens": [
-    "--cui-tag-brand-background", "--cui-tag-brand-border", "--cui-tag-brand-text",
-    "--cui-tag-count-background", "--cui-tag-count-text",
-    "--cui-tag-danger-background", "--cui-tag-danger-border", "--cui-tag-danger-text",
-    "--cui-tag-gap", "--cui-tag-height", "--cui-tag-hover-background", "--cui-tag-hover-border", "--cui-tag-hover-text",
-    "--cui-tag-info-background", "--cui-tag-info-border", "--cui-tag-info-text",
-    "--cui-tag-large-height", "--cui-tag-large-padding", "--cui-tag-large-size",
-    "--cui-tag-neutral-background", "--cui-tag-neutral-border", "--cui-tag-neutral-text",
-    "--cui-tag-padding", "--cui-tag-radius", "--cui-tag-remove-focus-offset", "--cui-tag-remove-focus-ring", "--cui-tag-remove-focus-width", "--cui-tag-remove-hover-background",
-    "--cui-tag-size", "--cui-tag-small-height", "--cui-tag-small-padding",
-    "--cui-tag-success-background", "--cui-tag-success-border", "--cui-tag-success-text",
-    "--cui-tag-warning-background", "--cui-tag-warning-border", "--cui-tag-warning-text", "--cui-tag-weight"
+    "--cui-border",
+    "--cui-danger",
+    "--cui-focus",
+    "--cui-icon-small-size",
+    "--cui-motion",
+    "--cui-muted",
+    "--cui-space-1",
+    "--cui-space-2",
+    "--cui-space-3",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-tag-brand-background",
+    "--cui-tag-brand-border",
+    "--cui-tag-brand-text",
+    "--cui-tag-count-background",
+    "--cui-tag-count-text",
+    "--cui-tag-danger-background",
+    "--cui-tag-danger-border",
+    "--cui-tag-danger-text",
+    "--cui-tag-gap",
+    "--cui-tag-height",
+    "--cui-tag-hover-background",
+    "--cui-tag-hover-border",
+    "--cui-tag-hover-text",
+    "--cui-tag-info-background",
+    "--cui-tag-info-border",
+    "--cui-tag-info-text",
+    "--cui-tag-large-height",
+    "--cui-tag-large-padding",
+    "--cui-tag-large-size",
+    "--cui-tag-neutral-background",
+    "--cui-tag-neutral-border",
+    "--cui-tag-neutral-text",
+    "--cui-tag-padding",
+    "--cui-tag-radius",
+    "--cui-tag-remove-focus-offset",
+    "--cui-tag-remove-focus-ring",
+    "--cui-tag-remove-focus-width",
+    "--cui-tag-remove-hover-background",
+    "--cui-tag-size",
+    "--cui-tag-small-height",
+    "--cui-tag-small-padding",
+    "--cui-tag-success-background",
+    "--cui-tag-success-border",
+    "--cui-tag-success-text",
+    "--cui-tag-warning-background",
+    "--cui-tag-warning-border",
+    "--cui-tag-warning-text",
+    "--cui-tag-weight",
+    "--cui-text"
   ],
-  "dependencies": ["icon"],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-tag-brand-background",
+      "role": "background",
+      "purpose": "Controls background color for brand tag."
+    },
+    {
+      "name": "--cui-tag-brand-border",
+      "role": "border",
+      "purpose": "Controls border color for brand tag."
+    },
+    {
+      "name": "--cui-tag-brand-text",
+      "role": "text",
+      "purpose": "Controls text color for brand tag."
+    },
+    {
+      "name": "--cui-tag-count-background",
+      "role": "background",
+      "purpose": "Controls background color for count tag."
+    },
+    {
+      "name": "--cui-tag-count-text",
+      "role": "text",
+      "purpose": "Controls text color for count tag."
+    },
+    {
+      "name": "--cui-tag-danger-background",
+      "role": "background",
+      "purpose": "Controls background color for danger state tag."
+    },
+    {
+      "name": "--cui-tag-danger-border",
+      "role": "border",
+      "purpose": "Controls border color for danger state tag."
+    },
+    {
+      "name": "--cui-tag-danger-text",
+      "role": "text",
+      "purpose": "Controls text color for danger state tag."
+    },
+    {
+      "name": "--cui-tag-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for tag."
+    },
+    {
+      "name": "--cui-tag-height",
+      "role": "sizing",
+      "purpose": "Controls height for tag."
+    },
+    {
+      "name": "--cui-tag-hover-background",
+      "role": "background",
+      "purpose": "Controls background color for hover state tag."
+    },
+    {
+      "name": "--cui-tag-hover-border",
+      "role": "border",
+      "purpose": "Controls border color for hover state tag."
+    },
+    {
+      "name": "--cui-tag-hover-text",
+      "role": "text",
+      "purpose": "Controls text color for hover state tag."
+    },
+    {
+      "name": "--cui-tag-info-background",
+      "role": "background",
+      "purpose": "Controls background color for information state tag."
+    },
+    {
+      "name": "--cui-tag-info-border",
+      "role": "border",
+      "purpose": "Controls border color for information state tag."
+    },
+    {
+      "name": "--cui-tag-info-text",
+      "role": "text",
+      "purpose": "Controls text color for information state tag."
+    },
+    {
+      "name": "--cui-tag-large-height",
+      "role": "sizing",
+      "purpose": "Controls height for tag."
+    },
+    {
+      "name": "--cui-tag-large-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for tag."
+    },
+    {
+      "name": "--cui-tag-large-size",
+      "role": "sizing",
+      "purpose": "Controls size for tag."
+    },
+    {
+      "name": "--cui-tag-neutral-background",
+      "role": "background",
+      "purpose": "Controls background color for neutral state tag."
+    },
+    {
+      "name": "--cui-tag-neutral-border",
+      "role": "border",
+      "purpose": "Controls border color for neutral state tag."
+    },
+    {
+      "name": "--cui-tag-neutral-text",
+      "role": "text",
+      "purpose": "Controls text color for neutral state tag."
+    },
+    {
+      "name": "--cui-tag-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for tag."
+    },
+    {
+      "name": "--cui-tag-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for tag."
+    },
+    {
+      "name": "--cui-tag-remove-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for tag."
+    },
+    {
+      "name": "--cui-tag-remove-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for remove tag."
+    },
+    {
+      "name": "--cui-tag-remove-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for tag."
+    },
+    {
+      "name": "--cui-tag-remove-hover-background",
+      "role": "background",
+      "purpose": "Controls background color for remove hover state tag."
+    },
+    {
+      "name": "--cui-tag-size",
+      "role": "sizing",
+      "purpose": "Controls size for tag."
+    },
+    {
+      "name": "--cui-tag-small-height",
+      "role": "sizing",
+      "purpose": "Controls height for tag."
+    },
+    {
+      "name": "--cui-tag-small-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for tag."
+    },
+    {
+      "name": "--cui-tag-success-background",
+      "role": "background",
+      "purpose": "Controls background color for success state tag."
+    },
+    {
+      "name": "--cui-tag-success-border",
+      "role": "border",
+      "purpose": "Controls border color for success state tag."
+    },
+    {
+      "name": "--cui-tag-success-text",
+      "role": "text",
+      "purpose": "Controls text color for success state tag."
+    },
+    {
+      "name": "--cui-tag-warning-background",
+      "role": "background",
+      "purpose": "Controls background color for warning state tag."
+    },
+    {
+      "name": "--cui-tag-warning-border",
+      "role": "border",
+      "purpose": "Controls border color for warning state tag."
+    },
+    {
+      "name": "--cui-tag-warning-text",
+      "role": "text",
+      "purpose": "Controls text color for warning state tag."
+    },
+    {
+      "name": "--cui-tag-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for tag."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
   "assets": {
     "template": "components/tag/fragment.html",
     "styles": "components/tag/styles.css",

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "grid",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Arranges repeated child regions in responsive tracks.",
+  "keywords": ["grid", "columns", "responsive", "tracks"],
+  "agent": { "useWhen": "Repeated peer items need intrinsic responsive columns or a bounded fixed column count.", "avoidWhen": "Items need a deliberate order-independent masonry layout or only one-dimensional flow.", "composeWith": ["container", "card", "stack"] },
+  "contract": { "role": "responsive-grid", "variants": ["responsive", "two", "three", "four"], "requiredFields": [], "invariants": ["Responsive columns auto-fit the selected minimum track width; fixed columns expand at the selected container-query breakpoint.", "Track count is limited to the source choices and never enables masonry.", "Items are already admitted host markup; the grid adds no item content, semantics, script, or interaction."] },
+  "tokens": ["--cui-grid-gap-compact", "--cui-grid-gap-generous", "--cui-grid-gap-none", "--cui-grid-gap-spacious", "--cui-grid-gap-standard", "--cui-grid-minimum-narrow", "--cui-grid-minimum-standard", "--cui-grid-minimum-wide"],
+  "dependencies": [],
+  "assets": { "template": "components/grid/fragment.html", "styles": "components/grid/styles.css", "scripts": [] },
+  "fixtures": ["components/grid/fixtures/typical.json", "components/grid/fixtures/fixed-columns.json", "components/grid/fixtures/two-columns.json", "components/grid/fixtures/four-columns.json"]
+}

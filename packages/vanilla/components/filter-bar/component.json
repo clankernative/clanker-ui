@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "name": "filter-bar",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Arranges host-admitted filter controls, actions, applied-filter content, and an optional result summary.",
+  "keywords": [
+    "filter",
+    "search",
+    "results",
+    "controls"
+  ],
+  "agent": {
+    "useWhen": "An app-owned search or result page needs a labelled presentation group around already-admitted controls and actions.",
+    "avoidWhen": "The component must own a GET form, query parameters, search state, command, route, applied-filter semantics, or JavaScript behavior.",
+    "composeWith": [
+      "form-field",
+      "button",
+      "data-table"
+    ]
+  },
+  "contract": {
+    "role": "presentation-only labelled control group",
+    "variants": [
+      "with-summary",
+      "without-summary"
+    ],
+    "requiredFields": [
+      "label",
+      "controls"
+    ],
+    "invariants": [
+      "The output is a div role=group, never a form; the host owns form/query binding and all operations.",
+      "Controls are required host-admitted markup; actions and applied content are optional host-admitted markup.",
+      "The optional result summary is nonblank escaped text announced with role=status.",
+      "AdmittedChildren is a host trust marker, not an HTML sanitizer.",
+      "The fragment contains exactly one [[attributes]], [[label]], [[summary]], [[controls]], [[actions]], and [[applied]] slot; expansion is exact and single-pass."
+    ]
+  },
+  "tokens": [
+    "--cui-border",
+    "--cui-filter-bar-background",
+    "--cui-filter-bar-border",
+    "--cui-filter-bar-gap",
+    "--cui-filter-bar-padding",
+    "--cui-filter-bar-radius",
+    "--cui-filter-bar-summary-text",
+    "--cui-radius-surface",
+    "--cui-space-2",
+    "--cui-space-3",
+    "--cui-space-4",
+    "--cui-surface",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-filter-bar-background",
+      "role": "background",
+      "purpose": "Controls background color for  filter bar."
+    },
+    {
+      "name": "--cui-filter-bar-border",
+      "role": "border",
+      "purpose": "Controls border color for  filter bar."
+    },
+    {
+      "name": "--cui-filter-bar-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for filter bar."
+    },
+    {
+      "name": "--cui-filter-bar-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for filter bar."
+    },
+    {
+      "name": "--cui-filter-bar-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for filter bar."
+    },
+    {
+      "name": "--cui-filter-bar-summary-text",
+      "role": "text",
+      "purpose": "Controls text color for summary filter bar."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/filter-bar/fragment.html",
+    "styles": "components/filter-bar/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/filter-bar/fixtures/typical.json",
+    "components/filter-bar/fixtures/empty-optional.json",
+    "components/filter-bar/fixtures/long-summary.json"
+  ],
+  "templateAuthoring": {
+    "schemaVersion": 1,
+    "rootTag": "cui-filter-bar",
+    "elements": [
+      {
+        "tag": "cui-filter-bar",
+        "form": "paired",
+        "allowedParents": [],
+        "attributes": [
+          {
+            "name": "label",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Must be nonblank plain text."
+            ]
+          },
+          {
+            "name": "summary",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "A literal or one whole checked string field; emitted as escaped status text."
+            ]
+          }
+        ],
+        "content": "helpers",
+        "allowedChildren": [
+          "cui-slot"
+        ],
+        "controlFlow": [],
+        "rules": [
+          "Direct children are named slots; whitespace is permitted only outside slots.",
+          "Do not wrap slots in an outer loop or conditional.",
+          "This is a presentation group, not a form; the app owns the GET/command wrapper, query binding, and operations."
+        ]
+      },
+      {
+        "tag": "cui-slot",
+        "form": "paired",
+        "allowedParents": [
+          "cui-filter-bar"
+        ],
+        "attributes": [
+          {
+            "name": "name",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Allowed names are controls (required), actions (optional), and applied (optional); each may occur at most once."
+            ]
+          }
+        ],
+        "content": "host-admitted",
+        "allowedChildren": [],
+        "controlFlow": [
+          "for",
+          "if",
+          "elif",
+          "else",
+          "endif",
+          "endfor"
+        ],
+        "rules": [
+          "Controls, actions, and applied content are host-admitted markup; supported nested components, links, and template flow may be used.",
+          "The controls slot must contain nonblank content."
+        ]
+      }
+    ],
+    "rules": [
+      "The controls slot is required; actions and applied slots are optional.",
+      "Admitted child content is subject to host validation and is not sanitized by this component.",
+      "The app owns form semantics, routes, query parameters, and commands."
+    ],
+    "examples": [
+      {
+        "name": "customer-filters",
+        "summary": "A filter presentation group with a native select control and a separate navigation action.",
+        "template": "<cui-filter-bar label=\"Filter customers\" summary=\"{{ result_summary }}\">\n  <cui-slot name=\"controls\">\n    <cui-select-field id=\"customer-status\" name=\"status\" label=\"Status\">\n      <cui-option value=\"active\" label=\"Active\" />\n      <cui-option value=\"inactive\" label=\"Inactive\" />\n    </cui-select-field>\n  </cui-slot>\n  <cui-slot name=\"actions\"><a href=\"{{ routes.customers_index() }}\">View all customers</a></cui-slot>\n</cui-filter-bar>",
+        "requirements": [
+          "App provides result_summary as a string field; register customers_index route if using the navigation link.",
+          "The app owns the surrounding GET form or command wrapper and the selected query value.",
+          "Host admits the nested select-field and option declarations."
+        ]
+      }
+    ]
+  }
+}

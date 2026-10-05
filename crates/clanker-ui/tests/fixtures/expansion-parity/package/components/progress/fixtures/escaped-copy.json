@@ -1,0 +1,11 @@
+{
+  "detail": "Plain text only: <script>alert(1)</script>",
+  "expectedHtml": "<div class=\"cui-progress cui-progress--info cui-progress--regular cui-progress--determinate\" data-cui-component=\"progress\" data-cui-tone=\"info\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Checking &lt;records&gt; &amp; &quot;attachments&quot; [[detail]]</span><span class=\"cui-progress__suffix\">2.5 of 10 &amp; rising</span></div><progress class=\"cui-progress__track\" value=\"2.5\" max=\"10\" aria-label=\"Checking &lt;records&gt; &amp; &quot;attachments&quot; [[detail]]\"></progress><p class=\"cui-progress__detail\">Plain text only: &lt;script&gt;alert(1)&lt;/script&gt;</p></div>\n",
+  "label": "Checking <records> & \"attachments\" [[detail]]",
+  "maximum": 10,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "2.5 of 10 & rising",
+  "tone": "info",
+  "value": 2.5
+}

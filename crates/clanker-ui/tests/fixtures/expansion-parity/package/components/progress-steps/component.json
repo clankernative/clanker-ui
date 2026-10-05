@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "progress-steps",
+  "status": "draft",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Shows ordered workflow progress with completed links and one current or error step.",
+  "keywords": ["progress", "steps", "stepper", "workflow"],
+  "agent": { "useWhen": "A finite multi-step workflow needs visible completion, current state, and future work.", "avoidWhen": "Progress is continuous, indeterminate, or only a page-level status.", "composeWith": ["alert", "button", "form-field", "progress"] },
+  "contract": { "role": "navigation", "variants": ["horizontal", "vertical", "detailed", "compact", "complete", "current", "error", "upcoming"], "requiredFields": ["label", "items"], "invariants": ["Contains 2 to 10 items ordered complete*, exactly one current/error, then upcoming*.", "Only completed steps have safe hrefs; every other state forbids href.", "State labels default to Completed, Current, Needs attention, Upcoming and may be localized.", "Draft pending Native host admission and browser proof; optional icon rendering requires locked check/alert geometry through the documented renderer seam."] },
+  "tokens": ["--cui-progress-steps-compact-marker-size", "--cui-progress-steps-complete-connector", "--cui-progress-steps-complete-marker-background", "--cui-progress-steps-complete-marker-border", "--cui-progress-steps-complete-marker-text", "--cui-progress-steps-connector", "--cui-progress-steps-content-gap", "--cui-progress-steps-current-marker-background", "--cui-progress-steps-current-marker-border", "--cui-progress-steps-current-marker-text", "--cui-progress-steps-detail-size", "--cui-progress-steps-detail-text", "--cui-progress-steps-error-marker-background", "--cui-progress-steps-error-marker-border", "--cui-progress-steps-error-marker-text", "--cui-progress-steps-focus-offset", "--cui-progress-steps-focus-ring", "--cui-progress-steps-focus-width", "--cui-progress-steps-gap", "--cui-progress-steps-label-size", "--cui-progress-steps-label-text", "--cui-progress-steps-label-weight", "--cui-progress-steps-marker-background", "--cui-progress-steps-marker-border", "--cui-progress-steps-marker-size", "--cui-progress-steps-marker-text", "--cui-progress-steps-radius", "--cui-progress-steps-text-gap", "--cui-progress-steps-vertical-gap"],
+  "dependencies": ["icon"],
+  "assets": { "template": "components/progress-steps/fragment.html", "styles": "components/progress-steps/styles.css", "scripts": [] },
+  "fixtures": ["components/progress-steps/fixtures/typical-golden.json", "components/progress-steps/fixtures/vertical-error-localized-golden.json", "components/progress-steps/fixtures/compact-golden.json"]
+}

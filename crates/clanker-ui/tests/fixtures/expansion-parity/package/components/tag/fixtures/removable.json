@@ -1,0 +1,7 @@
+{
+  "expectedHtml": "<span class=\"cui-tag cui-tag--warning cui-tag--medium\" data-cui-component=\"tag\" data-cui-tone=\"warning\"><span class=\"cui-tag__label\">Owned by customer reliability and platform operations</span><a class=\"cui-tag__remove\" href=\"?owner=all\" aria-label=\"Remove owner filter\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></a></span>\n",
+  "label": "Owned by customer reliability and platform operations",
+  "removeHref": "?owner=all",
+  "removeLabel": "Remove owner filter",
+  "tone": "warning"
+}

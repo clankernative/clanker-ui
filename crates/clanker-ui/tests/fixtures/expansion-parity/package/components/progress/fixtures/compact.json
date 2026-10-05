@@ -1,0 +1,9 @@
+{
+  "expectedHtml": "<div class=\"cui-progress cui-progress--info cui-progress--compact cui-progress--determinate\" data-cui-component=\"progress\" data-cui-tone=\"info\" data-cui-size=\"compact\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Indexing files</span></div><progress class=\"cui-progress__track\" value=\"12\" max=\"50\" aria-label=\"Indexing files\"></progress></div>\n",
+  "label": "Indexing files",
+  "maximum": 50,
+  "size": "compact",
+  "state": "determinate",
+  "tone": "info",
+  "value": 12
+}

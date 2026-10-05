@@ -1,0 +1,21 @@
+{
+  "expectedHtml": "<div class=\"cui-file-upload cui-file-upload--invalid\" data-cui-component=\"file-upload\" aria-invalid=\"true\" data-cui-accept=\".pdf,image/png\"><label class=\"cui-file-upload__label\" for=\"evidence-field\">Evidence files <span aria-hidden=\"true\">*</span></label><div class=\"cui-file-upload__dropzone\" data-cui-file-upload-dropzone><strong>Choose a file</strong><span>or drag and drop</span><input class=\"cui-file-upload__input\" id=\"evidence-field\" name=\"evidence\" type=\"file\" accept=\".pdf,image/png\" required aria-invalid=\"true\" aria-describedby=\"evidence-field-description\" data-cui-file-upload-input><ul class=\"cui-file-upload__local-selection\" data-cui-file-upload-local-selection aria-live=\"polite\" hidden></ul><p class=\"cui-file-upload__local-feedback\" data-cui-file-upload-local-feedback data-cui-selection-error-label=\"Files could not be handed to the application.\" data-cui-cancel-error-label=\"File selection could not be cancelled.\" role=\"status\" hidden></p></div><div class=\"cui-file-upload__description\" id=\"evidence-field-description\"><p class=\"cui-file-upload__error\">Choose a supported file type.</p></div><ul class=\"cui-file-upload__files\" aria-label=\"Selected files\"><li id=\"rejected\" class=\"cui-file-upload__file cui-file-upload__file--failed\"><span class=\"cui-file-upload__name\">archive.zip</span><span class=\"cui-file-upload__status\">Rejected; choose a PDF or PNG.</span></li></ul></div>\n",
+  "options": {
+    "accept": ".pdf,image/png",
+    "error": "Choose a supported file type.",
+    "files": [
+      {
+        "id": "rejected",
+        "name": "archive.zip",
+        "status": {
+          "state": "failed"
+        },
+        "statusLabel": "Rejected; choose a PDF or PNG."
+      }
+    ],
+    "id": "evidence-field",
+    "label": "Evidence files",
+    "name": "evidence",
+    "required": true
+  }
+}

@@ -5,7 +5,13 @@
   "target": "native-html",
   "category": "feedback",
   "summary": "Explains an empty result and offers an optional real navigation link as a next step.",
-  "keywords": ["empty", "blank slate", "no results", "first use", "empty collection"],
+  "keywords": [
+    "empty",
+    "blank slate",
+    "no results",
+    "first use",
+    "empty collection"
+  ],
   "agent": {
     "useWhen": "A collection or first-use area has no content and one next step is useful.",
     "avoidWhen": "Content is loading, failed, forbidden, or completed successfully.",
@@ -13,8 +19,17 @@
   },
   "contract": {
     "role": "section",
-    "variants": ["start", "center", "h2", "h3", "h4"],
-    "requiredFields": ["title", "body"],
+    "variants": [
+      "start",
+      "center",
+      "h2",
+      "h3",
+      "h4"
+    ],
+    "requiredFields": [
+      "title",
+      "body"
+    ],
     "invariants": [
       "Title and body are required nonblank plain text; values are HTML-escaped and never interpreted as markup or templates.",
       "Alignment is start or center and defaults to start. Heading level is h2, h3, or h4 and defaults to h2.",
@@ -25,12 +40,171 @@
     ]
   },
   "tokens": [
-    "--cui-empty-state-action-background", "--cui-empty-state-action-height", "--cui-empty-state-action-hover-background",
-    "--cui-empty-state-action-padding", "--cui-empty-state-action-radius", "--cui-empty-state-action-text", "--cui-empty-state-action-weight",
-    "--cui-empty-state-body-gap", "--cui-empty-state-body-line-height", "--cui-empty-state-body-text",
-    "--cui-empty-state-compact-gap", "--cui-empty-state-compact-padding", "--cui-empty-state-focus-offset", "--cui-empty-state-focus-ring", "--cui-empty-state-focus-width",
-    "--cui-empty-state-gap", "--cui-empty-state-max-width", "--cui-empty-state-measure", "--cui-empty-state-padding", "--cui-empty-state-text",
-    "--cui-empty-state-title-line-height", "--cui-empty-state-title-size", "--cui-empty-state-title-text", "--cui-empty-state-title-tracking", "--cui-empty-state-title-weight"
+    "--cui-accent",
+    "--cui-accent-hover",
+    "--cui-accent-text",
+    "--cui-empty-state-action-background",
+    "--cui-empty-state-action-height",
+    "--cui-empty-state-action-hover-background",
+    "--cui-empty-state-action-padding",
+    "--cui-empty-state-action-radius",
+    "--cui-empty-state-action-text",
+    "--cui-empty-state-action-weight",
+    "--cui-empty-state-body-gap",
+    "--cui-empty-state-body-line-height",
+    "--cui-empty-state-body-text",
+    "--cui-empty-state-compact-gap",
+    "--cui-empty-state-compact-padding",
+    "--cui-empty-state-focus-offset",
+    "--cui-empty-state-focus-ring",
+    "--cui-empty-state-focus-width",
+    "--cui-empty-state-gap",
+    "--cui-empty-state-max-width",
+    "--cui-empty-state-measure",
+    "--cui-empty-state-padding",
+    "--cui-empty-state-text",
+    "--cui-empty-state-title-line-height",
+    "--cui-empty-state-title-size",
+    "--cui-empty-state-title-text",
+    "--cui-empty-state-title-tracking",
+    "--cui-empty-state-title-weight",
+    "--cui-focus",
+    "--cui-heading-text",
+    "--cui-radius-control",
+    "--cui-space-2",
+    "--cui-space-3",
+    "--cui-space-5",
+    "--cui-space-6",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-empty-state-action-background",
+      "role": "background",
+      "purpose": "Controls background color for action empty state."
+    },
+    {
+      "name": "--cui-empty-state-action-height",
+      "role": "sizing",
+      "purpose": "Controls height for empty state."
+    },
+    {
+      "name": "--cui-empty-state-action-hover-background",
+      "role": "background",
+      "purpose": "Controls background color for action hover state empty state."
+    },
+    {
+      "name": "--cui-empty-state-action-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for empty state."
+    },
+    {
+      "name": "--cui-empty-state-action-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for empty state."
+    },
+    {
+      "name": "--cui-empty-state-action-text",
+      "role": "text",
+      "purpose": "Controls text color for action empty state."
+    },
+    {
+      "name": "--cui-empty-state-action-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for empty state."
+    },
+    {
+      "name": "--cui-empty-state-body-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for empty state."
+    },
+    {
+      "name": "--cui-empty-state-body-line-height",
+      "role": "typography",
+      "purpose": "Controls line height for empty state."
+    },
+    {
+      "name": "--cui-empty-state-body-text",
+      "role": "text",
+      "purpose": "Controls text color for body content empty state."
+    },
+    {
+      "name": "--cui-empty-state-compact-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for empty state."
+    },
+    {
+      "name": "--cui-empty-state-compact-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for empty state."
+    },
+    {
+      "name": "--cui-empty-state-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for empty state."
+    },
+    {
+      "name": "--cui-empty-state-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  empty state."
+    },
+    {
+      "name": "--cui-empty-state-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for empty state."
+    },
+    {
+      "name": "--cui-empty-state-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for empty state."
+    },
+    {
+      "name": "--cui-empty-state-max-width",
+      "role": "sizing",
+      "purpose": "Controls maximum width for empty state."
+    },
+    {
+      "name": "--cui-empty-state-measure",
+      "role": "sizing",
+      "purpose": "Controls maximum text width for empty state."
+    },
+    {
+      "name": "--cui-empty-state-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for empty state."
+    },
+    {
+      "name": "--cui-empty-state-text",
+      "role": "text",
+      "purpose": "Controls text color for  empty state."
+    },
+    {
+      "name": "--cui-empty-state-title-line-height",
+      "role": "typography",
+      "purpose": "Controls line height for empty state."
+    },
+    {
+      "name": "--cui-empty-state-title-size",
+      "role": "sizing",
+      "purpose": "Controls title font size for  empty state."
+    },
+    {
+      "name": "--cui-empty-state-title-text",
+      "role": "text",
+      "purpose": "Controls text color for title empty state.",
+      "semantic": "heading"
+    },
+    {
+      "name": "--cui-empty-state-title-tracking",
+      "role": "typography",
+      "purpose": "Controls letter spacing for empty state."
+    },
+    {
+      "name": "--cui-empty-state-title-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for empty state."
+    }
   ],
   "dependencies": [],
   "assets": {

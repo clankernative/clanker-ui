@@ -1,0 +1,535 @@
+{
+  "schemaVersion": 1,
+  "categories": [
+    {
+      "name": "actions",
+      "label": "Actions"
+    },
+    {
+      "name": "communication",
+      "label": "Communication"
+    },
+    {
+      "name": "data",
+      "label": "Data"
+    },
+    {
+      "name": "navigation",
+      "label": "Navigation"
+    },
+    {
+      "name": "objects",
+      "label": "Objects"
+    },
+    {
+      "name": "status",
+      "label": "Status"
+    },
+    {
+      "name": "system-tools",
+      "label": "System"
+    }
+  ],
+  "icons": [
+    {
+      "name": "alert",
+      "label": "Alert",
+      "category": "status"
+    },
+    {
+      "name": "archive",
+      "label": "Archive",
+      "category": "objects"
+    },
+    {
+      "name": "arrow-down",
+      "label": "Arrow down",
+      "category": "navigation"
+    },
+    {
+      "name": "arrow-left",
+      "label": "Arrow left",
+      "category": "navigation"
+    },
+    {
+      "name": "arrow-right",
+      "label": "Arrow right",
+      "category": "navigation"
+    },
+    {
+      "name": "arrow-up",
+      "label": "Arrow up",
+      "category": "navigation"
+    },
+    {
+      "name": "at-sign",
+      "label": "At sign",
+      "category": "communication"
+    },
+    {
+      "name": "bar-chart",
+      "label": "Bar chart",
+      "category": "data"
+    },
+    {
+      "name": "bell",
+      "label": "Bell",
+      "category": "communication"
+    },
+    {
+      "name": "bookmark",
+      "label": "Bookmark",
+      "category": "objects"
+    },
+    {
+      "name": "box",
+      "label": "Box",
+      "category": "objects"
+    },
+    {
+      "name": "briefcase",
+      "label": "Briefcase",
+      "category": "objects"
+    },
+    {
+      "name": "building",
+      "label": "Building",
+      "category": "objects"
+    },
+    {
+      "name": "calendar",
+      "label": "Calendar",
+      "category": "objects"
+    },
+    {
+      "name": "check",
+      "label": "Check",
+      "category": "status"
+    },
+    {
+      "name": "check-circle",
+      "label": "Check circle",
+      "category": "status"
+    },
+    {
+      "name": "check-square",
+      "label": "Checked square",
+      "category": "status"
+    },
+    {
+      "name": "chevron-down",
+      "label": "Chevron down",
+      "category": "navigation"
+    },
+    {
+      "name": "chevron-left",
+      "label": "Chevron left",
+      "category": "navigation"
+    },
+    {
+      "name": "chevron-right",
+      "label": "Chevron right",
+      "category": "navigation"
+    },
+    {
+      "name": "chevron-up",
+      "label": "Chevron up",
+      "category": "navigation"
+    },
+    {
+      "name": "clipboard",
+      "label": "Clipboard",
+      "category": "objects"
+    },
+    {
+      "name": "clock",
+      "label": "Clock",
+      "category": "objects"
+    },
+    {
+      "name": "close",
+      "label": "Close",
+      "category": "actions"
+    },
+    {
+      "name": "cloud",
+      "label": "Cloud",
+      "category": "objects"
+    },
+    {
+      "name": "code",
+      "label": "Code",
+      "category": "system-tools"
+    },
+    {
+      "name": "columns",
+      "label": "Columns",
+      "category": "data"
+    },
+    {
+      "name": "command",
+      "label": "Command",
+      "category": "system-tools"
+    },
+    {
+      "name": "compass",
+      "label": "Compass",
+      "category": "navigation"
+    },
+    {
+      "name": "contrast",
+      "label": "Contrast",
+      "category": "system-tools"
+    },
+    {
+      "name": "copy",
+      "label": "Copy",
+      "category": "actions"
+    },
+    {
+      "name": "cpu",
+      "label": "Processor",
+      "category": "system-tools"
+    },
+    {
+      "name": "credit-card",
+      "label": "Credit card",
+      "category": "objects"
+    },
+    {
+      "name": "data",
+      "label": "Data grid",
+      "category": "data"
+    },
+    {
+      "name": "database",
+      "label": "Database",
+      "category": "data"
+    },
+    {
+      "name": "document",
+      "label": "Document",
+      "category": "objects"
+    },
+    {
+      "name": "dots-horizontal",
+      "label": "More horizontal",
+      "category": "actions"
+    },
+    {
+      "name": "dots-vertical",
+      "label": "More vertical",
+      "category": "actions"
+    },
+    {
+      "name": "download",
+      "label": "Download",
+      "category": "actions"
+    },
+    {
+      "name": "external-link",
+      "label": "External link",
+      "category": "navigation"
+    },
+    {
+      "name": "eye",
+      "label": "Show",
+      "category": "actions"
+    },
+    {
+      "name": "eye-off",
+      "label": "Hide",
+      "category": "actions"
+    },
+    {
+      "name": "file",
+      "label": "File",
+      "category": "objects"
+    },
+    {
+      "name": "filter",
+      "label": "Filter",
+      "category": "actions"
+    },
+    {
+      "name": "flag",
+      "label": "Flag",
+      "category": "status"
+    },
+    {
+      "name": "folder",
+      "label": "Folder",
+      "category": "objects"
+    },
+    {
+      "name": "globe",
+      "label": "Globe",
+      "category": "objects"
+    },
+    {
+      "name": "grid",
+      "label": "Grid",
+      "category": "data"
+    },
+    {
+      "name": "hash",
+      "label": "Hash",
+      "category": "data"
+    },
+    {
+      "name": "heart",
+      "label": "Heart",
+      "category": "status"
+    },
+    {
+      "name": "help",
+      "label": "Help",
+      "category": "status"
+    },
+    {
+      "name": "home",
+      "label": "Home",
+      "category": "navigation"
+    },
+    {
+      "name": "image",
+      "label": "Image",
+      "category": "objects"
+    },
+    {
+      "name": "inbox",
+      "label": "Inbox",
+      "category": "communication"
+    },
+    {
+      "name": "info",
+      "label": "Information",
+      "category": "status"
+    },
+    {
+      "name": "key",
+      "label": "Key",
+      "category": "system-tools"
+    },
+    {
+      "name": "layers",
+      "label": "Layers",
+      "category": "objects"
+    },
+    {
+      "name": "layout-dashboard",
+      "label": "Dashboard layout",
+      "category": "data"
+    },
+    {
+      "name": "leaf",
+      "label": "Leaf",
+      "category": "objects"
+    },
+    {
+      "name": "link",
+      "label": "Link",
+      "category": "actions"
+    },
+    {
+      "name": "list",
+      "label": "List",
+      "category": "data"
+    },
+    {
+      "name": "lock",
+      "label": "Lock",
+      "category": "system-tools"
+    },
+    {
+      "name": "log-in",
+      "label": "Log in",
+      "category": "navigation"
+    },
+    {
+      "name": "log-out",
+      "label": "Log out",
+      "category": "navigation"
+    },
+    {
+      "name": "mail",
+      "label": "Mail",
+      "category": "communication"
+    },
+    {
+      "name": "map-pin",
+      "label": "Map pin",
+      "category": "objects"
+    },
+    {
+      "name": "menu",
+      "label": "Menu",
+      "category": "navigation"
+    },
+    {
+      "name": "message",
+      "label": "Message",
+      "category": "communication"
+    },
+    {
+      "name": "minus",
+      "label": "Minus",
+      "category": "actions"
+    },
+    {
+      "name": "monitor",
+      "label": "Monitor",
+      "category": "system-tools"
+    },
+    {
+      "name": "moon",
+      "label": "Moon",
+      "category": "system-tools"
+    },
+    {
+      "name": "palette",
+      "label": "Palette",
+      "category": "system-tools"
+    },
+    {
+      "name": "paperclip",
+      "label": "Attachment",
+      "category": "objects"
+    },
+    {
+      "name": "pause",
+      "label": "Pause",
+      "category": "actions"
+    },
+    {
+      "name": "pencil",
+      "label": "Edit",
+      "category": "actions"
+    },
+    {
+      "name": "phone",
+      "label": "Phone",
+      "category": "communication"
+    },
+    {
+      "name": "play",
+      "label": "Play",
+      "category": "actions"
+    },
+    {
+      "name": "plus",
+      "label": "Plus",
+      "category": "actions"
+    },
+    {
+      "name": "refresh",
+      "label": "Refresh",
+      "category": "actions"
+    },
+    {
+      "name": "restore",
+      "label": "Restore",
+      "category": "actions"
+    },
+    {
+      "name": "search",
+      "label": "Search",
+      "category": "actions"
+    },
+    {
+      "name": "send",
+      "label": "Send",
+      "category": "communication"
+    },
+    {
+      "name": "server",
+      "label": "Server",
+      "category": "system-tools"
+    },
+    {
+      "name": "settings",
+      "label": "Settings",
+      "category": "system-tools"
+    },
+    {
+      "name": "share",
+      "label": "Share",
+      "category": "communication"
+    },
+    {
+      "name": "shield",
+      "label": "Shield",
+      "category": "system-tools"
+    },
+    {
+      "name": "sliders",
+      "label": "Sliders",
+      "category": "actions"
+    },
+    {
+      "name": "sparkles",
+      "label": "Sparkles",
+      "category": "status"
+    },
+    {
+      "name": "star",
+      "label": "Star",
+      "category": "status"
+    },
+    {
+      "name": "sun",
+      "label": "Sun",
+      "category": "system-tools"
+    },
+    {
+      "name": "tag",
+      "label": "Tag",
+      "category": "objects"
+    },
+    {
+      "name": "terminal",
+      "label": "Terminal",
+      "category": "system-tools"
+    },
+    {
+      "name": "trash",
+      "label": "Delete",
+      "category": "actions"
+    },
+    {
+      "name": "unlock",
+      "label": "Unlock",
+      "category": "system-tools"
+    },
+    {
+      "name": "upload",
+      "label": "Upload",
+      "category": "actions"
+    },
+    {
+      "name": "user",
+      "label": "User",
+      "category": "communication"
+    },
+    {
+      "name": "user-check",
+      "label": "Verified user",
+      "category": "communication"
+    },
+    {
+      "name": "users",
+      "label": "Users",
+      "category": "communication"
+    },
+    {
+      "name": "waves",
+      "label": "Waves",
+      "category": "objects"
+    },
+    {
+      "name": "wifi",
+      "label": "Wireless network",
+      "category": "system-tools"
+    }
+  ]
+}

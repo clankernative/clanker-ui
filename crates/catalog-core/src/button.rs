@@ -147,7 +147,7 @@ impl ButtonInstance {
                 _ => {
                     return Err(
                         "link requires a safe HTTP(S), relative, or named route target".into(),
-                    )
+                    );
                 }
             }
         }

@@ -1,0 +1,13 @@
+{
+  "choices": [
+    {
+      "label": "Operations and cross-functional service delivery",
+      "value": "operations"
+    }
+  ],
+  "expectedHtml": "<div class=\"cui-select-field\" data-cui-component=\"select-field\"><label class=\"cui-select-field__label\" for=\"department\">Department for the selected organizational reporting area</label><div class=\"cui-select-field__control-wrap\"><select class=\"cui-select-field__control\" id=\"department\" name=\"department\" aria-describedby=\"department-description\"><option value=\"operations\">Operations and cross-functional service delivery</option></select></div><div class=\"cui-select-field__description\" id=\"department-description\"><p class=\"cui-select-field__hint\">Select the team responsible for this request.</p></div></div>\n",
+  "hint": "Select the team responsible for this request.",
+  "id": "department",
+  "label": "Department for the selected organizational reporting area",
+  "name": "department"
+}

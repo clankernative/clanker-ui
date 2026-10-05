@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "name": "tooltip",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Provides concise keyboard-accessible contextual help without interactive bubble content.",
+  "keywords": [
+    "tooltip",
+    "help",
+    "hint",
+    "context"
+  ],
+  "agent": {
+    "useWhen": "A small icon trigger needs concise, noninteractive contextual clarification.",
+    "avoidWhen": "The content needs links, controls, long-form explanation, or a touch-only disclosure. Native readiness covers literal static-page declarations, not runtime bindings or live-region replacement.",
+    "composeWith": [
+      "icon"
+    ]
+  },
+  "contract": {
+    "role": "tooltip",
+    "variants": [
+      "top",
+      "right",
+      "bottom",
+      "left"
+    ],
+    "requiredFields": [
+      "id",
+      "trigger_label",
+      "title"
+    ],
+    "invariants": [
+      "id is a stable lowercase kebab-case DOM ID reserved by derived_ids; triggerLabel and title are escaped nonblank plain text.",
+      "Optional description is plain text; bubble is noninteractive and linked to its keyboard-focusable trigger by aria-describedby.",
+      "Icon defaults to the closed help geometry catalog; caller-supplied icon names are validated against locked geometry.",
+      "Placement is top, right, bottom, or left; runtime positioning chooses collision-aware placement. Arrow defaults false.",
+      "Without JavaScript help stays visible in normal flow and the inert trigger is hidden. Enhancement adds hover/focus positioning and Escape dismissal without losing trigger focus; cleanup restores static help and releases listeners.",
+      "Motion respects prefers-reduced-motion; tooltip content never accepts raw markup or commands.",
+      "The fragment contains exactly one [[tooltip]] slot."
+    ]
+  },
+  "tokens": [
+    "--cui-tooltip-arrow-offset",
+    "--cui-tooltip-background",
+    "--cui-tooltip-color",
+    "--cui-tooltip-focus-ring",
+    "--cui-tooltip-padding",
+    "--cui-tooltip-radius",
+    "--cui-tooltip-shadow",
+    "--cui-tooltip-width"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-tooltip-arrow-offset",
+      "role": "spacing",
+      "purpose": "Controls offset for tooltip."
+    },
+    {
+      "name": "--cui-tooltip-background",
+      "role": "background",
+      "purpose": "Controls background color for  tooltip."
+    },
+    {
+      "name": "--cui-tooltip-color",
+      "role": "text",
+      "purpose": "Controls color for  tooltip."
+    },
+    {
+      "name": "--cui-tooltip-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  tooltip."
+    },
+    {
+      "name": "--cui-tooltip-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for tooltip."
+    },
+    {
+      "name": "--cui-tooltip-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for tooltip."
+    },
+    {
+      "name": "--cui-tooltip-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for tooltip."
+    },
+    {
+      "name": "--cui-tooltip-width",
+      "role": "sizing",
+      "purpose": "Controls width for tooltip."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
+  "assets": {
+    "template": "components/tooltip/fragment.html",
+    "styles": "components/tooltip/styles.css",
+    "scripts": [
+      "components/tooltip/install.js"
+    ]
+  },
+  "fixtures": [
+    "components/tooltip/fixtures/top-golden.json",
+    "components/tooltip/fixtures/right-golden.json",
+    "components/tooltip/fixtures/bottom-golden.json",
+    "components/tooltip/fixtures/left-golden.json"
+  ]
+}

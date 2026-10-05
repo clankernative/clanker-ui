@@ -1,0 +1,7 @@
+{
+  "expectedHtml": "<div class=\"cui-toggle\" data-cui-component=\"toggle\"><label class=\"cui-toggle__label\" for=\"audit-reminders\"><input class=\"cui-toggle__control\" type=\"checkbox\" role=\"switch\" id=\"audit-reminders\" name=\"audit-reminders\" value=\"true\">Notify me about audit reviews</label></div>\n",
+  "options": {
+    "label": "Notify me about audit reviews",
+    "name": "audit-reminders"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "expectedHtml": "<nav class=\"cui-progress-steps cui-progress-steps--horizontal cui-progress-steps--compact\" data-cui-component=\"progress-steps\" aria-label=\"Workflow\"><ol class=\"cui-progress-steps__list\"><li class=\"cui-progress-steps__item cui-progress-steps__item--complete\"><a class=\"cui-progress-steps__target\" href=\"?step=one\"><span class=\"cui-progress-steps__marker\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"check\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m20 6-11 11-5-5\"></path></svg>\n</span><span class=\"cui-progress-steps__content\"><span class=\"cui-progress-steps__sr-only\">Completed: </span><span class=\"cui-progress-steps__label\">One</span></span></a></li><li class=\"cui-progress-steps__item cui-progress-steps__item--current\"><span class=\"cui-progress-steps__target\" aria-current=\"step\"><span class=\"cui-progress-steps__marker\" aria-hidden=\"true\">2</span><span class=\"cui-progress-steps__content\"><span class=\"cui-progress-steps__sr-only\">Current: </span><span class=\"cui-progress-steps__label\">Two</span></span></span></li><li class=\"cui-progress-steps__item cui-progress-steps__item--upcoming\"><span class=\"cui-progress-steps__target\"><span class=\"cui-progress-steps__marker\" aria-hidden=\"true\">3</span><span class=\"cui-progress-steps__content\"><span class=\"cui-progress-steps__sr-only\">Upcoming: </span><span class=\"cui-progress-steps__label\">Three</span></span></span></li></ol></nav>\n",
+  "options": {
+    "appearance": "compact",
+    "items": [
+      {
+        "href": "?step=one",
+        "label": "One",
+        "state": "complete"
+      },
+      {
+        "label": "Two",
+        "state": "current"
+      },
+      {
+        "label": "Three",
+        "state": "upcoming"
+      }
+    ],
+    "label": "Workflow",
+    "orientation": "horizontal"
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "name": "activity-feed",
+  "status": "ready",
+  "target": "native-html",
+  "category": "data",
+  "summary": "Presents chronological operational events with actor, detail, time, and semantic tone.",
+  "keywords": [
+    "activity",
+    "timeline",
+    "audit history"
+  ],
+  "agent": {
+    "useWhen": "A detail page needs a concise chronological history of actions or state changes.",
+    "avoidWhen": "Users compare many events across fixed columns or need audit-log filtering.",
+    "composeWith": [
+      "badge",
+      "card",
+      "data-table"
+    ]
+  },
+  "contract": {
+    "role": "labelled ordered list with machine-readable native time elements",
+    "variants": [
+      "neutral",
+      "info",
+      "success",
+      "warning",
+      "danger"
+    ],
+    "requiredFields": [
+      "label",
+      "entries"
+    ],
+    "invariants": [
+      "One to 100 ordered entries with nonblank plain-text visible time labels.",
+      "occurredAt must be a real calendar-valid RFC3339 timestamp with timezone; regex-only acceptance is insufficient.",
+      "Portable hrefs accept only the package safe HTTP(S), relative, or application path policy. Native JSON hrefs also accept whole named routes calls; the host checks route existence, argument types, codecs and emission provenance.",
+      "All text and attributes are escaped; no script or raw HTML is emitted.",
+      "Fragment slots are exactly [[attributes]], [[label]], and [[entries]]."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-activity-feed-danger",
+    "--cui-activity-feed-detail-text",
+    "--cui-activity-feed-gap",
+    "--cui-activity-feed-info",
+    "--cui-activity-feed-line",
+    "--cui-activity-feed-marker-background",
+    "--cui-activity-feed-meta-text",
+    "--cui-activity-feed-neutral",
+    "--cui-activity-feed-success",
+    "--cui-activity-feed-title-text",
+    "--cui-activity-feed-warning",
+    "--cui-border",
+    "--cui-danger",
+    "--cui-focus-ring",
+    "--cui-info",
+    "--cui-link-hover",
+    "--cui-success",
+    "--cui-surface",
+    "--cui-text",
+    "--cui-text-secondary",
+    "--cui-warning"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-activity-feed-danger",
+      "role": "text",
+      "purpose": "Controls danger state for  activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-detail-text",
+      "role": "text",
+      "purpose": "Controls text color for supporting detail activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-info",
+      "role": "text",
+      "purpose": "Controls information state for  activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-line",
+      "role": "color",
+      "purpose": "Controls line height for activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-marker-background",
+      "role": "background",
+      "purpose": "Controls background color for marker activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-meta-text",
+      "role": "text",
+      "purpose": "Controls text color for meta activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-neutral",
+      "role": "color",
+      "purpose": "Controls neutral state for  activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-success",
+      "role": "text",
+      "purpose": "Controls success state for  activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-title-text",
+      "role": "text",
+      "purpose": "Controls text color for title activity feed."
+    },
+    {
+      "name": "--cui-activity-feed-warning",
+      "role": "text",
+      "purpose": "Controls warning state for  activity feed."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/activity-feed/fragment.html",
+    "styles": "components/activity-feed/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/activity-feed/fixtures/typical-golden.json",
+    "components/activity-feed/fixtures/compact-golden.json",
+    "components/activity-feed/fixtures/info.json",
+    "components/activity-feed/fixtures/warning.json",
+    "components/activity-feed/fixtures/danger.json"
+  ]
+}

@@ -1,11 +1,21 @@
 {
   "schemaVersion": 1,
   "name": "@clanker/vanilla",
-  "version": "0.4.0",
+  "version": "0.7.0",
   "summary": "Semantic HTML controls for Clanker Native",
   "theme": "theme/default.css",
+  "tokenMetadata": "theme/token-metadata.json",
   "resources": [
     "icons.json",
+    "icon-catalog.json",
+    "property-catalog.json",
+    "browser/lifecycle.js",
+    "theme/reference.css",
+    "theme/token-metadata.json",
+    "theme/fonts.css",
+    "fonts/geist-sans-variable.woff2",
+    "fonts/geist-mono-variable.woff2",
+    "fonts/GEIST-LICENSE.txt",
     "components/button/fragment.html",
     "components/icon/fragment.html",
     "components/badge/fragment.html",
@@ -19,6 +29,18 @@
     "components/empty-state/fragment.html",
     "components/metric/fragment.html",
     "components/skeleton/fragment.html",
-    "components/page-header/fragment.html"
+    "components/page-header/fragment.html",
+    "components/card/fragment.html",
+    "components/cluster/fragment.html",
+    "components/container/fragment.html",
+    "components/grid/fragment.html",
+    "components/split/fragment.html",
+    "components/stack/fragment.html",
+    "components/cover/fragment.html",
+    "components/layer/fragment.html",
+    "components/pane/fragment.html",
+    "components/reel/fragment.html",
+    "components/sidebar/fragment.html",
+    "components/switch/fragment.html"
   ]
 }

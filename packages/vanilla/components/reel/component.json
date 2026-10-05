@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "name": "reel",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Keeps peers at useful widths inside a labelled horizontal scroll region.",
+  "keywords": [
+    "reel",
+    "horizontal",
+    "scroll",
+    "timeline",
+    "cards",
+    "overflow"
+  ],
+  "agent": {
+    "useWhen": "Peer items must retain useful width and may extend beyond the container.",
+    "avoidWhen": "All items should remain visible through wrapping or reflow; use Grid instead.",
+    "composeWith": [
+      "container",
+      "stack",
+      "card",
+      "badge"
+    ]
+  },
+  "contract": {
+    "role": "horizontal-scroll-region",
+    "variants": [
+      "narrow",
+      "standard",
+      "wide",
+      "content"
+    ],
+    "requiredFields": [
+      "label"
+    ],
+    "invariants": [
+      "Label must contain safe visible text.",
+      "Children preserve source order and horizontal scrolling remains native.",
+      "The focusable region is named and no JavaScript is required."
+    ]
+  },
+  "tokens": [
+    "--cui-border",
+    "--cui-focus",
+    "--cui-reel-focus-offset",
+    "--cui-reel-focus-ring",
+    "--cui-reel-gap-compact",
+    "--cui-reel-gap-generous",
+    "--cui-reel-gap-none",
+    "--cui-reel-gap-spacious",
+    "--cui-reel-gap-standard",
+    "--cui-reel-item-width-narrow",
+    "--cui-reel-item-width-standard",
+    "--cui-reel-item-width-wide"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-reel-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for reel."
+    },
+    {
+      "name": "--cui-reel-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  reel."
+    },
+    {
+      "name": "--cui-reel-gap-compact",
+      "role": "spacing",
+      "purpose": "Controls compact for spacing between elements reel."
+    },
+    {
+      "name": "--cui-reel-gap-generous",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements reel."
+    },
+    {
+      "name": "--cui-reel-gap-none",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements reel."
+    },
+    {
+      "name": "--cui-reel-gap-spacious",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements reel."
+    },
+    {
+      "name": "--cui-reel-gap-standard",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements reel."
+    },
+    {
+      "name": "--cui-reel-item-width-narrow",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for item width reel."
+    },
+    {
+      "name": "--cui-reel-item-width-standard",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for item width reel."
+    },
+    {
+      "name": "--cui-reel-item-width-wide",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for item width reel."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/reel/fragment.html",
+    "styles": "components/reel/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/reel/fixtures/narrow.json",
+    "components/reel/fixtures/standard.json",
+    "components/reel/fixtures/wide.json",
+    "components/reel/fixtures/content.json"
+  ]
+}

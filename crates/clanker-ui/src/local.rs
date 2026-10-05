@@ -132,6 +132,7 @@ impl PackageSource for LocalPackage {
                     .assets
                     .scripts
                     .iter()
+                    .chain(component.assets.contracts.iter())
                     .chain([&component.assets.template, &component.assets.styles])
                     .chain(component.fixtures.iter());
                 for asset in assets {

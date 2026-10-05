@@ -1,0 +1,7 @@
+{
+  "variant": "horizontal",
+  "orientation": "horizontal",
+  "label": "Recent activity",
+  "alignment": "start",
+  "expectedHtml": "<div class=\"cui-divider cui-divider--horizontal cui-divider--labelled cui-divider--start\" data-cui-component=\"divider\" role=\"separator\" aria-orientation=\"horizontal\" aria-label=\"Recent activity\"><span class=\"cui-divider__label\">Recent activity</span></div>\n"
+}

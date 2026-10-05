@@ -1,0 +1,19 @@
+@layer clanker.components {
+  .cui-cluster { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: var(--cui-cluster-gap-compact, .5rem); min-inline-size: 0; }
+  .cui-cluster--gap-none { gap: var(--cui-cluster-gap-none, 0); }
+  .cui-cluster--gap-compact { gap: var(--cui-cluster-gap-compact, .5rem); }
+  .cui-cluster--gap-standard { gap: var(--cui-cluster-gap-standard, 1rem); }
+  .cui-cluster--gap-spacious { gap: var(--cui-cluster-gap-spacious, 1.5rem); }
+  .cui-cluster--gap-generous { gap: var(--cui-cluster-gap-generous, 2rem); }
+  .cui-cluster--align-stretch { align-items: stretch; }
+  .cui-cluster--align-start { align-items: flex-start; }
+  .cui-cluster--align-center { align-items: center; }
+  .cui-cluster--align-end { align-items: flex-end; }
+  .cui-cluster--align-baseline { align-items: baseline; }
+  .cui-cluster--justify-start { justify-content: flex-start; }
+  .cui-cluster--justify-center { justify-content: center; }
+  .cui-cluster--justify-end { justify-content: flex-end; }
+  .cui-cluster--justify-between { justify-content: space-between; }
+  .cui-cluster--nowrap { flex-wrap: nowrap; }
+  .cui-cluster > * { min-inline-size: 0; max-inline-size: 100%; }
+}

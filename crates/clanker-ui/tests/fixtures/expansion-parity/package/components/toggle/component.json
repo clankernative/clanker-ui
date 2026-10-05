@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "name": "toggle",
+  "status": "draft",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders a native Boolean checkbox styled as a switch.",
+  "keywords": ["toggle", "switch", "checkbox", "form", "boolean"],
+  "agent": {
+    "useWhen": "An app-owned form needs one labelled Boolean checkbox presented as an on/off switch.",
+    "avoidWhen": "The state must update without submission, requires component-owned JavaScript, or needs a non-Boolean value.",
+    "composeWith": ["form-field"]
+  },
+  "contract": {
+    "role": "native Boolean form control",
+    "variants": ["unchecked", "checked", "required", "disabled", "invalid"],
+    "requiredFields": ["name", "label"],
+    "invariants": [
+      "Uses a native checkbox with value=true, role=switch, and native checked, required, and disabled attributes.",
+      "Optional id defaults to name; deterministic hint, error, and description IDs are reserved.",
+      "Name and ID are non-reserved safe tokens; label, hint, and error are nonblank control-safe plain text escaped as HTML.",
+      "A false checkbox follows native successful-control submission semantics; no hidden false field or fake transport is emitted.",
+      "The app owns form, submission, transport, routes, and domain validation. No JavaScript, commands, arbitrary attributes, or raw markup are emitted.",
+      "The fragment has exactly one [[attributes]], [[label]], and [[description]] slot; expansion is exact and single-pass.",
+      "Draft status remains until a Native host build and browser review prove admission and behavior."
+    ]
+  },
+  "tokens": ["--cui-toggle-gap", "--cui-toggle-track", "--cui-toggle-track-border", "--cui-toggle-checked-background", "--cui-toggle-knob", "--cui-toggle-focus-ring", "--cui-toggle-hint-text", "--cui-toggle-error-text"],
+  "dependencies": [],
+  "assets": {"template": "components/toggle/fragment.html", "styles": "components/toggle/styles.css", "scripts": []},
+  "fixtures": ["components/toggle/fixtures/typical-golden.json", "components/toggle/fixtures/unchecked-golden.json", "components/toggle/fixtures/validation-golden.json", "components/toggle/fixtures/disabled-golden.json"]
+}

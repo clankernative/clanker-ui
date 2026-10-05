@@ -1,0 +1,1 @@
+{"options":{"id":"permission-review","title":"Review permissions","triggerLabel":"Review permissions","fallbackHref":"/permissions/review","size":"wide","headingLevel":"h3"},"children":{"body":"<p>Review the selected permissions.</p>","actions":"<button type=\"button\">Approve</button>"}}

@@ -1,0 +1,19 @@
+{
+  "expectedHtml": "<fieldset id=\"release-mode\" class=\"cui-radio-group cui-radio-group--stacked cui-radio-group--invalid\" data-cui-component=\"radio-group\" aria-invalid=\"true\" aria-describedby=\"release-mode-description release-mode-error\"><legend class=\"cui-radio-group__legend\">Release mode <span class=\"cui-radio-group__required\" aria-hidden=\"true\">*</span></legend><div class=\"cui-radio-group__choices\"><label class=\"cui-radio-group__choice\" for=\"release-mode-choice-1\"><input class=\"cui-radio-group__control\" type=\"radio\" id=\"release-mode-choice-1\" name=\"release-mode\" value=\"manual\" required><span class=\"cui-radio-group__text\"><span class=\"cui-radio-group__label\">Manual</span></span></label><label class=\"cui-radio-group__choice\" for=\"release-mode-choice-2\"><input class=\"cui-radio-group__control\" type=\"radio\" id=\"release-mode-choice-2\" name=\"release-mode\" value=\"auto\" required><span class=\"cui-radio-group__text\"><span class=\"cui-radio-group__label\">Automatic</span></span></label></div><div class=\"cui-radio-group__description\" id=\"release-mode-description\"><p class=\"cui-radio-group__error\" id=\"release-mode-error\">Choose a mode.</p></div></fieldset>\n",
+  "options": {
+    "choices": [
+      {
+        "label": "Manual",
+        "value": "manual"
+      },
+      {
+        "label": "Automatic",
+        "value": "auto"
+      }
+    ],
+    "error": "Choose a mode.",
+    "legend": "Release mode",
+    "name": "release-mode",
+    "required": true
+  }
+}

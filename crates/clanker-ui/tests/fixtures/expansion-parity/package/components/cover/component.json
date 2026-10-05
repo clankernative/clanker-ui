@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1, "name": "cover", "status": "ready", "target": "native-html", "category": "layout",
+  "summary": "Centers a primary task between optional top and bottom regions.", "keywords": ["cover", "centered", "sign-in", "onboarding", "viewport"],
+  "agent": {"useWhen":"One focused primary task needs optional product and support regions at opposite edges.","avoidWhen":"The middle region requires bounded scrolling; use Pane instead.","composeWith":["container","stack","card","empty-state"]},
+  "contract": {"role":"vertical-cover-layout","variants":["compact","standard","fill","viewport"],"requiredFields":[],"invariants":["Primary content follows optional top and precedes optional bottom slots.","Optional chrome never changes primary-row placement.","Neutral wrappers add no landmarks, controls, scripts, routes, or commands."]},
+  "tokens":["--cui-cover-height-compact","--cui-cover-height-standard","--cui-cover-viewport-offset","--cui-cover-gap-compact","--cui-cover-gap-generous","--cui-cover-gap-none","--cui-cover-gap-spacious","--cui-cover-gap-standard"], "dependencies":[],
+  "assets":{"template":"components/cover/fragment.html","styles":"components/cover/styles.css","scripts":[]},
+  "fixtures":["components/cover/fixtures/compact.json","components/cover/fixtures/standard.json","components/cover/fixtures/fill.json","components/cover/fixtures/viewport.json"]
+}

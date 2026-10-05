@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "name": "copy-field",
+  "status": "draft",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "A selectable read-only value with progressive clipboard feedback.",
+  "keywords": ["copy", "clipboard", "read-only", "identifier"],
+  "agent": {
+    "useWhen": "Users need to transfer a displayed non-secret identifier or value exactly.",
+    "avoidWhen": "The value is editable, sensitive, or ordinary selection is sufficient.",
+    "composeWith": ["definition-list", "form-field", "icon"]
+  },
+  "contract": {
+    "role": "native form control",
+    "variants": ["standard"],
+    "requiredFields": ["name", "label", "value"],
+    "invariants": ["The native read-only input is the only clipboard source and remains selectable without JavaScript.", "Feedback is literal localized text; clipboard content is never emitted in events.", "Native/app owns submission, validation, and authorization; this component creates no operation.", "Reserve control, hint, and status IDs. Async feedback cannot mutate detached or replaced specimens.", "Browser enhancement and import-graph host admission must be proven before ready registration."]
+  },
+  "tokens": ["--cui-copy-field-gap", "--cui-copy-field-label-text", "--cui-copy-field-height", "--cui-copy-field-border", "--cui-copy-field-radius", "--cui-copy-field-background", "--cui-copy-field-text", "--cui-copy-field-button-hover", "--cui-copy-field-focus-ring", "--cui-copy-field-hint-text"],
+  "dependencies": ["icon"],
+  "assets": {"template": "components/copy-field/fragment.html", "styles": "components/copy-field/styles.css", "scripts": ["components/copy-field/interaction.js"]},
+  "fixtures": ["components/copy-field/fixtures/typical-golden.json"]
+}

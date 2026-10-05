@@ -1,23 +1,25 @@
 # Clanker Native UI
 
-**Status:** provisional package and build-time Native adapter for fourteen components. The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready.
+**Status:** provisional 0.7.0 package with forty-five ready component contracts. The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready. The standalone local gallery has passed separate Native host admission and desktop/mobile browser checks for all fourteen layouts; CLI fixture verification alone does not prove host integration.
 
-Clanker Native UI is an optional, agent-first component discovery and assembly system. It helps an app-building agent find a component that fits a user's intent, read its contract, compose it for the app's target, and verify the result. The vanilla package provides Button, Icon, Badge, Divider, Status Indicator, Tag, Alert, Progress, Form Field, Avatar, Empty State, Metric, Skeleton, and Page Header with target-specific HTML and CSS. Native controls integrate with the host's existing Datastar form and patch transport; component-owned browser modules and signals remain a later slice. Other authors could publish their own packages and target adapters, including React catalogs, without making React a dependency of Clanker Native.
+Clanker Native UI is an optional, agent-first component discovery and assembly system. It helps an app-building agent find a component that fits a user's intent, read its contract, compose it for the app's target, and verify the result. The vanilla package provides Button, Icon, Badge, Divider, Status Indicator, Tag, Alert, Progress, Form Field, Avatar, Empty State, Metric, Skeleton, Page Header, Card, Cluster, Container, Grid, Split, Stack, Cover, Layer, Pane, Reel, Sidebar, and Switch with target-specific HTML and CSS. Native controls integrate with the host's existing Datastar form and patch transport. Four ready components have bounded browser-local enhancements for literal static pages; they do not own Datastar signals or app transport. Other authors could publish their own packages and target adapters, including React catalogs, without making React a dependency of Clanker Native.
 
 Clanker Native remains usable without Clanker Native UI. Apps keep ownership of their domain models, queries, commands, routes, presentation, and design flavor. Clanker Native UI describes and supplies UI components; it does not become a second app-operation catalog or an arbitrary callback SDK.
 
 ## Try the local proof
 
-The Rust workspace has a pure `catalog-core` crate and a `clanker-ui` discovery CLI. Clanker Native's build owns target-specific expansion into its private staging area. The ready vanilla components are `button`, `icon`, `badge`, `divider`, `status-indicator`, `tag`, `alert`, `progress`, `form-field`, `avatar`, `empty-state`, `metric`, `skeleton`, and `page-header`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/clanker-ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
+The Rust workspace has a pure `catalog-core` crate, a `clanker-ui` discovery/assembly CLI, and shared `clanker-ui-runtime` guards. Clanker UI owns expansion; the Native build invokes the pinned CLI and independently admits its output in a private snapshot. The forty-five ready vanilla components are `button`, `icon`, `badge`, `divider`, `status-indicator`, `tag`, `alert`, `progress`, `form-field`, `avatar`, `empty-state`, `metric`, `skeleton`, `page-header`, `card`, `cluster`, `container`, `grid`, `split`, `stack`, `cover`, `layer`, `pane`, `reel`, `sidebar`, `switch`, `select-field`, `filter-bar`, `data-table`, `breadcrumbs`, `pagination`, `activity-feed`, `button-group`, `definition-list`, `disclosure`, `progress-steps`, `segmented-control`, `tabs`, `checkbox-group`, `radio-group`, `toggle`, `copy-field`, `theme-switcher`, `tooltip`, and `toast`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/clanker-ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
 
 From this directory:
 
 ```sh
 cargo run --locked --offline -- find button --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- describe button --lock examples/button-app/clanker-ui.lock.json
+cargo run --locked --offline -- properties --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- graph button --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- verify --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- find icon --lock examples/button-app/clanker-ui.lock.json
+cargo run --locked --offline -- find-icon processor --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- describe icon --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- list --lock examples/button-app/clanker-ui.lock.json
 cargo run --locked --offline -- graph badge --lock examples/button-app/clanker-ui.lock.json
@@ -25,17 +27,50 @@ cargo run --locked --offline -- graph badge --lock examples/button-app/clanker-u
 
 `lock --lock <file> --package <path>` pins a local package relative to the lock file; changing its declared bytes requires `--update`. The CLI emits versioned JSON and nonzero status on failure. Its `verify` checks manifest shape, declared inputs, token references, and self-authored fixtures; it is not a substitute for Native's independent admission. Word matching is literal, not embedding-based search. The old `build` and `compose` commands still produce isolated generated files for the earlier proof, but **do not use them to integrate an app**.
 
+### Build-time expansion and script-free scenes
+
+```sh
+cargo run --locked --offline -- expand --lock examples/button-app/clanker-ui.lock.json --ui /path/to/app/ui
+cargo run --locked --offline -- render --lock examples/button-app/clanker-ui.lock.json --ui /path/to/app/ui --scene /tmp/scene.json --fragment components/example.html
+```
+
+`expand` returns symbolic templates, typed binding metadata, a resource manifest, locked input digests, consumed source paths, selected module entrypoints, runtime ABI 1, and `minijinja-2.12.0`. Optional `--out <directory>` writes a separate proof bundle, never the app source. Rendering, composition, binding syntax, resource selection, and helper semantics live here—not in the platform renderer.
+
+`render` expands the same locked package and evaluates a bounded fake scene: `{"page":"pages/example.html","data":{"title":"Sample"},"routes":{"index":"/"},"width":1280}`. Without `--fragment`, `page` selects the template. Includes stay inside the captured UI. Text is escaped, numeric/image guards run, and fonts are embedded from locked bytes. The result is an inert, script-free HTML document: forms cannot submit and app modules do not run. Fake route maps are illustrative links, not Roc route checking. Studio must set the iframe viewport to the returned width; this command proves static presentation only.
+
+The Native host calls `expand` once per captured build. It verifies the executable pin and package/input digests, stages selected resources, then retains normal Roc-context, template, route, form, and resource admission. Runtime semantics use a digest-pinned vendor copy of the shared helper crate. The host contains no component renderer and performs no runtime package lookup.
+
+Portable CLI release pins are not published. Local builds therefore require an explicit `DAY2_UI_ADAPTER_PIN_JSON` file with `schemaVersion: 1`, `package: "@clanker/vanilla"`, `adapterProtocol: 1`, `runtimeAbi: 1`, and a `targets` map. Each host target (`macos-aarch64`, `macos-x86_64`, `linux-aarch64`, or `linux-x86_64`) supplies `executable` and its reviewed `sha256:` byte digest. Relative executable paths resolve beside the pin file. Never substitute a placeholder Linux checksum or treat this override as portable distribution.
+
+Golden tests preserve the frozen Native renderer's output across the gallery, GoLinks, Studio's isolated gallery, and seven additional static contracts: all 38 supported roots. The parity corpus uses a frozen package independent of current defaults. The seven static ports have separate real Native and browser evidence below; golden parity alone is not host-integration evidence for the nine adapter-required contracts.
+
+### Component completeness and Native support
+
+`status: "ready"` describes the component, not a backend or host adapter. A complete contract has real rendering and interaction, accessibility, cleanup, no-JS behavior, and conformance tests against its declared ports. Simulated adapters must be explicitly labeled and exercise failure, cancellation, recovery, and replacement; they are not production upload or query implementations.
+
+`integration.native.status` separately records `supported` or `adapter-required`, with the exact proven scope or missing seam. An omitted integration record makes no new support claim. Native's actual declaration, resource, form, and route admission remains authoritative. Never weaken those checks to make a component appear integrated.
+
+App-facing ports are discoverable under `integration.ports`; `typeSource` and `export` point to a component-owned TypeScript declaration listed in `assets.contracts`. These declarations are locked inputs, not executable adapters or server transports. The app owns file bytes, commands, data queries, routes, authorization, validation, persistence, and authoritative states. Optional adapter absence preserves the documented native fallback; a supplied adapter must obey cancellation and lifetime boundaries.
+
+### Contract-driven Explorer metadata
+
+`catalog-core::properties` describes editable fields, typed enum choices/defaults, numeric bounds, conditional fields, and admitted child slots for all 54 component-complete contracts. Its validators use the existing Rust contracts. Tests compare descriptor field names with serialized contract fields; `describe` includes the selected descriptor, and `properties` exports the full catalog with typed sample values.
+
+The package declares `property-catalog.json` as locked data. `verify` rejects it if it differs from the Rust export. After changing descriptors, export the command's `data` object to that file, then explicitly refresh consumer locks. The Native host reads only the declared, digest-checked resource and stages `clanker-properties.js` in its private snapshot. It does not fetch package source at runtime or render HTML from the metadata.
+
+The sibling gallery uses one shared property form and app-owned DOM bindings on already-admitted specimens. Browser drafts are previews, not host admission: the Native build remains authoritative for declarations, routes, resources, and accessible states. Images still require host-owned provenance; child controls choose admitted samples rather than accepting HTML. Local gallery Node tests live in `tests/gallery/` because Native admits only Roc outside the app's `ui/` tree; these tests require the sibling gallery checkout.
+
 A Native app pins the package in `ui/clanker-ui.lock.json` and declares a button directly in its template, inside an existing app-owned command form when submitting:
 
 ```html
 <cui-button kind="submit" variant="primary" icon="plus" label="Create" />
 ```
 
-The Native build checks the package digest, expands each declaration in a private snapshot, adds package CSS and optional `ui/clanker-theme.css` overrides to staged `ui/app.css`, then applies normal template, form, and resource admission. Local dev invokes the same build; neither the package nor the CLI runs at request time. The app contains no generated component HTML or CSS. The local GoLinks proof in `../golinks-clanker-ui-button` uses this path; its sibling package location must be replaced with a provisioned, pinned source before CI can build it elsewhere.
+The Native build checks the package and CLI digests, invokes `expand`, stages the returned templates and merged package/app CSS, then applies normal template, form, and resource admission. Local dev invokes the same build; neither the package nor the CLI runs at request time. The app contains no generated component HTML or CSS. The local GoLinks proof in `../golinks-clanker-ui-button` uses this path; its sibling package location must be replaced with a provisioned, pinned source before CI can build it elsewhere.
 
-Button attributes are `kind` (`action`, `submit`, `link`), `label`, `variant` (`primary`, `secondary`, `danger`, `quiet`), `size` (`compact`, `standard`), optional `icon`, `edge-aligned`, `disabled`, `busy`, and `busy-label`. A link uses a safe `href` or app-owned `route`. Labels may be app-authored literals or complete typed page-field interpolations. Dynamic states select interactive or noninteractive markup from checked Bool fields; busy requires a replacement label. Disabled or busy links have no href. The standalone `<cui-icon name="search" size="medium" label="Search" />` contract uses the same closed 100-glyph catalog. Icons are decorative/hidden from assistive technology by default; standalone meaningful icons require a nonblank `label` and render as `role="img"`. Icon fragment HTML and CSS are package assets; the target adapter supplies SVG attributes and geometry through the exact `[[attributes]]` and `[[geometry]]` slots. The button does not create a command, form fields, or route. JavaScript-bearing components, multi-package assembly, and production package distribution remain future work.
+Button attributes are `kind` (`action`, `submit`, `link`), `label`, `variant` (`primary`, `secondary` [default], `danger`, `quiet`), `size` (`compact`, `standard`), optional `icon`, `edge-aligned`, `disabled`, `busy`, and `busy-label`. A link uses a safe `href` or app-owned `route`. Labels may be app-authored literals or complete typed page-field interpolations. The Native host also accepts whole checked Integer/Unsigned fields for `variant` (0 primary, 1 secondary, 2 quiet, 3 danger) and `size` (0 compact, 1 standard); closed runtime helpers reject other values and return only known class tokens. These ordinal bindings are a host capability, not a portable JSON contract or arbitrary enum expression. Dynamic states select interactive or noninteractive markup from checked Bool fields; busy requires a replacement label. Disabled or busy links have no href. The standalone `<cui-icon name="search" size="medium" label="Search" />` contract uses the same closed 100-glyph catalog. `icon-catalog.json` supplies validated icon names, labels, and categories; `find-icon` searches all three case-insensitively and `describe icon` returns the metadata without changing the component contract. Icons are decorative/hidden from assistive technology by default; standalone meaningful icons require a nonblank `label` and render as `role="img"`. Icon fragment HTML and CSS are package assets; the target adapter supplies SVG attributes and geometry through the exact `[[attributes]]` and `[[geometry]]` slots. The button does not create a command, form fields, or route. The additional browser-local contracts are component-complete but require separate Native adapters; multi-package assembly and production package distribution remain future work.
 
-The new static declarations use literal text only; they do not yet accept typed page-field interpolation:
+The static declarations accept literal text or whole checked page-field bindings for their text values:
 
 ```html
 <cui-badge tone="neutral" label="Active links" show-icon="false" />
@@ -47,7 +82,7 @@ Badge requires visible `label` text, accepts tones `neutral`, `info`, `success`,
 
 ## Form Field, Tag, Alert, and Progress
 
-The `0.3.0` package adds four Native controls. The local GoLinks proof has a **UI Demo** navigation entry at `/ui-demo`, covering all fourteen components, long copy, field errors and readonly values, tag counts and links, alert recovery, and measured/unknown progress. Sample task and error states are labeled illustrative; its create form uses the real app-owned command in the local instance. The dashboard and detail forms also use Form Field, including checked `link.url` and `link.description` value bindings. No generated component markup is pasted into the app. Earlier `0.3.0` [desktop](docs/screenshots/golinks-demo-desktop.png), [mobile](docs/screenshots/golinks-demo-mobile.png), and [Tag/Alert/Progress detail](docs/screenshots/golinks-demo-new-components.png) captures use a disposable local instance with two test links, not production data.
+The `0.3.0` package adds four Native controls. The local GoLinks proof has a **UI Demo** navigation entry at `/ui-demo`, covering all twenty components, long copy, field errors and readonly values, tag counts and links, alert recovery, and measured/unknown progress. Sample task and error states are labeled illustrative; its create form uses the real app-owned command in the local instance. The dashboard and detail forms also use Form Field, including checked `link.url` and `link.description` value bindings. No generated component markup is pasted into the app. Earlier `0.3.0` [desktop](docs/screenshots/golinks-demo-desktop.png), [mobile](docs/screenshots/golinks-demo-mobile.png), and [Tag/Alert/Progress detail](docs/screenshots/golinks-demo-new-components.png) captures use a disposable local instance with two test links, not production data.
 
 ```html
 <cui-form-field id="edit-url" name="url" label="Destination URL" input-type="url" value="{{ link.url }}" required="true" />
@@ -57,10 +92,10 @@ The `0.3.0` package adds four Native controls. The local GoLinks proof has a **U
 <cui-progress label="Importing links" state="determinate" value="42" maximum="100" suffix="42 of 100 links" />
 ```
 
-- **Form Field:** required stable `id`, `name`, and visible `label`; native input types `text`, `email`, `url`, `number`, `password`, `search`, `date`, and `tel`, or `kind="textarea"`. Optional `hint`, `error`, `placeholder`, `autocomplete`, `required`, `readonly`, bounded `maxlength`, and textarea `rows`. Hint/error IDs derive from the field ID; an error sets `aria-invalid`. Disabled named controls and hidden controls are deliberately not exposed. The host still checks the control against the command's input carrier; a supported visual input type is not permission to bind it to every command field. Do not preload a password with a stored secret.
+- **Form Field:** required stable `id`, `name`, and visible `label`; native input types `text`, `email`, `url`, `number`, `password`, `search`, `date`, and `tel`, or `kind="textarea"`. Optional `hint`, `error`, `placeholder`, `autocomplete`, `required`, `readonly`, `disabled`, bounded `maxlength`, and textarea `rows`. Hint/error IDs derive from the field ID; an error sets `aria-invalid`. Disabled inputs/textareas are supported outside command forms. The host still rejects disabled named command controls because browsers omit them from submission; use readonly when the command must receive the value. Hidden controls remain app-owned. The host still checks the control against the command's input carrier; a supported visual input type is not permission to bind it to every command field. Do not preload a password with a stored secret.
 - **Tag:** tones `neutral`, `brand`, `info`, `success`, `warning`, `danger`; sizes `small`, `medium`, `large`; optional closed `icon`. `count` requires `count-label`. Use an admitted `href` or app-owned `route` for navigation. An otherwise static tag can have `remove-href`/`remove-route` paired with `remove-label`; this is navigation, not client-side dismissal. Nested links are rejected.
-- **Alert:** required `title`, `body`, and `tone` (`info`, `success`, `warning`, `danger`). The title is a fixed `h2`; compose it at an appropriate heading level. A recovery destination (`recovery-href` or `recovery-route`) requires `recovery-label`. Announcement defaults to none; explicit `announcement="polite"` or `"assertive"` opts into live semantics. No dismissal or command lifecycle is claimed.
-- **Progress:** required task `label` and explicit `state`. Determinate progress requires finite literal `value` and `maximum`, with `maximum > 0` and `0 <= value <= maximum`; invalid values fail rather than clamp. Indeterminate progress omits both numbers and any `suffix`. Optional `detail`, semantic `tone`, and `size="regular"` or `"compact"`. Numeric page bindings are not admitted in this slice: the host would need a checked runtime range boundary before promising them.
+- **Alert:** required `title`, `body`, and `tone` (`info`, `success`, `warning`, `danger`). Optional `appearance` is `soft` (default), `outlined`, or `accent`; `heading-level` is `h2` (default), `h3`, or `h4`. A recovery destination (`recovery-href` or `recovery-route`) requires `recovery-label`. Announcement defaults to none; explicit `announcement="polite"` or `"assertive"` opts into live semantics. No dismissal or command lifecycle is claimed.
+- **Progress:** required task `label` and explicit `state`. Determinate progress requires numeric literals or whole checked Integer/Unsigned page fields for `value` and `maximum`, with `maximum > 0` and `0 <= value <= maximum`; invalid values fail rather than clamp. Indeterminate progress omits both numbers and any `suffix`. Optional `detail`, semantic `tone`, and `size="regular"` or `"compact"`. Bound values pass the host's runtime range guard, preserving unsigned integer precision and checking completion against the original values.
 
 ## Avatar, Empty State, Metric, Skeleton, and Page Header
 
@@ -74,17 +109,114 @@ The `0.4.0` package adds five dependency-light presentation components. They ext
 <cui-page-header title="Go Links" description="Find and manage your team's destinations." />
 ```
 
-- **Avatar:** required literal `initials` (one to three Unicode grapheme clusters) and meaningful `label`. Sizes `extra-small`, `small`, `medium`, `large`, `extra-large`; tones `neutral`, `brand`, `success`. A named `role="img"` wrapper hides the decorative initials. This port is **initials-only**: image/source props are rejected until local image admission, provenance, and fallback behavior have an explicit policy. Labels may use checked whole-field bindings; initials remain literal because their runtime length cannot be checked at build time.
+- **Avatar:** required `initials` (one to three Unicode grapheme clusters) and meaningful `label`, each literal or a whole checked page field. Sizes `extra-small`, `small`, `medium`, `large`, `extra-large`; tones `neutral`, `brand`, `success`. Native declarations accept optional `src` (a credential-free HTTPS literal or checked String field) or literal `image-asset` (an admitted app asset key), never both. The portable JSON contract calls this `imageSource`. Runtime guards validate bound initials and URLs. The browser loads the photo with no referrer; the server neither fetches nor proxies it. Only actually rendered HTTPS origins enter CSP, up to 32 per response; remote photo bytes are not package-pinned. CSP is fixed for the document: a new origin in a live patch preserves initials and shows an explicit refresh notice without discarding drafts automatically. Initials remain beneath the image as a no-JS fallback.
 - **Empty State:** required `title`/`body`; `alignment="start"` or `"center"`; `heading-level="h2"`, `"h3"`, or `"h4"`. Optional `action-label` pairs with an admitted `action-href` or app-owned `action-route`. This is ordinary navigation, not a command or dismissal. Choose the heading level for the surrounding document.
 - **Metric:** required `label` and already formatted `value`; optional `detail`, closed-catalog `icon`, and `appearance="plain"` or `"contained"`. `trend`, `trend-tone`, and `trend-label` must appear together. Direction (`up`, `down`, `flat`) is independent of favorability (`positive`, `negative`, `neutral`). Optional `trend-announcement` replaces the screen-reader description, not an ARIA live policy. The component does not calculate, parse, poll, or infer business meaning.
 - **Skeleton:** required literal `shape="text"`, `"rectangle"`, or `"circle"`; optional `size="small"`, `"medium"`, or `"large"`, width presets `short`, `medium`, `full`, and `animated` (default true). Always `aria-hidden`; the app owns meaningful loading text and the parent's `aria-busy`. Reduced motion disables its animation. No arbitrary dimensions or data expressions are exposed.
-- **Page Header:** required `title`, optional nonblank `description`, fixed `h1`. The title/description port deliberately excludes Toolframe's trusted-markup actions slot. Compose app-owned navigation/actions beside the component; do not pass raw HTML or create multiple page-level headings.
+- **Page Header:** required `title`, optional nonblank `description`, fixed `h1`. Optional named `actions` child is ordinary app-authored markup admitted by Native, not an HTML-valued attribute. Use `<cui-slot name="actions">…</cui-slot>`; do not pass a raw HTML option or create multiple page-level headings.
 
-Empty State, Metric, and Page Header text accepts literals or complete checked page-field interpolation, subject to ordinary Native template admission and runtime escaping. Structural choices, destinations, icons, Avatar initials, and Skeleton geometry remain checked literals or declared route names. Query authors remain responsible for meaningful nonblank bound labels. No browser-local state, component-owned Datastar signal, or arbitrary expression passthrough is introduced.
+Empty State, Metric, and Page Header text accepts literals or complete checked page-field interpolation, subject to ordinary Native template admission and runtime escaping. Bound values pass the shared Clanker UI runtime guards; ordinary CLI fixtures do not verify a real app's runtime-bound inputs. Structural choices, ordinary navigation destinations, icon names, and Skeleton geometry remain checked literals or declared route names. Avatar image URLs and initials have dedicated checked runtime bindings. Query authors remain responsible for meaningful nonblank bound labels. No browser-local state, component-owned Datastar signal, or arbitrary expression passthrough is introduced.
+
+## Layout and admitted child slots
+
+The 0.5.0 package adds six static layouts. Their child markup is a host-admitted slot, never a plain-text attribute or fixture-style `children` input in an app declaration. Named slots use `<cui-slot name="…">…</cui-slot>` and are admitted by the Native host before composition:
+
+```html
+<cui-card padding="standard" title="Recent activity">
+  <cui-slot name="body"><p>Three deployments completed.</p></cui-slot>
+  <cui-slot name="actions"><a href="/deployments">View deployments</a></cui-slot>
+</cui-card>
+<cui-split ratio="start-wide">
+  <cui-slot name="start"><section>Primary region</section></cui-slot>
+  <cui-slot name="end"><aside>Supporting region</aside></cui-slot>
+</cui-split>
+<cui-grid columns="responsive"><cui-slot name="body">…</cui-slot></cui-grid>
+```
+
+Card requires `body`, optionally accepts `actions`, and has optional title/subtitle with `h2` default heading level. Split requires `start` and `end` and renders them in that order. Container, Stack, Cluster, and Grid accept implicit body children or an explicit `body` slot. Container options are `width` (`reading`, `compact`, `standard`, `wide`, `full`) and `gutter` (`none`, `compact`, `standard`, `generous`). Stack options are `gap` (`none`, `compact`, `standard`, `spacious`, `generous`) and `alignment` (`stretch`, `start`, `center`, `end`, `baseline`). Cluster adds `justification` (`start`, `center`, `end`, `between`) and `wrapping` (`wrap`, `nowrap`); defaults are compact gap, centered alignment, start justification, and wrapping. Grid options are `columns` (`responsive`, `two`, `three`, `four`), `minimum` (`narrow`, `standard`, `wide`), gap, alignment, and `collapse-at` (`compact`, `standard`, `wide`, `never`). Split options are `ratio` (`equal`, `start-wide`, `end-wide`, `start-dominant`, `end-dominant`), gap, alignment, and `collapse-at`; regions remain stacked until that container-query breakpoint. Gap values are `none`, `compact`, `standard`, `spacious`, `generous`; layout defaults and allowed typed values are defined in each manifest and `catalog-core::layout`. Grid intentionally has no masonry mode. Package fixtures verify static rendering; host admission, responsive behavior, and browser output remain separate checks. `collapse-at="never"` means never collapse: fixed Grid, Split, Sidebar, and Switch layouts expand immediately, including on narrow screens.
+
+The 0.6.0 package adds the remaining six Toolframe layout-category components. Together with Divider and Page Header, the catalog now covers all fourteen Toolframe layouts; this is not parity with all fifty-four Toolframe components.
+
+| Layout | Child slots | Typed options and behavior |
+| --- | --- | --- |
+| Cover | Required `primary`; optional `top`, `bottom` | `height`: compact, standard (default), fill, viewport; `gap`. Centers primary between optional chrome without changing DOM order. |
+| Layer | Required `base`, `foreground` | `placement`: center (default), top-start, top-end, bottom-start, bottom-end, stretch; `inset`: the gap presets. Grid overlap, not a modal or focus trap. Base controls remain reachable outside foreground content. |
+| Pane | Required `body`; optional `header`, `footer` | `height`: content (default), compact, standard, fill, viewport; optional `body-scrolling`. Bounded heights scroll the body by default; content height does not. An explicit boolean overrides scrolling independently of height. |
+| Reel | Implicit children or explicit `body` | Required nonblank `label`; `item-width`: narrow, standard (default), wide, content; `snap`: free (default), start, center; `gap`. Labelled, keyboard-focusable native horizontal scrolling, not a carousel lifecycle. |
+| Sidebar | Required `main`, `aside` | `side`: start, end (default); `width`: narrow, standard (default), wide; `gap`, `alignment` (default start), `collapse-at`. DOM order follows the selected rail side, including when stacked. |
+| Switch | Implicit children or explicit `body` | `sizing`: natural (default), equal; `gap`, `alignment`, `justification`, `collapse-at`. Switches the complete group from a column to one row; it is not a boolean input. |
+
+```html
+<cui-sidebar side="start" width="narrow" collapse-at="compact">
+  <cui-slot name="aside"><nav aria-label="Sections"><a href="#activity">Activity</a></nav></cui-slot>
+  <cui-slot name="main"><section id="activity"><h2>Activity</h2><p>Illustrative workspace content.</p></section></cui-slot>
+</cui-sidebar>
+<cui-pane height="compact">
+  <cui-slot name="header"><h2>Recent activity</h2></cui-slot>
+  <cui-slot name="body"><p>Illustrative activity entries.</p></cui-slot>
+  <cui-slot name="footer"><a href="#activity">View activity</a></cui-slot>
+</cui-pane>
+```
+
+`fill` requires an app-owned parent with a definite block size. Viewport variants subtract the app-overridable viewport-offset token. A bounded Pane with `body-scrolling="false"` can clip oversized content; the app must ensure it fits. None of these layouts introduces app routes, commands, authorization, JavaScript, or arbitrary CSS-valued options.
+
+## Read-only result and form components
+
+The 0.7.0 package adds five presentation contracts: Select Field, Filter Bar, Data Table, Breadcrumbs, and Pagination. All 54 Toolframe contracts are component-complete. Native supports the previous 45 within their documented scope. Modal, Drawer, Popover, Command Menu, Confirm Dialog, Date Calendar, Date Picker, File Upload, and Data Viewport retain `integration.native.status: adapter-required`; they are not silently admitted to Native templates.
+
+The nine have closed Rust validation, locked variant goldens, browser lifecycle/keyboard coverage, and desktop/mobile/no-JavaScript conformance tests. Confirm Dialog, File Upload, and Data Viewport expose explicit app-owned adapter ports; date components emit typed browser-draft events. Their `.d.ts` contracts are locked inputs, not transport implementations. Test adapters exercise rejection, cancellation, and recovery without uploading bytes, querying a backend, or claiming command success. `../clanker-ui-gallery/` owns visual usage examples; the package repository keeps reusable fixtures and conformance tests.
+
+- **Select Field** emits a labelled native single-select with 1–100 unique choices, optional hint/error, required/disabled state, and checked selection. Use paired `<cui-option value="…" label="…" />` declarations for checked app data, or a closed static `choices` JSON array. The app owns the surrounding form and validation.
+- **Filter Bar** is a labelled `div role="group"`, not a form. Its required `controls` and optional `actions`/`applied` slots accept only host-admitted children. An optional whole-field `summary` is announced as status text.
+- **Data Table** has a required caption and a closed JSON column-label array. Native admits paired `cui-table-row`/`cui-table-cell` declarations, checks cell counts, and creates row IDs from a static `id-prefix` plus a checked `key`. Narrow layouts preserve every cell and column label. Filtering, ordering, paging, and row actions belong to the app.
+- **Breadcrumbs** uses linked `cui-crumb` ancestors followed by one current, nonlinked item. **Pagination** uses `cui-page` items with closed kinds and standard/outlined/compact presentation. Destinations are admitted app route calls or safe literals—not arbitrary bound URL strings. Runtime guards require exactly one current item.
+
+Native additionally admits read-only `<form data-page="registered_name">` controls for fixed-path page routes. It derives the GET action, checks declared scalar query fields and defaults, and revalidates dynamic select options after rendering. This is host support, not component-owned transport; command forms retain their existing ticket, authorization, and revision checks. The Button configurator uses closed ordinal-to-variant/size helpers, not arbitrary bound CSS or variant strings. Native also checks whole boolean fields before materializing selected/checked controls.
+
+## Seven static Native ports
+
+Activity Feed, Button Group, Definition List, Disclosure, Progress Steps, Segmented Control, and Tabs are ready for static/native HTML. Activity Feed uses ordered timestamped entries; Definition List uses native `dl` semantics and admitted rich values; Button Group composes admitted Buttons; Disclosure uses native `details`/`summary`. Tabs and Segmented Control are ordinary page navigation, not client-side tab panels. Progress Steps is app-supplied workflow presentation, not a workflow engine.
+
+Native JSON `href` values in Activity Feed, Tabs, Segmented Control, and Progress Steps may contain a **whole named route call**, such as `"href":"{{ routes.tasks() }}"`. They reuse the Breadcrumbs/Pagination grammar. The host checks route existence, argument types, reference codecs, and emission provenance; arbitrary field-based URLs and mixed expressions remain rejected. Literal internal paths still require host route admission. Serialized portable contracts remain safe-URL data, not template programs.
+
+`tests/fixtures/static-native-proof.html` and its app-owned CSS were admitted in a disposable gallery copy using a separate platform snapshot and a locally digest-pinned CLI. The original gallery, its data, and the shared platform's selected artifact were not changed. Browser checks cover native semantics, disabled/busy Buttons, keyboard links and disclosure toggling, no page-wide mobile overflow, and JavaScript-disabled navigation/disclosure. A negative Native build rejected an unregistered route. [Desktop](docs/screenshots/gallery-static-native-desktop.png), [mobile](docs/screenshots/gallery-static-native-mobile.png), and [mobile navigation](docs/screenshots/gallery-static-native-mobile-navigation.png) show illustrative content, not production data. The copied gallery's sidebar still describes its older 31-entry explorer.
+
+To rerun `tests/browser/static-native-proof.mjs`, first build and authenticate the disposable Native app, then prepend `globalThis.staticNativeProof = {origin, space, screenshots}` and pass the resulting script to `ego-browser nodejs`. Use its authenticated TaskSpace ID and an absolute screenshot directory. This is an integration check, not a `file://` rendering proof; portable CLI releases remain unpublished. Only the local example lock was refreshed; existing sibling consumer locks require an explicit refresh before their next rebuild.
+
+## Native choice controls
+
+Checkbox Group, Radio Group, and Toggle use ordinary browser drafts and the app's existing command form. Native admits repeated `List(Str)` checkbox values, scalar radio values, and Boolean toggles; it excludes disabled choices from editable authority and keeps fully disabled groups host-bound. Empty selections, forged choices, keyboard operation, rejection recovery, and JavaScript-disabled submission passed in a disposable gallery. The app-owned proof command validates and echoes sample preferences; it changes no task or project. See `tests/browser/choice-native-proof.mjs`, the command fixtures under `tests/fixtures/native-choice-command/`, and [desktop](docs/screenshots/gallery-choice-native-desktop.png)/[mobile](docs/screenshots/gallery-choice-native-mobile.png) evidence.
+
+## Browser-local enhancements
+
+Copy Field, Theme Switcher, Tooltip, and Toast are ready for **literal static-page declarations**. Clanker selects closed module entrypoints; Native independently admits, stages, and serves the complete import graph. CLI `verify` checks declared inputs and fixtures, not browser execution or host import admission. Legacy `build`/`compose` still cannot stage these enhancements and are not the Native app integration path.
+
+- Copy Field retains a selectable readonly input. Clipboard feedback cannot claim a changed/replaced value or mutate after teardown; events contain no clipboard content.
+- Theme Switcher writes only the configured app-owned `data-cui-theme` target. System preferences resolve to concrete palettes; teardown preserves the app-owned target's current theme rather than undoing it. The component owns no account/server preference or theme CSS.
+- Tooltip keeps help visible in normal flow without JavaScript, hiding its inert trigger. Enhancement adds contextual positioning, hover/focus behavior, and Escape dismissal that preserves trigger focus.
+- Toast dismisses presentation only, pauses timers during hover/focus/hidden-document periods, and releases timers on removal/teardown. Its explicit history policy controls local restoration; the app owns message content and meaning.
+
+The disposable Native build and `tests/browser/enhancement-native-proof.mjs` passed desktop/mobile bounds, semantics, clipboard success/denial, scoped/system themes, keyboard dismissal, timer pause/cancellation, and no-JS fallbacks. Clipboard writes were stubbed; no OS clipboard content was read or overwritten. [Desktop](docs/screenshots/gallery-enhancement-native-desktop.png) and [mobile](docs/screenshots/gallery-enhancement-native-mobile.png) show static illustrative data. Supplemental DOM replacement, teardown/reinstall, and synthetic persisted-event probes passed, but **actual Native live-region patching and real BFCache restoration remain unproven**. Do not infer those capabilities or runtime page-field bindings from this readiness scope. Portable CLI releases remain unpublished; host proof uses an explicit local pin and isolated sources.
+
+## Standalone Native gallery
+
+`../clanker-ui-gallery` is the current real consumer and Clanker Studio target. It is independent of GoLinks: the app owns two project/task models, typed create/edit/seed commands, queries, routes, and an orange-accented neutral theme. `/` has live project summaries and recent tasks beside an independent create form. `/tasks` supplies app-owned search, project/status filters, ordering, and six-row pagination. `/components` exposes 31 component entries, named presets, and a checked Button configurator. Theme/density selections use read-only page forms. `/tasks/{task_id}` retains a revision-checked editor; `/layouts` remains the detailed layout atlas.
+
+From the sibling `platform` checkout:
+
+```sh
+./cli/day2 platform local-dev ../clanker-ui-gallery --example demo --directory /tmp/cui-gallery-demo --detach
+```
+
+The seed creates two illustrative projects and eight tasks only when both tables are empty. Current browser checks used separate temporary instances: all 31 default specimen routes rendered, task search/pagination and checked Button controls worked, and mobile tables preserved every field without page-wide overflow. Create/edit and seed initialization/no-op passed; a stale edit retained its draft without overwriting revision 2. No-JS GET filtering and empty-gallery initialization were also exercised.
+
+Current local/sample captures: [overview desktop](docs/screenshots/gallery-product-overview-desktop.png), [overview mobile](docs/screenshots/gallery-product-overview-mobile.png), [tasks desktop](docs/screenshots/gallery-product-tasks-desktop.png), [tasks mobile](docs/screenshots/gallery-product-tasks-mobile.png), [components desktop](docs/screenshots/gallery-product-components-desktop.png), [components mobile](docs/screenshots/gallery-product-components-mobile.png), and [stale-revision recovery](docs/screenshots/gallery-product-stale-revision.png). Earlier layout evidence remains: [atlas desktop](docs/screenshots/gallery-atlas-desktop.png) and [atlas mobile](docs/screenshots/gallery-atlas-mobile.png).
+
+The gallery's README documents the current Native rejection limitation: a failed submission preserves its original signed ticket, so corrected retries require copying the draft and reloading. Neither the gallery nor Studio bypasses revision protection. Out-of-range page-query choices are rejected, but Native currently presents declared query failures as a generic HTTP 500; the gallery does not alter that global host policy. Studio's local `instance/native-page.json` targets the gallery; its existing desktop-proof mode remains read-only and does not load the component catalog. The sibling package lock and machine-local preview origin still need portable provisioning before CI or distribution.
 
 ## Ownership and patch contracts
 
-A component contract distinguishes configuration, app-owned presentation data, browser-local state, native outputs, composition, and lifecycle in its manifest invariants. Typed Rust instances enforce the portable contract; the Native adapter separately enforces declaration and host admission. Fixture verification does not prove that arbitrary app data meets a nonblank-label requirement: app queries must supply meaningful accessible text.
+A component contract distinguishes configuration, app-owned presentation data, browser-local state, native outputs, composition, and lifecycle in its manifest invariants. Typed Rust instances and the CLI enforce component/declaration contracts; Native separately enforces app-context admission. Fixture verification does not prove that arbitrary app data meets a nonblank-label requirement: app queries must supply meaningful accessible text.
 
 | Component | State owner | Output and lifecycle |
 | --- | --- | --- |
@@ -93,12 +225,44 @@ A component contract distinguishes configuration, app-owned presentation data, b
 | Tag | App supplies metadata/filter state | Optional navigation only; removal does not silently dismiss |
 | Alert | App supplies message/recovery state | Optional navigation and explicit announcement policy |
 | Progress | App owns measured task state | Native progress semantics; no polling or invented numeric state |
-| Form Field | Browser owns its current draft; app owns initial value and validation | Native control change and surrounding form submission; no separate command transport |
+| Form Field, Select Field, Checkbox Group, Radio Group, Toggle | Browser owns its current draft; app owns initial value, choices, and validation | Native controls and surrounding admitted form submission; no separate command transport |
+| Filter Bar, Data Table | App owns filters, source rows, ordering, paging, and actions | Admitted presentation/composition; no query or command ownership |
+| Breadcrumbs, Pagination, Tabs, Segmented Control | App supplies current position and admitted destinations | Ordinary navigation; no route, panel, query or pagination state ownership |
+| Activity Feed, Definition List, Progress Steps | App supplies history, labelled values or workflow status | Native/read-only presentation; no query, time formatting or workflow ownership |
+| Button Group | App supplies admitted Buttons and group label | Composition only; each Button retains its ordinary semantics |
+| Disclosure | App supplies initial open state and admitted body | Browser-native toggle; no JavaScript or recreated ARIA state |
+| Copy Field, Theme Switcher, Tooltip, Toast | App supplies literal configuration/content; component owns bounded local presentation only | Host-staged installers and exact-root teardown; no commands, routes, or server-state ownership |
 | Avatar, Metric, Page Header | App supplies identity, formatted measurements, and page context | Named identity or ordinary text; no events, calculation, or mount hook |
 | Empty State | App owns result/empty state and recovery destination | Optional admitted navigation; no command or dismissal |
 | Skeleton | App owns loading lifecycle and busy/text semantics | Decorative hidden markup; optional reduced-motion-aware CSS animation |
+| Container, Stack, Cluster, Grid, Split, Card, Cover, Layer, Pane, Reel, Sidebar, Switch | App supplies admitted child content and layout choices | Build-time composition, responsive CSS, and native scrolling; no signals or business operations |
 
-Keep editable controls outside app-owned `data-live` query regions. The host patches live data independently, replaces the submitted form on success, and preserves a rejected draft. Stable IDs and non-overlapping region ownership matter; components do not add a second Datastar state catalog. All fragments use single-pass substitution so slot-looking text remains text. A future browser-local component must define its signal namespace, reset/retention rules, controlled bindings, outputs, no-JS behavior, and patch cleanup before registration; these native/static ports do not prove that lifecycle.
+Keep editable controls outside app-owned `data-live` query regions. The host patches live data independently, replaces the submitted form on success, and preserves a rejected draft. Stable IDs and non-overlapping region ownership matter; components do not add a second Datastar state catalog. All fragments use single-pass substitution so slot-looking text remains text. Browser-local components require explicit ownership, reset/retention rules, outputs, no-JS behavior, and cleanup. The four admitted enhancements have bounded static-page proof; they do not establish Native live-region replacement or controlled runtime bindings.
+
+## Locked agent context and diagnostics
+
+`cargo run --locked --offline -- capabilities` reports the installed CLI's supported commands and explicit limitations without opening an app. `context <name> --lock <path>` returns the locked manifest, typed property descriptions, dependency-first component selection, and one declared fixture input. It lists every other fixture path and the host/browser checks still required. It does not copy component source into an application.
+
+Components may declare a structured `templateAuthoring` contract in their manifest. `describe`, `context`, and `properties` forward it generically: paired child grammar, attribute value forms, identity/content constraints, and inline Native template examples. It is guidance, not editable properties, raw HTML input, or an executable renderer schema. Data Table includes a customer loop with composed badge/indicator cells and an empty row alongside its existing text-row fixture; Filter Bar, Select Field, Breadcrumbs, and Pagination describe their helper children. Read the example's app-field and route requirements before adapting it. Native Studio forwards the manifest object; an installed CLI and app lock must be explicitly refreshed together to see changed package bytes.
+
+`verify` expands each declared authoring example through the existing Clanker renderer, without app I/O. This catches declaration drift, not route registration, page-field types, command authority, or browser behavior; Native still admits the app's final template. The manifests remain the source of truth; `property-catalog.json` is a freshness-checked projection.
+
+`doctor --lock <path>` checks local package identity and bytes, dependency closure, typed fixtures, declared theme tokens, generated property-catalog freshness, and authoring example expansion. Its scope is the package: a passing result is not a Native app build or browser acceptance. Neither command mutates files or needs the network. App initialization and upgrades remain outside this CLI rather than pretending the F# project workflow applies to Native.
+
+## Discover and check theming
+
+`clanker-ui tokens --lock <lock> [--component <name>]` reports described token ownership, role, purpose, semantic grouping, CSS baseline defaults, resolution traces, and direct/transitive component readers. `describe` and `context` expose the same information in `component.tokenDetails`; the legacy `component.tokens` name array remains unchanged. Definitions live in component `tokenDescriptions` and the theme metadata path declared by the package's `tokenMetadata` field. CSS remains the default-value authority. Draft descriptors do not establish component readiness; unresolved or contextual defaults are reported rather than guessed.
+
+`clanker-ui check-css --ui <dir> --lock <lock>` reads authored CSS/HTML without changing files or running app code. It reports unknown `--cui-*` sets/reads as errors; internal selectors, unscoped component element styling, misplaced component-token consumption, competing raw color rules, and suspicious `!important` as warnings. Diagnostics use the usual JSON envelope and `CUI001`, with a distinct `rule` and source location. Errors exit nonzero; warnings alone do not. `capabilities` advertises both commands. Check the report's limitations: template branches are possible static structure, not computed browser cascade; JavaScript-created styles and external CSS are not executed or fetched.
+
+Use shared tokens for coordinated changes and component tokens for deliberate exceptions:
+
+```css
+:root { --cui-heading-text: green; }
+.customer-page { --cui-surface-subtle: #f0f5f1; }
+```
+
+Page Header titles, Card titles, Empty State titles, and Data Table captions/column headers fall back to the shared heading color. Individual heading tokens remain overridable. These defaults use component-local fallbacks so a shared token override on an app subtree still works; they do not add global `h1`/`th` rules or recolor semantic status badges/alerts. `--cui-accent` remains the shared accent. Changing declared metadata or CSS bytes requires an explicit lock refresh; existing app and Studio installation pins are not updated by either command.
 
 ## What an agent should do
 
@@ -147,9 +311,9 @@ Agent instructions and examples make correct composition easy; checks make it ac
 
 Keep three boundaries separate while developing them together in this folder:
 
-1. **Catalog and agent CLI.** Parse and validate package/component contracts, build the generated navigation and search index, expose `search`, `describe`, and dependency/verification information, and resolve local packages into an app-specific lock. This layer knows intent, compatibility, package identity, and source provenance; it does not render UI or interpret app business data. An MCP server could later wrap the same CLI/library API if agents benefit from it, not become a second catalog.
+1. **Catalog and agent CLI.** Parse and validate package/component contracts, build the generated navigation and search index, expose `search`, `describe`, and dependency/verification information, and resolve local packages into an app-specific lock. This layer knows intent, compatibility, package identity, and provenance. Its pure expansion core renders symbolic templates without interpreting Roc business data; script-free scenes use explicitly supplied fake data. An MCP server could later wrap the same CLI/library API if agents benefit from it, not become a second catalog.
 2. **Vanilla component package.** Adapt the proven Toolframe components into portable semantic HTML, colocated CSS, small browser modules, themes, fixtures, and accessibility behavior. Keep a single component source contract with target-specific assets where necessary. The package does not own an app's design override, queries, commands, routes, or persistent state.
-3. **Clanker Native adapter.** Resolve selected, pinned components into the build's private snapshot; expand app-authored declarations, then admit the resulting templates and resources against existing typed query/command bindings. This adapter owns integration with Datastar and the platform, not the portable catalog. A future React adapter can consume the same discovery model without pretending that the rendering source is identical.
+3. **Clanker Native adapter.** Invoke the pinned CLI once, verify its declared inputs and outputs, and stage its bundle in the private snapshot. Independently admit templates, resources, and bindings against typed queries, routes, and commands. The platform owns admission, staging, serving, and Datastar integration—not component rendering or helper semantics. A future React adapter can consume the same discovery model without pretending that the rendering source is identical.
 
 The agent selects components and declares their options at the point of use; the build expands them deterministically. Avoid making the agent hand-copy template, CSS, and JS files or maintain a second manual asset list. Changes to an app-owned theme stay in the app and do not mutate the downloaded package. Keep a package's default tokens and required semantic roles explicit so an app can override values without forking component source.
 

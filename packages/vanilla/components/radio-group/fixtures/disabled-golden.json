@@ -1,0 +1,19 @@
+{
+  "expectedHtml": "<fieldset id=\"mode\" class=\"cui-radio-group cui-radio-group--stacked\" data-cui-component=\"radio-group\" disabled><legend class=\"cui-radio-group__legend\">Mode</legend><div class=\"cui-radio-group__choices\"><label class=\"cui-radio-group__choice\" for=\"mode-choice-1\"><input class=\"cui-radio-group__control\" type=\"radio\" id=\"mode-choice-1\" name=\"mode\" value=\"one\" disabled><span class=\"cui-radio-group__text\"><span class=\"cui-radio-group__label\">One</span></span></label><label class=\"cui-radio-group__choice\" for=\"mode-choice-2\"><input class=\"cui-radio-group__control\" type=\"radio\" id=\"mode-choice-2\" name=\"mode\" value=\"two\" disabled><span class=\"cui-radio-group__text\"><span class=\"cui-radio-group__label\">Two</span></span></label></div></fieldset>\n",
+  "options": {
+    "choices": [
+      {
+        "label": "One",
+        "value": "one"
+      },
+      {
+        "disabled": true,
+        "label": "Two",
+        "value": "two"
+      }
+    ],
+    "disabled": true,
+    "legend": "Mode",
+    "name": "mode"
+  }
+}

@@ -1,0 +1,90 @@
+<div id="golinks-app">
+  <header class="header">
+    <div>
+      <p class="eyebrow">{{ company.name }}</p>
+      <h1>Go Links</h1>
+      <p class="subtitle">Manage short links, track popularity, and review activity.</p>
+    </div>
+    <nav class="nav" aria-label="Go Links">
+      <a data-nav="dashboard" href="{{ routes.links() }}">Dashboard</a>
+      <a data-nav="trash" href="{{ routes.trash() }}">Trash</a>
+      <a data-nav="audit-feed" href="{{ routes.audit_feed() }}">Audit Feed</a>
+      <a href="{{ routes.component_demo() }}">UI Demo</a>
+    </nav>
+  </header>
+
+  <div class="grid">
+    <article class="card" aria-labelledby="link-title">
+      <div id="link-heading" data-live class="card-header">
+        <div>
+          <h2 id="link-title">go/{{ link.name }}</h2>
+          {% if link.description != "" %}
+          <p>{{ link.description }}</p>
+          {% else %}
+          <p>No description.</p>
+          {% endif %}
+        </div>
+        {% if link.can_visit %}
+        <a class="button" href="{{ routes.visit(path=link.name) }}" target="_blank" rel="noreferrer" aria-label="Visit go/{{ link.name }}">Visit</a>
+        {% endif %}
+      </div>
+
+      <dl id="link-summary" data-live class="details">
+        <div>
+          <dt>Destination URL</dt>
+          <dd class="url"><a data-destination="{{ link.url }}" target="_blank" rel="noreferrer">{{ link.url }}</a></dd>
+        </div>
+        <div>
+          <dt>Visits</dt>
+          <dd>{{ link.visit_count }}</dd>
+        </div>
+        <div>
+          <dt>Owner</dt>
+          <dd>{{ link.owner }}</dd>
+        </div>
+        <div>
+          <dt>Updated</dt>
+          <dd><time data-unix="{{ link.updated_time }}">{{ link.updated_time }}</time></dd>
+        </div>
+        <div>
+          <dt>Created</dt>
+          <dd><time data-unix="{{ link.created_time }}">{{ link.created_time }}</time></dd>
+        </div>
+        <div>
+          <dt>Last visited</dt>
+          <dd><time data-unix="{{ link.last_visited_time }}">{{ link.last_visited_time }}</time></dd>
+        </div>
+        <div>
+          <dt>Revision</dt>
+          <dd>{{ link.version }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <aside id="link-form-panel" class="card" aria-labelledby="edit-title">
+      <div class="card-header">
+        <div>
+          <h2 id="edit-title">Edit {{ link.name }}</h2>
+          <p>Update destination URL or description.</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <form id="edit-link" data-command="golinks.edit" class="form">
+          <input type="hidden" name="link_id" value="{{ link.id }}">
+          <input type="hidden" name="expected_version" value="{{ link.version }}">
+          <label for="edit-name">
+            <span>Name</span>
+            <input id="edit-name" type="text" value="{{ link.name }}" disabled>
+          </label>
+          <cui-form-field id="edit-url" name="url" label="Destination URL" input-type="url" value="{{ link.url }}" required="true" autocomplete="off" />
+          <cui-form-field id="edit-description" name="description" label="Description" kind="textarea" value="{{ link.description }}" placeholder="What this link is for" />
+          <p class="form-hint">Editing revision {{ link.version }}. If someone else changes this link first, <a href="{{ routes.link(link_id=link.id) }}">reload</a> before saving again.</p>
+          <div class="actions">
+            <cui-button kind="submit" variant="primary" size="standard" icon="check" label="Save Changes" />
+            <cui-button kind="link" variant="secondary" size="standard" route="links" label="Cancel Edit" />
+          </div>
+        </form>
+      </div>
+    </aside>
+  </div>
+</div>

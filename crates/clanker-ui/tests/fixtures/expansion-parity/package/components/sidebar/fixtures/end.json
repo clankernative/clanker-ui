@@ -1,0 +1,10 @@
+{
+  "options": {
+    "side": "end"
+  },
+  "children": {
+    "main": "<main>Content</main>",
+    "aside": "<aside>Rail</aside>"
+  },
+  "expectedHtml": "<div class=\"cui-sidebar cui-sidebar--side-end cui-sidebar--width-standard cui-sidebar--gap-standard cui-sidebar--align-start cui-sidebar--collapse-standard\" data-cui-component=\"sidebar\"><div class=\"cui-sidebar__regions\"><div class=\"cui-sidebar__main\"><main>Content</main></div><div class=\"cui-sidebar__aside\"><aside>Rail</aside></div></div></div>\n"
+}

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "name": "popover",
+  "status": "ready",
+  "integration": {"native": {"status": "adapter-required", "scope": "Native declaration, admitted child content, and browser lifecycle integration are not yet verified."}},
+  "target": "native-html",
+  "category": "overlay",
+  "summary": "Reveals brief contextual information in a native details disclosure, optionally enhanced with dismissal and collision positioning.",
+  "keywords": [
+    "popover",
+    "context",
+    "help",
+    "disclosure"
+  ],
+  "agent": {
+    "useWhen": "Brief supporting information belongs next to its trigger and can remain available in native disclosure semantics.",
+    "avoidWhen": "The content is essential task content, needs protected focus, or contains a complex workflow.",
+    "composeWith": [
+      "icon",
+      "button",
+      "disclosure"
+    ]
+  },
+  "contract": {
+    "role": "native details and summary contextual disclosure",
+    "variants": [
+      "start",
+      "end",
+      "narrow",
+      "standard",
+      "wide"
+    ],
+    "requiredFields": [
+      "id",
+      "label",
+      "body"
+    ],
+    "invariants": [
+      "The native details/summary disclosure works without JavaScript; no ARIA state is recreated.",
+      "Content is supplied only through a separately host-admitted slot; icon names use the package's closed geometry catalog.",
+      "Enhanced Escape/outside dismissal and viewport collision positioning do not replace native disclosure behavior.",
+      "The panel id is the sole derived id and must be reserved against page collisions.",
+      "Adapter fragment has exactly one [[popover]] slot."
+    ]
+  },
+  "tokens": [
+    "--cui-border",
+    "--cui-border-strong",
+    "--cui-focus",
+    "--cui-popover-border",
+    "--cui-popover-focus",
+    "--cui-popover-label",
+    "--cui-popover-leading-icon",
+    "--cui-popover-padding",
+    "--cui-popover-radius",
+    "--cui-popover-shadow",
+    "--cui-popover-shift-x",
+    "--cui-popover-surface",
+    "--cui-popover-trigger-border",
+    "--cui-popover-trigger-radius",
+    "--cui-popover-width",
+    "--cui-popover-width-narrow",
+    "--cui-popover-width-standard",
+    "--cui-popover-width-wide",
+    "--cui-radius-control",
+    "--cui-radius-surface",
+    "--cui-shadow-control",
+    "--cui-shadow-overlay",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-surface-overlay",
+    "--cui-surface-raised",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-popover-border",
+      "role": "border",
+      "purpose": "Controls border color for  popover."
+    },
+    {
+      "name": "--cui-popover-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for  popover."
+    },
+    {
+      "name": "--cui-popover-label",
+      "role": "color",
+      "purpose": "Controls label for  popover."
+    },
+    {
+      "name": "--cui-popover-leading-icon",
+      "role": "color",
+      "purpose": "Controls icon for leading popover."
+    },
+    {
+      "name": "--cui-popover-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for popover."
+    },
+    {
+      "name": "--cui-popover-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for popover."
+    },
+    {
+      "name": "--cui-popover-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for popover."
+    },
+    {
+      "name": "--cui-popover-shift-x",
+      "role": "position",
+      "purpose": "Controls visual treatment for shift popover."
+    },
+    {
+      "name": "--cui-popover-surface",
+      "role": "background",
+      "purpose": "Controls surface color for  popover."
+    },
+    {
+      "name": "--cui-popover-trigger-border",
+      "role": "border",
+      "purpose": "Controls border color for trigger popover."
+    },
+    {
+      "name": "--cui-popover-trigger-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for popover."
+    },
+    {
+      "name": "--cui-popover-width",
+      "role": "sizing",
+      "purpose": "Controls width for popover."
+    },
+    {
+      "name": "--cui-popover-width-narrow",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width popover."
+    },
+    {
+      "name": "--cui-popover-width-standard",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width popover."
+    },
+    {
+      "name": "--cui-popover-width-wide",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width popover."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
+  "assets": {
+    "template": "components/popover/fragment.html",
+    "styles": "components/popover/styles.css",
+    "scripts": [
+      "components/popover/interaction.js"
+    ]
+  },
+  "fixtures": [
+    "components/popover/fixtures/start-narrow-golden.json",
+    "components/popover/fixtures/end-standard-golden.json",
+    "components/popover/fixtures/start-standard-golden.json",
+    "components/popover/fixtures/end-wide-golden.json",
+    "components/popover/fixtures/start-wide-golden.json"
+  ]
+}

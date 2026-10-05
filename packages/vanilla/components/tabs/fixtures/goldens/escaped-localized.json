@@ -1,0 +1,18 @@
+{
+  "expectedHtml": "<nav class=\"cui-tabs\" data-cui-component=\"tabs\" aria-label=\"Réglages &amp; accès\"><ul class=\"cui-tabs__list\"><li class=\"cui-tabs__item\"><a class=\"cui-tabs__link cui-tabs__link--active\" href=\"?section=general\" aria-current=\"page\">Général</a></li><li class=\"cui-tabs__item\"><a class=\"cui-tabs__link\" href=\"?section=team\">Équipe &lt;12&gt;</a></li></ul></nav>\n",
+  "options": {
+    "items": [
+      {
+        "active": true,
+        "href": "?section=general",
+        "label": "Général"
+      },
+      {
+        "active": false,
+        "href": "?section=team",
+        "label": "Équipe <12>"
+      }
+    ],
+    "label": "Réglages & accès"
+  }
+}

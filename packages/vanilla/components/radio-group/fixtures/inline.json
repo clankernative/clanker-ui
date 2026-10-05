@@ -1,0 +1,1 @@
+{"name":"timezone","legend":"Timezone","layout":"inline","choices":[{"value":"utc","label":"UTC"},{"value":"local","label":"Local"}]}

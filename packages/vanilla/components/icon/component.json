@@ -5,15 +5,28 @@
   "target": "native-html",
   "category": "actions",
   "summary": "Renders a closed set of scalable SVG icons with decorative or standalone image semantics.",
-  "keywords": ["icon", "glyph", "symbol", "svg", "visual cue"],
+  "keywords": [
+    "icon",
+    "glyph",
+    "symbol",
+    "svg",
+    "visual cue"
+  ],
   "agent": {
     "useWhen": "An interface action, status, or navigation cue benefits from a familiar glyph. Use a package catalog name and small, medium, or large size; add a label only when the icon stands alone and conveys meaning.",
     "avoidWhen": "Text alone is clearer, the icon is interactive, or a product illustration is required.",
-    "composeWith": ["button", "badge"]
+    "composeWith": [
+      "button",
+      "badge"
+    ]
   },
   "contract": {
     "role": "img",
-    "variants": ["small", "medium", "large"],
+    "variants": [
+      "small",
+      "medium",
+      "large"
+    ],
     "requiredFields": [],
     "invariants": [
       "Configuration supplies a closed icon name, size and optional accessible label; there is no browser-local state or event output.",
@@ -31,6 +44,33 @@
     "--cui-icon-size",
     "--cui-icon-small-size",
     "--cui-icon-stroke-width"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-icon-color",
+      "role": "text",
+      "purpose": "Controls color for  icon."
+    },
+    {
+      "name": "--cui-icon-large-size",
+      "role": "sizing",
+      "purpose": "Controls size for icon."
+    },
+    {
+      "name": "--cui-icon-size",
+      "role": "sizing",
+      "purpose": "Controls size for icon."
+    },
+    {
+      "name": "--cui-icon-small-size",
+      "role": "sizing",
+      "purpose": "Controls size for icon."
+    },
+    {
+      "name": "--cui-icon-stroke-width",
+      "role": "sizing",
+      "purpose": "Controls width for icon."
+    }
   ],
   "dependencies": [],
   "assets": {

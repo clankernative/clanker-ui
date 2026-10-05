@@ -19,3 +19,8 @@ jobs:
         run: cargo test --locked
       - name: Verify locked package
         run: cargo run --locked -- verify --lock examples/button-app/clanker-ui.lock.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test isolated component interactions
+        run: node --test tests/components/*.test.mjs

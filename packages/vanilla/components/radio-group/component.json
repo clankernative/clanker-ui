@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "name": "radio-group",
+  "status": "ready",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders mutually exclusive native radio choices in an accessible fieldset.",
+  "keywords": [
+    "radio",
+    "group",
+    "form",
+    "choice",
+    "validation"
+  ],
+  "agent": {
+    "useWhen": "An app-owned form needs one selection from 2–12 mutually exclusive options.",
+    "avoidWhen": "Choices are dynamic, require rich content, custom transport, client-side state, or a command lifecycle.",
+    "composeWith": [
+      "form-field"
+    ]
+  },
+  "contract": {
+    "role": "native form control group",
+    "variants": [
+      "stacked",
+      "inline",
+      "required",
+      "disabled",
+      "invalid"
+    ],
+    "requiredFields": [
+      "name",
+      "legend",
+      "choices"
+    ],
+    "invariants": [
+      "Uses native fieldset/legend and same-name radio inputs; native required and disabled behavior is preserved.",
+      "Contains 2..=12 choices with unique nonblank values; each choice has a nonblank label and optional nonblank hint.",
+      "Optional selected must match an enabled choice. A required group is natively required by its radio controls.",
+      "An optional safe explicit id names the fieldset; otherwise name is used. Choice, hint, error, and description IDs are deterministic and reserved.",
+      "Layout is stacked or inline. Group disabled state is native fieldset disabled state.",
+      "Names and IDs are non-reserved safe tokens; all copy and values are control-safe plain text escaped as HTML.",
+      "The app owns form, submission, transport, routes, and domain validation. No hidden transport, JavaScript, commands, arbitrary attributes, or raw markup are emitted.",
+      "The fragment has exactly one [[attributes]], [[legend]], [[choices]], and [[description]] slot; expansion is exact and single-pass.",
+      "Native command forms require a declared Str carrier. Only enabled ticket-bounded choices are editable; omission becomes an empty string and must be validated by the app. Browser required constraints do not replace server validation.",
+      "Fully disabled groups are host-bound to the declared selection. Native build, desktop/mobile browser, keyboard, no-JS, and rejected-draft proof lives in tests/browser/choice-native-proof.mjs."
+    ]
+  },
+  "tokens": [
+    "--cui-radio-group-accent",
+    "--cui-radio-group-border",
+    "--cui-radio-group-checked-background",
+    "--cui-radio-group-checked-border",
+    "--cui-radio-group-choice-gap",
+    "--cui-radio-group-choice-padding",
+    "--cui-radio-group-disabled-opacity",
+    "--cui-radio-group-error-text",
+    "--cui-radio-group-focus-offset",
+    "--cui-radio-group-focus-ring",
+    "--cui-radio-group-focus-width",
+    "--cui-radio-group-gap",
+    "--cui-radio-group-hint-size",
+    "--cui-radio-group-hint-text",
+    "--cui-radio-group-label-size",
+    "--cui-radio-group-label-weight",
+    "--cui-radio-group-legend-text",
+    "--cui-radio-group-radius",
+    "--cui-radio-group-text"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-radio-group-accent",
+      "role": "text",
+      "purpose": "Controls accent color for  radio group."
+    },
+    {
+      "name": "--cui-radio-group-border",
+      "role": "border",
+      "purpose": "Controls border color for  radio group."
+    },
+    {
+      "name": "--cui-radio-group-checked-background",
+      "role": "background",
+      "purpose": "Controls background color for checked state radio group."
+    },
+    {
+      "name": "--cui-radio-group-checked-border",
+      "role": "border",
+      "purpose": "Controls border color for checked state radio group."
+    },
+    {
+      "name": "--cui-radio-group-choice-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for radio group."
+    },
+    {
+      "name": "--cui-radio-group-choice-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for radio group."
+    },
+    {
+      "name": "--cui-radio-group-disabled-opacity",
+      "role": "opacity",
+      "purpose": "Controls opacity for radio group."
+    },
+    {
+      "name": "--cui-radio-group-error-text",
+      "role": "text",
+      "purpose": "Controls text color for error state radio group."
+    },
+    {
+      "name": "--cui-radio-group-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for radio group."
+    },
+    {
+      "name": "--cui-radio-group-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  radio group."
+    },
+    {
+      "name": "--cui-radio-group-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for radio group."
+    },
+    {
+      "name": "--cui-radio-group-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for radio group."
+    },
+    {
+      "name": "--cui-radio-group-hint-size",
+      "role": "sizing",
+      "purpose": "Controls size for radio group."
+    },
+    {
+      "name": "--cui-radio-group-hint-text",
+      "role": "text",
+      "purpose": "Controls text color for hint radio group."
+    },
+    {
+      "name": "--cui-radio-group-label-size",
+      "role": "sizing",
+      "purpose": "Controls size for radio group."
+    },
+    {
+      "name": "--cui-radio-group-label-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for radio group."
+    },
+    {
+      "name": "--cui-radio-group-legend-text",
+      "role": "text",
+      "purpose": "Controls text color for legend radio group."
+    },
+    {
+      "name": "--cui-radio-group-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for radio group."
+    },
+    {
+      "name": "--cui-radio-group-text",
+      "role": "text",
+      "purpose": "Controls text color for  radio group."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/radio-group/fragment.html",
+    "styles": "components/radio-group/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/radio-group/fixtures/typical-golden.json",
+    "components/radio-group/fixtures/validation-golden.json",
+    "components/radio-group/fixtures/disabled-golden.json",
+    "components/radio-group/fixtures/inline-golden.json"
+  ]
+}

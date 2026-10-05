@@ -1,0 +1,6 @@
+{
+  "tone": "neutral",
+  "label": "Draft",
+  "showIcon": false,
+  "expectedHtml": "<span class=\"cui-badge cui-badge--neutral\" data-cui-component=\"badge\" data-cui-tone=\"neutral\"><span class=\"cui-badge__label\">Draft</span></span>\n"
+}

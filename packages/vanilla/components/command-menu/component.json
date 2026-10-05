@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "name": "command-menu",
+  "status": "ready",
+  "integration": {"native": {"status": "adapter-required", "scope": "Native declaration, checked destinations, and browser lifecycle integration are not yet verified."}},
+  "target": "native-html",
+  "category": "overlay",
+  "summary": "Searches grouped application destinations in a native dialog while retaining a real fallback link.",
+  "keywords": [
+    "command",
+    "palette",
+    "search",
+    "navigation",
+    "launcher"
+  ],
+  "agent": {
+    "useWhen": "Users repeatedly navigate among many URL-backed application destinations.",
+    "avoidWhen": "A few visible links suffice, the action mutates state, or the destination is not a safe URL.",
+    "composeWith": [
+      "button",
+      "confirm-dialog",
+      "icon",
+      "modal"
+    ]
+  },
+  "contract": {
+    "role": "searchable native dialog containing grouped destination links",
+    "variants": [
+      "grouped",
+      "shortcut-enabled"
+    ],
+    "requiredFields": [
+      "id",
+      "title",
+      "trigger_label",
+      "fallback_href",
+      "groups"
+    ],
+    "invariants": [
+      "Configuration is typed plain data; labels, descriptions, keywords and shortcuts are escaped, never interpreted as markup.",
+      "One to eight groups contain one to twenty items each and no more than one hundred items total; group and item IDs are unique.",
+      "Every item and the fallback is a validated safe destination; links remain real navigation when JavaScript or dialog.showModal is unavailable.",
+      "Icons are resolved only through the locked closed icon geometry map.",
+      "The optional Ctrl/Meta single-key shortcut ignores editable and composing targets; filtering and arrow/Home/End/Enter behavior remain local to the component.",
+      "Derived IDs include the dialog, title, search, results, instructions, every group label, and every item; reserve all against page collisions.",
+      "The component owns navigation presentation only; it never creates or submits application commands.",
+      "The Native host must separately admit its declared lifecycle script and native dialog behavior before integration is claimed."
+    ]
+  },
+  "tokens": [
+    "--cui-backdrop",
+    "--cui-border",
+    "--cui-border-strong",
+    "--cui-command-menu-backdrop",
+    "--cui-command-menu-backdrop-blur",
+    "--cui-command-menu-border",
+    "--cui-command-menu-radius",
+    "--cui-command-menu-shadow",
+    "--cui-command-menu-surface",
+    "--cui-command-menu-width",
+    "--cui-focus",
+    "--cui-font-mono",
+    "--cui-radius-control",
+    "--cui-radius-small",
+    "--cui-radius-surface",
+    "--cui-shadow-raised",
+    "--cui-surface-hover",
+    "--cui-surface-raised",
+    "--cui-surface-selected",
+    "--cui-surface-sunken",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-command-menu-backdrop",
+      "role": "background",
+      "purpose": "Controls visual treatment for  command menu."
+    },
+    {
+      "name": "--cui-command-menu-backdrop-blur",
+      "role": "background",
+      "purpose": "Controls visual treatment for backdrop command menu."
+    },
+    {
+      "name": "--cui-command-menu-border",
+      "role": "border",
+      "purpose": "Controls border color for  command menu."
+    },
+    {
+      "name": "--cui-command-menu-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for command menu."
+    },
+    {
+      "name": "--cui-command-menu-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for command menu."
+    },
+    {
+      "name": "--cui-command-menu-surface",
+      "role": "background",
+      "purpose": "Controls surface color for  command menu."
+    },
+    {
+      "name": "--cui-command-menu-width",
+      "role": "sizing",
+      "purpose": "Controls width for command menu."
+    }
+  ],
+  "dependencies": [
+    "button",
+    "icon"
+  ],
+  "assets": {
+    "template": "components/command-menu/fragment.html",
+    "styles": "components/command-menu/styles.css",
+    "scripts": [
+      "components/command-menu/interaction.js"
+    ]
+  },
+  "fixtures": [
+    "components/command-menu/fixtures/typical-golden.json",
+    "components/command-menu/fixtures/dense-golden.json"
+  ]
+}

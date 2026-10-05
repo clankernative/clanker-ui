@@ -1,0 +1,8 @@
+/* App-owned overrides for the disposable gallery's existing dark theme.
+   These are consumer choices, not package defaults. */
+.gallery-shell {
+  --cui-surface-sunken: var(--gallery-canvas);
+  --cui-tabs-active-text: var(--gallery-accent);
+  --cui-tabs-focus-ring: var(--gallery-accent);
+  --cui-segmented-control-focus-ring: var(--gallery-accent);
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "activity-feed",
+  "status": "draft",
+  "target": "native-html",
+  "category": "data",
+  "summary": "Presents chronological operational events with actor, detail, time, and semantic tone.",
+  "keywords": ["activity", "timeline", "audit history"],
+  "agent": {"useWhen": "A detail page needs a concise chronological history of actions or state changes.", "avoidWhen": "Users compare many events across fixed columns or need audit-log filtering.", "composeWith": ["badge", "card", "data-table"]},
+  "contract": {"role": "labelled ordered list with machine-readable native time elements", "variants": ["neutral", "info", "success", "warning", "danger"], "requiredFields": ["label", "entries"], "invariants": ["One to 100 ordered entries with nonblank plain-text visible time labels.", "occurredAt must be a real calendar-valid RFC3339 timestamp with timezone; regex-only acceptance is insufficient.", "href accepts only the package safe HTTP(S), relative, or application path policy.", "All text and attributes are escaped; no script or raw HTML is emitted.", "Fragment slots are exactly [[attributes]], [[label]], and [[entries]]."]},
+  "tokens": ["--cui-activity-feed-gap", "--cui-activity-feed-line", "--cui-activity-feed-marker-background", "--cui-activity-feed-neutral", "--cui-activity-feed-info", "--cui-activity-feed-success", "--cui-activity-feed-warning", "--cui-activity-feed-danger", "--cui-activity-feed-title-text", "--cui-activity-feed-detail-text", "--cui-activity-feed-meta-text"],
+  "dependencies": [], "assets": {"template": "components/activity-feed/fragment.html", "styles": "components/activity-feed/styles.css", "scripts": []},
+  "fixtures": ["components/activity-feed/fixtures/typical-golden.json", "components/activity-feed/fixtures/compact-golden.json"]
+}

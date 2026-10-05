@@ -1,0 +1,15 @@
+<main class="theming-proof">
+  <cui-stack gap="spacious">
+    <p>Local token proof using illustrative data. This is a static CLI preview, not Native admission.</p>
+    <section class="theme-proof-scoped" aria-label="Scoped shared heading override">
+      <cui-stack gap="standard">
+        <cui-page-header title="Shared heading color" description="One scoped token colors structural headings." />
+        <cui-card title="Card heading"><cui-empty-state title="Empty State heading" body="Body text retains its own token." heading-level="h3" /></cui-card>
+        <cui-data-table caption="Table caption" caption-visible="true" columns='["Customer","Status"]'><cui-table-row id="theme-customer"><cui-table-cell>Ada</cui-table-cell><cui-table-cell><cui-badge label="Active" tone="success" /></cui-table-cell></cui-table-row></cui-data-table>
+      </cui-stack>
+    </section>
+    <section class="theme-proof-exception" aria-label="Component-specific heading override">
+      <cui-data-table caption="Individual table exception" caption-visible="true" columns='["Customer","Status"]'><cui-table-row id="exception-customer"><cui-table-cell>Lin</cui-table-cell><cui-table-cell>Inactive</cui-table-cell></cui-table-row></cui-data-table>
+    </section>
+  </cui-stack>
+</main>

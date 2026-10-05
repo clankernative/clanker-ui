@@ -1,0 +1,376 @@
+{
+  "schemaVersion": 1,
+  "name": "select-field",
+  "status": "ready",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders an accessible native select with checked choices, optional help, errors, and disabled state.",
+  "keywords": [
+    "select",
+    "form",
+    "choice",
+    "label",
+    "validation"
+  ],
+  "agent": {
+    "useWhen": "An app-owned form needs a labelled selection from a fixed, validated set of options.",
+    "avoidWhen": "Options are dynamic or require rich content, searchable widgets, runtime scripts, or component-owned submission and validation behavior.",
+    "composeWith": [
+      "form-field",
+      "filter-bar"
+    ]
+  },
+  "contract": {
+    "role": "native form control",
+    "variants": [
+      "standard",
+      "disabled",
+      "invalid"
+    ],
+    "requiredFields": [
+      "id",
+      "name",
+      "label",
+      "choices"
+    ],
+    "invariants": [
+      "Every control has a visible label associated by for/id; hint and error descriptions use deterministic described-by wiring.",
+      "Choices contain 1..=100 unique nonblank values; selected must match an enabled choice.",
+      "All values and labels are escaped plain text; choice values are not HTML or raw attributes.",
+      "required and disabled are native boolean attributes; the app owns its form, command, route, submission, and domain validation.",
+      "No raw markup, arbitrary attributes, scripts, routes, or commands are emitted.",
+      "The fragment contains exactly one [[attributes]], [[label]], [[control]], and [[description]] slot; expansion is exact and single-pass."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border",
+    "--cui-danger",
+    "--cui-radius-control",
+    "--cui-select-field-background",
+    "--cui-select-field-border",
+    "--cui-select-field-error-border",
+    "--cui-select-field-error-text",
+    "--cui-select-field-focus-offset",
+    "--cui-select-field-focus-ring",
+    "--cui-select-field-focus-width",
+    "--cui-select-field-gap",
+    "--cui-select-field-height",
+    "--cui-select-field-hint-text",
+    "--cui-select-field-label-size",
+    "--cui-select-field-label-text",
+    "--cui-select-field-label-weight",
+    "--cui-select-field-measure",
+    "--cui-select-field-padding",
+    "--cui-select-field-radius",
+    "--cui-select-field-required-text",
+    "--cui-select-field-text",
+    "--cui-space-1",
+    "--cui-space-2",
+    "--cui-surface",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-select-field-background",
+      "role": "background",
+      "purpose": "Controls background color for  select field."
+    },
+    {
+      "name": "--cui-select-field-border",
+      "role": "border",
+      "purpose": "Controls border color for  select field."
+    },
+    {
+      "name": "--cui-select-field-error-border",
+      "role": "border",
+      "purpose": "Controls border color for error state select field."
+    },
+    {
+      "name": "--cui-select-field-error-text",
+      "role": "text",
+      "purpose": "Controls text color for error state select field."
+    },
+    {
+      "name": "--cui-select-field-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for select field."
+    },
+    {
+      "name": "--cui-select-field-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  select field."
+    },
+    {
+      "name": "--cui-select-field-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for select field."
+    },
+    {
+      "name": "--cui-select-field-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for select field."
+    },
+    {
+      "name": "--cui-select-field-height",
+      "role": "sizing",
+      "purpose": "Controls height for select field."
+    },
+    {
+      "name": "--cui-select-field-hint-text",
+      "role": "text",
+      "purpose": "Controls text color for hint select field."
+    },
+    {
+      "name": "--cui-select-field-label-size",
+      "role": "sizing",
+      "purpose": "Controls size for select field."
+    },
+    {
+      "name": "--cui-select-field-label-text",
+      "role": "text",
+      "purpose": "Controls label text for  select field."
+    },
+    {
+      "name": "--cui-select-field-label-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for select field."
+    },
+    {
+      "name": "--cui-select-field-measure",
+      "role": "sizing",
+      "purpose": "Controls maximum text width for select field."
+    },
+    {
+      "name": "--cui-select-field-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for select field."
+    },
+    {
+      "name": "--cui-select-field-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for select field."
+    },
+    {
+      "name": "--cui-select-field-required-text",
+      "role": "text",
+      "purpose": "Controls text color for required select field."
+    },
+    {
+      "name": "--cui-select-field-text",
+      "role": "text",
+      "purpose": "Controls text color for  select field."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/select-field/fragment.html",
+    "styles": "components/select-field/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/select-field/fixtures/typical.json",
+    "components/select-field/fixtures/invalid-state.json",
+    "components/select-field/fixtures/long-text.json",
+    "components/select-field/fixtures/disabled.json"
+  ],
+  "templateAuthoring": {
+    "schemaVersion": 1,
+    "rootTag": "cui-select-field",
+    "elements": [
+      {
+        "tag": "cui-select-field",
+        "form": "paired",
+        "allowedParents": [],
+        "attributes": [
+          {
+            "name": "id",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Use a safe select ID; reserve its derived -hint and -error IDs."
+            ]
+          },
+          {
+            "name": "name",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Use a safe nonreserved form field name."
+            ]
+          },
+          {
+            "name": "label",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Must be nonblank plain text."
+            ]
+          },
+          {
+            "name": "selected",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "A literal or one whole checked string field."
+            ]
+          },
+          {
+            "name": "placeholder",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "Plain text literal or whole checked string field."
+            ]
+          },
+          {
+            "name": "hint",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "Plain text literal or whole checked string field."
+            ]
+          },
+          {
+            "name": "error",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "Plain text literal or whole checked string field."
+            ]
+          },
+          {
+            "name": "required",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Boolean literal true or false."
+            ]
+          },
+          {
+            "name": "disabled",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Boolean literal true or false."
+            ]
+          },
+          {
+            "name": "choices",
+            "required": false,
+            "valueForms": [
+              "json-literal"
+            ],
+            "rules": [
+              "Alternative to child options: JSON array of typed choice objects; cannot be combined with child options."
+            ]
+          }
+        ],
+        "content": "helpers",
+        "allowedChildren": [
+          "cui-option"
+        ],
+        "controlFlow": [
+          "for",
+          "if",
+          "elif",
+          "else",
+          "endif",
+          "endfor"
+        ],
+        "rules": [
+          "Canonical paired template form uses cui-option children. The existing JSON choices property is the alternative static-data form; do not combine the two.",
+          "The component can also be used self-closing with choices JSON where the host declaration syntax permits it.",
+          "Options are plain text only; no rich option markup."
+        ]
+      },
+      {
+        "tag": "cui-option",
+        "form": "self-closing",
+        "allowedParents": [
+          "cui-select-field"
+        ],
+        "attributes": [
+          {
+            "name": "value",
+            "required": true,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "A literal or one whole checked string field."
+            ]
+          },
+          {
+            "name": "label",
+            "required": true,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "A literal or one whole checked string field."
+            ]
+          },
+          {
+            "name": "disabled",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Boolean literal true or false."
+            ]
+          }
+        ],
+        "content": "none",
+        "allowedChildren": [],
+        "controlFlow": [],
+        "rules": [
+          "Option values must be unique and nonblank; selected must match an enabled option.",
+          "The helper has no body or markup content."
+        ]
+      }
+    ],
+    "rules": [
+      "Exactly one source of options is used: child options or the choices JSON property.",
+      "Whole-field bindings are checked by Native template admission; values and labels are emitted as escaped text.",
+      "The app owns form submission, routes, commands, and domain validation."
+    ],
+    "examples": [
+      {
+        "name": "customer-status",
+        "summary": "A select whose options come from app-owned choices and whose selected value is bound to the customer.",
+        "template": "<cui-select-field id=\"customer-status\" name=\"status\" label=\"Status\" selected=\"{{ customer.status }}\">\n  {% for choice in status_choices %}\n  <cui-option value=\"{{ choice.value }}\" label=\"{{ choice.label }}\" />\n  {% endfor %}\n</cui-select-field>",
+        "requirements": [
+          "App provides customer.status and status_choices iterable with string value and label fields.",
+          "The selected value must match an enabled option; the app owns its form and submission behavior."
+        ]
+      }
+    ]
+  }
+}

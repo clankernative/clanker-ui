@@ -1,0 +1,9 @@
+{
+  "options": {
+    "height": "content"
+  },
+  "children": {
+    "body": "<section>Rows</section>"
+  },
+  "expectedHtml": "<div class=\"cui-pane cui-pane--height-content\" data-cui-component=\"pane\"><div class=\"cui-pane__body\"><section>Rows</section></div></div>\n"
+}

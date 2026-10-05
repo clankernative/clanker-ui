@@ -1,0 +1,10 @@
+{
+  "expectedHtml": "<div class=\"cui-progress cui-progress--success cui-progress--regular cui-progress--determinate cui-progress--complete\" data-cui-component=\"progress\" data-cui-tone=\"success\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Upload complete</span><span class=\"cui-progress__suffix\">100%</span></div><progress class=\"cui-progress__track\" value=\"100\" max=\"100\" aria-label=\"Upload complete\"></progress></div>\n",
+  "label": "Upload complete",
+  "maximum": 100,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "100%",
+  "tone": "success",
+  "value": 100
+}

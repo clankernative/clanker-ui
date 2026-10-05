@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "name": "alert",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Explains contextual information, success, warnings, or failures with optional recovery navigation.",
+  "keywords": ["alert", "callout", "error", "message", "recovery"],
+  "agent": {
+    "useWhen": "A page region needs a short explanation, consequence, or real recovery destination; choose a heading level appropriate to its document outline and an appearance that fits the surface.",
+    "avoidWhen": "The message is a transient toast, field validation, empty result, dismissible notice, command, or lifecycle-driven interaction.",
+    "composeWith": ["button", "form-field", "icon"]
+  },
+  "contract": {
+    "role": "section",
+    "variants": ["info", "success", "warning", "danger", "soft", "outlined", "accent", "h2", "h3", "h4"],
+    "requiredFields": ["title", "body", "tone"],
+    "invariants": [
+      "Configuration selects one of info, success, warning, or danger tone; appearance is soft, outlined, or accent (default soft).",
+      "Heading level is h2, h3, or h4 (default h2); it changes semantic heading markup without changing the visual title style.",
+      "Title and body are required nonblank plain text and are escaped; markup, template expressions, and event attributes are never admitted from values.",
+      "The tone selects a decorative icon from the closed package catalog: info uses info, success uses check, warning and danger use alert. Text remains meaningful without color or icon.",
+      "recoveryLabel and recoveryHref must be supplied together and render as one real navigation link; unsafe destinations are rejected. No command or dismissal is created.",
+      "Announcement defaults to none; only explicit polite or assertive choices create the corresponding role and aria-live value. Announcement choice is configuration, not browser-managed lifecycle.",
+      "The section contains the selected heading, description, decorative icon, and optional recovery link in source order; the app owns any dynamic replacement lifecycle.",
+      "Recovery link placement adapts to the component container width, not the viewport. There is no browser-local state, dismissal, event output, script, or hidden follow-up behavior.",
+      "The fragment requires exactly one [[attributes]], [[icon]], [[heading]], [[body]], and [[recovery]] slot and is expanded in one pass."
+    ]
+  },
+  "tokens": [
+    "--cui-alert-accent-background", "--cui-alert-accent-border", "--cui-alert-body-gap",
+    "--cui-alert-danger-background", "--cui-alert-danger-border", "--cui-alert-danger-text",
+    "--cui-alert-gap", "--cui-alert-info-background", "--cui-alert-info-border", "--cui-alert-info-text",
+    "--cui-alert-measure", "--cui-alert-outlined-background", "--cui-alert-padding", "--cui-alert-radius",
+    "--cui-alert-recovery-focus-offset", "--cui-alert-recovery-focus-ring", "--cui-alert-recovery-focus-width",
+    "--cui-alert-success-background", "--cui-alert-success-border", "--cui-alert-success-text",
+    "--cui-alert-title-size", "--cui-alert-title-weight", "--cui-alert-warning-background", "--cui-alert-warning-border", "--cui-alert-warning-text"
+  ],
+  "dependencies": ["icon"],
+  "assets": {
+    "template": "components/alert/fragment.html",
+    "styles": "components/alert/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/alert/fixtures/info.json",
+    "components/alert/fixtures/success.json",
+    "components/alert/fixtures/warning.json",
+    "components/alert/fixtures/danger.json",
+    "components/alert/fixtures/recovery.json",
+    "components/alert/fixtures/escaped.json",
+    "components/alert/fixtures/polite.json",
+    "components/alert/fixtures/assertive.json",
+    "components/alert/fixtures/outlined-h2.json",
+    "components/alert/fixtures/outlined-h3.json",
+    "components/alert/fixtures/outlined-h4.json",
+    "components/alert/fixtures/accent-h2.json",
+    "components/alert/fixtures/accent-h3.json",
+    "components/alert/fixtures/accent-h4.json",
+    "components/alert/fixtures/soft-h3.json",
+    "components/alert/fixtures/soft-h4.json"
+  ]
+}

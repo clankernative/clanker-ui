@@ -5,16 +5,37 @@
   "target": "native-html",
   "category": "data",
   "summary": "Presents a formatted operational value with optional context, trend, and decorative icon.",
-  "keywords": ["metric", "statistic", "kpi", "trend", "operational value"],
+  "keywords": [
+    "metric",
+    "statistic",
+    "kpi",
+    "trend",
+    "operational value"
+  ],
   "agent": {
     "useWhen": "A summary needs a primary formatted operational value with optional supporting context and a directional change.",
     "avoidWhen": "The value belongs in a data-table cell, needs a chart to explain it, or requires live browser state or interaction.",
-    "composeWith": ["divider", "icon"]
+    "composeWith": [
+      "divider",
+      "icon"
+    ]
   },
   "contract": {
     "role": "metric",
-    "variants": ["plain", "contained", "up", "down", "flat", "positive", "negative", "neutral"],
-    "requiredFields": ["label", "value"],
+    "variants": [
+      "plain",
+      "contained",
+      "up",
+      "down",
+      "flat",
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "requiredFields": [
+      "label",
+      "value"
+    ],
     "invariants": [
       "Label and formatted value are required nonblank text; values remain app-formatted text and are never parsed or localized by the component.",
       "Trend direction and favorability tone are independent. trend, trendTone, and trendLabel must be supplied together; trendAnnouncement may override the English accessible default only when a trend exists.",
@@ -26,9 +47,135 @@
     ]
   },
   "tokens": [
-    "--cui-metric-background", "--cui-metric-border", "--cui-metric-border-radius", "--cui-metric-contained-shadow", "--cui-metric-content-gap", "--cui-metric-detail-color", "--cui-metric-footer-gap", "--cui-metric-icon-background", "--cui-metric-icon-color", "--cui-metric-icon-size", "--cui-metric-label-color", "--cui-metric-label-size", "--cui-metric-negative-color", "--cui-metric-neutral-color", "--cui-metric-padding", "--cui-metric-positive-color", "--cui-metric-value-size", "--cui-metric-weight"
+    "--cui-border",
+    "--cui-danger",
+    "--cui-icon-small-size",
+    "--cui-metric-background",
+    "--cui-metric-border",
+    "--cui-metric-border-radius",
+    "--cui-metric-contained-shadow",
+    "--cui-metric-content-gap",
+    "--cui-metric-detail-color",
+    "--cui-metric-footer-gap",
+    "--cui-metric-icon-background",
+    "--cui-metric-icon-color",
+    "--cui-metric-icon-size",
+    "--cui-metric-label-color",
+    "--cui-metric-label-size",
+    "--cui-metric-negative-color",
+    "--cui-metric-neutral-color",
+    "--cui-metric-padding",
+    "--cui-metric-positive-color",
+    "--cui-metric-value-size",
+    "--cui-metric-weight",
+    "--cui-radius-control",
+    "--cui-radius-surface",
+    "--cui-shadow-control",
+    "--cui-space-1",
+    "--cui-space-2",
+    "--cui-space-4",
+    "--cui-space-5",
+    "--cui-success-text",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-text",
+    "--cui-text-secondary"
   ],
-  "dependencies": ["icon"],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-metric-background",
+      "role": "background",
+      "purpose": "Controls background color for  metric."
+    },
+    {
+      "name": "--cui-metric-border",
+      "role": "border",
+      "purpose": "Controls border color for  metric."
+    },
+    {
+      "name": "--cui-metric-border-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for metric."
+    },
+    {
+      "name": "--cui-metric-contained-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for metric."
+    },
+    {
+      "name": "--cui-metric-content-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for metric."
+    },
+    {
+      "name": "--cui-metric-detail-color",
+      "role": "text",
+      "purpose": "Controls color for supporting detail metric."
+    },
+    {
+      "name": "--cui-metric-footer-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for metric."
+    },
+    {
+      "name": "--cui-metric-icon-background",
+      "role": "background",
+      "purpose": "Controls background color for icon metric."
+    },
+    {
+      "name": "--cui-metric-icon-color",
+      "role": "text",
+      "purpose": "Controls color for icon metric."
+    },
+    {
+      "name": "--cui-metric-icon-size",
+      "role": "sizing",
+      "purpose": "Controls size for metric."
+    },
+    {
+      "name": "--cui-metric-label-color",
+      "role": "text",
+      "purpose": "Controls color for label metric."
+    },
+    {
+      "name": "--cui-metric-label-size",
+      "role": "sizing",
+      "purpose": "Controls size for metric."
+    },
+    {
+      "name": "--cui-metric-negative-color",
+      "role": "text",
+      "purpose": "Controls color for negative metric."
+    },
+    {
+      "name": "--cui-metric-neutral-color",
+      "role": "text",
+      "purpose": "Controls color for neutral state metric."
+    },
+    {
+      "name": "--cui-metric-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for metric."
+    },
+    {
+      "name": "--cui-metric-positive-color",
+      "role": "text",
+      "purpose": "Controls color for positive metric."
+    },
+    {
+      "name": "--cui-metric-value-size",
+      "role": "sizing",
+      "purpose": "Controls size for metric."
+    },
+    {
+      "name": "--cui-metric-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for metric."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
   "assets": {
     "template": "components/metric/fragment.html",
     "styles": "components/metric/styles.css",

@@ -1,0 +1,28 @@
+{
+  "caption": "Recent activity",
+  "captionVisible": true,
+  "columns": [
+    "Activity",
+    "Owner",
+    "Status"
+  ],
+  "expectedHtml": "<div class=\"cui-data-table\" data-cui-component=\"data-table\" tabindex=\"0\" role=\"region\" aria-label=\"Recent activity\"><table class=\"cui-data-table__table\"><caption class=\"cui-data-table__caption cui-data-table__caption--visible\">Recent activity</caption><thead class=\"cui-data-table__head\"><tr><th scope=\"col\">Activity</th><th scope=\"col\">Owner</th><th scope=\"col\">Status</th></tr></thead><tbody class=\"cui-data-table__body\"><tr id=\"activity-1\"><td data-label=\"Activity\">Quarterly &lt;review&gt;</td><td data-label=\"Owner\">Mina &amp; Chen</td><td data-label=\"Status\">Open</td></tr><tr id=\"activity-2\"><td data-label=\"Activity\">Access request</td><td data-label=\"Owner\">Sam Rivera</td><td data-label=\"Status\">Complete</td></tr></tbody></table></div>\n",
+  "rows": [
+    {
+      "cells": [
+        "Quarterly <review>",
+        "Mina & Chen",
+        "Open"
+      ],
+      "id": "activity-1"
+    },
+    {
+      "cells": [
+        "Access request",
+        "Sam Rivera",
+        "Complete"
+      ],
+      "id": "activity-2"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "summary": "Why did this pause?",
+  "appearance": "contained",
+  "open": false,
+  "children": "<p>Host-admitted body.</p>",
+  "expectedHtml": "<details class=\"cui-disclosure cui-disclosure--contained\" data-cui-component=\"disclosure\"><summary class=\"cui-disclosure__summary\"><span>Why did this pause?</span><span class=\"cui-disclosure__icon\" aria-hidden=\"true\"></span></summary><div class=\"cui-disclosure__body\"><p>Host-admitted body.</p></div></details>\n"
+}

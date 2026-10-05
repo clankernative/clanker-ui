@@ -1,0 +1,19 @@
+{
+  "expectedHtml": "<nav class=\"cui-pagination cui-pagination--compact\" data-cui-component=\"pagination\" aria-label=\"Pages\"><ol class=\"cui-pagination__list\"><li class=\"cui-pagination__item cui-pagination__item--previous\"><span class=\"cui-pagination__disabled\" aria-disabled=\"true\">Previous</span></li><li class=\"cui-pagination__item cui-pagination__item--current\"><span class=\"cui-pagination__current\" aria-current=\"page\">1</span></li><li class=\"cui-pagination__item cui-pagination__item--next\"><span class=\"cui-pagination__disabled\" aria-disabled=\"true\">Next</span></li></ol></nav>\n",
+  "items": [
+    {
+      "kind": "previous",
+      "label": "Previous"
+    },
+    {
+      "kind": "current",
+      "label": "1"
+    },
+    {
+      "kind": "next",
+      "label": "Next"
+    }
+  ],
+  "label": "Pages",
+  "variant": "compact"
+}

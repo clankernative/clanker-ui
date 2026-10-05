@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "disclosure",
+  "status": "draft",
+  "target": "native-html",
+  "category": "data",
+  "summary": "Reveals optional supporting content through native details and summary semantics.",
+  "keywords": ["details", "accordion", "collapsible"],
+  "agent": {"useWhen": "Optional supporting detail can remain collapsed until a user requests it.", "avoidWhen": "The content is required to complete the task or needs exclusive accordion behavior.", "composeWith": ["alert", "card", "stack"]},
+  "contract": {"role": "native details and summary disclosure", "variants": ["contained", "plain"], "requiredFields": ["summary", "body"], "invariants": ["Summary is nonblank escaped text; body is provided only through the host-admitted body slot.", "Default appearance is contained and default state is closed.", "The native disclosure works without JavaScript; no ARIA state is recreated.", "Fragment slots are exactly [[attributes]], [[summary]], and [[body]]."]},
+  "tokens": ["--cui-disclosure-background", "--cui-disclosure-border", "--cui-disclosure-hover-background", "--cui-disclosure-padding", "--cui-disclosure-radius", "--cui-disclosure-summary-text", "--cui-disclosure-icon-text", "--cui-disclosure-focus-ring"],
+  "dependencies": [], "assets": {"template": "components/disclosure/fragment.html", "styles": "components/disclosure/styles.css", "scripts": []},
+  "fixtures": ["components/disclosure/fixtures/contained-golden.json", "components/disclosure/fixtures/plain-open-golden.json"]
+}

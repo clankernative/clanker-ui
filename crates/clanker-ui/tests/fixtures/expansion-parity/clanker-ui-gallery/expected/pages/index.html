@@ -1,0 +1,100 @@
+<div class="gallery-shell {{ 'theme-light' if workspace.theme_light else '' }} {{ 'density-comfortable' if workspace.density_comfortable else '' }}">
+  <aside class="gallery-sidebar" aria-label="Gallery navigation">
+    <a class="gallery-brand" href="{{ routes.workspace() }}"><span class="brand-mark" aria-hidden="true">C</span><span>Clanker UI <small>gallery</small></span></a>
+    <div class="sidebar-body">
+      <form class="sidebar-search" data-page="components" role="search"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle>
+<path d="m21 21-5-5"></path></svg>
+<input type="search" name="q" maxlength="160" placeholder="Find a component" aria-label="Search component catalog"><button class="sr-only" type="submit">Search catalog</button></form>
+      <nav class="nav-section" aria-label="Examples">
+        <p class="nav-section-title">EXAMPLES</p>
+        <a class="nav-link" href="{{ routes.workspace() }}" aria-current="page"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3z"></path></svg>
+Overview</a>
+        <a class="nav-link" href="{{ routes.tasks() }}"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>
+Task workspace</a>
+        <a class="nav-link" href="{{ routes.components() }}"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5"></path></svg>
+Components</a>
+        <a class="nav-link" href="{{ routes.layouts() }}"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"></path></svg>
+Layout atlas</a>
+      </nav>
+      {% include "components/catalog-navigation.html" %}
+    </div>
+    <div class="sidebar-footer"><strong>Clanker UI gallery</strong><p>Build-time components · Native reads and commands</p></div>
+  </aside>
+  <header class="mobile-header">
+    <a class="gallery-brand" href="{{ routes.workspace() }}"><span class="brand-mark" aria-hidden="true">C</span><span>Clanker UI <small>gallery</small></span></a>
+    <details class="mobile-menu"><summary aria-label="Open navigation"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+</summary><nav aria-label="Gallery navigation"><a class="nav-link" href="{{ routes.workspace() }}" aria-current="page">Overview</a><a class="nav-link" href="{{ routes.tasks() }}">Task workspace</a><a class="nav-link" href="{{ routes.components() }}">Components</a><a class="nav-link" href="{{ routes.layouts() }}">Layout atlas</a></nav></details>
+  </header>
+  <div class="gallery-main">
+    <div class="gallery-topbar">
+      <nav class="cui-breadcrumbs" data-cui-component="breadcrumbs" aria-label="Breadcrumbs"><ol class="cui-breadcrumbs__list"><li class="cui-breadcrumbs__item"><a class="cui-breadcrumbs__link" href="{{ routes.workspace() }}">Gallery</a></li><li class="cui-breadcrumbs__item"><span class="cui-breadcrumbs__current" aria-current="page">Overview</span></li></ol></nav>
+
+      <form class="toolbar-controls" data-page="workspace" aria-label="Display preferences">
+        <label class="sr-only" for="overview-theme">Theme</label><select id="overview-theme" name="theme"><option value="0" data-cui-selected-flag="{{ not workspace.theme_light }}">Dark</option><option value="1" data-cui-selected-flag="{{ workspace.theme_light }}">Light</option></select>
+        <label class="sr-only" for="overview-density">Density</label><select id="overview-density" name="density"><option value="0" data-cui-selected-flag="{{ not workspace.density_comfortable }}">Compact</option><option value="1" data-cui-selected-flag="{{ workspace.density_comfortable }}">Comfortable</option></select>
+        <button class="cui-button cui-button--secondary cui-button--compact" type="submit"><span>Apply</span></button>
+
+      </form>
+    </div>
+    <div class="gallery-content">
+      <div class="page-heading"><header class="cui-page-header" data-cui-component="page-header"><div class="cui-page-header__content"><h1 class="cui-page-header__title">Overview</h1><p class="cui-page-header__description">A real Native workspace, shaped by the component catalog.</p></div></header>
+<a href="{{ routes.tasks() }}">Browse tasks</a></div>
+      <section id="workspace-metrics" class="overview-summary" data-live aria-label="Workspace metrics">
+        <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Total tasks</dt><dd class="cui-metric__value">{{ cui_text(workspace.total) }}</dd></dl></article>
+
+        <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Active</dt><dd class="cui-metric__value">{{ cui_text(workspace.active) }}</dd></dl></article>
+
+        <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Completed</dt><dd class="cui-metric__value">{{ cui_text(workspace.completed) }}</dd></dl></article>
+
+        <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Projects</dt><dd class="cui-metric__value">{{ cui_text(workspace.project_count) }}</dd></dl></article>
+
+      </section>
+      <section aria-labelledby="projects-title">
+        <div class="section-title"><h2 id="projects-title">Projects</h2><a href="{{ routes.tasks() }}">View all tasks <span aria-hidden="true">→</span></a></div>
+        <div id="workspace-projects" class="project-cards" data-live>
+          {% for project in workspace.cards.items %}
+          <div class="project-card"><div class="cui-card cui-card--standard" data-cui-component="card"><header class="cui-card__header"><h3 class="cui-card__title">{{ cui_text(project.name) }}</h3><p class="cui-card__subtitle">{{ cui_text(project.summary) }}</p></header><div class="cui-card__body"><div class="project-progress"><div class="progress-caption"><span>Completion</span><strong>{{ project.completion }}%</strong></div><div class="cui-progress cui-progress--info cui-progress--compact cui-progress--determinate{% if cui_progress_complete(project.completion, "100") %} cui-progress--complete{% endif %}" data-cui-component="progress" data-cui-tone="info" data-cui-size="compact" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">{{ cui_text(project.name) }}</span></div><progress class="cui-progress__track" value="{{ cui_progress_value(project.completion, "100") }}" max="{{ cui_progress_maximum(project.completion, "100") }}" aria-label="{{ cui_text(project.name) }}"></progress></div>
+<div class="progress-caption"><span>{{ project.active }} active</span><span>{{ project.completed }} of {{ project.total }} tasks</span></div></div></div><footer class="cui-card__actions"><span class="project-owner">{{ project.owner }}</span><a href="{{ routes.tasks(project=project.filter) }}">Open project <span aria-hidden="true">→</span></a></footer></div>
+</div>
+          {% else %}<section class="cui-empty-state cui-empty-state--start" data-cui-component="empty-state"><div class="cui-empty-state__layout"><div class="cui-empty-state__content"><h2 class="cui-empty-state__title">No projects yet</h2><p class="cui-empty-state__body">Initialize the sample data from Demo details below, then reload this overview.</p></div></div></section>
+{% endfor %}
+        </div>
+      </section>
+      <div class="overview-working-area">
+        <section id="workspace-recent" data-live class="panel" aria-labelledby="recent-title">
+          <div class="panel-heading"><h2 id="recent-title">Recent tasks</h2><a href="{{ routes.tasks() }}">See all</a></div>
+          <div class="cui-data-table" role="region" tabindex="0" aria-label="Recent tasks" data-cui-component="data-table"><table class="cui-data-table__table"><caption class="cui-data-table__caption cui-visually-hidden">Recent tasks</caption><thead class="cui-data-table__head"><tr><th scope="col">Task</th><th scope="col">Project</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Updated</th></tr></thead><tbody class="cui-data-table__body">
+            {% for row in workspace.recent.items %}
+            <tr id="recent-{{ cui_token(row.task.id) }}"><td data-label="Task"><a href="{{ routes.task(task_id=row.task.id) }}">{{ row.task.title }}</a></td><td data-label="Project">{{ row.project_name }}</td><td data-label="Status">{% if row.task.state == 2 %}<span class="cui-badge cui-badge--success" data-cui-component="badge" data-cui-tone="success"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m20 6-11 11-5-5"></path></svg></span><span class="cui-badge__label">Done</span></span>
+{% elif row.task.state == 1 %}<span class="cui-badge cui-badge--info" data-cui-component="badge" data-cui-tone="info"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 11v5M12 8h.01"></path></svg></span><span class="cui-badge__label">Doing</span></span>
+{% else %}<span class="cui-badge cui-badge--neutral" data-cui-component="badge" data-cui-tone="neutral"><span class="cui-badge__label">Todo</span></span>
+{% endif %}</td><td data-label="Owner">{{ row.task.owner }}</td><td data-label="Updated">Revision {{ row.task.version }}</td></tr>
+            {% else %}<tr id="recent-empty"><td data-label="Task">No tasks yet. Initialize sample data or create the first task.</td><td data-label="Project">—</td><td data-label="Status">—</td><td data-label="Owner">—</td><td data-label="Updated">—</td></tr>{% endfor %}
+          </tbody></table></div>
+
+          <div class="panel-footer"><span>Showing up to six most recent tasks</span><a href="{{ routes.tasks() }}">Open task list</a></div>
+        </section>
+        <aside class="panel create-panel" aria-labelledby="create-title">
+          <h2 id="create-title">Create a task</h2><p class="small-note">Details are required and limited to 4,000 UTF-8 bytes.</p>
+          <form id="create-task" data-command="gallery.create_task" class="task-form">
+            {% if workspace.has_projects %}<div class="cui-select-field" data-cui-component="select-field"><label class="cui-select-field__label" for="create-project">Project <span class="cui-select-field__required" aria-hidden="true">*</span></label><select class="cui-select-field__control" id="create-project" name="project_id" required>{% for project in workspace.projects.items %}<option value="{{ cui_text(project.id) }}">{{ cui_text(project.name) }}</option>{% endfor %}</select></div>
+{% else %}<label for="create-project">Project</label><select id="create-project" class="empty-select" name="project_id" required aria-describedby="create-project-hint"><option value="" disabled selected>No projects yet</option></select><p id="create-project-hint" class="small-note">Initialize sample projects below, then reload before creating a task.</p>{% endif %}
+            <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="create-task-title">Task title <span class="cui-form-field__required" aria-hidden="true">*</span></label><input class="cui-form-field__control" id="create-task-title" name="title" type="text" value="" placeholder="What needs to get done?" autocomplete="off" maxlength="160" aria-describedby="create-task-title-hint" required><div class="cui-form-field__description"><p class="cui-form-field__hint" id="create-task-title-hint">Use a short, printable title (up to 160 UTF-8 bytes).</p></div></div>
+
+            <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="textarea"><label class="cui-form-field__label" for="create-task-detail">Details <span class="cui-form-field__required" aria-hidden="true">*</span></label><textarea class="cui-form-field__control cui-form-field__control--textarea" id="create-task-detail" name="detail" rows="4" placeholder="Add useful context for this task" maxlength="4000" aria-describedby="create-task-detail-hint" required></textarea><div class="cui-form-field__description"><p class="cui-form-field__hint" id="create-task-detail-hint">Required. Up to 4,000 UTF-8 bytes; tabs and line breaks are allowed.</p></div></div>
+
+            {% if workspace.has_projects %}<button class="cui-button cui-button--primary" type="submit"><span class="cui-button__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></span><span>Create task</span></button>
+{% else %}<button class="cui-button cui-button--primary" type="submit" disabled><span>Initialize projects first</span></button>
+{% endif %}
+            <p class="small-note">On rejection, copy your draft and reload before retrying. The saved records remain unchanged.</p>
+          </form>
+          <details class="command-recovery"><summary>Demo details</summary><p>Data is illustrative and stored in this local gallery. Seed initializes only an empty gallery; existing projects and tasks are preserved.</p><form id="ensure-demo" data-command="gallery.seed_demo"><button class="cui-button cui-button--secondary cui-button--compact" type="submit"><span>Initialize sample data</span></button>
+</form></details>
+        </aside>
+      </div>
+      <details class="demo-about"><summary>About this gallery</summary><p>Clanker UI components are assembled at build time from a locked local package. Native admits read-only query forms and routes; app-owned commands create and edit the real sample records. Explore the <a href="{{ routes.layouts() }}">14-layout atlas</a> and <a href="{{ routes.components() }}">31 component entries</a>.</p></details>
+      <footer class="page-footer">Clanker UI · Gallery overview</footer>
+    </div>
+  </div>
+</div>

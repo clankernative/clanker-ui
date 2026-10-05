@@ -1,0 +1,1 @@
+{"label":"Access request progress","items":[{"state":"complete","href":"?step=request","label":"Request","detail":"Basic access details"},{"state":"complete","href":"?step=scope","label":"Scope","detail":"Roles and environments"},{"state":"current","label":"Review","detail":"Confirm ownership and duration"},{"state":"upcoming","label":"Approval","detail":"Security decision"}]}

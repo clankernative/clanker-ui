@@ -39,6 +39,16 @@ fn escape_html(value: &str) -> String {
 /// Renders a static page heading. The adapter fragment must contain exactly one
 /// `[[page-header]]` slot; inserted text and markup-like slot strings are never re-parsed.
 pub fn render(instance: &PageHeaderInstance, fragment: &str) -> Result<String, String> {
+    render_with_actions(instance, None, fragment)
+}
+
+/// Compose actions admitted by the host, never a deserialized HTML string.
+/// The app still owns all forms, commands, and destinations in this slot.
+pub fn render_with_actions(
+    instance: &PageHeaderInstance,
+    actions: Option<&crate::layout::AdmittedChildren>,
+    fragment: &str,
+) -> Result<String, String> {
     instance.validate()?;
     let description = instance
         .description
@@ -50,8 +60,20 @@ pub fn render(instance: &PageHeaderInstance, fragment: &str) -> Result<String, S
             )
         })
         .unwrap_or_default();
+    let actions = actions
+        .map(|content| {
+            if content.as_markup().trim().is_empty() {
+                return Err("page header actions must not be blank".to_owned());
+            }
+            Ok(format!(
+                "<div class=\"cui-page-header__actions\">{}</div>",
+                content.as_markup()
+            ))
+        })
+        .transpose()?
+        .unwrap_or_default();
     let header = format!(
-        "<header class=\"cui-page-header\" data-cui-component=\"page-header\"><div class=\"cui-page-header__content\"><h1 class=\"cui-page-header__title\">{}</h1>{description}</div></header>",
+        "<header class=\"cui-page-header\" data-cui-component=\"page-header\"><div class=\"cui-page-header__content\"><h1 class=\"cui-page-header__title\">{}</h1>{description}</div>{actions}</header>",
         escape_html(&instance.title)
     );
     crate::fragment::fill(fragment, &[("[[page-header]]", &header)])
@@ -134,6 +156,17 @@ mod tests {
         ] {
             assert!(render(&instance(), fragment).is_err(), "{fragment}");
         }
+    }
+
+    #[test]
+    fn composes_admitted_actions_but_rejects_blank_slots() {
+        let actions = crate::layout::AdmittedChildren::from_host_admitted(
+            "<a href=\"https://example.test\">Create</a>",
+        );
+        let html = render_with_actions(&instance(), Some(&actions), FRAGMENT).unwrap();
+        assert!(html.contains("<div class=\"cui-page-header__actions\"><a href=\"https://example.test\">Create</a></div>"));
+        let empty = crate::layout::AdmittedChildren::from_host_admitted(" ");
+        assert!(render_with_actions(&instance(), Some(&empty), FRAGMENT).is_err());
     }
 
     #[test]

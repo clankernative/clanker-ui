@@ -1,0 +1,12 @@
+{
+  "expectedHtml": "<nav class=\"cui-breadcrumbs\" data-cui-component=\"breadcrumbs\" aria-label=\"Breadcrumbs\"><ol class=\"cui-breadcrumbs__list\"><li class=\"cui-breadcrumbs__item\"><a class=\"cui-breadcrumbs__link\" href=\"/workspace\">Workspace</a></li><li class=\"cui-breadcrumbs__item\"><span class=\"cui-breadcrumbs__current\" aria-current=\"page\">A project title that wraps naturally on narrow displays</span></li></ol></nav>\n",
+  "items": [
+    {
+      "href": "/workspace",
+      "label": "Workspace"
+    },
+    {
+      "label": "A project title that wraps naturally on narrow displays"
+    }
+  ]
+}

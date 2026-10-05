@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "name": "toggle",
+  "status": "ready",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders a native Boolean checkbox styled as a switch.",
+  "keywords": [
+    "toggle",
+    "switch",
+    "checkbox",
+    "form",
+    "boolean"
+  ],
+  "agent": {
+    "useWhen": "An app-owned form needs one labelled Boolean checkbox presented as an on/off switch.",
+    "avoidWhen": "The state must update without submission, requires component-owned JavaScript, or needs a non-Boolean value.",
+    "composeWith": [
+      "form-field"
+    ]
+  },
+  "contract": {
+    "role": "native Boolean form control",
+    "variants": [
+      "unchecked",
+      "checked",
+      "required",
+      "disabled",
+      "invalid"
+    ],
+    "requiredFields": [
+      "name",
+      "label"
+    ],
+    "invariants": [
+      "Uses a native checkbox with value=true, role=switch, and native checked, required, and disabled attributes.",
+      "Optional id defaults to name; deterministic hint, error, and description IDs are reserved.",
+      "Name and ID are non-reserved safe tokens; label, hint, and error are nonblank control-safe plain text escaped as HTML.",
+      "A false checkbox follows native successful-control submission semantics; no hidden false field or fake transport is emitted.",
+      "The app owns form, submission, transport, routes, and domain validation. No JavaScript, commands, arbitrary attributes, or raw markup are emitted.",
+      "The fragment has exactly one [[attributes]], [[label]], and [[description]] slot; expansion is exact and single-pass.",
+      "Native command forms require a declared Bool carrier. The host maps an omitted enabled checkbox to false and binds a disabled checkbox to its declared state; the component introduces no hidden false field.",
+      "Native build, desktop/mobile browser, keyboard, no-JS, and rejected-draft proof lives in tests/browser/choice-native-proof.mjs."
+    ]
+  },
+  "tokens": [
+    "--cui-toggle-checked-background",
+    "--cui-toggle-checked-knob",
+    "--cui-toggle-disabled-opacity",
+    "--cui-toggle-error-border",
+    "--cui-toggle-error-text",
+    "--cui-toggle-focus-offset",
+    "--cui-toggle-focus-ring",
+    "--cui-toggle-focus-width",
+    "--cui-toggle-gap",
+    "--cui-toggle-hint-size",
+    "--cui-toggle-hint-text",
+    "--cui-toggle-knob",
+    "--cui-toggle-label-weight",
+    "--cui-toggle-text",
+    "--cui-toggle-track",
+    "--cui-toggle-track-border"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-toggle-checked-background",
+      "role": "background",
+      "purpose": "Controls background color for checked state toggle."
+    },
+    {
+      "name": "--cui-toggle-checked-knob",
+      "role": "background",
+      "purpose": "Controls knob for checked state toggle."
+    },
+    {
+      "name": "--cui-toggle-disabled-opacity",
+      "role": "opacity",
+      "purpose": "Controls opacity for toggle."
+    },
+    {
+      "name": "--cui-toggle-error-border",
+      "role": "border",
+      "purpose": "Controls border color for error state toggle."
+    },
+    {
+      "name": "--cui-toggle-error-text",
+      "role": "text",
+      "purpose": "Controls text color for error state toggle."
+    },
+    {
+      "name": "--cui-toggle-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for toggle."
+    },
+    {
+      "name": "--cui-toggle-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  toggle."
+    },
+    {
+      "name": "--cui-toggle-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for toggle."
+    },
+    {
+      "name": "--cui-toggle-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for toggle."
+    },
+    {
+      "name": "--cui-toggle-hint-size",
+      "role": "sizing",
+      "purpose": "Controls size for toggle."
+    },
+    {
+      "name": "--cui-toggle-hint-text",
+      "role": "text",
+      "purpose": "Controls text color for hint toggle."
+    },
+    {
+      "name": "--cui-toggle-knob",
+      "role": "background",
+      "purpose": "Controls knob for  toggle."
+    },
+    {
+      "name": "--cui-toggle-label-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for toggle."
+    },
+    {
+      "name": "--cui-toggle-text",
+      "role": "text",
+      "purpose": "Controls text color for  toggle."
+    },
+    {
+      "name": "--cui-toggle-track",
+      "role": "background",
+      "purpose": "Controls track for  toggle."
+    },
+    {
+      "name": "--cui-toggle-track-border",
+      "role": "border",
+      "purpose": "Controls border color for track toggle."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/toggle/fragment.html",
+    "styles": "components/toggle/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/toggle/fixtures/typical-golden.json",
+    "components/toggle/fixtures/unchecked-golden.json",
+    "components/toggle/fixtures/validation-golden.json",
+    "components/toggle/fixtures/disabled-golden.json"
+  ]
+}

@@ -1,0 +1,1 @@
+{"options":{"id":"connection-inspector","title":"Connection details","description":"Review connection ownership and retry policy.","triggerLabel":"Open inspector","fallbackHref":"/connections/42","placement":"end"},"children":{"body":"<p>Connection configuration and recent status.</p>"}}

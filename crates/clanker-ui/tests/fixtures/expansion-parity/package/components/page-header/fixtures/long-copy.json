@@ -1,0 +1,5 @@
+{
+  "title": "Customer operations and infrastructure deployment configuration",
+  "description": "Review deployment configuration across customer environments, regional infrastructure, and long-running production workflows without clipping or changing the reading order.",
+  "expectedHtml": "<header class=\"cui-page-header\" data-cui-component=\"page-header\"><div class=\"cui-page-header__content\"><h1 class=\"cui-page-header__title\">Customer operations and infrastructure deployment configuration</h1><p class=\"cui-page-header__description\">Review deployment configuration across customer environments, regional infrastructure, and long-running production workflows without clipping or changing the reading order.</p></div></header>\n"
+}

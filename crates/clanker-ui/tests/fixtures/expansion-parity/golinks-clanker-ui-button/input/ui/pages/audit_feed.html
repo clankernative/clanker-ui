@@ -1,0 +1,62 @@
+<div id="golinks-app">
+  <header class="header">
+    <div>
+      <p class="eyebrow">{{ company.name }}</p>
+      <h1>Go Links</h1>
+      <p class="subtitle">Manage short links, track popularity, and review activity.</p>
+    </div>
+    <nav class="nav" aria-label="Go Links">
+      <a data-nav="dashboard" href="{{ routes.links() }}">Dashboard</a>
+      <a data-nav="trash" href="{{ routes.trash() }}">Trash</a>
+      <a data-nav="audit-feed" href="{{ routes.audit_feed() }}" aria-current="page">Audit Feed</a>
+      <a href="{{ routes.component_demo() }}">UI Demo</a>
+    </nav>
+  </header>
+
+  <article id="audit-panel" class="card" aria-labelledby="audit-title">
+    <div class="card-header">
+      <div>
+        <h2 id="audit-title">Audit Feed</h2>
+        <p>Recent activity across go links.</p>
+      </div>
+    </div>
+
+    <div id="audit-list" data-live>
+      {% if audit_feed.items | length == 0 %}
+      <p class="empty">No activity yet.</p>
+      {% else %}
+      <ul class="list">
+        {% for entry in audit_feed.items %}
+        <li>
+          <div>
+            <p class="name">{{ entry.summary }}</p>
+            <p class="audit-type">{{ entry.event_type }} | Go Link</p>
+            <p class="description">{{ entry.actor }}{% if entry.entity_name != "" %} · go/{{ entry.entity_name }}{% endif %}</p>
+            {% if entry.changes != "" %}
+            <p class="description">Changed: {{ entry.changes }}</p>
+            {% endif %}
+          </div>
+          <div class="meta">
+            <p><time data-unix="{{ entry.occurred_at }}">{{ entry.occurred_at }}</time></p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+
+    <div class="pagination">
+      <p id="audit-page" data-pager-label></p>
+      <div class="actions">
+        <button type="button" data-pager-previous disabled>Previous</button>
+        <span id="audit-next" data-live>
+          {% if audit_feed.has_more %}
+          <a class="button" data-pager-next rel="next" href="{{ routes.audit_feed(after=audit_feed.next_after) }}">Next</a>
+          {% else %}
+          <span class="button button-disabled" aria-disabled="true">Next</span>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </article>
+</div>

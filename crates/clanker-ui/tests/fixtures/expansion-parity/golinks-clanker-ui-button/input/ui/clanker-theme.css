@@ -1,0 +1,48 @@
+/* GoLinks owns its flavor. The package supplies structure and fallback tokens. */
+:root {
+  --cui-accent: var(--primary);
+  --cui-accent-hover: var(--primary-dark);
+  --cui-accent-text: #fff;
+  --cui-surface: var(--surface);
+  --cui-surface-hover: var(--surface-muted);
+  --cui-text: var(--text);
+  --cui-focus: var(--focus);
+  --cui-danger: var(--error-text);
+  --cui-muted: var(--muted);
+  --cui-border: var(--border-strong);
+  --cui-form-field-radius: .65rem;
+  --cui-form-field-control-padding: .7rem .8rem;
+  --cui-form-field-label-weight: 600;
+  --cui-form-field-placeholder-text: #64748b;
+  --cui-button-radius: .65rem;
+  --cui-button-padding: .55rem .8rem;
+
+  /* Layout surfaces follow the established GoLinks spacing and palette. */
+  --cui-container-width-reading: 65ch;
+  --cui-container-width-compact: 48rem;
+  --cui-container-width-standard: 72rem;
+  --cui-container-width-wide: 90rem;
+  --cui-container-gutter-compact: 1rem;
+  --cui-container-gutter-standard: clamp(1rem, 4vw, 2rem);
+  --cui-container-gutter-generous: 3rem;
+  --cui-stack-gap-compact: .5rem;
+  --cui-stack-gap-standard: 1rem;
+  --cui-stack-gap-spacious: 1.5rem;
+  --cui-stack-gap-generous: 2rem;
+  --cui-cluster-gap-compact: .5rem;
+  --cui-cluster-gap-standard: 1rem;
+  --cui-cluster-gap-spacious: 1.5rem;
+  --cui-cluster-gap-generous: 2rem;
+  --cui-grid-gap-standard: 1rem;
+  --cui-grid-minimum-narrow: 12rem;
+  --cui-grid-minimum-standard: 18rem;
+  --cui-grid-minimum-wide: 24rem;
+  --cui-split-gap-standard: 1rem;
+  --cui-card-background: var(--surface);
+  --cui-card-border: var(--border);
+  --cui-card-radius: 1rem;
+  --cui-card-padding: 1rem;
+  --cui-card-compact-padding: 1rem;
+  --cui-page-header-title-text: var(--text);
+  --cui-page-header-description-text: var(--muted);
+}

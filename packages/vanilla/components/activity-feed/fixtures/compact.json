@@ -1,0 +1,6 @@
+{
+  "label": "Changes",
+  "compact": true,
+  "entries": [{"title":"Updated","occurredAt":"2025-01-01T00:00:00+00:00","timeLabel":"Just now","tone":"neutral"}],
+  "expectedHtml": "<div class=\"cui-activity-feed cui-activity-feed--compact\" data-cui-component=\"activity-feed\"><ol class=\"cui-activity-feed__list\" aria-label=\"Changes\"><li class=\"cui-activity-feed__item\"><span class=\"cui-activity-feed__marker cui-activity-feed__tone--neutral\" aria-hidden=\"true\"></span><div class=\"cui-activity-feed__content\"><div class=\"cui-activity-feed__title\">Updated</div><div class=\"cui-activity-feed__meta\"><time class=\"cui-activity-feed__time\" datetime=\"2025-01-01T00:00:00+00:00\">Just now</time></div></div></li></ol></div>\n"
+}

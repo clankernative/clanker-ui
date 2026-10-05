@@ -1,0 +1,7 @@
+{
+  "variant": "horizontal",
+  "orientation": "horizontal",
+  "label": "Production access requests awaiting ownership and security review",
+  "alignment": "center",
+  "expectedHtml": "<div class=\"cui-divider cui-divider--horizontal cui-divider--labelled cui-divider--center\" data-cui-component=\"divider\" role=\"separator\" aria-orientation=\"horizontal\" aria-label=\"Production access requests awaiting ownership and security review\"><span class=\"cui-divider__label\">Production access requests awaiting ownership and security review</span></div>\n"
+}

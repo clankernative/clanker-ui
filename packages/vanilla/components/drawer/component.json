@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "name": "drawer",
+  "status": "ready",
+  "integration": {"native": {"status": "adapter-required", "scope": "Native declaration, admitted child slots, and browser lifecycle integration are not yet verified."}},
+  "target": "native-html",
+  "category": "overlay",
+  "summary": "Presents edge-attached task context in a native dialog with a real no-JavaScript destination.",
+  "keywords": [
+    "dialog",
+    "drawer",
+    "inspector",
+    "side panel"
+  ],
+  "agent": {
+    "useWhen": "A focused secondary task or inspector benefits from retaining the surrounding page context.",
+    "avoidWhen": "The task is not interruptive, needs a full page, or content should remain persistently visible.",
+    "composeWith": [
+      "button",
+      "form-field",
+      "definition-list"
+    ]
+  },
+  "contract": {
+    "role": "edge-attached native dialog",
+    "variants": [
+      "start",
+      "end",
+      "narrow",
+      "standard",
+      "wide"
+    ],
+    "requiredFields": [
+      "title",
+      "trigger_label",
+      "fallback_href",
+      "body"
+    ],
+    "invariants": [
+      "Options are typed plain data; body and optional actions are separate host-admitted slots.",
+      "fallbackHref remains a real safe destination until showModal enhancement succeeds.",
+      "Native dialog top-layer, Escape, and focus behavior are retained; no-JavaScript activation follows fallbackHref.",
+      "Description is optional and, when present, is referenced by aria-describedby.",
+      "Derived IDs are id, id-title, and conditionally id-description and must be collision checked.",
+      "Adapter fragment has exactly one [[drawer]] slot."
+    ]
+  },
+  "tokens": [
+    "--cui-border",
+    "--cui-drawer-actions-padding",
+    "--cui-drawer-backdrop",
+    "--cui-drawer-body-padding",
+    "--cui-drawer-close-focus",
+    "--cui-drawer-header-padding",
+    "--cui-drawer-radius",
+    "--cui-drawer-shadow",
+    "--cui-drawer-surface",
+    "--cui-drawer-title-size",
+    "--cui-drawer-width",
+    "--cui-drawer-width-narrow",
+    "--cui-drawer-width-standard",
+    "--cui-drawer-width-wide",
+    "--cui-focus",
+    "--cui-radius-control",
+    "--cui-radius-surface",
+    "--cui-shadow-raised",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-surface-raised",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-drawer-actions-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for drawer."
+    },
+    {
+      "name": "--cui-drawer-backdrop",
+      "role": "background",
+      "purpose": "Controls visual treatment for  drawer."
+    },
+    {
+      "name": "--cui-drawer-body-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for drawer."
+    },
+    {
+      "name": "--cui-drawer-close-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for close drawer."
+    },
+    {
+      "name": "--cui-drawer-header-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for drawer."
+    },
+    {
+      "name": "--cui-drawer-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for drawer."
+    },
+    {
+      "name": "--cui-drawer-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for drawer."
+    },
+    {
+      "name": "--cui-drawer-surface",
+      "role": "background",
+      "purpose": "Controls surface color for  drawer."
+    },
+    {
+      "name": "--cui-drawer-title-size",
+      "role": "sizing",
+      "purpose": "Controls title font size for  drawer."
+    },
+    {
+      "name": "--cui-drawer-width",
+      "role": "sizing",
+      "purpose": "Controls width for drawer."
+    },
+    {
+      "name": "--cui-drawer-width-narrow",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width drawer."
+    },
+    {
+      "name": "--cui-drawer-width-standard",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width drawer."
+    },
+    {
+      "name": "--cui-drawer-width-wide",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width drawer."
+    }
+  ],
+  "dependencies": [
+    "button",
+    "icon"
+  ],
+  "assets": {
+    "template": "components/drawer/fragment.html",
+    "styles": "components/drawer/styles.css",
+    "scripts": [
+      "components/drawer/interaction.js"
+    ]
+  },
+  "fixtures": [
+    "components/drawer/fixtures/start-narrow-golden.json",
+    "components/drawer/fixtures/end-standard-golden.json",
+    "components/drawer/fixtures/start-wide-golden.json"
+  ]
+}

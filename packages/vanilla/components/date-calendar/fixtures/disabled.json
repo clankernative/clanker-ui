@@ -1,0 +1,54 @@
+{
+  "id": "release-calendar",
+  "month": "2026-08-01",
+  "today": "2026-08-25",
+  "label": "Release calendar",
+  "monthLabels": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ],
+  "weekdayShortLabels": [
+    "Su",
+    "Mo",
+    "Tu",
+    "We",
+    "Th",
+    "Fr",
+    "Sa"
+  ],
+  "weekdayFullLabels": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ],
+  "previousLabel": "Previous month",
+  "nextLabel": "Next month",
+  "firstDay": 1,
+  "minimum": "2026-08-01",
+  "maximum": "2026-09-30",
+  "unavailableDates": [
+    "2026-08-22"
+  ],
+  "selectionMode": "range",
+  "selection": {
+    "kind": "range",
+    "start": "2026-08-18",
+    "end": "2026-08-24"
+  },
+  "interactive": true,
+  "disabled": true
+}

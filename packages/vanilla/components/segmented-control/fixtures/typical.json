@@ -1,0 +1,1 @@
+{"label":"Record visibility","items":[{"kind":"link","href":"?scope=all","label":"All records"},{"kind":"current","label":"Shared"},{"kind":"link","href":"?scope=private","label":"Private"},{"kind":"disabled","label":"Archived"}]}

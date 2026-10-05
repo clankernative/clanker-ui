@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "name": "modal",
+  "status": "ready",
+  "integration": {"native": {"status": "adapter-required", "scope": "Native declaration, admitted child slots, and browser lifecycle integration are not yet verified."}},
+  "target": "native-html",
+  "category": "overlay",
+  "summary": "Presents a focused native dialog while retaining a real destination when enhancement is unavailable.",
+  "keywords": [
+    "dialog",
+    "modal",
+    "interrupt",
+    "review"
+  ],
+  "agent": {
+    "useWhen": "A short, interruptive task needs protected focus and a real fallback destination.",
+    "avoidWhen": "The task is non-interruptive, lengthy, or better represented as a page or disclosure.",
+    "composeWith": [
+      "button",
+      "form-field",
+      "stack"
+    ]
+  },
+  "contract": {
+    "role": "native modal dialog",
+    "variants": [
+      "small",
+      "standard",
+      "wide"
+    ],
+    "requiredFields": [
+      "title",
+      "trigger_label",
+      "fallback_href",
+      "body"
+    ],
+    "invariants": [
+      "Modal options are typed plain data; body and optional actions are separate host-admitted slots.",
+      "fallbackHref must be a safe real destination and remains navigable if dialog enhancement is unavailable.",
+      "Native dialog top-layer, Escape, and focus semantics are preserved; JavaScript only enhances the fallback link.",
+      "Derived IDs are id and id-title and must be reserved against page collisions.",
+      "Only the component's delegated click behavior is installed by the host lifecycle; no global auto-run or app operation is owned.",
+      "Adapter fragment has exactly one [[modal]] slot."
+    ]
+  },
+  "tokens": [
+    "--cui-border",
+    "--cui-focus",
+    "--cui-modal-actions-padding",
+    "--cui-modal-backdrop",
+    "--cui-modal-body-padding",
+    "--cui-modal-close-focus",
+    "--cui-modal-header-padding",
+    "--cui-modal-radius",
+    "--cui-modal-shadow",
+    "--cui-modal-surface",
+    "--cui-modal-title-size",
+    "--cui-modal-width",
+    "--cui-modal-width-small",
+    "--cui-modal-width-standard",
+    "--cui-modal-width-wide",
+    "--cui-radius-control",
+    "--cui-radius-surface",
+    "--cui-shadow-raised",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-surface-raised",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-modal-actions-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for modal."
+    },
+    {
+      "name": "--cui-modal-backdrop",
+      "role": "background",
+      "purpose": "Controls visual treatment for  modal."
+    },
+    {
+      "name": "--cui-modal-body-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for modal."
+    },
+    {
+      "name": "--cui-modal-close-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for close modal."
+    },
+    {
+      "name": "--cui-modal-header-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for modal."
+    },
+    {
+      "name": "--cui-modal-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for modal."
+    },
+    {
+      "name": "--cui-modal-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for modal."
+    },
+    {
+      "name": "--cui-modal-surface",
+      "role": "background",
+      "purpose": "Controls surface color for  modal."
+    },
+    {
+      "name": "--cui-modal-title-size",
+      "role": "sizing",
+      "purpose": "Controls title font size for  modal."
+    },
+    {
+      "name": "--cui-modal-width",
+      "role": "sizing",
+      "purpose": "Controls width for modal."
+    },
+    {
+      "name": "--cui-modal-width-small",
+      "role": "sizing",
+      "purpose": "Controls small size for width modal."
+    },
+    {
+      "name": "--cui-modal-width-standard",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width modal."
+    },
+    {
+      "name": "--cui-modal-width-wide",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width modal."
+    }
+  ],
+  "dependencies": [
+    "button",
+    "icon"
+  ],
+  "assets": {
+    "template": "components/modal/fragment.html",
+    "styles": "components/modal/styles.css",
+    "scripts": [
+      "components/modal/interaction.js"
+    ]
+  },
+  "fixtures": [
+    "components/modal/fixtures/small-golden.json",
+    "components/modal/fixtures/standard-golden.json",
+    "components/modal/fixtures/wide-golden.json"
+  ]
+}

@@ -1,0 +1,9 @@
+<main>
+<cui-activity-feed label="Release activity" entries='[{"title":"Release <ready>","detail":"Version 2 & live","actor":"ops","occurredAt":"2024-02-29T12:30:00Z","timeLabel":"Today at 12:30 UTC","tone":"success","href":"/releases/2"}]'/>
+<cui-definition-list density="compact"><cui-definition term="Owner"><strong>Platform</strong></cui-definition><cui-definition term="Region">Europe West</cui-definition></cui-definition-list>
+<cui-disclosure summary="Advanced & settings" appearance="plain" open="true"><cui-slot name="body"><p>Host content</p><cui-button label="{{ action_label }}"/></cui-slot></cui-disclosure>
+<cui-button-group label="Actions & navigation" appearance="spaced" full-width="true"><cui-button label="Save"/><button type="button">Cancel</button></cui-button-group>
+<cui-tabs label="Réglages & accès" items='[{"active":true,"href":"?section=general","label":"Général"},{"active":false,"href":"?section=team","label":"Équipe <12>"}]'/>
+<cui-segmented-control label="Affichage & filtres" items='[{"kind":"current","label":"Tout <voir>"},{"kind":"link","href":"?scope=mine","label":"À moi"}]'/>
+<cui-progress-steps label="Progress" items='[{"state":"complete","label":"Request","href":"?step=request"},{"state":"current","label":"Review"},{"state":"upcoming","label":"Approval"}]'/>
+</main>

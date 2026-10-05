@@ -1,0 +1,18 @@
+{
+  "expectedHtml": "<nav class=\"cui-segmented-control cui-segmented-control--equal\" data-cui-component=\"segmented-control\" aria-label=\"View\"><ul class=\"cui-segmented-control__list\"><li class=\"cui-segmented-control__item cui-segmented-control__item--current\"><span class=\"cui-segmented-control__current\" aria-current=\"page\">List</span></li><li class=\"cui-segmented-control__item cui-segmented-control__item--link\"><a class=\"cui-segmented-control__link\" href=\"?view=grid\">Grid</a></li></ul></nav>\n",
+  "options": {
+    "equalWidth": true,
+    "items": [
+      {
+        "kind": "current",
+        "label": "List"
+      },
+      {
+        "href": "?view=grid",
+        "kind": "link",
+        "label": "Grid"
+      }
+    ],
+    "label": "View"
+  }
+}

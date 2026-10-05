@@ -1,0 +1,5 @@
+{
+  "options": { "columns": "three", "minimum": "wide", "gap": "spacious", "collapseAt": "wide", "alignment": "center" },
+  "children": { "body": "<div>A</div><div>B</div><div>C</div>" },
+  "expectedHtml": "<div class=\"cui-grid cui-grid--columns-three cui-grid--minimum-wide cui-grid--gap-spacious cui-grid--align-center cui-grid--collapse-wide\" data-cui-component=\"grid\"><div class=\"cui-grid__items\"><div>A</div><div>B</div><div>C</div></div></div>\n"
+}

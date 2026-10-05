@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1, "name": "layer", "status": "ready", "target": "native-html", "category": "layout",
+  "summary": "Places a foreground region over base content through local grid layering.", "keywords": ["layer", "overlay", "badge", "annotation", "preview"],
+  "agent": {"useWhen":"A badge, annotation, control, or comparison must share the base content area.","avoidWhen":"Content should interrupt the page or protect focus; use a dialog instead.","composeWith":["card","badge","button","icon"]},
+  "contract": {"role":"overlapping-region-layout","variants":["center","top-start","top-end","bottom-start","bottom-end","stretch"],"requiredFields":[],"invariants":["Required base precedes foreground in DOM order.","Foreground non-control surface does not block base interactions.","Neutral wrappers add no landmarks, controls, scripts, routes, or commands."]},
+  "tokens":["--cui-layer-inset-compact","--cui-layer-inset-generous","--cui-layer-inset-none","--cui-layer-inset-spacious","--cui-layer-inset-standard"], "dependencies":[],
+  "assets":{"template":"components/layer/fragment.html","styles":"components/layer/styles.css","scripts":[]},
+  "fixtures":["components/layer/fixtures/center.json","components/layer/fixtures/top-start.json","components/layer/fixtures/top-end.json","components/layer/fixtures/bottom-start.json","components/layer/fixtures/bottom-end.json","components/layer/fixtures/stretch.json"]
+}

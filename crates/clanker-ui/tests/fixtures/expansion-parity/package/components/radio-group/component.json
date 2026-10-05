@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "name": "radio-group",
+  "status": "draft",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders mutually exclusive native radio choices in an accessible fieldset.",
+  "keywords": ["radio", "group", "form", "choice", "validation"],
+  "agent": {
+    "useWhen": "An app-owned form needs one selection from 2–12 mutually exclusive options.",
+    "avoidWhen": "Choices are dynamic, require rich content, custom transport, client-side state, or a command lifecycle.",
+    "composeWith": ["form-field"]
+  },
+  "contract": {
+    "role": "native form control group",
+    "variants": ["stacked", "inline", "required", "disabled", "invalid"],
+    "requiredFields": ["name", "legend", "choices"],
+    "invariants": [
+      "Uses native fieldset/legend and same-name radio inputs; native required and disabled behavior is preserved.",
+      "Contains 2..=12 choices with unique nonblank values; each choice has a nonblank label and optional nonblank hint.",
+      "Optional selected must match an enabled choice. A required group is natively required by its radio controls.",
+      "An optional safe explicit id names the fieldset; otherwise name is used. Choice, hint, error, and description IDs are deterministic and reserved.",
+      "Layout is stacked or inline. Group disabled state is native fieldset disabled state.",
+      "Names and IDs are non-reserved safe tokens; all copy and values are control-safe plain text escaped as HTML.",
+      "The app owns form, submission, transport, routes, and domain validation. No hidden transport, JavaScript, commands, arbitrary attributes, or raw markup are emitted.",
+      "The fragment has exactly one [[attributes]], [[legend]], [[choices]], and [[description]] slot; expansion is exact and single-pass.",
+      "Draft status remains until a Native host build and browser review prove admission and behavior."
+    ]
+  },
+  "tokens": ["--cui-radio-group-gap", "--cui-radio-group-choice-gap", "--cui-radio-group-choice-padding", "--cui-radio-group-border", "--cui-radio-group-radius", "--cui-radio-group-accent", "--cui-radio-group-focus-ring", "--cui-radio-group-hint-text", "--cui-radio-group-error-text"],
+  "dependencies": [],
+  "assets": {"template": "components/radio-group/fragment.html", "styles": "components/radio-group/styles.css", "scripts": []},
+  "fixtures": ["components/radio-group/fixtures/typical-golden.json", "components/radio-group/fixtures/validation-golden.json", "components/radio-group/fixtures/disabled-golden.json", "components/radio-group/fixtures/inline-golden.json"]
+}

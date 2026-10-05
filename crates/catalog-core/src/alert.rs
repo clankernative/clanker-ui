@@ -32,6 +32,44 @@ impl Tone {
     }
 }
 
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum Appearance {
+    #[default]
+    Soft,
+    Outlined,
+    Accent,
+}
+
+impl Appearance {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Soft => "soft",
+            Self::Outlined => "outlined",
+            Self::Accent => "accent",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum HeadingLevel {
+    #[default]
+    H2,
+    H3,
+    H4,
+}
+
+impl HeadingLevel {
+    fn as_str(self) -> &'static str {
+        match self {
+            Self::H2 => "h2",
+            Self::H3 => "h3",
+            Self::H4 => "h4",
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Announcement {
@@ -54,6 +92,10 @@ pub struct AlertInstance {
     pub title: String,
     pub body: String,
     pub tone: Tone,
+    #[serde(default)]
+    pub appearance: Appearance,
+    #[serde(default)]
+    pub heading_level: HeadingLevel,
     #[serde(default)]
     pub recovery_label: Option<String>,
     #[serde(default)]
@@ -132,8 +174,9 @@ pub fn render(
         Some(Announcement::Assertive) => " role=\"alert\" aria-live=\"assertive\"".into(),
     };
     let attributes = format!(
-        "class=\"cui-alert cui-alert--{}\" data-cui-component=\"alert\" data-cui-tone=\"{}\"{}",
+        "class=\"cui-alert cui-alert--{} cui-alert--{}\" data-cui-component=\"alert\" data-cui-tone=\"{}\"{}",
         instance.tone.as_str(),
+        instance.appearance.as_str(),
         instance.tone.as_str(),
         role
     );
@@ -162,7 +205,15 @@ pub fn render(
                 "icon",
                 format!("<span class=\"cui-alert__icon\">{icon}</span>"),
             ),
-            ("title", escape_html(&instance.title)),
+            (
+                "heading",
+                format!(
+                    "<{} class=\"cui-alert__title\">{}</{}>",
+                    instance.heading_level.as_str(),
+                    escape_html(&instance.title),
+                    instance.heading_level.as_str()
+                ),
+            ),
             ("body", escape_html(&instance.body)),
             ("recovery", recovery),
         ],
@@ -173,7 +224,7 @@ pub fn render(
 mod tests {
     use super::*;
 
-    const FRAGMENT: &str = "<section [[attributes]]><div class=\"cui-alert__layout\">[[icon]]<div class=\"cui-alert__content\"><h2 class=\"cui-alert__title\">[[title]]</h2><p class=\"cui-alert__body\">[[body]]</p>[[recovery]]</div></div></section>";
+    const FRAGMENT: &str = "<section [[attributes]]><div class=\"cui-alert__layout\">[[icon]]<div class=\"cui-alert__content\">[[heading]]<p class=\"cui-alert__body\">[[body]]</p></div>[[recovery]]</div></section>";
     fn icons() -> BTreeMap<String, String> {
         BTreeMap::from([
             ("info".into(), "<path d=\"M1 1\"></path>".into()),
@@ -186,6 +237,8 @@ mod tests {
             title: "Saved".into(),
             body: "Changes are available.".into(),
             tone,
+            appearance: Appearance::Soft,
+            heading_level: HeadingLevel::H2,
             recovery_label: None,
             recovery_href: None,
             announcement: None,
@@ -202,6 +255,8 @@ mod tests {
         ] {
             let html = render(&alert(tone), FRAGMENT, &icons()).unwrap();
             assert!(html.contains(&format!("data-cui-tone=\"{}\"", tone.as_str())));
+            assert!(html.contains("cui-alert--soft"));
+            assert!(html.contains("<h2 class=\"cui-alert__title\">Saved</h2>"));
             assert!(html.contains(&format!("data-cui-icon=\"{icon_name}\"")));
             assert!(html.contains("aria-hidden=\"true\""));
             assert!(!html.contains(" role="));
@@ -255,11 +310,16 @@ mod tests {
         value.body = "Body".into();
         assert!(render(
             &value,
-            "<section [[attributes]]>[[icon]][[title]][[body]][[recovery]][[other]]</section>",
+            "<section [[attributes]]>[[icon]][[heading]][[body]][[recovery]][[other]]</section>",
             &icons()
         )
         .is_err());
-        assert!(render(&value, "[[attributes]][[icon]][[title]][[body]]", &icons()).is_err());
+        assert!(render(
+            &value,
+            "[[attributes]][[icon]][[heading]][[body]]",
+            &icons()
+        )
+        .is_err());
         assert!(serde_json::from_str::<AlertInstance>(
             r#"{"title":"T","body":"B","tone":"info","dismissible":true}"#
         )
@@ -268,5 +328,84 @@ mod tests {
             r#"{"title":"T","body":"B","tone":"neutral"}"#
         )
         .is_err());
+        assert!(serde_json::from_str::<AlertInstance>(
+            r#"{"title":"T","body":"B","tone":"info","appearance":"flat"}"#
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn package_fixtures_match_the_declared_fragment() {
+        let package =
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/vanilla");
+        let fragment =
+            std::fs::read_to_string(package.join("components/alert/fragment.html")).unwrap();
+        let icons: BTreeMap<String, String> =
+            serde_json::from_str(&std::fs::read_to_string(package.join("icons.json")).unwrap())
+                .unwrap();
+        for file in [
+            "info.json",
+            "success.json",
+            "warning.json",
+            "danger.json",
+            "recovery.json",
+            "escaped.json",
+            "polite.json",
+            "assertive.json",
+            "outlined-h2.json",
+            "outlined-h3.json",
+            "outlined-h4.json",
+            "accent-h2.json",
+            "accent-h3.json",
+            "accent-h4.json",
+            "soft-h3.json",
+            "soft-h4.json",
+        ] {
+            let mut fixture: serde_json::Value = serde_json::from_str(
+                &std::fs::read_to_string(package.join("components/alert/fixtures").join(file))
+                    .unwrap(),
+            )
+            .unwrap();
+            let expected = fixture["expectedHtml"].as_str().unwrap().to_owned();
+            fixture.as_object_mut().unwrap().remove("expectedHtml");
+            let value: AlertInstance = serde_json::from_value(fixture).unwrap();
+            assert_eq!(
+                render(&value, &fragment, &icons).unwrap(),
+                expected,
+                "{file}"
+            );
+        }
+    }
+
+    #[test]
+    fn supports_every_appearance_and_heading_level_combination() {
+        for (appearance, appearance_name) in [
+            (Appearance::Soft, "soft"),
+            (Appearance::Outlined, "outlined"),
+            (Appearance::Accent, "accent"),
+        ] {
+            for (level, tag) in [
+                (HeadingLevel::H2, "h2"),
+                (HeadingLevel::H3, "h3"),
+                (HeadingLevel::H4, "h4"),
+            ] {
+                let html = render(
+                    &AlertInstance {
+                        appearance,
+                        heading_level: level,
+                        ..alert(Tone::Info)
+                    },
+                    FRAGMENT,
+                    &icons(),
+                )
+                .unwrap();
+                assert!(html.contains(&format!("cui-alert--{appearance_name}")));
+                assert!(html.contains(&format!("<{tag} class=\"cui-alert__title\">Saved</{tag}>")));
+            }
+        }
+        let parsed: AlertInstance =
+            serde_json::from_str(r#"{"title":"T","body":"B","tone":"info"}"#).unwrap();
+        assert_eq!(parsed.appearance, Appearance::Soft);
+        assert_eq!(parsed.heading_level, HeadingLevel::H2);
     }
 }

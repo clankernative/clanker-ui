@@ -1,0 +1,17 @@
+<section class="atlas-section" id="native-enhancement-proof" aria-labelledby="native-enhancement-title">
+  <h2 id="native-enhancement-title">Browser-local enhancement proof</h2>
+  <p class="section-description">Illustrative content only. These components create no command, route, task state, or transport.</p>
+  <article class="specimen"><h3>Selectable copy fallback</h3><div class="demo-frame">
+    <cui-copy-field id="enhancement-reference" name="illustrative-reference" label="Illustrative reference" value="ILLUSTRATION-42" hint="A readonly literal. Select it manually without JavaScript." />
+  </div></article>
+  <article class="specimen"><h3>Scoped app-owned themes</h3><div class="demo-frame">
+    <cui-theme-switcher label="Illustrative sample theme" choices='[{"value":"light","label":"Light","icon":"sun"},{"value":"dark","label":"Dark","icon":"moon"},{"value":"system","label":"System","icon":"contrast"}]' default-choice="dark" system-light-theme="light" system-dark-theme="dark" storage-key="null" target-id="enhancement-theme-sample" />
+    <div id="enhancement-theme-sample" data-cui-theme="dark" class="enhancement-theme-sample">Only this app-owned sample uses the selected theme. The gallery and server model are unchanged.</div>
+  </div></article>
+  <article class="specimen"><h3>Concise accessible help</h3><div class="demo-frame">
+    <cui-tooltip id="enhancement-help" trigger-label="About the illustrative reference" title="Literal sample reference" description="Not a secret, command result, or task identifier." placement="bottom" arrow="true" />
+  </div></article>
+  <article class="specimen"><h3>Static notices with optional dismissal</h3><div class="demo-frame">
+    <cui-toast label="Illustrative notices" position="inline" history-policy="reset" messages='[{"title":"Illustrative notice","body":"Not a server command result or a live task announcement.","tone":"info"},{"title":"Illustrative success tone","body":"The color demonstrates a variant; nothing was saved.","tone":"success","dismissLabel":null}]' />
+  </div></article>
+</section>

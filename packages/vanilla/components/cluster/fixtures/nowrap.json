@@ -1,0 +1,5 @@
+{
+  "options": { "gap": "standard", "alignment": "baseline", "justification": "between", "wrapping": "nowrap" },
+  "children": { "body": "<span>Start</span><span>End</span>" },
+  "expectedHtml": "<div class=\"cui-cluster cui-cluster--gap-standard cui-cluster--align-baseline cui-cluster--justify-between cui-cluster--nowrap\" data-cui-component=\"cluster\"><span>Start</span><span>End</span></div>\n"
+}

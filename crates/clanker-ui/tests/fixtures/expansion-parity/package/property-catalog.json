@@ -1,0 +1,3293 @@
+{
+  "components": [
+    {
+      "fields": [
+        {
+          "attribute": "title",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "title",
+          "maximum": null,
+          "minimum": null,
+          "name": "title",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "body",
+          "choices": [],
+          "default": null,
+          "help": "",
+          "integer": false,
+          "kind": "multiline",
+          "label": "body",
+          "maximum": null,
+          "minimum": null,
+          "name": "body",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "tone",
+          "choices": [
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": null,
+          "help": "",
+          "integer": false,
+          "kind": "enum",
+          "label": "tone",
+          "maximum": null,
+          "minimum": null,
+          "name": "tone",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "appearance",
+          "choices": [
+            "soft",
+            "outlined",
+            "accent"
+          ],
+          "default": "soft",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "appearance",
+          "maximum": null,
+          "minimum": null,
+          "name": "appearance",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "heading-level",
+          "choices": [
+            "h2",
+            "h3",
+            "h4"
+          ],
+          "default": "h2",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "headingLevel",
+          "maximum": null,
+          "minimum": null,
+          "name": "headingLevel",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "recovery-label",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "recoveryLabel",
+          "maximum": null,
+          "minimum": null,
+          "name": "recoveryLabel",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "recovery-href",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "recoveryHref",
+          "maximum": null,
+          "minimum": null,
+          "name": "recoveryHref",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "announcement",
+          "choices": [
+            "polite",
+            "assertive"
+          ],
+          "default": null,
+          "help": "Optional explicit live-announcement mode; omitted is static.",
+          "integer": false,
+          "kind": "enum",
+          "label": "announcement",
+          "maximum": null,
+          "minimum": null,
+          "name": "announcement",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "alert",
+      "sample": {
+        "announcement": null,
+        "appearance": "soft",
+        "body": "A representative message.",
+        "headingLevel": "h2",
+        "recoveryHref": null,
+        "recoveryLabel": null,
+        "title": "Notice",
+        "tone": "info"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "initials",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "initials",
+          "maximum": null,
+          "minimum": null,
+          "name": "initials",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "size",
+          "choices": [
+            "extra-small",
+            "small",
+            "medium",
+            "large",
+            "extra-large"
+          ],
+          "default": "medium",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "size",
+          "maximum": null,
+          "minimum": null,
+          "name": "size",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "tone",
+          "choices": [
+            "neutral",
+            "brand",
+            "success"
+          ],
+          "default": "neutral",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "tone",
+          "maximum": null,
+          "minimum": null,
+          "name": "tone",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "image-source",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "imageSource",
+          "maximum": null,
+          "minimum": null,
+          "name": "imageSource",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "avatar",
+      "sample": {
+        "imageSource": null,
+        "initials": "JD",
+        "label": "Jordan Doe",
+        "size": "medium",
+        "tone": "neutral"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "tone",
+          "choices": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "running"
+          ],
+          "default": "neutral",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "tone",
+          "maximum": null,
+          "minimum": null,
+          "name": "tone",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "icon",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "icon",
+          "maximum": null,
+          "minimum": null,
+          "name": "icon",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "show-icon",
+          "choices": [],
+          "default": true,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "showIcon",
+          "maximum": null,
+          "minimum": null,
+          "name": "showIcon",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "badge",
+      "sample": {
+        "icon": null,
+        "label": "Ready",
+        "showIcon": true,
+        "tone": "success"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": "Breadcrumbs",
+          "help": "Accessible navigation label.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "items",
+          "choices": [],
+          "default": [],
+          "fields": [
+            {
+              "attribute": "label",
+              "choices": [],
+              "default": null,
+              "help": "Plain text; validated by the component contract.",
+              "integer": false,
+              "kind": "text",
+              "label": "label",
+              "maximum": null,
+              "minimum": null,
+              "name": "label",
+              "required": true,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "href",
+              "choices": [],
+              "default": null,
+              "help": "Optional plain text.",
+              "integer": false,
+              "kind": "text",
+              "label": "href",
+              "maximum": null,
+              "minimum": null,
+              "name": "href",
+              "required": false,
+              "visibleWhen": null
+            }
+          ],
+          "help": "At least two breadcrumb entries; final entry is current.",
+          "integer": false,
+          "kind": "list",
+          "label": "items",
+          "maximum": null,
+          "minimum": null,
+          "name": "items",
+          "required": true,
+          "visibleWhen": null
+        }
+      ],
+      "name": "breadcrumbs",
+      "sample": {
+        "items": [
+          {
+            "href": "/",
+            "label": "Home"
+          },
+          {
+            "href": null,
+            "label": "Current"
+          }
+        ],
+        "label": "Breadcrumbs"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "fields": [
+            {
+              "attribute": "",
+              "choices": [
+                "literal"
+              ],
+              "default": "literal",
+              "help": "Only literal text is editor-owned; checked page-field bindings stay host-owned.",
+              "integer": false,
+              "kind": "enum",
+              "label": "kind",
+              "maximum": null,
+              "minimum": null,
+              "name": "kind",
+              "required": true,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "",
+              "choices": [],
+              "default": null,
+              "help": "Button label; use a literal TextValue. Field bindings are host-owned.",
+              "integer": false,
+              "kind": "text",
+              "label": "value",
+              "maximum": null,
+              "minimum": null,
+              "name": "value",
+              "required": true,
+              "visibleWhen": null
+            }
+          ],
+          "help": "Button label; use a literal TextValue. Field bindings are host-owned.",
+          "integer": false,
+          "kind": "object",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "variant",
+          "choices": [
+            "primary",
+            "secondary",
+            "danger",
+            "quiet"
+          ],
+          "default": "secondary",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "variant",
+          "maximum": null,
+          "minimum": null,
+          "name": "variant",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "size",
+          "choices": [
+            "compact",
+            "standard"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "size",
+          "maximum": null,
+          "minimum": null,
+          "name": "size",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "icon",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "leadingIcon",
+          "maximum": null,
+          "minimum": null,
+          "name": "leadingIcon",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "edge-aligned",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "edgeAligned",
+          "maximum": null,
+          "minimum": null,
+          "name": "edgeAligned",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "disabled",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "disabled",
+          "maximum": null,
+          "minimum": null,
+          "name": "disabled",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "busy",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "busy",
+          "maximum": null,
+          "minimum": null,
+          "name": "busy",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "busy-label",
+          "choices": [],
+          "default": null,
+          "fields": [
+            {
+              "attribute": "",
+              "choices": [
+                "literal"
+              ],
+              "default": "literal",
+              "help": "Only literal text is editor-owned; checked page-field bindings stay host-owned.",
+              "integer": false,
+              "kind": "enum",
+              "label": "kind",
+              "maximum": null,
+              "minimum": null,
+              "name": "kind",
+              "required": true,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "",
+              "choices": [],
+              "default": null,
+              "help": "Optional literal TextValue shown when busy.",
+              "integer": false,
+              "kind": "text",
+              "label": "value",
+              "maximum": null,
+              "minimum": null,
+              "name": "value",
+              "required": true,
+              "visibleWhen": null
+            }
+          ],
+          "help": "Optional literal TextValue shown when busy.",
+          "integer": false,
+          "kind": "object",
+          "label": "busyLabel",
+          "maximum": null,
+          "minimum": null,
+          "name": "busyLabel",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "destination",
+          "choices": [],
+          "default": null,
+          "fields": [
+            {
+              "attribute": "",
+              "choices": [
+                "action",
+                "submit",
+                "link"
+              ],
+              "default": "action",
+              "help": "Select an existing operation type; the editor does not create commands or routes.",
+              "integer": false,
+              "kind": "enum",
+              "label": "kind",
+              "maximum": null,
+              "minimum": null,
+              "name": "kind",
+              "required": true,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "href",
+              "choices": [],
+              "default": null,
+              "fields": [
+                {
+                  "attribute": "kind",
+                  "choices": [
+                    "literal"
+                  ],
+                  "default": "literal",
+                  "help": "Only literal safe destinations are editor-owned.",
+                  "integer": false,
+                  "kind": "enum",
+                  "label": "kind",
+                  "maximum": null,
+                  "minimum": null,
+                  "name": "kind",
+                  "required": true,
+                  "visibleWhen": null
+                },
+                {
+                  "attribute": "value",
+                  "choices": [],
+                  "default": null,
+                  "help": "Safe HTTP(S) or relative href; checked by the typed button contract.",
+                  "integer": false,
+                  "kind": "text",
+                  "label": "value",
+                  "maximum": null,
+                  "minimum": null,
+                  "name": "value",
+                  "required": true,
+                  "visibleWhen": null
+                }
+              ],
+              "help": "Only required for kind=link.",
+              "integer": false,
+              "kind": "object",
+              "label": "href",
+              "maximum": null,
+              "minimum": null,
+              "name": "href",
+              "required": false,
+              "visibleWhen": {
+                "equals": "link",
+                "field": "kind"
+              }
+            }
+          ],
+          "help": "Typed destination; application owns command and route behavior.",
+          "integer": false,
+          "kind": "object",
+          "label": "destination",
+          "maximum": null,
+          "minimum": null,
+          "name": "destination",
+          "required": true,
+          "visibleWhen": null
+        }
+      ],
+      "name": "button",
+      "sample": {
+        "busy": false,
+        "busyLabel": null,
+        "destination": {
+          "kind": "action"
+        },
+        "disabled": false,
+        "edgeAligned": false,
+        "label": {
+          "kind": "literal",
+          "value": "Continue"
+        },
+        "leadingIcon": null,
+        "size": "standard",
+        "variant": "secondary"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "title",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "title",
+          "maximum": null,
+          "minimum": null,
+          "name": "title",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "subtitle",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "subtitle",
+          "maximum": null,
+          "minimum": null,
+          "name": "subtitle",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "padding",
+          "choices": [
+            "none",
+            "compact",
+            "standard"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "padding",
+          "maximum": null,
+          "minimum": null,
+          "name": "padding",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "heading-level",
+          "choices": [
+            "h2",
+            "h3",
+            "h4"
+          ],
+          "default": "h2",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "headingLevel",
+          "maximum": null,
+          "minimum": null,
+          "name": "headingLevel",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "card",
+      "sample": {
+        "headingLevel": "h2",
+        "padding": "standard",
+        "subtitle": null,
+        "title": null
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": true
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "actions",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "compact",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "stretch",
+            "start",
+            "center",
+            "end",
+            "baseline"
+          ],
+          "default": "center",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "justification",
+          "choices": [
+            "start",
+            "center",
+            "end",
+            "between"
+          ],
+          "default": "start",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "justification",
+          "maximum": null,
+          "minimum": null,
+          "name": "justification",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "wrapping",
+          "choices": [
+            "wrap",
+            "nowrap"
+          ],
+          "default": "wrap",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "wrapping",
+          "maximum": null,
+          "minimum": null,
+          "name": "wrapping",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "cluster",
+      "sample": {
+        "alignment": "center",
+        "gap": "compact",
+        "justification": "start",
+        "wrapping": "wrap"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "width",
+          "choices": [
+            "reading",
+            "compact",
+            "standard",
+            "wide",
+            "full"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "width",
+          "maximum": null,
+          "minimum": null,
+          "name": "width",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "gutter",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gutter",
+          "maximum": null,
+          "minimum": null,
+          "name": "gutter",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "container",
+      "sample": {
+        "gutter": "standard",
+        "width": "standard"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "height",
+          "choices": [
+            "compact",
+            "standard",
+            "fill",
+            "viewport"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "height",
+          "maximum": null,
+          "minimum": null,
+          "name": "height",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "cover",
+      "sample": {
+        "gap": "standard",
+        "height": "standard"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "primary",
+          "required": true
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "top",
+          "required": false
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "bottom",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "caption",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "caption",
+          "maximum": null,
+          "minimum": null,
+          "name": "caption",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "caption-visible",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "captionVisible",
+          "maximum": null,
+          "minimum": null,
+          "name": "captionVisible",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "columns",
+          "choices": [],
+          "default": [],
+          "help": "1 to 16 plain-text column labels.",
+          "integer": false,
+          "itemKind": "text",
+          "kind": "list",
+          "label": "columns",
+          "maximum": null,
+          "minimum": null,
+          "name": "columns",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "rows",
+          "choices": [],
+          "default": [],
+          "fields": [
+            {
+              "attribute": "id",
+              "choices": [],
+              "default": null,
+              "help": "Optional plain text.",
+              "integer": false,
+              "kind": "text",
+              "label": "id",
+              "maximum": null,
+              "minimum": null,
+              "name": "id",
+              "required": false,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "cells",
+              "choices": [],
+              "default": [],
+              "help": "Plain text cells; count must match columns.",
+              "integer": false,
+              "itemKind": "text",
+              "kind": "list",
+              "label": "cells",
+              "maximum": null,
+              "minimum": null,
+              "name": "cells",
+              "required": true,
+              "visibleWhen": null
+            }
+          ],
+          "help": "At most 100 plain-text rows.",
+          "integer": false,
+          "kind": "list",
+          "label": "rows",
+          "maximum": null,
+          "minimum": null,
+          "name": "rows",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "data-table",
+      "sample": {
+        "caption": "Example data",
+        "captionVisible": false,
+        "columns": [
+          "Name",
+          "State"
+        ],
+        "rows": [
+          {
+            "cells": [
+              "Sample task",
+              "Ready"
+            ],
+            "id": null
+          }
+        ]
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "orientation",
+          "choices": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "orientation",
+          "maximum": null,
+          "minimum": null,
+          "name": "orientation",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "center",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "divider",
+      "sample": {
+        "alignment": "center",
+        "label": null,
+        "orientation": "horizontal"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "title",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "title",
+          "maximum": null,
+          "minimum": null,
+          "name": "title",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "body",
+          "choices": [],
+          "default": null,
+          "help": "",
+          "integer": false,
+          "kind": "multiline",
+          "label": "body",
+          "maximum": null,
+          "minimum": null,
+          "name": "body",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "start",
+            "center"
+          ],
+          "default": "start",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "heading-level",
+          "choices": [
+            "h2",
+            "h3",
+            "h4"
+          ],
+          "default": "h2",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "headingLevel",
+          "maximum": null,
+          "minimum": null,
+          "name": "headingLevel",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "action-href",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "actionHref",
+          "maximum": null,
+          "minimum": null,
+          "name": "actionHref",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "action-label",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "actionLabel",
+          "maximum": null,
+          "minimum": null,
+          "name": "actionLabel",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "empty-state",
+      "sample": {
+        "actionHref": null,
+        "actionLabel": null,
+        "alignment": "start",
+        "body": "Try again later.",
+        "headingLevel": "h2",
+        "title": "Nothing here yet"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "summary",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "resultSummary",
+          "maximum": null,
+          "minimum": null,
+          "name": "resultSummary",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "filter-bar",
+      "sample": {
+        "label": "Filters",
+        "resultSummary": null
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "controls",
+          "required": true
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "actions",
+          "required": false
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "applied",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "name",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "name",
+          "maximum": null,
+          "minimum": null,
+          "name": "name",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "kind",
+          "choices": [
+            "input",
+            "textarea"
+          ],
+          "default": "input",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "kind",
+          "maximum": null,
+          "minimum": null,
+          "name": "kind",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "input-type",
+          "choices": [
+            "text",
+            "email",
+            "url",
+            "number",
+            "password",
+            "search",
+            "date",
+            "tel"
+          ],
+          "default": null,
+          "help": "Only applies to input fields.",
+          "integer": false,
+          "kind": "enum",
+          "label": "inputType",
+          "maximum": null,
+          "minimum": null,
+          "name": "inputType",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "rows",
+          "choices": [],
+          "default": null,
+          "help": "Textarea row count.",
+          "integer": true,
+          "kind": "number",
+          "label": "rows",
+          "maximum": null,
+          "minimum": null,
+          "name": "rows",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "value",
+          "choices": [],
+          "default": "",
+          "help": "Browser draft value.",
+          "integer": false,
+          "kind": "multiline",
+          "label": "value",
+          "maximum": null,
+          "minimum": null,
+          "name": "value",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "placeholder",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "placeholder",
+          "maximum": null,
+          "minimum": null,
+          "name": "placeholder",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "hint",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "hint",
+          "maximum": null,
+          "minimum": null,
+          "name": "hint",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "error",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "error",
+          "maximum": null,
+          "minimum": null,
+          "name": "error",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "autocomplete",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "autocomplete",
+          "maximum": null,
+          "minimum": null,
+          "name": "autocomplete",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "maxlength",
+          "choices": [],
+          "default": null,
+          "help": "Maximum input length.",
+          "integer": true,
+          "kind": "number",
+          "label": "maxLength",
+          "maximum": null,
+          "minimum": null,
+          "name": "maxLength",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "required",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "required",
+          "maximum": null,
+          "minimum": null,
+          "name": "required",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "readonly",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "readonly",
+          "maximum": null,
+          "minimum": null,
+          "name": "readonly",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "disabled",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "disabled",
+          "maximum": null,
+          "minimum": null,
+          "name": "disabled",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "form-field",
+      "sample": {
+        "autocomplete": null,
+        "disabled": false,
+        "error": null,
+        "hint": null,
+        "inputType": null,
+        "kind": "input",
+        "label": "Search",
+        "maxLength": null,
+        "name": "search",
+        "placeholder": null,
+        "readonly": false,
+        "required": false,
+        "rows": null,
+        "value": ""
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "columns",
+          "choices": [
+            "responsive",
+            "two",
+            "three",
+            "four"
+          ],
+          "default": "responsive",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "columns",
+          "maximum": null,
+          "minimum": null,
+          "name": "columns",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "minimum",
+          "choices": [
+            "narrow",
+            "standard",
+            "wide"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "minimum",
+          "maximum": null,
+          "minimum": null,
+          "name": "minimum",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "stretch",
+            "start",
+            "center",
+            "end",
+            "baseline"
+          ],
+          "default": "stretch",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "collapse-at",
+          "choices": [
+            "compact",
+            "standard",
+            "wide",
+            "never"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "collapseAt",
+          "maximum": null,
+          "minimum": null,
+          "name": "collapseAt",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "grid",
+      "sample": {
+        "alignment": "stretch",
+        "collapseAt": "standard",
+        "columns": "responsive",
+        "gap": "standard",
+        "minimum": "standard"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "name",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "name",
+          "maximum": null,
+          "minimum": null,
+          "name": "name",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "size",
+          "choices": [
+            "small",
+            "medium",
+            "large"
+          ],
+          "default": "medium",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "size",
+          "maximum": null,
+          "minimum": null,
+          "name": "size",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "icon",
+      "sample": {
+        "label": null,
+        "name": "check",
+        "size": "medium"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "placement",
+          "choices": [
+            "center",
+            "top-start",
+            "top-end",
+            "bottom-start",
+            "bottom-end",
+            "stretch"
+          ],
+          "default": "center",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "placement",
+          "maximum": null,
+          "minimum": null,
+          "name": "placement",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "inset",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "inset",
+          "maximum": null,
+          "minimum": null,
+          "name": "inset",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "layer",
+      "sample": {
+        "inset": "standard",
+        "placement": "center"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "base",
+          "required": true
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "foreground",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "value",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "value",
+          "maximum": null,
+          "minimum": null,
+          "name": "value",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "detail",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "detail",
+          "maximum": null,
+          "minimum": null,
+          "name": "detail",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "trend",
+          "choices": [
+            "up",
+            "down",
+            "flat"
+          ],
+          "default": null,
+          "help": "Trend fields must be supplied together.",
+          "integer": false,
+          "kind": "enum",
+          "label": "trend",
+          "maximum": null,
+          "minimum": null,
+          "name": "trend",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "trend-tone",
+          "choices": [
+            "positive",
+            "negative",
+            "neutral"
+          ],
+          "default": null,
+          "help": "Trend fields must be supplied together.",
+          "integer": false,
+          "kind": "enum",
+          "label": "trendTone",
+          "maximum": null,
+          "minimum": null,
+          "name": "trendTone",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "trend-label",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "trendLabel",
+          "maximum": null,
+          "minimum": null,
+          "name": "trendLabel",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "trend-announcement",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "trendAnnouncement",
+          "maximum": null,
+          "minimum": null,
+          "name": "trendAnnouncement",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "icon",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "icon",
+          "maximum": null,
+          "minimum": null,
+          "name": "icon",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "appearance",
+          "choices": [
+            "plain",
+            "contained"
+          ],
+          "default": "plain",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "appearance",
+          "maximum": null,
+          "minimum": null,
+          "name": "appearance",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "metric",
+      "sample": {
+        "appearance": "plain",
+        "detail": null,
+        "icon": null,
+        "label": "Active users",
+        "trend": null,
+        "trendAnnouncement": null,
+        "trendLabel": null,
+        "trendTone": null,
+        "value": "42"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "title",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "title",
+          "maximum": null,
+          "minimum": null,
+          "name": "title",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "description",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "description",
+          "maximum": null,
+          "minimum": null,
+          "name": "description",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "page-header",
+      "sample": {
+        "description": null,
+        "title": "Overview"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "actions",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": "Pagination",
+          "help": "Accessible navigation label.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "variant",
+          "choices": [
+            "standard",
+            "outlined",
+            "compact"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "variant",
+          "maximum": null,
+          "minimum": null,
+          "name": "variant",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "items",
+          "choices": [],
+          "default": [],
+          "fields": [
+            {
+              "attribute": "kind",
+              "choices": [
+                "page",
+                "current",
+                "previous",
+                "next",
+                "gap"
+              ],
+              "default": "page",
+              "help": "Choose a value supported by the typed component contract.",
+              "integer": false,
+              "kind": "enum",
+              "label": "kind",
+              "maximum": null,
+              "minimum": null,
+              "name": "kind",
+              "required": false,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "label",
+              "choices": [],
+              "default": null,
+              "help": "",
+              "integer": false,
+              "kind": "text",
+              "label": "label",
+              "maximum": null,
+              "minimum": null,
+              "name": "label",
+              "required": true,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "href",
+              "choices": [],
+              "default": null,
+              "help": "Optional plain text.",
+              "integer": false,
+              "kind": "text",
+              "label": "href",
+              "maximum": null,
+              "minimum": null,
+              "name": "href",
+              "required": false,
+              "visibleWhen": null
+            }
+          ],
+          "help": "Exactly one current page is required.",
+          "integer": false,
+          "kind": "list",
+          "label": "items",
+          "maximum": null,
+          "minimum": null,
+          "name": "items",
+          "required": true,
+          "visibleWhen": null
+        }
+      ],
+      "name": "pagination",
+      "sample": {
+        "items": [
+          {
+            "href": null,
+            "kind": "current",
+            "label": "1"
+          }
+        ],
+        "label": "Pagination",
+        "variant": "standard"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "height",
+          "choices": [
+            "content",
+            "compact",
+            "standard",
+            "fill",
+            "viewport"
+          ],
+          "default": "content",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "height",
+          "maximum": null,
+          "minimum": null,
+          "name": "height",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "body-scrolling",
+          "choices": [],
+          "default": null,
+          "help": "If omitted, bounded heights scroll and content height does not.",
+          "integer": false,
+          "kind": "boolean",
+          "label": "bodyScrolling",
+          "maximum": null,
+          "minimum": null,
+          "name": "bodyScrolling",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "pane",
+      "sample": {
+        "bodyScrolling": null,
+        "height": "content"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": true
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "header",
+          "required": false
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "footer",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "state",
+          "choices": [
+            "determinate",
+            "indeterminate"
+          ],
+          "default": "indeterminate",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "state",
+          "maximum": null,
+          "minimum": null,
+          "name": "state",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "value",
+          "choices": [],
+          "default": null,
+          "help": "Required with maximum when state is determinate; 0 <= value <= maximum.",
+          "integer": false,
+          "kind": "number",
+          "label": "value",
+          "maximum": null,
+          "minimum": 0.0,
+          "name": "value",
+          "required": false,
+          "visibleWhen": {
+            "equals": "determinate",
+            "field": "state"
+          }
+        },
+        {
+          "attribute": "maximum",
+          "choices": [],
+          "default": null,
+          "help": "Must be greater than zero for determinate progress.",
+          "integer": false,
+          "kind": "number",
+          "label": "maximum",
+          "maximum": null,
+          "minimum": 2.2250738585072014e-308,
+          "name": "maximum",
+          "required": false,
+          "visibleWhen": {
+            "equals": "determinate",
+            "field": "state"
+          }
+        },
+        {
+          "attribute": "suffix",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "suffix",
+          "maximum": null,
+          "minimum": null,
+          "name": "suffix",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "detail",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "detail",
+          "maximum": null,
+          "minimum": null,
+          "name": "detail",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "tone",
+          "choices": [
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": "info",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "tone",
+          "maximum": null,
+          "minimum": null,
+          "name": "tone",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "size",
+          "choices": [
+            "regular",
+            "compact"
+          ],
+          "default": "regular",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "size",
+          "maximum": null,
+          "minimum": null,
+          "name": "size",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "progress",
+      "sample": {
+        "detail": null,
+        "label": "Upload",
+        "maximum": 2.0,
+        "size": "regular",
+        "state": "determinate",
+        "suffix": null,
+        "tone": "info",
+        "value": 1.0
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "item-width",
+          "choices": [
+            "narrow",
+            "standard",
+            "wide",
+            "content"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "itemWidth",
+          "maximum": null,
+          "minimum": null,
+          "name": "itemWidth",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "snap",
+          "choices": [
+            "free",
+            "start",
+            "center"
+          ],
+          "default": "free",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "snap",
+          "maximum": null,
+          "minimum": null,
+          "name": "snap",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "reel",
+      "sample": {
+        "gap": "standard",
+        "itemWidth": "standard",
+        "label": "Featured items",
+        "snap": "free"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "name",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "name",
+          "maximum": null,
+          "minimum": null,
+          "name": "name",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "choices",
+          "choices": [],
+          "default": [],
+          "fields": [
+            {
+              "attribute": "value",
+              "choices": [],
+              "default": null,
+              "help": "Plain text; validated by the component contract.",
+              "integer": false,
+              "kind": "text",
+              "label": "value",
+              "maximum": null,
+              "minimum": null,
+              "name": "value",
+              "required": true,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "label",
+              "choices": [],
+              "default": null,
+              "help": "Plain text; validated by the component contract.",
+              "integer": false,
+              "kind": "text",
+              "label": "label",
+              "maximum": null,
+              "minimum": null,
+              "name": "label",
+              "required": true,
+              "visibleWhen": null
+            },
+            {
+              "attribute": "disabled",
+              "choices": [],
+              "default": false,
+              "help": "",
+              "integer": false,
+              "kind": "boolean",
+              "label": "disabled",
+              "maximum": null,
+              "minimum": null,
+              "name": "disabled",
+              "required": false,
+              "visibleWhen": null
+            }
+          ],
+          "help": "Each choice has a unique value.",
+          "integer": false,
+          "kind": "list",
+          "label": "choices",
+          "maximum": null,
+          "minimum": null,
+          "name": "choices",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "selected",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "selected",
+          "maximum": null,
+          "minimum": null,
+          "name": "selected",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "placeholder",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "placeholder",
+          "maximum": null,
+          "minimum": null,
+          "name": "placeholder",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "hint",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "hint",
+          "maximum": null,
+          "minimum": null,
+          "name": "hint",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "error",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "error",
+          "maximum": null,
+          "minimum": null,
+          "name": "error",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "required",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "required",
+          "maximum": null,
+          "minimum": null,
+          "name": "required",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "disabled",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "disabled",
+          "maximum": null,
+          "minimum": null,
+          "name": "disabled",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "select-field",
+      "sample": {
+        "choices": [
+          {
+            "disabled": false,
+            "label": "West",
+            "value": "west"
+          }
+        ],
+        "disabled": false,
+        "error": null,
+        "hint": null,
+        "label": "Region",
+        "name": "region",
+        "placeholder": null,
+        "required": false,
+        "selected": null
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "side",
+          "choices": [
+            "start",
+            "end"
+          ],
+          "default": "end",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "side",
+          "maximum": null,
+          "minimum": null,
+          "name": "side",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "width",
+          "choices": [
+            "narrow",
+            "standard",
+            "wide"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "width",
+          "maximum": null,
+          "minimum": null,
+          "name": "width",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "stretch",
+            "start",
+            "center",
+            "end",
+            "baseline"
+          ],
+          "default": "start",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "collapse-at",
+          "choices": [
+            "compact",
+            "standard",
+            "wide",
+            "never"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "collapseAt",
+          "maximum": null,
+          "minimum": null,
+          "name": "collapseAt",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "sidebar",
+      "sample": {
+        "alignment": "start",
+        "collapseAt": "standard",
+        "gap": "standard",
+        "side": "end",
+        "width": "standard"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "main",
+          "required": true
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "aside",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "shape",
+          "choices": [
+            "text",
+            "rectangle",
+            "circle"
+          ],
+          "default": null,
+          "help": "",
+          "integer": false,
+          "kind": "enum",
+          "label": "shape",
+          "maximum": null,
+          "minimum": null,
+          "name": "shape",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "size",
+          "choices": [
+            "small",
+            "medium",
+            "large"
+          ],
+          "default": "medium",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "size",
+          "maximum": null,
+          "minimum": null,
+          "name": "size",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "width",
+          "choices": [
+            "short",
+            "medium",
+            "full"
+          ],
+          "default": "full",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "width",
+          "maximum": null,
+          "minimum": null,
+          "name": "width",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "animated",
+          "choices": [],
+          "default": true,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "animated",
+          "maximum": null,
+          "minimum": null,
+          "name": "animated",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "skeleton",
+      "sample": {
+        "animated": true,
+        "shape": "text",
+        "size": "medium",
+        "width": "full"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "ratio",
+          "choices": [
+            "equal",
+            "start-wide",
+            "end-wide",
+            "start-dominant",
+            "end-dominant"
+          ],
+          "default": "equal",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "ratio",
+          "maximum": null,
+          "minimum": null,
+          "name": "ratio",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "stretch",
+            "start",
+            "center",
+            "end",
+            "baseline"
+          ],
+          "default": "stretch",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "collapse-at",
+          "choices": [
+            "compact",
+            "standard",
+            "wide",
+            "never"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "collapseAt",
+          "maximum": null,
+          "minimum": null,
+          "name": "collapseAt",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "split",
+      "sample": {
+        "alignment": "stretch",
+        "collapseAt": "standard",
+        "gap": "standard",
+        "ratio": "equal"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "start",
+          "required": true
+        },
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "end",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "stretch",
+            "start",
+            "center",
+            "end",
+            "baseline"
+          ],
+          "default": "stretch",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "stack",
+      "sample": {
+        "alignment": "stretch",
+        "gap": "standard"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "tone",
+          "choices": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": "neutral",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "tone",
+          "maximum": null,
+          "minimum": null,
+          "name": "tone",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "detail",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "detail",
+          "maximum": null,
+          "minimum": null,
+          "name": "detail",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "size",
+          "choices": [
+            "small",
+            "large"
+          ],
+          "default": "small",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "size",
+          "maximum": null,
+          "minimum": null,
+          "name": "size",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "pulse",
+          "choices": [],
+          "default": false,
+          "help": "",
+          "integer": false,
+          "kind": "boolean",
+          "label": "pulse",
+          "maximum": null,
+          "minimum": null,
+          "name": "pulse",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "status-indicator",
+      "sample": {
+        "detail": null,
+        "label": "Online",
+        "pulse": false,
+        "size": "small",
+        "tone": "neutral"
+      },
+      "slots": []
+    },
+    {
+      "fields": [
+        {
+          "attribute": "sizing",
+          "choices": [
+            "natural",
+            "equal"
+          ],
+          "default": "natural",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "sizing",
+          "maximum": null,
+          "minimum": null,
+          "name": "sizing",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "gap",
+          "choices": [
+            "none",
+            "compact",
+            "standard",
+            "spacious",
+            "generous"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "gap",
+          "maximum": null,
+          "minimum": null,
+          "name": "gap",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "alignment",
+          "choices": [
+            "stretch",
+            "start",
+            "center",
+            "end",
+            "baseline"
+          ],
+          "default": "stretch",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "alignment",
+          "maximum": null,
+          "minimum": null,
+          "name": "alignment",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "justification",
+          "choices": [
+            "start",
+            "center",
+            "end",
+            "between"
+          ],
+          "default": "start",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "justification",
+          "maximum": null,
+          "minimum": null,
+          "name": "justification",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "collapse-at",
+          "choices": [
+            "compact",
+            "standard",
+            "wide",
+            "never"
+          ],
+          "default": "standard",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "collapseAt",
+          "maximum": null,
+          "minimum": null,
+          "name": "collapseAt",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "switch",
+      "sample": {
+        "alignment": "stretch",
+        "collapseAt": "standard",
+        "gap": "standard",
+        "justification": "start",
+        "sizing": "natural"
+      },
+      "slots": [
+        {
+          "help": "Host-admitted named child content; never raw HTML input.",
+          "name": "body",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fields": [
+        {
+          "attribute": "label",
+          "choices": [],
+          "default": null,
+          "help": "Plain text; validated by the component contract.",
+          "integer": false,
+          "kind": "text",
+          "label": "label",
+          "maximum": null,
+          "minimum": null,
+          "name": "label",
+          "required": true,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "tone",
+          "choices": [
+            "neutral",
+            "brand",
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": "neutral",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "tone",
+          "maximum": null,
+          "minimum": null,
+          "name": "tone",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "size",
+          "choices": [
+            "small",
+            "medium",
+            "large"
+          ],
+          "default": "medium",
+          "help": "Choose a value supported by the typed component contract.",
+          "integer": false,
+          "kind": "enum",
+          "label": "size",
+          "maximum": null,
+          "minimum": null,
+          "name": "size",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "href",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "href",
+          "maximum": null,
+          "minimum": null,
+          "name": "href",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "icon",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "icon",
+          "maximum": null,
+          "minimum": null,
+          "name": "icon",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "count",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "count",
+          "maximum": null,
+          "minimum": null,
+          "name": "count",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "count-label",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "countLabel",
+          "maximum": null,
+          "minimum": null,
+          "name": "countLabel",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "remove-href",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "removeHref",
+          "maximum": null,
+          "minimum": null,
+          "name": "removeHref",
+          "required": false,
+          "visibleWhen": null
+        },
+        {
+          "attribute": "remove-label",
+          "choices": [],
+          "default": null,
+          "help": "Optional plain text.",
+          "integer": false,
+          "kind": "text",
+          "label": "removeLabel",
+          "maximum": null,
+          "minimum": null,
+          "name": "removeLabel",
+          "required": false,
+          "visibleWhen": null
+        }
+      ],
+      "name": "tag",
+      "sample": {
+        "count": null,
+        "countLabel": null,
+        "href": null,
+        "icon": null,
+        "label": "Active",
+        "removeHref": null,
+        "removeLabel": null,
+        "size": "medium",
+        "tone": "neutral"
+      },
+      "slots": []
+    }
+  ],
+  "package": "@clanker/vanilla",
+  "schemaVersion": 1
+}

@@ -1,0 +1,20 @@
+{
+  "expectedHtml": "<fieldset id=\"scope\" class=\"cui-checkbox-group cui-checkbox-group--stacked cui-checkbox-group--invalid\" data-cui-component=\"checkbox-group\" aria-invalid=\"true\" aria-describedby=\"scope-description scope-error\"><legend class=\"cui-checkbox-group__legend\">Workspace access</legend><div class=\"cui-checkbox-group__choices\"><label class=\"cui-checkbox-group__choice\" for=\"scope-choice-1\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"scope-choice-1\" name=\"scope\" value=\"read\"><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">Read catalog</span></span></label><label class=\"cui-checkbox-group__choice\" for=\"scope-choice-2\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"scope-choice-2\" name=\"scope\" value=\"billing\" disabled><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">Manage billing</span></span></label></div><div class=\"cui-checkbox-group__description\" id=\"scope-description\"><p class=\"cui-checkbox-group__error\" id=\"scope-error\">Choose at least one area.</p><p class=\"cui-checkbox-group__hint\">Select requested access.</p></div></fieldset>\n",
+  "options": {
+    "choices": [
+      {
+        "label": "Read catalog",
+        "value": "read"
+      },
+      {
+        "disabled": true,
+        "label": "Manage billing",
+        "value": "billing"
+      }
+    ],
+    "description": "Select requested access.",
+    "error": "Choose at least one area.",
+    "legend": "Workspace access",
+    "name": "scope"
+  }
+}

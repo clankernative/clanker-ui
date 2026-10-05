@@ -1,0 +1,20 @@
+{
+  "choices": [
+    {
+      "label": "Active",
+      "value": "active"
+    },
+    {
+      "disabled": true,
+      "label": "Archived",
+      "value": "archived"
+    }
+  ],
+  "disabled": true,
+  "error": "Choose an available status",
+  "expectedHtml": "<div class=\"cui-select-field cui-select-field--invalid\" data-cui-component=\"select-field\"><label class=\"cui-select-field__label\" for=\"status\">Status &lt;&amp;&gt;</label><div class=\"cui-select-field__control-wrap\"><select class=\"cui-select-field__control\" id=\"status\" name=\"status\" aria-describedby=\"status-description\" aria-invalid=\"true\" disabled><option value=\"active\" selected>Active</option><option value=\"archived\" disabled>Archived</option></select></div><div class=\"cui-select-field__description\" id=\"status-description\"><p class=\"cui-select-field__error\">Choose an available status</p></div></div>\n",
+  "id": "status",
+  "label": "Status <&>",
+  "name": "status",
+  "selected": "active"
+}

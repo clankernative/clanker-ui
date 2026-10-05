@@ -1,0 +1,6 @@
+{
+  "label": "Delayed <queue> & \"workers\"",
+  "tone": "warning",
+  "detail": "Waiting & retrying <now>",
+  "expectedHtml": "<span class=\"cui-status-indicator cui-status-indicator--warning cui-status-indicator--small\" data-cui-component=\"status-indicator\"><span class=\"cui-status-indicator__dot\" aria-hidden=\"true\"></span><span class=\"cui-status-indicator__label\">Delayed &lt;queue&gt; &amp; &quot;workers&quot;</span><span class=\"cui-status-indicator__detail\">Waiting &amp; retrying &lt;now&gt;</span></span>\n"
+}

@@ -1,0 +1,12 @@
+{
+  "expectedHtml": "<span class=\"cui-tooltip\" data-cui-component=\"tooltip\" data-cui-tooltip-placement=\"bottom\"><button class=\"cui-tooltip__trigger\" type=\"button\" aria-label=\"Help\" aria-describedby=\"tooltip-example\" data-cui-tooltip-trigger><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"help\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n<path d=\"M9.6 9.2a2.5 2.5 0 1 1 3.7 2.7c-.8.5-1.3 1-1.3 1.9v.5M12 17.2h.01\"></path></svg></button><span class=\"cui-tooltip__bubble cui-tooltip__bubble--supporting\" id=\"tooltip-example\" role=\"tooltip\" data-cui-tooltip-bubble><span class=\"cui-tooltip__title\">More information</span><span class=\"cui-tooltip__description\">Additional context.</span><span class=\"cui-tooltip__arrow\" aria-hidden=\"true\"></span></span></span>\n",
+  "options": {
+    "arrow": true,
+    "description": "Additional context.",
+    "icon": "help",
+    "id": "tooltip-example",
+    "placement": "bottom",
+    "title": "More information",
+    "triggerLabel": "Help"
+  }
+}

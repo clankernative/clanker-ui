@@ -1,0 +1,50 @@
+<div id="gallery-app" class="task-page">
+  <header class="appbar">
+    <a class="brand" href="{{ routes.workspace() }}">Clanker gallery</a>
+    <nav class="app-nav" aria-label="Gallery"><a href="{{ routes.workspace() }}">Workspace</a><a href="{{ routes.layouts() }}">Layout atlas</a></nav>
+    <p class="app-note">Illustrative data · real Native commands</p>
+  </header>
+  <div class="page-content">
+    <cui-container width="wide" gutter="none">
+      <cui-stack gap="generous">
+        <p class="back-link"><a href="{{ routes.workspace() }}">Back to workspace</a></p>
+        <div id="task-heading" data-live>
+          <cui-page-header title="{{ task.task.title }}" description="{{ task.project.name }}" />
+        </div>
+        <cui-sidebar side="end" width="wide" gap="generous" alignment="start" collapse-at="standard">
+          <cui-slot name="main">
+            <section id="task-read-state" data-live aria-labelledby="saved-title" class="saved-state">
+              <h2 id="saved-title">Saved task</h2>
+              <cui-cluster gap="standard" alignment="center">
+                {% if task.task.state == 2 %}<cui-badge tone="success" label="Completed" />
+                {% elif task.task.state == 1 %}<cui-badge tone="info" label="In progress" />
+                {% else %}<cui-badge tone="neutral" label="To do" />{% endif %}
+                <span class="small-note">Revision {{ task.task.version }}</span>
+              </cui-cluster>
+              <p class="task-detail">{{ task.task.detail }}</p>
+              <dl class="saved-facts"><div><dt>Project</dt><dd>{{ task.project.name }}</dd></div><div><dt>Owner</dt><dd>{{ task.task.owner }}</dd></div><div><dt>State</dt><dd>{{ task.task.status }}</dd></div></dl>
+              <p class="small-note">This read region may update while you edit. The form keeps the revision it was opened with.</p>
+            </section>
+          </cui-slot>
+          <cui-slot name="aside">
+            <section class="create-panel" aria-labelledby="edit-title">
+              <h2 id="edit-title">Edit task</h2>
+              <p class="section-description">Save the title, details, and status in one revision-checked command.</p>
+              <form id="edit-task" data-command="gallery.edit_task" class="task-form">
+                <input type="hidden" name="task_id" value="{{ task.task.id }}">
+                <input type="hidden" name="expected_version" value="{{ task.task.version }}">
+                <cui-form-field id="edit-title-field" name="title" label="Task title" value="{{ task.task.title }}" maxlength="160" autocomplete="off" hint="A rejected draft stays available. Copy it and reload before retrying." />
+                <cui-form-field id="edit-detail" name="detail" label="Details" kind="textarea" rows="5" value="{{ task.task.detail }}" maxlength="4000" hint="The server accepts up to 4,000 UTF-8 bytes." />
+                <label class="select-field" for="edit-state"><span>Status</span><select id="edit-state" name="state"><option value="0" {% if task.task.state == 0 %}selected{% endif %}>To do</option><option value="1" {% if task.task.state == 1 %}selected{% endif %}>In progress</option><option value="2" {% if task.task.state == 2 %}selected{% endif %}>Completed</option></select></label>
+                <cui-button kind="submit" variant="primary" icon="check" label="Save changes" />
+                <p class="small-note">Editing revision {{ task.task.version }}. After any rejection, copy your draft and <a href="{{ routes.task(task_id=task.task.id) }}">reload the task</a> before trying again.</p>
+              </form>
+            </section>
+          </cui-slot>
+        </cui-sidebar>
+        <section class="workspace-guide" aria-labelledby="revision-title"><h2 id="revision-title">An older draft never overwrites a newer save</h2><p>Open this task in two tabs. Save in one tab, then submit the other. Native checks the signed revision before the app changes any data; the rejected draft remains available to copy.</p></section>
+        <footer class="page-footer"><p>The app owns its commands. Native owns revision checks and Datastar transport. Clanker components own presentation.</p></footer>
+      </cui-stack>
+    </cui-container>
+  </div>
+</div>

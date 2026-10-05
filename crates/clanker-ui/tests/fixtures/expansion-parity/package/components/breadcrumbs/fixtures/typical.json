@@ -1,0 +1,17 @@
+{
+  "expectedHtml": "<nav class=\"cui-breadcrumbs\" data-cui-component=\"breadcrumbs\" aria-label=\"Breadcrumbs\"><ol class=\"cui-breadcrumbs__list\"><li class=\"cui-breadcrumbs__item\"><a class=\"cui-breadcrumbs__link\" href=\"/\">Home</a></li><li class=\"cui-breadcrumbs__item\"><a class=\"cui-breadcrumbs__link\" href=\"/projects\">Projects &amp; teams</a></li><li class=\"cui-breadcrumbs__item\"><span class=\"cui-breadcrumbs__current\" aria-current=\"page\">Current &lt;project&gt;</span></li></ol></nav>\n",
+  "items": [
+    {
+      "href": "/",
+      "label": "Home"
+    },
+    {
+      "href": "/projects",
+      "label": "Projects & teams"
+    },
+    {
+      "label": "Current <project>"
+    }
+  ],
+  "label": "Breadcrumbs"
+}

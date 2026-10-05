@@ -1,0 +1,17 @@
+{
+  "expectedHtml": "<nav class=\"cui-segmented-control\" data-cui-component=\"segmented-control\" aria-label=\"Affichage &amp; filtres\"><ul class=\"cui-segmented-control__list\"><li class=\"cui-segmented-control__item cui-segmented-control__item--current\"><span class=\"cui-segmented-control__current\" aria-current=\"page\">Tout &lt;voir&gt;</span></li><li class=\"cui-segmented-control__item cui-segmented-control__item--link\"><a class=\"cui-segmented-control__link\" href=\"?scope=mine\">À moi</a></li></ul></nav>\n",
+  "options": {
+    "items": [
+      {
+        "kind": "current",
+        "label": "Tout <voir>"
+      },
+      {
+        "href": "?scope=mine",
+        "kind": "link",
+        "label": "À moi"
+      }
+    ],
+    "label": "Affichage & filtres"
+  }
+}

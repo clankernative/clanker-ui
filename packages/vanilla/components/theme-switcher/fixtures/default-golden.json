@@ -1,0 +1,27 @@
+{
+  "expectedHtml": "<div class=\"cui-theme-switcher cui-theme-switcher--text\" data-cui-component=\"theme-switcher\" data-cui-theme-default=\"system\" data-cui-theme-system-light=\"light\" data-cui-theme-system-dark=\"dark\" data-cui-theme-storage-key=\"clanker-theme\" role=\"group\" aria-label=\"Color theme\"><p class=\"cui-theme-switcher__fallback\">Theme: System (interactive choices require JavaScript).</p><div class=\"cui-theme-switcher__choices\"><button class=\"cui-theme-switcher__option\" type=\"button\" title=\"System\" data-cui-theme-value=\"system\" aria-pressed=\"false\" hidden><span class=\"cui-theme-switcher__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"contrast\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n<path d=\"M12 3a9 9 0 0 0 0 18z\" fill=\"currentColor\" stroke=\"none\"></path></svg></span><span class=\"cui-theme-switcher__label\">System</span></button><button class=\"cui-theme-switcher__option\" type=\"button\" title=\"Light\" data-cui-theme-value=\"light\" aria-pressed=\"false\" hidden><span class=\"cui-theme-switcher__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"sun\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"></circle>\n<path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"></path></svg></span><span class=\"cui-theme-switcher__label\">Light</span></button><button class=\"cui-theme-switcher__option\" type=\"button\" title=\"Dark\" data-cui-theme-value=\"dark\" aria-pressed=\"false\" hidden><span class=\"cui-theme-switcher__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"moon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2z\"></path></svg></span><span class=\"cui-theme-switcher__label\">Dark</span></button></div></div>\n",
+  "options": {
+    "choices": [
+      {
+        "icon": "contrast",
+        "label": "System",
+        "value": "system"
+      },
+      {
+        "icon": "sun",
+        "label": "Light",
+        "value": "light"
+      },
+      {
+        "icon": "moon",
+        "label": "Dark",
+        "value": "dark"
+      }
+    ],
+    "defaultChoice": "system",
+    "label": "Color theme",
+    "presentation": "text",
+    "systemDarkTheme": "dark",
+    "systemLightTheme": "light"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "name": "avatar",
+  "status": "ready",
+  "target": "native-html",
+  "category": "identity",
+  "summary": "Identifies a person, team, or integration with an accessible image or initials fallback.",
+  "keywords": ["avatar", "identity", "person", "team", "initials", "image"],
+  "agent": {
+    "useWhen": "A person, team, or integration needs a compact identity marker with a meaningful accessible name, optionally backed by a safely sourced image.",
+    "avoidWhen": "The image is content rather than an identity marker or needs app behavior beyond a static image with initials fallback.",
+    "composeWith": ["badge", "data-table", "page-header"]
+  },
+  "contract": {
+    "role": "identity",
+    "variants": ["extra-small", "small", "medium", "large", "extra-large", "neutral", "brand", "success", "image"],
+    "requiredFields": ["initials", "label"],
+    "invariants": [
+      "Initials and the accessible label are required, nonblank text without control characters; initials contain at most three Unicode grapheme clusters.",
+      "imageSource, when supplied, is a credential-free HTTPS URL or a safe /assets/app/ or /assets/instance/ host asset path; unsafe URLs, controls, backslashes and traversal are rejected.",
+      "The wrapper is a named role=img; image alt text is empty and hidden from assistive technology while initials remain the accessible fallback and sit beneath the image in CSS, including when loading fails.",
+      "Images use no-referrer, lazy loading and asynchronous decoding. The app owns URL acquisition. Native src and initials may use checked whole-field bindings; the host validates their runtime values. The browser loads images normally; the server performs no image fetch, and the component adds no JavaScript or lifecycle behavior.",
+      "The component is static and noninteractive and owns no commands or routes.",
+      "The fragment has exactly one [[avatar]] slot; the renderer escapes initials, label and imageSource and rejects malformed or unsupported slots."
+    ]
+  },
+  "tokens": [
+    "--cui-avatar-border-width", "--cui-avatar-radius", "--cui-avatar-weight",
+    "--cui-avatar-extra-small-size", "--cui-avatar-extra-small-font-size",
+    "--cui-avatar-small-size", "--cui-avatar-small-font-size",
+    "--cui-avatar-medium-size", "--cui-avatar-medium-font-size",
+    "--cui-avatar-large-size", "--cui-avatar-large-font-size",
+    "--cui-avatar-extra-large-size", "--cui-avatar-extra-large-font-size",
+    "--cui-avatar-neutral-background", "--cui-avatar-neutral-border", "--cui-avatar-neutral-text",
+    "--cui-avatar-brand-background", "--cui-avatar-brand-border", "--cui-avatar-brand-text",
+    "--cui-avatar-success-background", "--cui-avatar-success-border", "--cui-avatar-success-text"
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/avatar/fragment.html",
+    "styles": "components/avatar/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/avatar/fixtures/extra-small-neutral.json",
+    "components/avatar/fixtures/small-brand.json",
+    "components/avatar/fixtures/medium-success.json",
+    "components/avatar/fixtures/large-neutral.json",
+    "components/avatar/fixtures/extra-large-brand.json",
+    "components/avatar/fixtures/medium-neutral.json",
+    "components/avatar/fixtures/small-success.json",
+    "components/avatar/fixtures/large-brand.json",
+    "components/avatar/fixtures/image-https.json",
+    "components/avatar/fixtures/image-host-asset.json"
+  ]
+}

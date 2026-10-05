@@ -5,16 +5,38 @@
   "target": "native-html",
   "category": "feedback",
   "summary": "Preserves a known layout with a decorative, non-announcing loading placeholder.",
-  "keywords": ["skeleton", "loading", "placeholder", "shimmer"],
+  "keywords": [
+    "skeleton",
+    "loading",
+    "placeholder",
+    "shimmer"
+  ],
   "agent": {
     "useWhen": "Loading data should preserve the shape of a known final interface layout.",
     "avoidWhen": "The final layout is unknown or measurable task progress should be communicated.",
-    "composeWith": ["alert", "progress", "status-indicator"]
+    "composeWith": [
+      "alert",
+      "progress",
+      "status-indicator"
+    ]
   },
   "contract": {
     "role": "presentation",
-    "variants": ["text", "rectangle", "circle", "small", "medium", "large", "short", "full", "animated", "static"],
-    "requiredFields": ["shape"],
+    "variants": [
+      "text",
+      "rectangle",
+      "circle",
+      "small",
+      "medium",
+      "large",
+      "short",
+      "full",
+      "animated",
+      "static"
+    ],
+    "requiredFields": [
+      "shape"
+    ],
     "invariants": [
       "Shape is required; size defaults to medium, width to full, and animated to true. Unknown fields and enum values are rejected.",
       "Every placeholder is aria-hidden and has no role, live region, busy state, content, script, or runtime style input; the parent application owns aria-busy and its concise loading announcement.",
@@ -25,12 +47,101 @@
     ]
   },
   "tokens": [
-    "--cui-skeleton-background", "--cui-skeleton-shimmer", "--cui-skeleton-radius",
-    "--cui-skeleton-short-width", "--cui-skeleton-medium-width",
-    "--cui-skeleton-small-text-height", "--cui-skeleton-medium-text-height", "--cui-skeleton-large-text-height",
-    "--cui-skeleton-small-rectangle-height", "--cui-skeleton-medium-rectangle-height", "--cui-skeleton-large-rectangle-height",
-    "--cui-skeleton-circle-size", "--cui-skeleton-small-circle-size", "--cui-skeleton-large-circle-size",
-    "--cui-skeleton-animation-duration"
+    "--cui-border-subtle",
+    "--cui-radius-small",
+    "--cui-skeleton-animation-duration",
+    "--cui-skeleton-background",
+    "--cui-skeleton-circle-size",
+    "--cui-skeleton-large-circle-size",
+    "--cui-skeleton-large-rectangle-height",
+    "--cui-skeleton-large-text-height",
+    "--cui-skeleton-medium-rectangle-height",
+    "--cui-skeleton-medium-text-height",
+    "--cui-skeleton-medium-width",
+    "--cui-skeleton-radius",
+    "--cui-skeleton-shimmer",
+    "--cui-skeleton-short-width",
+    "--cui-skeleton-small-circle-size",
+    "--cui-skeleton-small-rectangle-height",
+    "--cui-skeleton-small-text-height",
+    "--cui-surface-raised"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-skeleton-animation-duration",
+      "role": "motion",
+      "purpose": "Controls animation duration for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-background",
+      "role": "background",
+      "purpose": "Controls background color for  skeleton."
+    },
+    {
+      "name": "--cui-skeleton-circle-size",
+      "role": "sizing",
+      "purpose": "Controls size for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-large-circle-size",
+      "role": "sizing",
+      "purpose": "Controls size for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-large-rectangle-height",
+      "role": "sizing",
+      "purpose": "Controls height for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-large-text-height",
+      "role": "sizing",
+      "purpose": "Controls height for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-medium-rectangle-height",
+      "role": "sizing",
+      "purpose": "Controls height for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-medium-text-height",
+      "role": "sizing",
+      "purpose": "Controls height for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-medium-width",
+      "role": "sizing",
+      "purpose": "Controls width for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-shimmer",
+      "role": "color",
+      "purpose": "Controls visual treatment for  skeleton."
+    },
+    {
+      "name": "--cui-skeleton-short-width",
+      "role": "sizing",
+      "purpose": "Controls width for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-small-circle-size",
+      "role": "sizing",
+      "purpose": "Controls size for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-small-rectangle-height",
+      "role": "sizing",
+      "purpose": "Controls height for skeleton."
+    },
+    {
+      "name": "--cui-skeleton-small-text-height",
+      "role": "sizing",
+      "purpose": "Controls height for skeleton."
+    }
   ],
   "dependencies": [],
   "assets": {

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "name": "sidebar",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Arranges a stable supporting rail beside a flexible main region.",
+  "keywords": [
+    "sidebar",
+    "rail",
+    "main",
+    "aside",
+    "responsive"
+  ],
+  "agent": {
+    "useWhen": "A supporting rail belongs beside a flexible main region at a chosen container width.",
+    "avoidWhen": "The regions need equal or arbitrary proportions; use Split instead.",
+    "composeWith": [
+      "pane",
+      "split",
+      "container",
+      "stack"
+    ]
+  },
+  "contract": {
+    "role": "main-and-rail-layout",
+    "variants": [
+      "start",
+      "end"
+    ],
+    "requiredFields": [],
+    "invariants": [
+      "Main and aside are required neutral regions, not landmarks.",
+      "Region DOM order matches visual order for keyboard reading.",
+      "The rail collapses until its configured container-query boundary."
+    ]
+  },
+  "tokens": [
+    "--cui-sidebar-gap-compact",
+    "--cui-sidebar-gap-generous",
+    "--cui-sidebar-gap-none",
+    "--cui-sidebar-gap-spacious",
+    "--cui-sidebar-gap-standard",
+    "--cui-sidebar-rail-size",
+    "--cui-sidebar-width-narrow",
+    "--cui-sidebar-width-standard",
+    "--cui-sidebar-width-wide"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-sidebar-gap-compact",
+      "role": "spacing",
+      "purpose": "Controls compact for spacing between elements sidebar."
+    },
+    {
+      "name": "--cui-sidebar-gap-generous",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements sidebar."
+    },
+    {
+      "name": "--cui-sidebar-gap-none",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements sidebar."
+    },
+    {
+      "name": "--cui-sidebar-gap-spacious",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements sidebar."
+    },
+    {
+      "name": "--cui-sidebar-gap-standard",
+      "role": "spacing",
+      "purpose": "Controls visual treatment for spacing between elements sidebar."
+    },
+    {
+      "name": "--cui-sidebar-rail-size",
+      "role": "sizing",
+      "purpose": "Controls size for sidebar."
+    },
+    {
+      "name": "--cui-sidebar-width-narrow",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width sidebar."
+    },
+    {
+      "name": "--cui-sidebar-width-standard",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width sidebar."
+    },
+    {
+      "name": "--cui-sidebar-width-wide",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for width sidebar."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/sidebar/fragment.html",
+    "styles": "components/sidebar/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/sidebar/fixtures/start.json",
+    "components/sidebar/fixtures/end.json"
+  ]
+}

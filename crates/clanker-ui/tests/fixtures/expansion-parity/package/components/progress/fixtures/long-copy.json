@@ -1,0 +1,11 @@
+{
+  "detail": "The final archive includes large files and may take several minutes to finish.",
+  "expectedHtml": "<div class=\"cui-progress cui-progress--info cui-progress--regular cui-progress--determinate\" data-cui-component=\"progress\" data-cui-tone=\"info\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Preparing a complete export of historical records, attachments, and audit metadata</span><span class=\"cui-progress__suffix\">3 of 8 stages complete</span></div><progress class=\"cui-progress__track\" value=\"3\" max=\"8\" aria-label=\"Preparing a complete export of historical records, attachments, and audit metadata\"></progress><p class=\"cui-progress__detail\">The final archive includes large files and may take several minutes to finish.</p></div>\n",
+  "label": "Preparing a complete export of historical records, attachments, and audit metadata",
+  "maximum": 8,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "3 of 8 stages complete",
+  "tone": "info",
+  "value": 3
+}

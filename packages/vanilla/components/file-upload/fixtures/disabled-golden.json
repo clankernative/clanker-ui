@@ -1,0 +1,15 @@
+{
+  "expectedHtml": "<div class=\"cui-file-upload cui-file-upload--disabled\" data-cui-component=\"file-upload\" data-cui-accept=\".pdf,.png,image/png,application/pdf\"><label class=\"cui-file-upload__label\" for=\"attachments\">Attachments</label><div class=\"cui-file-upload__dropzone\" data-cui-file-upload-dropzone><strong>Select supporting files</strong><span>or drop them here</span><input class=\"cui-file-upload__input\" id=\"attachments\" name=\"attachments\" type=\"file\" accept=\".pdf,.png,image/png,application/pdf\" disabled aria-describedby=\"attachments-description\" data-cui-file-upload-input><ul class=\"cui-file-upload__local-selection\" data-cui-file-upload-local-selection aria-live=\"polite\" hidden></ul><p class=\"cui-file-upload__local-feedback\" data-cui-file-upload-local-feedback data-cui-selection-error-label=\"Files could not be handed to the application.\" data-cui-cancel-error-label=\"File selection could not be cancelled.\" role=\"status\" hidden></p></div><div class=\"cui-file-upload__description\" id=\"attachments-description\"><p class=\"cui-file-upload__hint\">PDF or PNG files, up to 10 MB each.</p></div></div>\n",
+  "options": {
+    "accept": ".pdf,.png,image/png,application/pdf",
+    "disabled": true,
+    "dropLabel": "or drop them here",
+    "fileListLabel": "Files on this request",
+    "files": [],
+    "hint": "PDF or PNG files, up to 10 MB each.",
+    "label": "Attachments",
+    "multiple": false,
+    "name": "attachments",
+    "prompt": "Select supporting files"
+  }
+}

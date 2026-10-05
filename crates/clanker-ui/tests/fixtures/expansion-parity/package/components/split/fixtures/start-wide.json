@@ -1,0 +1,5 @@
+{
+  "options": { "ratio": "start-wide", "gap": "compact", "alignment": "center", "collapseAt": "compact" },
+  "children": { "start": "<main>Wide</main>", "end": "<aside>Narrow</aside>" },
+  "expectedHtml": "<div class=\"cui-split cui-split--ratio-start-wide cui-split--gap-compact cui-split--align-center cui-split--collapse-compact\" data-cui-component=\"split\"><div class=\"cui-split__regions\"><div class=\"cui-split__start\"><main>Wide</main></div><div class=\"cui-split__end\"><aside>Narrow</aside></div></div></div>\n"
+}

@@ -38,7 +38,17 @@ fn presentation_goldens_match_the_locked_fragment_shape() {
                     skeleton::render(&serde_json::from_value(fixture).unwrap(), &fragment)
                 }
                 "page-header" => {
-                    page_header::render(&serde_json::from_value(fixture).unwrap(), &fragment)
+                    let children = fixture.as_object_mut().unwrap().remove("children");
+                    let actions = children.as_ref().map(|children| {
+                        catalog_core::layout::AdmittedChildren::from_host_admitted(
+                            children["actions"].as_str().unwrap(),
+                        )
+                    });
+                    page_header::render_with_actions(
+                        &serde_json::from_value(fixture).unwrap(),
+                        actions.as_ref(),
+                        &fragment,
+                    )
                 }
                 _ => unreachable!(),
             }

@@ -1,0 +1,20 @@
+{
+  "caption": "Detailed request records for current reporting period",
+  "columns": [
+    "Request and business context",
+    "Assigned team",
+    "Current workflow status",
+    "Updated"
+  ],
+  "expectedHtml": "<div class=\"cui-data-table\" data-cui-component=\"data-table\" tabindex=\"0\" role=\"region\" aria-label=\"Detailed request records for current reporting period\"><table class=\"cui-data-table__table\"><caption class=\"cui-data-table__caption\">Detailed request records for current reporting period</caption><thead class=\"cui-data-table__head\"><tr><th scope=\"col\">Request and business context</th><th scope=\"col\">Assigned team</th><th scope=\"col\">Current workflow status</th><th scope=\"col\">Updated</th></tr></thead><tbody class=\"cui-data-table__body\"><tr><td data-label=\"Request and business context\">A longer request description that remains readable in responsive stacked rows</td><td data-label=\"Assigned team\">Platform operations</td><td data-label=\"Current workflow status\">Awaiting cross-team review</td><td data-label=\"Updated\">Today</td></tr></tbody></table></div>\n",
+  "rows": [
+    {
+      "cells": [
+        "A longer request description that remains readable in responsive stacked rows",
+        "Platform operations",
+        "Awaiting cross-team review",
+        "Today"
+      ]
+    }
+  ]
+}

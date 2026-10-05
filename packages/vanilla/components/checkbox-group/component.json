@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "name": "checkbox-group",
+  "status": "ready",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders a bounded native fieldset of independently selectable checkbox choices.",
+  "keywords": [
+    "checkbox",
+    "group",
+    "form",
+    "choice",
+    "validation"
+  ],
+  "agent": {
+    "useWhen": "An app-owned form needs 1–20 independently selectable options with shared context.",
+    "avoidWhen": "Choices are dynamic, require rich content, custom transport, client-side state, or a command lifecycle.",
+    "composeWith": [
+      "form-field"
+    ]
+  },
+  "contract": {
+    "role": "native form control group",
+    "variants": [
+      "stacked",
+      "inline",
+      "disabled",
+      "invalid"
+    ],
+    "requiredFields": [
+      "name",
+      "legend",
+      "choices"
+    ],
+    "invariants": [
+      "Uses native fieldset/legend and repeated checkbox names; the browser owns successful-control form semantics.",
+      "Contains 1..=20 choices with unique nonblank values; each choice has a nonblank label and optional nonblank hint.",
+      "An optional safe explicit id names the fieldset; otherwise name is used. Choice, hint, error, and description IDs are deterministic and reserved.",
+      "Layout is stacked or inline. Group and per-choice disabled states use native disabled controls.",
+      "Names and IDs are non-reserved safe tokens; all copy and values are control-safe plain text escaped as HTML.",
+      "The app owns form, submission, transport, routes, and domain validation. No hidden transport, JavaScript, commands, arbitrary attributes, or raw markup are emitted.",
+      "The fragment has exactly one [[attributes]], [[legend]], [[choices]], and [[description]] slot; expansion is exact and single-pass.",
+      "Native command forms require a declared List(Str) carrier for repeated checkbox choices; omission becomes an empty list. Enabled choices are ticket-bounded, and disabled individual choices are excluded from editable submissions.",
+      "Fully disabled groups are host-bound to their declared checked values. The app still validates domain choices; rejected forms preserve the editable browser draft. Native build, desktop/mobile browser, keyboard, no-JS, and forged-choice proof lives in tests/browser/choice-native-proof.mjs."
+    ]
+  },
+  "tokens": [
+    "--cui-checkbox-group-accent",
+    "--cui-checkbox-group-border",
+    "--cui-checkbox-group-checked-background",
+    "--cui-checkbox-group-checked-border",
+    "--cui-checkbox-group-choice-gap",
+    "--cui-checkbox-group-choice-padding",
+    "--cui-checkbox-group-disabled-opacity",
+    "--cui-checkbox-group-error-text",
+    "--cui-checkbox-group-focus-offset",
+    "--cui-checkbox-group-focus-ring",
+    "--cui-checkbox-group-focus-width",
+    "--cui-checkbox-group-gap",
+    "--cui-checkbox-group-hint-size",
+    "--cui-checkbox-group-hint-text",
+    "--cui-checkbox-group-label-size",
+    "--cui-checkbox-group-label-weight",
+    "--cui-checkbox-group-legend-text",
+    "--cui-checkbox-group-radius",
+    "--cui-checkbox-group-text"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-checkbox-group-accent",
+      "role": "text",
+      "purpose": "Controls accent color for  checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-border",
+      "role": "border",
+      "purpose": "Controls border color for  checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-checked-background",
+      "role": "background",
+      "purpose": "Controls background color for checked state checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-checked-border",
+      "role": "border",
+      "purpose": "Controls border color for checked state checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-choice-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-choice-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-disabled-opacity",
+      "role": "opacity",
+      "purpose": "Controls opacity for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-error-text",
+      "role": "text",
+      "purpose": "Controls text color for error state checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-hint-size",
+      "role": "sizing",
+      "purpose": "Controls size for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-hint-text",
+      "role": "text",
+      "purpose": "Controls text color for hint checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-label-size",
+      "role": "sizing",
+      "purpose": "Controls size for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-label-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-legend-text",
+      "role": "text",
+      "purpose": "Controls text color for legend checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for checkbox group."
+    },
+    {
+      "name": "--cui-checkbox-group-text",
+      "role": "text",
+      "purpose": "Controls text color for  checkbox group."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/checkbox-group/fragment.html",
+    "styles": "components/checkbox-group/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/checkbox-group/fixtures/typical-golden.json",
+    "components/checkbox-group/fixtures/validation-golden.json",
+    "components/checkbox-group/fixtures/disabled-golden.json",
+    "components/checkbox-group/fixtures/inline-golden.json"
+  ]
+}

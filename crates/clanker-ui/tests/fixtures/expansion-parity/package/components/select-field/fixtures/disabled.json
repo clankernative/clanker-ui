@@ -1,0 +1,19 @@
+{
+  "choices": [
+    {
+      "label": "Operations",
+      "value": "ops"
+    },
+    {
+      "label": "Design",
+      "value": "design"
+    }
+  ],
+  "disabled": true,
+  "expectedHtml": "<div class=\"cui-select-field\" data-cui-component=\"select-field\"><label class=\"cui-select-field__label\" for=\"locked-team\">Assigned team</label><div class=\"cui-select-field__control-wrap\"><select class=\"cui-select-field__control\" id=\"locked-team\" name=\"team\" aria-describedby=\"locked-team-description\" disabled><option value=\"ops\" selected>Operations</option><option value=\"design\">Design</option></select></div><div class=\"cui-select-field__description\" id=\"locked-team-description\"><p class=\"cui-select-field__hint\">The app owns whether this field can be edited.</p></div></div>\n",
+  "hint": "The app owns whether this field can be edited.",
+  "id": "locked-team",
+  "label": "Assigned team",
+  "name": "team",
+  "selected": "ops"
+}

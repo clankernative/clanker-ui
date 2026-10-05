@@ -5,16 +5,35 @@
   "target": "native-html",
   "category": "feedback",
   "summary": "Renders a compact status or category with visible text, semantic tone, and an optional decorative icon.",
-  "keywords": ["badge", "pill", "status", "state", "category"],
+  "keywords": [
+    "badge",
+    "pill",
+    "status",
+    "state",
+    "category"
+  ],
   "agent": {
     "useWhen": "A short state or category must remain visible beside its subject. Choose a semantic tone; a matching decorative icon is included by default for non-neutral tones.",
     "avoidWhen": "The message needs a sentence, recovery action, live announcement, or interactive behavior.",
-    "composeWith": ["button", "data-table"]
+    "composeWith": [
+      "button",
+      "data-table"
+    ]
   },
   "contract": {
     "role": "status-label",
-    "variants": ["neutral", "info", "success", "warning", "danger", "running"],
-    "requiredFields": ["label", "tone"],
+    "variants": [
+      "neutral",
+      "info",
+      "success",
+      "warning",
+      "danger",
+      "running"
+    ],
+    "requiredFields": [
+      "label",
+      "tone"
+    ],
     "invariants": [
       "Configuration supplies tone and decorative icon options; the visible label is app-owned presentation data, currently literal-only in Native declarations.",
       "The component owns no browser-local state, events, commands or patch lifecycle; it composes beside the app-owned subject and is replaced as ordinary server-rendered content.",
@@ -26,16 +45,157 @@
     ]
   },
   "tokens": [
-    "--cui-badge-danger-background", "--cui-badge-danger-border", "--cui-badge-danger-text",
-    "--cui-badge-gap", "--cui-badge-info-background", "--cui-badge-info-border",
-    "--cui-badge-info-text", "--cui-badge-neutral-background", "--cui-badge-neutral-border",
-    "--cui-badge-neutral-text", "--cui-badge-padding", "--cui-badge-radius",
-    "--cui-badge-running-background", "--cui-badge-running-border", "--cui-badge-running-text",
-    "--cui-badge-size", "--cui-badge-success-background", "--cui-badge-success-border",
-    "--cui-badge-success-text", "--cui-badge-warning-background", "--cui-badge-warning-border",
-    "--cui-badge-warning-text", "--cui-badge-weight"
+    "--cui-badge-danger-background",
+    "--cui-badge-danger-border",
+    "--cui-badge-danger-text",
+    "--cui-badge-gap",
+    "--cui-badge-info-background",
+    "--cui-badge-info-border",
+    "--cui-badge-info-text",
+    "--cui-badge-neutral-background",
+    "--cui-badge-neutral-border",
+    "--cui-badge-neutral-text",
+    "--cui-badge-padding",
+    "--cui-badge-radius",
+    "--cui-badge-running-background",
+    "--cui-badge-running-border",
+    "--cui-badge-running-text",
+    "--cui-badge-size",
+    "--cui-badge-success-background",
+    "--cui-badge-success-border",
+    "--cui-badge-success-text",
+    "--cui-badge-warning-background",
+    "--cui-badge-warning-border",
+    "--cui-badge-warning-text",
+    "--cui-badge-weight",
+    "--cui-border",
+    "--cui-danger",
+    "--cui-icon-small-size",
+    "--cui-muted",
+    "--cui-space-1",
+    "--cui-space-2",
+    "--cui-surface"
   ],
-  "dependencies": ["icon"],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-badge-danger-background",
+      "role": "background",
+      "purpose": "Controls background color for danger state badge."
+    },
+    {
+      "name": "--cui-badge-danger-border",
+      "role": "border",
+      "purpose": "Controls border color for danger state badge."
+    },
+    {
+      "name": "--cui-badge-danger-text",
+      "role": "text",
+      "purpose": "Controls text color for danger state badge."
+    },
+    {
+      "name": "--cui-badge-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for badge."
+    },
+    {
+      "name": "--cui-badge-info-background",
+      "role": "background",
+      "purpose": "Controls background color for information state badge."
+    },
+    {
+      "name": "--cui-badge-info-border",
+      "role": "border",
+      "purpose": "Controls border color for information state badge."
+    },
+    {
+      "name": "--cui-badge-info-text",
+      "role": "text",
+      "purpose": "Controls text color for information state badge."
+    },
+    {
+      "name": "--cui-badge-neutral-background",
+      "role": "background",
+      "purpose": "Controls background color for neutral state badge."
+    },
+    {
+      "name": "--cui-badge-neutral-border",
+      "role": "border",
+      "purpose": "Controls border color for neutral state badge."
+    },
+    {
+      "name": "--cui-badge-neutral-text",
+      "role": "text",
+      "purpose": "Controls text color for neutral state badge."
+    },
+    {
+      "name": "--cui-badge-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for badge."
+    },
+    {
+      "name": "--cui-badge-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for badge."
+    },
+    {
+      "name": "--cui-badge-running-background",
+      "role": "background",
+      "purpose": "Controls background color for running badge."
+    },
+    {
+      "name": "--cui-badge-running-border",
+      "role": "border",
+      "purpose": "Controls border color for running badge."
+    },
+    {
+      "name": "--cui-badge-running-text",
+      "role": "text",
+      "purpose": "Controls text color for running badge."
+    },
+    {
+      "name": "--cui-badge-size",
+      "role": "sizing",
+      "purpose": "Controls size for badge."
+    },
+    {
+      "name": "--cui-badge-success-background",
+      "role": "background",
+      "purpose": "Controls background color for success state badge."
+    },
+    {
+      "name": "--cui-badge-success-border",
+      "role": "border",
+      "purpose": "Controls border color for success state badge."
+    },
+    {
+      "name": "--cui-badge-success-text",
+      "role": "text",
+      "purpose": "Controls text color for success state badge."
+    },
+    {
+      "name": "--cui-badge-warning-background",
+      "role": "background",
+      "purpose": "Controls background color for warning state badge."
+    },
+    {
+      "name": "--cui-badge-warning-border",
+      "role": "border",
+      "purpose": "Controls border color for warning state badge."
+    },
+    {
+      "name": "--cui-badge-warning-text",
+      "role": "text",
+      "purpose": "Controls text color for warning state badge."
+    },
+    {
+      "name": "--cui-badge-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for badge."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
   "assets": {
     "template": "components/badge/fragment.html",
     "styles": "components/badge/styles.css",

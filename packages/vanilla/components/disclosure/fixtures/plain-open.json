@@ -1,0 +1,7 @@
+{
+  "summary": "More <details>",
+  "appearance": "plain",
+  "open": true,
+  "children": "<p>Expanded.</p>",
+  "expectedHtml": "<details class=\"cui-disclosure cui-disclosure--plain\" data-cui-component=\"disclosure\" open><summary class=\"cui-disclosure__summary\"><span>More &lt;details&gt;</span><span class=\"cui-disclosure__icon\" aria-hidden=\"true\"></span></summary><div class=\"cui-disclosure__body\"><p>Expanded.</p></div></details>\n"
+}

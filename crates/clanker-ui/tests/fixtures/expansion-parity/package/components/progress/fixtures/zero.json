@@ -1,0 +1,10 @@
+{
+  "expectedHtml": "<div class=\"cui-progress cui-progress--info cui-progress--regular cui-progress--determinate\" data-cui-component=\"progress\" data-cui-tone=\"info\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Queued for processing</span><span class=\"cui-progress__suffix\">0%</span></div><progress class=\"cui-progress__track\" value=\"0\" max=\"100\" aria-label=\"Queued for processing\"></progress></div>\n",
+  "label": "Queued for processing",
+  "maximum": 100,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "0%",
+  "tone": "info",
+  "value": 0
+}

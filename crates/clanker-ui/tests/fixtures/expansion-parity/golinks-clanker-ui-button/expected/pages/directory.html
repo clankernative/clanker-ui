@@ -1,0 +1,116 @@
+<div id="golinks-app">
+  <header class="header">
+    <div>
+      <p class="eyebrow">{{ company.name }}</p>
+      <h1>Go Links</h1>
+      <p class="subtitle">Manage short links, track popularity, and review activity.</p>
+    </div>
+    <nav class="nav" aria-label="Go Links">
+      <a data-nav="dashboard" href="{{ routes.links() }}" aria-current="page">Dashboard</a>
+      <a data-nav="trash" href="{{ routes.trash() }}">Trash</a>
+      <a data-nav="audit-feed" href="{{ routes.audit_feed() }}">Audit Feed</a>
+      <a href="{{ routes.component_demo() }}">UI Demo</a>
+    </nav>
+  </header>
+
+  <div class="grid">
+    <article id="links-panel" class="card" aria-labelledby="links-title">
+      <div class="card-header">
+        <div>
+          <h2 id="links-title">Popularity Ranking <span class="cui-badge cui-badge--neutral" data-cui-component="badge" data-cui-tone="neutral"><span class="cui-badge__label">Active links</span></span>
+</h2>
+          <p>Search and manage active go links.</p>
+        </div>
+        <div class="search" role="search">
+          <label class="visually-hidden" for="link-search">Search links</label>
+          <input id="link-search" type="search" placeholder="Search name, URL, owner..." autocomplete="off" aria-describedby="link-search-hint">
+          <span id="link-search-hint" class="visually-hidden">Press Enter to search.</span>
+        </div>
+      </div>
+
+      <div id="links-list" data-live class="table-wrap" role="region" aria-labelledby="links-title" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" class="rank">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">URL</th>
+              <th scope="col">Visits</th>
+              <th scope="col">Updated</th>
+              <th scope="col">Owner</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for link in links.items %}
+            <tr class="link-row">
+              <td class="rank"></td>
+              <td>
+                <a class="name" href="{{ routes.link(link_id=link.id) }}">go/{{ link.name }}</a>
+                {% if link.description != "" %}<p class="description">{{ link.description }}</p>{% endif %}
+              </td>
+              <td class="url"><a data-destination="{{ link.url }}" target="_blank" rel="noreferrer">{{ link.url }}</a></td>
+              <td class="visits">{{ link.visit_count }}</td>
+              <td class="updated"><time data-unix="{{ link.updated_time }}">{{ link.updated_time }}</time></td>
+              <td class="owner">{{ link.owner }}</td>
+              <td>
+                <div class="actions">
+                  {% if link.can_visit %}
+                  <a class="button" href="{{ routes.visit(path=link.name) }}" target="_blank" rel="noreferrer" aria-label="Visit go/{{ link.name }}">Visit</a>
+                  {% endif %}
+                  <a class="button" href="{{ routes.link(link_id=link.id) }}" aria-label="Edit go/{{ link.name }}">Edit</a>
+                </div>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="7" class="empty"><span class="cui-status-indicator cui-status-indicator--neutral cui-status-indicator--small" data-cui-component="status-indicator"><span class="cui-status-indicator__dot" aria-hidden="true"></span><span class="cui-status-indicator__label">No links match your filters.</span></span>
+</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <p id="links-page" data-pager-label></p>
+        <div class="actions">
+          <button type="button" data-pager-previous disabled>Previous</button>
+          <span id="links-next" data-live>
+            {% if links.has_more %}
+            <a class="button" data-pager-next rel="next" href="{{ routes.links(after=links.next_after) }}">Next</a>
+            {% else %}
+            <span class="button button-disabled" aria-disabled="true">Next</span>
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </article>
+
+    <aside id="link-form-panel" class="card" aria-labelledby="create-title">
+      <div class="card-header">
+        <div>
+          <h2 id="create-title"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"></path></svg>
+ Create Go Link</h2>
+          <p>Add a new short link.</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <form id="create-link" data-command="golinks.create" class="form">
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="create-name">Name <span class="cui-form-field__required" aria-hidden="true">*</span></label><input class="cui-form-field__control" id="create-name" name="name" type="text" value="" placeholder="engineering-handbook" autocomplete="off" maxlength="255" required></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="create-url">Destination URL <span class="cui-form-field__required" aria-hidden="true">*</span></label><input class="cui-form-field__control" id="create-url" name="url" type="url" value="" placeholder="https://... or codex://..." autocomplete="off" required></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="textarea"><label class="cui-form-field__label" for="create-description">Description</label><textarea class="cui-form-field__control cui-form-field__control--textarea" id="create-description" name="description" rows="3" placeholder="What this link is for"></textarea></div>
+
+          <div class="cui-divider cui-divider--horizontal" data-cui-component="divider" role="separator" aria-orientation="horizontal"></div>
+
+          <div class="actions">
+            <button class="cui-button cui-button--primary" type="submit"><span class="cui-button__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></span><span>Create</span></button>
+
+          </div>
+        </form>
+      </div>
+    </aside>
+  </div>
+</div>

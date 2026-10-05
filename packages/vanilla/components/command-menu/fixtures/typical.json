@@ -1,0 +1,13 @@
+{
+  "id": "app-commands",
+  "title": "Application commands",
+  "triggerLabel": "Open commands",
+  "fallbackHref": "/search",
+  "groups": [{"id": "actions", "label": "Actions", "items": [{"id": "new-report", "href": "/reports/new", "label": "Create report", "description": "Start from a saved dataset", "shortcut": "Ctrl R", "icon": "plus", "keywords": ["build", "analytics"]}]}],
+  "searchLabel": "Search commands",
+  "searchPlaceholder": "Search actions and destinations",
+  "emptyText": "No commands match your search.",
+  "instructions": "Type to filter. Use arrow keys to move and Enter to open.",
+  "closeLabel": "Close command menu",
+  "shortcut": {"key": "k", "label": "Ctrl K"}
+}

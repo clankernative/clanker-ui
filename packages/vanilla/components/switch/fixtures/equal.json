@@ -1,0 +1,9 @@
+{
+  "options": {
+    "sizing": "equal"
+  },
+  "children": {
+    "body": "<button>One</button><button>Two</button>"
+  },
+  "expectedHtml": "<div class=\"cui-switch cui-switch--sizing-equal cui-switch--gap-standard cui-switch--align-stretch cui-switch--justify-start cui-switch--collapse-standard\" data-cui-component=\"switch\"><div class=\"cui-switch__items\"><button>One</button><button>Two</button></div></div>\n"
+}
