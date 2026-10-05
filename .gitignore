@@ -1,3 +1,4 @@
 /target/
 /examples/*/staged/
 .DS_Store
+/docs/screenshots/
