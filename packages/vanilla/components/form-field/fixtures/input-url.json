@@ -1,0 +1,9 @@
+{
+  "error": "Enter a complete HTTP or HTTPS URL.",
+  "expectedHtml": "<div class=\"cui-form-field cui-form-field--invalid\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"endpoint-url\">Endpoint URL</label><input class=\"cui-form-field__control\" id=\"endpoint-url\" name=\"endpoint\" type=\"url\" value=\"not-a-url\" aria-describedby=\"endpoint-url-error\" aria-invalid=\"true\"><div class=\"cui-form-field__description\"><p class=\"cui-form-field__error\" id=\"endpoint-url-error\">Enter a complete HTTP or HTTPS URL.</p></div></div>\n",
+  "id": "endpoint-url",
+  "inputType": "url",
+  "label": "Endpoint URL",
+  "name": "endpoint",
+  "value": "not-a-url"
+}

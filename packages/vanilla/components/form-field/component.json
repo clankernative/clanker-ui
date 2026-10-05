@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "name": "form-field",
+  "status": "ready",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders a labelled native input or textarea with optional disabled state, persistent help, and explicit invalid-state wiring.",
+  "keywords": [
+    "form",
+    "field",
+    "input",
+    "textarea",
+    "label",
+    "validation"
+  ],
+  "agent": {
+    "useWhen": "An app-owned form needs editable text, email, URL, number, password, search, date, telephone, or multiline text with a visible label and optional persistent hint or error.",
+    "avoidWhen": "The value is selected from a closed option set, uploaded as a file, edited as rich content, or needs a date-picker widget. Do not use to create a form, command, route, or validation workflow.",
+    "composeWith": [
+      "button",
+      "alert"
+    ]
+  },
+  "contract": {
+    "role": "native form control",
+    "variants": [
+      "text",
+      "email",
+      "url",
+      "number",
+      "password",
+      "search",
+      "date",
+      "tel",
+      "textarea"
+    ],
+    "requiredFields": [
+      "id",
+      "name",
+      "label"
+    ],
+    "invariants": [
+      "The app owns its surrounding form, command, route, submission transport, domain validation, and checked page-field binding; this component only emits one native editable control.",
+      "Every control has an explicit stable ID, a non-reserved form name, and a visible label associated by for/id. Values and all user-facing content are escaped plain text; an omitted value is empty.",
+      "Hint and error descriptions use deterministic IDs derived from the control ID and are listed in aria-describedby in matching order. An error is visible and sets aria-invalid=true; no error omits aria-invalid.",
+      "required, readonly, and disabled are native boolean attributes. A disabled control is unavailable for interaction and is omitted from native form submission, including command submissions; do not use it when a command must receive that named value. No hidden fields, raw attributes, Datastar expressions, forms, routes, commands, or JavaScript are emitted.",
+      "Textarea is a distinct field kind, supports rows from 2 through 40 (default 3), preserves permitted newlines, and does not accept inputType. Input rows are invalid. Autocomplete is supported for both control kinds.",
+      "maxLength is optional and must be an integer from 1 through 65535. It is supported for textarea and text, email, URL, password, search, and telephone inputs, but rejected for number and date inputs.",
+      "Hint and error values, when provided, must contain non-whitespace plain text. Placeholder may intentionally be empty. Input values reject control characters; textarea values preserve line breaks and tabs while rejecting other control characters.",
+      "The fragment contains exactly one [[attributes]], [[label]], [[control]], and [[description]] slot. The renderer performs single-pass slot expansion without interpreting slot-like user text."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border",
+    "--cui-border-strong",
+    "--cui-danger",
+    "--cui-font-size-small",
+    "--cui-font-weight-medium",
+    "--cui-form-field-background",
+    "--cui-form-field-border",
+    "--cui-form-field-control-padding",
+    "--cui-form-field-error-border",
+    "--cui-form-field-error-text",
+    "--cui-form-field-focus-border",
+    "--cui-form-field-focus-offset",
+    "--cui-form-field-focus-ring",
+    "--cui-form-field-focus-width",
+    "--cui-form-field-gap",
+    "--cui-form-field-height",
+    "--cui-form-field-hint-text",
+    "--cui-form-field-hover-border",
+    "--cui-form-field-label-size",
+    "--cui-form-field-label-text",
+    "--cui-form-field-label-weight",
+    "--cui-form-field-measure",
+    "--cui-form-field-message-size",
+    "--cui-form-field-placeholder-text",
+    "--cui-form-field-radius",
+    "--cui-form-field-required-text",
+    "--cui-form-field-shadow",
+    "--cui-form-field-text",
+    "--cui-radius-control",
+    "--cui-space-1",
+    "--cui-space-2",
+    "--cui-space-3",
+    "--cui-surface",
+    "--cui-text",
+    "--cui-text-muted",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-form-field-background",
+      "role": "background",
+      "purpose": "Controls background color for  form field."
+    },
+    {
+      "name": "--cui-form-field-border",
+      "role": "border",
+      "purpose": "Controls border color for  form field."
+    },
+    {
+      "name": "--cui-form-field-control-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for form field."
+    },
+    {
+      "name": "--cui-form-field-error-border",
+      "role": "border",
+      "purpose": "Controls border color for error state form field."
+    },
+    {
+      "name": "--cui-form-field-error-text",
+      "role": "text",
+      "purpose": "Controls text color for error state form field."
+    },
+    {
+      "name": "--cui-form-field-focus-border",
+      "role": "focus",
+      "purpose": "Controls border color for focus treatment form field."
+    },
+    {
+      "name": "--cui-form-field-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for form field."
+    },
+    {
+      "name": "--cui-form-field-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  form field."
+    },
+    {
+      "name": "--cui-form-field-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for form field."
+    },
+    {
+      "name": "--cui-form-field-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for form field."
+    },
+    {
+      "name": "--cui-form-field-height",
+      "role": "sizing",
+      "purpose": "Controls height for form field."
+    },
+    {
+      "name": "--cui-form-field-hint-text",
+      "role": "text",
+      "purpose": "Controls text color for hint form field."
+    },
+    {
+      "name": "--cui-form-field-hover-border",
+      "role": "border",
+      "purpose": "Controls border color for hover state form field."
+    },
+    {
+      "name": "--cui-form-field-label-size",
+      "role": "sizing",
+      "purpose": "Controls size for form field."
+    },
+    {
+      "name": "--cui-form-field-label-text",
+      "role": "text",
+      "purpose": "Controls label text for  form field."
+    },
+    {
+      "name": "--cui-form-field-label-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for form field."
+    },
+    {
+      "name": "--cui-form-field-measure",
+      "role": "sizing",
+      "purpose": "Controls maximum text width for form field."
+    },
+    {
+      "name": "--cui-form-field-message-size",
+      "role": "sizing",
+      "purpose": "Controls size for form field."
+    },
+    {
+      "name": "--cui-form-field-placeholder-text",
+      "role": "text",
+      "purpose": "Controls text color for placeholder form field."
+    },
+    {
+      "name": "--cui-form-field-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for form field."
+    },
+    {
+      "name": "--cui-form-field-required-text",
+      "role": "text",
+      "purpose": "Controls text color for required form field."
+    },
+    {
+      "name": "--cui-form-field-shadow",
+      "role": "shadow",
+      "purpose": "Controls shadow for form field."
+    },
+    {
+      "name": "--cui-form-field-text",
+      "role": "text",
+      "purpose": "Controls text color for  form field."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/form-field/fragment.html",
+    "styles": "components/form-field/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/form-field/fixtures/input-text.json",
+    "components/form-field/fixtures/input-email.json",
+    "components/form-field/fixtures/input-url.json",
+    "components/form-field/fixtures/input-number.json",
+    "components/form-field/fixtures/input-password.json",
+    "components/form-field/fixtures/input-search.json",
+    "components/form-field/fixtures/input-date.json",
+    "components/form-field/fixtures/input-tel.json",
+    "components/form-field/fixtures/textarea.json",
+    "components/form-field/fixtures/disabled-input.json",
+    "components/form-field/fixtures/disabled-textarea.json"
+  ]
+}

@@ -1,0 +1,70 @@
+.cui-status-indicator {
+  --cui-status-indicator-tone: var(--cui-status-indicator-neutral, var(--cui-text-muted, #6b7280));
+
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--cui-status-indicator-gap, 0.5rem);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  color: var(--cui-status-indicator-label-text, var(--cui-text, #17202a));
+  font-size: 0.875rem;
+  line-height: 1.25;
+  vertical-align: middle;
+}
+
+.cui-status-indicator--info {
+  --cui-status-indicator-tone: var(--cui-status-indicator-info, var(--cui-info-text, #175cd3));
+}
+
+.cui-status-indicator--success {
+  --cui-status-indicator-tone: var(--cui-status-indicator-success, var(--cui-success-text, #067647));
+}
+
+.cui-status-indicator--warning {
+  --cui-status-indicator-tone: var(--cui-status-indicator-warning, var(--cui-warning-text, #b54708));
+}
+
+.cui-status-indicator--danger {
+  --cui-status-indicator-tone: var(--cui-status-indicator-danger, var(--cui-danger-text, #b42318));
+}
+
+.cui-status-indicator__dot {
+  flex: none;
+  align-self: center;
+  inline-size: var(--cui-status-indicator-size, 0.5rem);
+  block-size: var(--cui-status-indicator-size, 0.5rem);
+  border-radius: 50%;
+  background: var(--cui-status-indicator-tone);
+}
+
+.cui-status-indicator--large .cui-status-indicator__dot {
+  inline-size: calc(var(--cui-status-indicator-size, 0.5rem) * 1.5);
+  block-size: calc(var(--cui-status-indicator-size, 0.5rem) * 1.5);
+}
+
+.cui-status-indicator--pulse .cui-status-indicator__dot {
+  animation: cui-status-indicator-pulse var(--cui-status-indicator-pulse-duration, 1.6s) ease-in-out infinite;
+}
+
+.cui-status-indicator__label {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.cui-status-indicator__detail {
+  color: var(--cui-status-indicator-detail-text, var(--cui-text-secondary, #475467));
+  overflow-wrap: anywhere;
+}
+
+@keyframes cui-status-indicator-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cui-status-indicator--pulse .cui-status-indicator__dot {
+    animation: none;
+  }
+}

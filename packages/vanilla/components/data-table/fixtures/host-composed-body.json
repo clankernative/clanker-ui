@@ -1,0 +1,13 @@
+{
+  "children": {
+    "body": "<tbody class=\"cui-data-table__body\"><tr id=\"task-1\"><td data-label=\"Task\"><a href=\"/tasks/1\">Review outline</a></td><td data-label=\"Status\"><span class=\"cui-badge cui-badge--success\" data-cui-component=\"badge\">Done</span></td></tr></tbody>"
+  },
+  "expectedHtml": "<div class=\"cui-data-table\" data-cui-component=\"data-table\" tabindex=\"0\" role=\"region\" aria-label=\"Project tasks\"><table class=\"cui-data-table__table\"><caption class=\"cui-data-table__caption\">Project tasks</caption><thead class=\"cui-data-table__head\"><tr><th scope=\"col\">Task</th><th scope=\"col\">Status</th></tr></thead><tbody class=\"cui-data-table__body\"><tr id=\"task-1\"><td data-label=\"Task\"><a href=\"/tasks/1\">Review outline</a></td><td data-label=\"Status\"><span class=\"cui-badge cui-badge--success\" data-cui-component=\"badge\">Done</span></td></tr></tbody></table></div>\n",
+  "options": {
+    "caption": "Project tasks",
+    "columns": [
+      "Task",
+      "Status"
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+{"name":"release-mode","legend":"Release mode","error":"Choose a mode.","required":true,"choices":[{"value":"manual","label":"Manual"},{"value":"auto","label":"Automatic"}]}

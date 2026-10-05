@@ -1,0 +1,6 @@
+{
+  "label": "Operational",
+  "tone": "success",
+  "detail": "All regions responding",
+  "expectedHtml": "<span class=\"cui-status-indicator cui-status-indicator--success cui-status-indicator--small\" data-cui-component=\"status-indicator\"><span class=\"cui-status-indicator__dot\" aria-hidden=\"true\"></span><span class=\"cui-status-indicator__label\">Operational</span><span class=\"cui-status-indicator__detail\">All regions responding</span></span>\n"
+}

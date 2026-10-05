@@ -1,0 +1,46 @@
+{
+  "expectedHtml": "<div class=\"cui-command-menu\" data-cui-component=\"command-menu\"><a class=\"cui-command-menu__trigger cui-button cui-button--secondary\" href=\"/search\" aria-haspopup=\"dialog\" aria-controls=\"workspace-search\" data-cui-command-trigger><span aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"command\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z\"></path></svg></span><span>Search workspace</span></a><dialog class=\"cui-command-menu__dialog\" id=\"workspace-search\" aria-labelledby=\"workspace-search-title\" data-cui-command-dialog><div class=\"cui-command-menu__surface\"><h2 class=\"cui-command-menu__visually-hidden\" id=\"workspace-search-title\">Find a destination</h2><div class=\"cui-command-menu__search\"><label class=\"cui-command-menu__visually-hidden\" for=\"workspace-search-search\">Filter destinations</label><span aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"search\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"></circle>\n<path d=\"m21 21-5-5\"></path></svg></span><input class=\"cui-command-menu__search-control\" id=\"workspace-search-search\" type=\"search\" placeholder=\"Type a page name\" autocomplete=\"off\" role=\"combobox\" aria-autocomplete=\"list\" aria-expanded=\"true\" aria-controls=\"workspace-search-results\" aria-describedby=\"workspace-search-instructions\" data-cui-command-search><button class=\"cui-command-menu__close\" type=\"button\" aria-label=\"Close search\" data-cui-command-close><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></button></div><div class=\"cui-command-menu__results\" id=\"workspace-search-results\" role=\"listbox\" aria-label=\"Find a destination\" data-cui-command-results><section class=\"cui-command-menu__group\" role=\"group\" aria-labelledby=\"workspace-search-group-recent\" data-cui-command-group><h3 class=\"cui-command-menu__group-label\" id=\"workspace-search-group-recent\">Recent</h3><div class=\"cui-command-menu__items\"><a class=\"cui-command-menu__item\" id=\"workspace-search-item-overview\" href=\"/overview\" role=\"option\" aria-selected=\"false\" tabindex=\"-1\" data-cui-command-item data-cui-command-text=\"Overview home\"><span class=\"cui-command-menu__item-content\"><span class=\"cui-command-menu__item-label\">Overview</span></span></a><a class=\"cui-command-menu__item\" id=\"workspace-search-item-reports\" href=\"/reports\" role=\"option\" aria-selected=\"false\" tabindex=\"-1\" data-cui-command-item data-cui-command-text=\"Reports\"><span class=\"cui-command-menu__item-content\"><span class=\"cui-command-menu__item-label\">Reports</span></span></a></div></section><section class=\"cui-command-menu__group\" role=\"group\" aria-labelledby=\"workspace-search-group-settings\" data-cui-command-group><h3 class=\"cui-command-menu__group-label\" id=\"workspace-search-group-settings\">Settings</h3><div class=\"cui-command-menu__items\"><a class=\"cui-command-menu__item\" id=\"workspace-search-item-preferences\" href=\"/settings/preferences\" role=\"option\" aria-selected=\"false\" tabindex=\"-1\" data-cui-command-item data-cui-command-text=\"Preferences\"><span class=\"cui-command-menu__item-content\"><span class=\"cui-command-menu__item-label\">Preferences</span></span></a></div></section><p class=\"cui-command-menu__empty\" role=\"status\" hidden data-cui-command-empty>No destinations found.</p></div><p class=\"cui-command-menu__instructions\" id=\"workspace-search-instructions\">Use arrows to move; Enter opens a destination.</p></div></dialog></div>\n",
+  "options": {
+    "closeLabel": "Close search",
+    "emptyText": "No destinations found.",
+    "fallbackHref": "/search",
+    "groups": [
+      {
+        "id": "recent",
+        "items": [
+          {
+            "href": "/overview",
+            "id": "overview",
+            "keywords": [
+              "home"
+            ],
+            "label": "Overview"
+          },
+          {
+            "href": "/reports",
+            "id": "reports",
+            "label": "Reports"
+          }
+        ],
+        "label": "Recent"
+      },
+      {
+        "id": "settings",
+        "items": [
+          {
+            "href": "/settings/preferences",
+            "id": "preferences",
+            "label": "Preferences"
+          }
+        ],
+        "label": "Settings"
+      }
+    ],
+    "id": "workspace-search",
+    "instructions": "Use arrows to move; Enter opens a destination.",
+    "searchLabel": "Filter destinations",
+    "searchPlaceholder": "Type a page name",
+    "title": "Find a destination",
+    "triggerLabel": "Search workspace"
+  }
+}

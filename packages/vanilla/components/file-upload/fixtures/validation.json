@@ -1,0 +1,11 @@
+{
+  "name": "evidence",
+  "id": "evidence-field",
+  "label": "Evidence files",
+  "accept": ".pdf,image/png",
+  "required": true,
+  "error": "Choose a supported file type.",
+  "files": [
+    {"id": "rejected", "name": "archive.zip", "status": {"state": "failed"}, "statusLabel": "Rejected; choose a PDF or PNG."}
+  ]
+}

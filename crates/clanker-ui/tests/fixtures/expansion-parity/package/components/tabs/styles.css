@@ -1,0 +1,9 @@
+/* Draft: peer destinations only; intentionally not an ARIA tablist. */
+.cui-tabs { max-inline-size: 100%; min-inline-size: 0; overflow-x: auto; border-block-end: 1px solid var(--cui-tabs-border, var(--cui-border-subtle, #cbd5e1)); scrollbar-width: thin; }
+.cui-tabs__list { display: flex; gap: var(--cui-tabs-gap, .25rem); inline-size: max-content; min-inline-size: 100%; margin: 0; padding: 0; list-style: none; }
+.cui-tabs__item { flex: none; }
+.cui-tabs__link { display: block; padding: var(--cui-tabs-padding, .625rem .875rem); border-block-end: .15rem solid transparent; color: var(--cui-tabs-text, var(--cui-text-secondary, #475569)); font: inherit; text-decoration: none; white-space: nowrap; }
+.cui-tabs__link:hover { color: var(--cui-tabs-hover-text, var(--cui-text-primary, #0f172a)); }
+.cui-tabs__link:focus-visible { outline: var(--cui-tabs-focus-width, 2px) solid var(--cui-tabs-focus-ring, #2563eb); outline-offset: var(--cui-tabs-focus-offset, 2px); }
+.cui-tabs__link--active { color: var(--cui-tabs-active-text, var(--cui-link, #1d4ed8)); border-block-end-color: var(--cui-tabs-indicator, var(--cui-accent, #2563eb)); font-weight: 600; }
+@media (forced-colors: active) { .cui-tabs__link--active { border-block-end-color: LinkText; } .cui-tabs__link:focus-visible { outline-color: Highlight; } }

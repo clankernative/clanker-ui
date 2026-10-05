@@ -1,0 +1,69 @@
+.cui-progress {
+  --cui-progress-tone: var(--cui-progress-info, var(--cui-badge-info-text, var(--cui-accent, #335ad2)));
+  display: grid;
+  gap: var(--cui-progress-gap, var(--cui-space-2, .375rem));
+  min-inline-size: 0;
+}
+.cui-progress--success { --cui-progress-tone: var(--cui-progress-success, var(--cui-badge-success-text, #166534)); }
+.cui-progress--warning { --cui-progress-tone: var(--cui-progress-warning, var(--cui-badge-warning-text, #854d0e)); }
+.cui-progress--danger { --cui-progress-tone: var(--cui-progress-danger, var(--cui-danger, #991b1b)); }
+.cui-progress__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--cui-space-1, .25rem) var(--cui-space-3, .75rem);
+  min-inline-size: 0;
+}
+.cui-progress__label,
+.cui-progress__suffix,
+.cui-progress__detail { overflow-wrap: anywhere; }
+.cui-progress__label {
+  color: var(--cui-progress-label-text, var(--cui-text, #18203b));
+  font-size: var(--cui-font-size-small, .875rem);
+  font-weight: var(--cui-font-weight-medium, 500);
+}
+.cui-progress__suffix,
+.cui-progress__detail {
+  color: var(--cui-progress-detail-text, var(--cui-text-secondary, var(--cui-muted, #45516e)));
+  font-size: var(--cui-font-size-small, .875rem);
+  font-variant-numeric: tabular-nums;
+}
+@keyframes cui-progress-indeterminate {
+  from { background-position-x: 100%; }
+  to { background-position-x: -100%; }
+}
+.cui-progress__track {
+  display: block;
+  overflow: hidden;
+  inline-size: 100%;
+  block-size: var(--cui-progress-height, .5rem);
+  border: 0;
+  border-radius: var(--cui-progress-radius, 999px);
+  background: var(--cui-progress-track, var(--cui-surface-hover, #e6eaf4));
+  color: var(--cui-progress-tone);
+  appearance: none;
+}
+.cui-progress__track::-webkit-progress-bar {
+  border-radius: inherit;
+  background: var(--cui-progress-track, var(--cui-surface-hover, #e6eaf4));
+}
+.cui-progress__track::-webkit-progress-value { border-radius: inherit; background: currentColor; }
+.cui-progress__track::-moz-progress-bar { background: currentColor; }
+.cui-progress--compact .cui-progress__track { block-size: var(--cui-progress-compact-height, .25rem); }
+.cui-progress--indeterminate .cui-progress__track {
+  background-color: var(--cui-progress-track, var(--cui-surface-hover, #e6eaf4));
+  background-image: linear-gradient(90deg, transparent 0 25%, var(--cui-progress-tone) 45% 55%, transparent 75% 100%);
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  animation: cui-progress-indeterminate 1.6s linear infinite;
+}
+.cui-progress--indeterminate .cui-progress__track::-webkit-progress-bar { background: transparent; }
+.cui-progress--indeterminate .cui-progress__track::-moz-progress-bar { background: transparent; }
+@media (prefers-reduced-motion: reduce) {
+  .cui-progress--indeterminate .cui-progress__track {
+    animation: none;
+    background-position-x: 50%;
+  }
+}
+.cui-progress__detail { margin: 0; line-height: 1.4; }

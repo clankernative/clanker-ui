@@ -1,0 +1,14 @@
+@layer clanker.components {
+  .cui-stack { display: flex; flex-direction: column; align-items: stretch; gap: var(--cui-stack-gap-standard, 1rem); min-inline-size: 0; }
+  .cui-stack--gap-none { gap: var(--cui-stack-gap-none, 0); }
+  .cui-stack--gap-compact { gap: var(--cui-stack-gap-compact, .5rem); }
+  .cui-stack--gap-standard { gap: var(--cui-stack-gap-standard, 1rem); }
+  .cui-stack--gap-spacious { gap: var(--cui-stack-gap-spacious, 1.5rem); }
+  .cui-stack--gap-generous { gap: var(--cui-stack-gap-generous, 2rem); }
+  .cui-stack--align-stretch { align-items: stretch; }
+  .cui-stack--align-start { align-items: flex-start; }
+  .cui-stack--align-center { align-items: center; }
+  .cui-stack--align-end { align-items: flex-end; }
+  .cui-stack--align-baseline { align-items: baseline; }
+  .cui-stack > * { min-inline-size: 0; overflow-wrap: anywhere; }
+}

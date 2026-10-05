@@ -1,0 +1,13 @@
+{
+  "expectedHtml": "<dl class=\"cui-definition-list cui-definition-list--compact cui-definition-list--plain\" data-cui-component=\"definition-list\"><div class=\"cui-definition-list__item\"><dt class=\"cui-definition-list__term\">State &lt;&amp;&gt;</dt><dd class=\"cui-definition-list__value\">Ready &lt;now&gt;</dd></div></dl>\n",
+  "options": {
+    "density": "compact",
+    "dividers": false,
+    "items": [
+      {
+        "term": "State <&>",
+        "value": "Ready <now>"
+      }
+    ]
+  }
+}

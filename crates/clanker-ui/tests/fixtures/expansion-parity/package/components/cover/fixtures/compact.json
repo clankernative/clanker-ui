@@ -1,0 +1,9 @@
+{
+  "options": {
+    "height": "compact"
+  },
+  "children": {
+    "primary": "<main>Task</main>"
+  },
+  "expectedHtml": "<div class=\"cui-cover cui-cover--height-compact cui-cover--gap-standard\" data-cui-component=\"cover\"><div class=\"cui-cover__top\"></div><div class=\"cui-cover__primary\"><main>Task</main></div><div class=\"cui-cover__bottom\"></div></div>\n"
+}

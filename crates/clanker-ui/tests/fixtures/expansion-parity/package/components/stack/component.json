@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "stack",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Establishes consistent vertical rhythm between admitted child regions.",
+  "keywords": ["stack", "vertical", "spacing", "flow"],
+  "agent": { "useWhen": "Related regions need consistent vertical spacing.", "avoidWhen": "Normal text flow or one component already owns the spacing.", "composeWith": ["container", "card", "grid", "page-header"] },
+  "contract": { "role": "neutral-vertical-layout", "variants": ["none", "compact", "standard", "spacious", "generous"], "requiredFields": [], "invariants": ["Gap applies only between direct children.", "Child markup must already be admitted by the host and is not accepted as an instance string.", "The wrapper preserves reading order and adds no keyboard behavior, landmark semantics, or JavaScript."] },
+  "tokens": ["--cui-stack-gap-compact", "--cui-stack-gap-generous", "--cui-stack-gap-none", "--cui-stack-gap-spacious", "--cui-stack-gap-standard"],
+  "dependencies": [],
+  "assets": { "template": "components/stack/fragment.html", "styles": "components/stack/styles.css", "scripts": [] },
+  "fixtures": ["components/stack/fixtures/typical.json", "components/stack/fixtures/alignment.json", "components/stack/fixtures/generous-gap.json", "components/stack/fixtures/compact-gap.json", "components/stack/fixtures/no-gap.json"]
+}

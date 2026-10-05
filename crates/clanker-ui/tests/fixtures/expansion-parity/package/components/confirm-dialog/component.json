@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "name": "confirm-dialog",
+  "status": "draft",
+  "target": "native-html",
+  "category": "overlay",
+  "summary": "Confirms a consequential existing form submission through a native dialog with an honest no-JavaScript submit trigger.",
+  "keywords": ["confirmation", "destructive-action", "dialog", "form"],
+  "agent": {
+    "useWhen": "An existing form submits a costly, destructive, or difficult-to-reverse operation.",
+    "avoidWhen": "The action is safe or reversible, requires a new endpoint, or has no existing validated form.",
+    "composeWith": ["alert", "button", "form-field"]
+  },
+  "contract": {
+    "role": "native confirmation dialog for an existing form submitter",
+    "variants": ["neutral", "danger"],
+    "requiredFields": ["id", "form_id", "title", "body", "trigger_label", "confirm_label"],
+    "invariants": [
+      "Title and body are plain escaped text; configuration cannot provide markup.",
+      "The trigger is a real submit button with an explicit existing form association and remains a no-JavaScript fallback.",
+      "Enhancement requires the associated form, original submitter, native dialog API, and requestSubmit; otherwise native submit behavior is untouched.",
+      "Confirmation calls requestSubmit with the original submitter to preserve native constraint validation, submit name/value, and app-owned signed transport.",
+      "Cancel, Escape, or backdrop close never submits. The app/server remains responsible for validation, authorization, and destructive effects.",
+      "Derived IDs include the dialog, title, and body; reserve all against page collisions.",
+      "The current Native host forbids external form= associations and has no confirm-dialog adapter seam; keep this as a draft and do not bypass host admission or add an endpoint."
+    ]
+  },
+  "tokens": ["--cui-confirm-dialog-backdrop", "--cui-confirm-dialog-backdrop-blur", "--cui-confirm-dialog-padding", "--cui-confirm-dialog-radius", "--cui-confirm-dialog-surface", "--cui-confirm-dialog-title-size", "--cui-confirm-dialog-width"],
+  "dependencies": ["button", "icon"],
+  "assets": {"template": "components/confirm-dialog/fragment.html", "styles": "components/confirm-dialog/styles.css", "scripts": ["components/confirm-dialog/interaction.js"]},
+  "fixtures": ["components/confirm-dialog/fixtures/neutral.json", "components/confirm-dialog/fixtures/danger.json", "components/confirm-dialog/fixtures/neutral-golden.json", "components/confirm-dialog/fixtures/danger-golden.json"]
+}

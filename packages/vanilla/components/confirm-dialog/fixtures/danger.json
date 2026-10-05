@@ -1,0 +1,1 @@
+{"id":"remove-connection","formId":"remove-connection-form","title":"Remove connection?","body":"Scheduled imports will stop immediately.","triggerLabel":"Remove connection","confirmLabel":"Yes, remove","cancelLabel":"Keep connection","tone":"danger","headingLevel":"h3","submitName":"operation","submitValue":"remove"}

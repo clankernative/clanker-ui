@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "split",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Arranges named start and end regions with a responsive proportion.",
+  "keywords": ["split", "columns", "proportion", "regions"],
+  "agent": { "useWhen": "Two named regions need a predictable ratio at a chosen container width.", "avoidWhen": "There are more than two peer items or regions should remain stacked at every size.", "composeWith": ["container", "stack", "card"] },
+  "contract": { "role": "two-region-layout", "variants": ["equal", "start-wide", "end-wide", "start-dominant", "end-dominant"], "requiredFields": [], "invariants": ["The required start and end slots preserve source order in the DOM.", "Regions stack until the selected container-query breakpoint; the 'never' choice means never collapse and expands immediately.", "The neutral layout adds no landmarks, controls, scripts, routes, or commands."] },
+  "tokens": ["--cui-split-gap-compact", "--cui-split-gap-generous", "--cui-split-gap-none", "--cui-split-gap-spacious", "--cui-split-gap-standard"],
+  "dependencies": [],
+  "assets": { "template": "components/split/fragment.html", "styles": "components/split/styles.css", "scripts": [] },
+  "fixtures": ["components/split/fixtures/typical.json", "components/split/fixtures/start-wide.json", "components/split/fixtures/end-wide.json", "components/split/fixtures/start-dominant.json", "components/split/fixtures/end-dominant.json"]
+}

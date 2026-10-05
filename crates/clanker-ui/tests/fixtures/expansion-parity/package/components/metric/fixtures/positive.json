@@ -1,0 +1,8 @@
+{
+  "expectedHtml": "<article class=\"cui-metric cui-metric--plain\" data-cui-component=\"metric\"><dl class=\"cui-metric__content\"><dt class=\"cui-metric__label\">Requests</dt><dd class=\"cui-metric__value\">184</dd></dl><p class=\"cui-metric__footer\"><span class=\"cui-metric__change cui-metric__change--down cui-metric__change--positive\"><span class=\"cui-visually-hidden\">Decreased, favorable change: </span><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"arrow-down\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12l7 7 7-7\"></path></svg><span>8%</span></span></p></article>\n",
+  "label": "Requests",
+  "value": "184",
+  "trend": "down",
+  "trendTone": "positive",
+  "trendLabel": "8%"
+}

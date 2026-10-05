@@ -1,0 +1,120 @@
+<div id="gallery-app" class="workspace-page">
+  <!-- THESIS: A working project/task demo proves the components with real data.
+       OWN-WORLD: Inherited neutral workspace, graphite text, Studio-family orange.
+       STORY: Create a task, edit it, and observe Native live reads without losing drafts.
+       FIRST VIEWPORT: Project rail, task list, and an independent create form.
+       FORM: Approved bounded workspace; no new visual identity or runtime UI framework. -->
+  <header class="appbar">
+    <a class="brand" href="{{ routes.workspace() }}">Clanker gallery</a>
+    <nav class="app-nav" aria-label="Gallery">
+      <a href="{{ routes.workspace() }}" aria-current="page">Workspace</a>
+      <a href="{{ routes.layouts() }}">Layout atlas</a>
+    </nav>
+    <p class="app-note">Illustrative data · real Native commands</p>
+  </header>
+
+  <div class="page-content">
+    <cui-sidebar side="start" width="narrow" gap="generous" alignment="start" collapse-at="standard">
+      <cui-slot name="aside">
+        <aside class="project-rail" aria-labelledby="project-rail-title">
+          <h2 id="project-rail-title">Projects</h2>
+          <div id="project-navigation" data-live class="project-names" aria-label="Sample projects">
+            {% for project in workspace.projects.items %}
+            <p>{{ project.name }}</p>
+            {% else %}
+            <p>No projects yet.</p>
+            {% endfor %}
+          </div>
+          <nav aria-label="Workspace sections"><a href="#workspace-tasks">Browse tasks</a><a href="#create-title">Create a task</a></nav>
+          <details class="rail-note">
+            <summary>Demo details</summary>
+            <p>Typed commands, live read regions, and revision-safe edits. All project data is illustrative.</p>
+            <form id="ensure-demo" data-command="gallery.seed_demo">
+              <cui-button kind="submit" variant="secondary" size="compact" label="Initialize sample data" />
+            </form>
+            <p class="small-note">Initializes an empty gallery. Existing projects and tasks are left unchanged.</p>
+          </details>
+        </aside>
+      </cui-slot>
+      <cui-slot name="main">
+        <cui-stack gap="generous">
+          <cui-page-header title="Project workspace" description="Create a task, edit its status, and watch the workspace update. Sample projects give the components real data to work with." />
+
+          <section id="workspace-summary" data-live aria-label="Live workspace summary" class="workspace-summary">
+            <cui-cluster gap="generous" alignment="start">
+              <cui-metric label="Tasks" value="{{ workspace.total }}" />
+              <cui-metric label="Open" value="{{ workspace.active }}" />
+              <cui-metric label="Completed" value="{{ workspace.completed }}" />
+              <cui-status-indicator tone="info" label="Live query data" detail="Updated by Native, not a component signal." />
+            </cui-cluster>
+            <cui-progress state="determinate" label="Task completion" value="{{ workspace.completion }}" maximum="100" tone="info" size="compact" />
+          </section>
+
+          <cui-sidebar side="end" width="wide" gap="generous" alignment="start" collapse-at="standard">
+            <cui-slot name="main">
+              <section id="workspace-tasks" data-live aria-label="Project tasks">
+                {% for project in workspace.projects.items %}
+                <section id="project-{{ project.id }}" class="project-section" aria-label="{{ project.name }}">
+                  <h2>{{ project.name }}</h2>
+                  <p class="section-description">{{ project.summary }}</p>
+                  <cui-pane height="standard">
+                    <cui-slot name="header"><div class="list-header"><span>Task</span><span>Status</span><span>Action</span></div></cui-slot>
+                    <cui-slot name="body">
+                      <ul class="task-list">
+                        {% for item in workspace.tasks.items %}
+                        {% if item.project_id == project.id %}
+                        <li class="task-row">
+                          <div class="task-copy"><a class="task-title" href="{{ routes.task(task_id=item.id) }}">{{ item.title }}</a><p>{{ item.detail }}</p><span class="small-note">{{ item.owner }} · revision {{ item.version }}</span></div>
+                          <div class="task-status">
+                            {% if item.state == 2 %}<cui-badge tone="success" label="Completed" />
+                            {% elif item.state == 1 %}<cui-badge tone="info" label="In progress" />
+                            {% else %}<cui-badge tone="neutral" label="To do" />{% endif %}
+                          </div>
+                          <a class="task-action" href="{{ routes.task(task_id=item.id) }}">Edit<span class="sr-only"> {{ item.title }}</span></a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                      </ul>
+                    </cui-slot>
+                    <cui-slot name="footer"><p class="list-footer">Read data only. Open a task to edit it outside this live region.</p></cui-slot>
+                  </cui-pane>
+                </section>
+                {% else %}
+                <cui-empty-state title="Start with sample projects" body="Use Initialize sample data, then reload the workspace. The demo creates real local records only when both tables are empty." alignment="start" />
+                {% endfor %}
+              </section>
+            </cui-slot>
+            <cui-slot name="aside">
+              <aside class="create-panel" aria-labelledby="create-title">
+                <h2 id="create-title">Create a task</h2>
+                <p class="section-description">An independent form. Live updates leave its draft alone.</p>
+                <form id="create-task" data-command="gallery.create_task" class="task-form">
+                  <label class="select-field" for="create-project"><span>Project</span><select id="create-project" name="project_id" required>{% for project in workspace.projects.items %}<option value="{{ project.id }}">{{ project.name }}</option>{% endfor %}</select></label>
+                  <cui-form-field id="create-title-field" name="title" label="Task title" placeholder="What needs checking?" maxlength="160" autocomplete="off" hint="Enter a meaningful title. Blank titles are rejected by the app." />
+                  <cui-form-field id="create-detail" name="detail" label="Details" kind="textarea" rows="4" placeholder="A short note for this task" maxlength="4000" hint="Details are required; the server accepts up to 4,000 UTF-8 bytes." />
+                  {% if workspace.projects.items | length > 0 %}
+                  <cui-button kind="submit" variant="primary" icon="plus" label="Create task" />
+                  {% else %}
+                  <cui-button kind="submit" variant="primary" label="Initialize projects first" disabled="true" />
+                  <p>Add the sample projects, then <a href="{{ routes.workspace() }}">reload</a> to create a task.</p>
+                  {% endif %}
+                  <p class="small-note">Saved through an app-owned command. After a rejection, copy your draft and reload before retrying.</p>
+                </form>
+              </aside>
+            </cui-slot>
+          </cui-sidebar>
+
+          <section class="workspace-guide" aria-labelledby="try-title">
+            <h2 id="try-title">Try the data boundary</h2>
+            <cui-grid columns="three" gap="spacious" collapse-at="compact">
+              <div><h3>Keep a draft</h3><p>Type here, then edit a task in another tab. The live list changes; this form stays yours.</p></div>
+              <div><h3>Reject an invalid edit</h3><p>Submit a blank title or an invalid state. No record changes, and your draft remains available. Copy it and reload before retrying.</p></div>
+              <div><h3>Check a stale revision</h3><p>Open one task in two tabs. Save the first, then submit the older form. Reload before retrying.</p></div>
+            </cui-grid>
+          </section>
+          <footer class="page-footer"><p>Real local records. Illustrative project content. <a href="{{ routes.layouts() }}">Explore all 14 layouts and the other ported components.</a></p></footer>
+        </cui-stack>
+      </cui-slot>
+    </cui-sidebar>
+  </div>
+</div>

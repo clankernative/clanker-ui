@@ -1,0 +1,5 @@
+{
+  "options": { "title": "Details", "headingLevel": "h3", "padding": "compact" },
+  "children": { "body": "<p>Admitted content.</p>" },
+  "expectedHtml": "<div class=\"cui-card cui-card--compact\" data-cui-component=\"card\"><header class=\"cui-card__header\"><h3 class=\"cui-card__title\">Details</h3></header><div class=\"cui-card__body\"><p>Admitted content.</p></div></div>\n"
+}

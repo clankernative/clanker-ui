@@ -1,0 +1,16 @@
+{
+  "children": {
+    "actions": "<button type=\"button\">Apply</button>",
+    "body": "<p>Filter controls.</p>"
+  },
+  "expectedHtml": "<div class=\"cui-drawer\" data-cui-component=\"drawer\"><a class=\"cui-button cui-button--secondary cui-button--standard\" href=\"/filters\" aria-haspopup=\"dialog\" aria-controls=\"drawer-example\" data-cui-modal-trigger>Open filters</a><dialog class=\"cui-drawer__dialog cui-drawer__dialog--start cui-drawer__dialog--narrow\" id=\"drawer-example\" aria-labelledby=\"drawer-example-title\" aria-describedby=\"drawer-example-description\" data-cui-modal-dialog><div class=\"cui-drawer__surface\"><header class=\"cui-drawer__header\"><div class=\"cui-drawer__heading\"><h2 class=\"cui-drawer__title\" id=\"drawer-example-title\">Filters</h2><p class=\"cui-drawer__description\" id=\"drawer-example-description\">Narrow the results.</p></div><button class=\"cui-drawer__close\" type=\"button\" aria-label=\"Close drawer\" data-cui-modal-close><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></button></header><div class=\"cui-drawer__body\"><p>Filter controls.</p></div><footer class=\"cui-drawer__actions\"><button type=\"button\">Apply</button></footer></div></dialog></div>\n",
+  "options": {
+    "description": "Narrow the results.",
+    "fallbackHref": "/filters",
+    "id": "drawer-example",
+    "placement": "start",
+    "size": "narrow",
+    "title": "Filters",
+    "triggerLabel": "Open filters"
+  }
+}

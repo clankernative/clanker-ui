@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 1,
+  "name": "data-table",
+  "status": "ready",
+  "target": "native-html",
+  "category": "data-display",
+  "summary": "Renders a responsive, keyboard-scrollable labelled data table with accessible headers and text fixture rows.",
+  "keywords": [
+    "table",
+    "data",
+    "rows",
+    "responsive",
+    "results"
+  ],
+  "agent": {
+    "useWhen": "A result set is best compared across labelled columns; use text fixture rows or have the Native host compose admitted app-owned rich cells.",
+    "avoidWhen": "The data is better represented as cards, the host cannot prove composed row/cell structure and stable IDs, or the component would need to own application operations.",
+    "composeWith": [
+      "filter-bar",
+      "pagination"
+    ]
+  },
+  "contract": {
+    "role": "keyboard-focusable labelled responsive table region",
+    "variants": [
+      "caption-hidden",
+      "caption-visible",
+      "text-rows",
+      "host-composed-body"
+    ],
+    "requiredFields": [
+      "caption",
+      "columns"
+    ],
+    "invariants": [
+      "Caption is nonblank; 1..=16 nonblank columns and up to 100 fixture rows are admitted.",
+      "Text rows must match the column count exactly; optional stable IDs are unique safe tokens; all fixture cells are escaped text.",
+      "Column headers use scope=col; the overflow wrapper is tabindex=0 role=region labelled by the caption.",
+      "Responsive narrow presentation preserves every cell and column label; first cell spans the row.",
+      "Host-composed tbody markup is admitted only after the host proves row/cell structure, labels, budgets, and stable IDs; AdmittedChildren is not a sanitizer.",
+      "The fragment contains exactly one [[attributes]], [[caption]], [[head]], and [[body]] slot; expansion is exact and single-pass."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border",
+    "--cui-border-strong",
+    "--cui-data-table-background",
+    "--cui-data-table-border",
+    "--cui-data-table-caption-padding",
+    "--cui-data-table-caption-text",
+    "--cui-data-table-cell-padding",
+    "--cui-data-table-compact-padding",
+    "--cui-data-table-focus",
+    "--cui-data-table-head-background",
+    "--cui-data-table-head-text",
+    "--cui-data-table-label-text",
+    "--cui-data-table-radius",
+    "--cui-data-table-row-hover",
+    "--cui-data-table-scrollbar",
+    "--cui-data-table-size",
+    "--cui-data-table-strong-border",
+    "--cui-heading-text",
+    "--cui-radius-surface",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-surface-subtle",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-data-table-background",
+      "role": "background",
+      "purpose": "Controls background color for  data table."
+    },
+    {
+      "name": "--cui-data-table-border",
+      "role": "border",
+      "purpose": "Controls border color for  data table."
+    },
+    {
+      "name": "--cui-data-table-caption-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for data table."
+    },
+    {
+      "name": "--cui-data-table-caption-text",
+      "role": "text",
+      "purpose": "Controls text color for caption data table.",
+      "semantic": "heading"
+    },
+    {
+      "name": "--cui-data-table-cell-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for data table."
+    },
+    {
+      "name": "--cui-data-table-compact-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for data table."
+    },
+    {
+      "name": "--cui-data-table-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for  data table."
+    },
+    {
+      "name": "--cui-data-table-head-background",
+      "role": "background",
+      "purpose": "Controls background color for column heading data table."
+    },
+    {
+      "name": "--cui-data-table-head-text",
+      "role": "text",
+      "purpose": "Controls text color for column heading data table.",
+      "semantic": "heading"
+    },
+    {
+      "name": "--cui-data-table-label-text",
+      "role": "text",
+      "purpose": "Controls label text for  data table."
+    },
+    {
+      "name": "--cui-data-table-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for data table."
+    },
+    {
+      "name": "--cui-data-table-row-hover",
+      "role": "color",
+      "purpose": "Controls hover state for table row data table."
+    },
+    {
+      "name": "--cui-data-table-scrollbar",
+      "role": "color",
+      "purpose": "Controls scrollbar color for  data table."
+    },
+    {
+      "name": "--cui-data-table-size",
+      "role": "sizing",
+      "purpose": "Controls size for data table."
+    },
+    {
+      "name": "--cui-data-table-strong-border",
+      "role": "border",
+      "purpose": "Controls border color for strong data table."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/data-table/fragment.html",
+    "styles": "components/data-table/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/data-table/fixtures/typical.json",
+    "components/data-table/fixtures/empty.json",
+    "components/data-table/fixtures/dense-long-text.json",
+    "components/data-table/fixtures/host-composed-body.json"
+  ],
+  "templateAuthoring": {
+    "schemaVersion": 1,
+    "rootTag": "cui-data-table",
+    "elements": [
+      {
+        "tag": "cui-data-table",
+        "form": "paired",
+        "allowedParents": [],
+        "attributes": [
+          {
+            "name": "caption",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Must be nonblank plain text."
+            ]
+          },
+          {
+            "name": "columns",
+            "required": true,
+            "valueForms": [
+              "json-literal"
+            ],
+            "rules": [
+              "A JSON array of 1..16 nonblank plain-text column labels."
+            ]
+          },
+          {
+            "name": "caption-visible",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Boolean literal true or false; defaults to false."
+            ]
+          }
+        ],
+        "content": "helpers",
+        "allowedChildren": [
+          "cui-table-row"
+        ],
+        "controlFlow": [
+          "for",
+          "if",
+          "elif",
+          "else",
+          "endif",
+          "endfor"
+        ],
+        "rules": [
+          "Content consists only of table rows and supported template control flow."
+        ]
+      },
+      {
+        "tag": "cui-table-row",
+        "form": "paired",
+        "allowedParents": [
+          "cui-data-table"
+        ],
+        "attributes": [
+          {
+            "name": "id",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Use alone, not with id-prefix or key; 1..128 ASCII letters, digits, hyphen, underscore, or colon."
+            ]
+          },
+          {
+            "name": "id-prefix",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Use together with key and not with id; 1..128 ASCII letters, digits, hyphen, underscore, or colon."
+            ]
+          },
+          {
+            "name": "key",
+            "required": false,
+            "valueForms": [
+              "key-field"
+            ],
+            "rules": [
+              "Use only with id-prefix; one whole checked field resolving to a string, integer, unsigned integer, or model reference; runtime token is 1..128 ASCII letters, digits, hyphen, or underscore, with no sanitization."
+            ]
+          }
+        ],
+        "content": "helpers",
+        "allowedChildren": [
+          "cui-table-cell"
+        ],
+        "controlFlow": [],
+        "rules": [
+          "Choose exactly id OR id-prefix plus key.",
+          "Each row has exactly the table's column count in paired, attribute-free cells, with whitespace only between cells.",
+          "Do not put conditional control flow around cells; conditionals inside a cell are supported.",
+          "The app must provide stable, globally unique emitted IDs. Literal duplicates within this table are rejected; runtime-generated duplicates are not all detected."
+        ]
+      },
+      {
+        "tag": "cui-table-cell",
+        "form": "paired",
+        "allowedParents": [
+          "cui-table-row"
+        ],
+        "attributes": [],
+        "content": "host-admitted",
+        "allowedChildren": [],
+        "controlFlow": [
+          "for",
+          "if",
+          "elif",
+          "else",
+          "endif",
+          "endfor"
+        ],
+        "rules": [
+          "Content may contain text, escaped bindings, HTML including registered route links, and nested supported cui-* declarations admitted by the host; this is host admission, not a raw HTML string property.",
+          "No colspan or invented sorting or pagination behavior."
+        ]
+      }
+    ],
+    "rules": [
+      "The host verifies row and cell structure, labels, budgets, bindings, and stable IDs before admission; package metadata does not grant host capabilities.",
+      "No arbitrary raw HTML string properties are supported."
+    ],
+    "examples": [
+      {
+        "name": "rich-customers",
+        "summary": "Three-column customer results with status badges and an empty state.",
+        "template": "<cui-data-table caption=\"Customers\" columns='[\"Customer\",\"Status\",\"Scheme\"]'>\n  {% for customer in customers %}\n  <cui-table-row id-prefix=\"customer\" key=\"{{ customer.id }}\">\n    <cui-table-cell><a href=\"{{ routes.customer_show(id=customer.id) }}\">{{ customer.name }}</a><br>{{ customer.email }}</cui-table-cell>\n    <cui-table-cell>{% if customer.active %}<cui-badge label=\"Active\" tone=\"success\" />{% else %}<cui-badge label=\"Inactive\" tone=\"neutral\" />{% endif %}</cui-table-cell>\n    <cui-table-cell>{% if customer.has_scheme %}<cui-status-indicator label=\"Scheme active\" tone=\"success\" />{% else %}<cui-status-indicator label=\"No scheme\" tone=\"neutral\" />{% endif %}</cui-table-cell>\n  </cui-table-row>\n  {% else %}\n  <cui-table-row id=\"customers-empty\"><cui-table-cell><cui-empty-state title=\"No customers\" body=\"Try changing the filters.\" /></cui-table-cell><cui-table-cell>—</cui-table-cell><cui-table-cell>—</cui-table-cell></cui-table-row>\n  {% endfor %}\n</cui-data-table>",
+        "requirements": [
+          "App provides customers as a list of records: id is a safe token string or checked integer/reference; name and email are strings; active and has_scheme are Bool fields.",
+          "Register customer_show route accepting id if using the linked name.",
+          "Host admits cui-badge and cui-empty-state in cell content; app provides stable unique customer IDs."
+        ]
+      }
+    ]
+  }
+}

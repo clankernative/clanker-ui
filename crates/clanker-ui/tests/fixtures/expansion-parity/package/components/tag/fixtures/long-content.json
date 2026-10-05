@@ -1,0 +1,8 @@
+{
+  "count": "18",
+  "countLabel": "18 affected records",
+  "expectedHtml": "<span class=\"cui-tag cui-tag--danger cui-tag--large\" data-cui-component=\"tag\" data-cui-tone=\"danger\"><span class=\"cui-tag__label\">Security review required before the next production deployment by customer reliability and platform operations</span><span class=\"cui-tag__count\" aria-hidden=\"true\">18</span><span class=\"cui-tag__count-label\">18 affected records</span></span>\n",
+  "label": "Security review required before the next production deployment by customer reliability and platform operations",
+  "size": "large",
+  "tone": "danger"
+}

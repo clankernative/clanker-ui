@@ -1,0 +1,62 @@
+<div id="golinks-app">
+  <header class="header">
+    <div>
+      <p class="eyebrow">{{ company.name }}</p>
+      <h1>Go Links</h1>
+      <p class="subtitle">Manage short links, track popularity, and review activity.</p>
+    </div>
+    <nav class="nav" aria-label="Go Links">
+      <a data-nav="dashboard" href="{{ routes.links() }}">Dashboard</a>
+      <a data-nav="trash" href="{{ routes.trash() }}" aria-current="page">Trash</a>
+      <a data-nav="audit-feed" href="{{ routes.audit_feed() }}">Audit Feed</a>
+      <a href="{{ routes.component_demo() }}">UI Demo</a>
+    </nav>
+  </header>
+
+  <article id="trash-panel" class="card" aria-labelledby="trash-title">
+    <div class="card-header">
+      <div>
+        <h2 id="trash-title">Trash</h2>
+        <p>Persisted soft-deleted links.</p>
+      </div>
+    </div>
+
+    <div id="trash-list" data-live>
+      {% if trash.items | length == 0 %}
+      <p class="empty">Trash is empty.</p>
+      {% else %}
+      <ul class="list">
+        {% for link in trash.items %}
+        <li>
+          <div>
+            <p class="name">go/{{ link.name }}</p>
+            <p class="description url">{{ link.url }}</p>
+            {% if link.deletion_reason != "" %}
+            <p class="description">Reason: {{ link.deletion_reason }}</p>
+            {% endif %}
+          </div>
+          <div class="meta">
+            <p>{{ link.visit_count }} visits before deletion</p>
+            <p>Deleted <time data-unix="{{ link.deleted_time }}">{{ link.deleted_time }}</time></p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+
+    <div class="pagination">
+      <p id="trash-page" data-pager-label></p>
+      <div class="actions">
+        <button type="button" data-pager-previous disabled>Previous</button>
+        <span id="trash-next" data-live>
+          {% if trash.has_more %}
+          <a class="button" data-pager-next rel="next" href="{{ routes.trash(after=trash.next_after) }}">Next</a>
+          {% else %}
+          <span class="button button-disabled" aria-disabled="true">Next</span>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </article>
+</div>

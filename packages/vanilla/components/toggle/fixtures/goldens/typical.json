@@ -1,0 +1,3 @@
+{
+  "expectedHtml": "<div class=\"cui-toggle\" data-cui-component=\"toggle\"><label class=\"cui-toggle__label\" for=\"weekly-digest\"><input class=\"cui-toggle__control\" type=\"checkbox\" role=\"switch\" id=\"weekly-digest\" name=\"weekly-digest\" value=\"true\" aria-describedby=\"weekly-digest-hint\" checked>Send a weekly digest</label><div class=\"cui-toggle__description\" id=\"weekly-digest-description\"><p class=\"cui-toggle__hint\" id=\"weekly-digest-hint\">Delivered Monday.</p></div></div>\n"
+}

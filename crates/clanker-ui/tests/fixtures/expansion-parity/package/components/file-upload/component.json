@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "file-upload",
+  "status": "draft",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Presents native file selection alongside explicitly server-owned file states.",
+  "keywords": ["file", "upload", "attachment", "form"],
+  "agent": {"useWhen": "A form accepts attachments and the application supplies any upload lifecycle or persisted-file state.", "avoidWhen": "The component would need to transfer bytes, validate server files, or invent an upload transport; the Native host currently admits no multipart file carrier.", "composeWith": ["form-field", "progress", "pagination"]},
+  "contract": {"role": "labelled native file input with server-owned file rows", "variants": ["single", "multiple", "disabled", "error", "server-file-states"], "requiredFields": ["name", "label"], "invariants": ["Input name/id, labels, accept grammar, descriptions, rows, localized statuses and action URLs are strictly validated and escaped.", "At most 25 file rows with unique IDs are rendered; uploading progress is 0..=100.", "This static package declares no script. Any separately host-admitted enhancement may assign a native FileList and report selected names only; it must never fabricate success, persist bytes, fetch, or own transport.", "Without the host's multipart file carrier this contract is draft-only: it makes no ready/upload claim.", "Serialized fixture/config values contain no raw HTML; action links are safe HTTPS or app-relative paths."]},
+  "tokens": ["--cui-file-upload-border", "--cui-file-upload-active-border", "--cui-file-upload-active-background", "--cui-file-upload-background", "--cui-file-upload-focus", "--cui-file-upload-error", "--cui-file-upload-gap", "--cui-file-upload-radius", "--cui-file-upload-padding", "--cui-file-upload-text", "--cui-file-upload-muted", "--cui-file-upload-success", "--cui-file-upload-progress"],
+  "dependencies": [],
+  "assets": {"template": "components/file-upload/fragment.html", "styles": "components/file-upload/styles.css", "scripts": []},
+  "fixtures": ["components/file-upload/fixtures/typical.json", "components/file-upload/fixtures/validation.json", "components/file-upload/fixtures/typical-golden.json", "components/file-upload/fixtures/validation-golden.json"]
+}

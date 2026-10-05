@@ -1,0 +1,1 @@
+{"name":"retention","id":"retention-period","legend":"Retention period","description":"Applies to new records.","selected":"90","required":true,"layout":"inline","choices":[{"value":"30","label":"30 days"},{"value":"90","label":"90 days","hint":"Recommended."},{"value":"365","label":"One year"}]}

@@ -1,0 +1,8 @@
+{
+  "initials": "ET",
+  "label": "Emilia Torres",
+  "size": "medium",
+  "tone": "neutral",
+  "imageSource": "https://images.example.test/emilia.png",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--medium cui-avatar--neutral\" role=\"img\" aria-label=\"Emilia Torres\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">ET</span><img class=\"cui-avatar__image\" src=\"https://images.example.test/emilia.png\" alt=\"\" aria-hidden=\"true\" referrerpolicy=\"no-referrer\" loading=\"lazy\" decoding=\"async\"></span>\n"
+}

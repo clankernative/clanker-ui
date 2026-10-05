@@ -1,0 +1,37 @@
+{
+  "expectedHtml": "<div class=\"cui-file-upload\" data-cui-component=\"file-upload\" data-cui-accept=\".pdf,.png,image/png,application/pdf\"><label class=\"cui-file-upload__label\" for=\"attachments\">Attachments</label><div class=\"cui-file-upload__dropzone\" data-cui-file-upload-dropzone><strong>Select supporting files</strong><span>or drop them here</span><input class=\"cui-file-upload__input\" id=\"attachments\" name=\"attachments\" type=\"file\" accept=\".pdf,.png,image/png,application/pdf\" multiple aria-describedby=\"attachments-description\" data-cui-file-upload-input><ul class=\"cui-file-upload__local-selection\" data-cui-file-upload-local-selection aria-live=\"polite\" hidden></ul><p class=\"cui-file-upload__local-feedback\" data-cui-file-upload-local-feedback data-cui-selection-error-label=\"Files could not be handed to the application.\" data-cui-cancel-error-label=\"File selection could not be cancelled.\" role=\"status\" hidden></p></div><div class=\"cui-file-upload__description\" id=\"attachments-description\"><p class=\"cui-file-upload__hint\">PDF or PNG files, up to 10 MB each.</p></div><ul class=\"cui-file-upload__files\" aria-label=\"Files on this request\"><li id=\"requirements\" class=\"cui-file-upload__file cui-file-upload__file--uploading\"><span class=\"cui-file-upload__name\">requirements.pdf</span><span class=\"cui-file-upload__meta\">PDF · 1.2 MB</span><span class=\"cui-file-upload__status\">Uploading 48%</span><progress value=\"48\" max=\"100\" aria-label=\"Uploading 48%\"></progress><a href=\"/uploads/requirements/cancel\">Cancel</a></li><li id=\"diagram\" class=\"cui-file-upload__file cui-file-upload__file--complete\"><span class=\"cui-file-upload__name\">architecture.png</span><span class=\"cui-file-upload__status\">Uploaded</span></li></ul></div>\n",
+  "options": {
+    "accept": ".pdf,.png,image/png,application/pdf",
+    "dropLabel": "or drop them here",
+    "fileListLabel": "Files on this request",
+    "files": [
+      {
+        "action": {
+          "href": "/uploads/requirements/cancel",
+          "label": "Cancel"
+        },
+        "id": "requirements",
+        "meta": "PDF · 1.2 MB",
+        "name": "requirements.pdf",
+        "status": {
+          "progress": 48,
+          "state": "uploading"
+        },
+        "statusLabel": "Uploading 48%"
+      },
+      {
+        "id": "diagram",
+        "name": "architecture.png",
+        "status": {
+          "state": "complete"
+        },
+        "statusLabel": "Uploaded"
+      }
+    ],
+    "hint": "PDF or PNG files, up to 10 MB each.",
+    "label": "Attachments",
+    "multiple": true,
+    "name": "attachments",
+    "prompt": "Select supporting files"
+  }
+}

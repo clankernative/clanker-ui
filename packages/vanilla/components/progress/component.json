@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "name": "progress",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Shows accessible determinate or indeterminate task progress with visible task copy.",
+  "keywords": [
+    "progress",
+    "loading",
+    "completion",
+    "task"
+  ],
+  "agent": {
+    "useWhen": "A task has measurable completion or an active wait with no reliable estimate.",
+    "avoidWhen": "The operation completes immediately or completion and failure need a final alert or recovery action.",
+    "composeWith": [
+      "alert",
+      "button",
+      "status-indicator"
+    ]
+  },
+  "contract": {
+    "role": "progressbar",
+    "variants": [
+      "determinate",
+      "indeterminate",
+      "info",
+      "success",
+      "warning",
+      "danger",
+      "regular",
+      "compact"
+    ],
+    "requiredFields": [
+      "label",
+      "state"
+    ],
+    "invariants": [
+      "The application owns task data and server-rendered updates; this component owns no command, route, polling, browser-side numeric state, or JavaScript lifecycle.",
+      "A visible nonblank label is required and is also the accessible name of the native progress element.",
+      "Determinate state requires finite value and maximum with maximum > 0 and 0 <= value <= maximum; values are rejected rather than clamped.",
+      "Indeterminate state is explicit and omits both value and maximum; suffix is only allowed for determinate state.",
+      "Optional detail and suffix are plain text and HTML-encoded. Tone selects info, success, warning, or danger; size selects regular or compact track height.",
+      "The adapter fragment contains exactly one [[attributes]], [[label]], [[progress]], [[suffix]], and [[detail]] slot; substitutions are single-pass so user text cannot inject slots."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-badge-info-text",
+    "--cui-badge-success-text",
+    "--cui-badge-warning-text",
+    "--cui-danger",
+    "--cui-font-size-small",
+    "--cui-font-weight-medium",
+    "--cui-muted",
+    "--cui-progress-compact-height",
+    "--cui-progress-danger",
+    "--cui-progress-detail-text",
+    "--cui-progress-gap",
+    "--cui-progress-height",
+    "--cui-progress-info",
+    "--cui-progress-label-text",
+    "--cui-progress-radius",
+    "--cui-progress-success",
+    "--cui-progress-tone",
+    "--cui-progress-track",
+    "--cui-progress-warning",
+    "--cui-space-1",
+    "--cui-space-2",
+    "--cui-space-3",
+    "--cui-surface-hover",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-progress-compact-height",
+      "role": "sizing",
+      "purpose": "Controls height for progress."
+    },
+    {
+      "name": "--cui-progress-danger",
+      "role": "text",
+      "purpose": "Controls danger state for  progress."
+    },
+    {
+      "name": "--cui-progress-detail-text",
+      "role": "text",
+      "purpose": "Controls text color for supporting detail progress."
+    },
+    {
+      "name": "--cui-progress-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for progress."
+    },
+    {
+      "name": "--cui-progress-height",
+      "role": "sizing",
+      "purpose": "Controls height for progress."
+    },
+    {
+      "name": "--cui-progress-info",
+      "role": "text",
+      "purpose": "Controls information state for  progress."
+    },
+    {
+      "name": "--cui-progress-label-text",
+      "role": "text",
+      "purpose": "Controls label text for  progress."
+    },
+    {
+      "name": "--cui-progress-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for progress."
+    },
+    {
+      "name": "--cui-progress-success",
+      "role": "text",
+      "purpose": "Controls success state for  progress."
+    },
+    {
+      "name": "--cui-progress-tone",
+      "role": "color",
+      "purpose": "Runtime tone selection for progress; this selects component state rather than a theme color."
+    },
+    {
+      "name": "--cui-progress-track",
+      "role": "background",
+      "purpose": "Controls track for  progress."
+    },
+    {
+      "name": "--cui-progress-warning",
+      "role": "text",
+      "purpose": "Controls warning state for  progress."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/progress/fragment.html",
+    "styles": "components/progress/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/progress/fixtures/determinate-info.json",
+    "components/progress/fixtures/determinate-success.json",
+    "components/progress/fixtures/determinate-warning.json",
+    "components/progress/fixtures/determinate-danger.json",
+    "components/progress/fixtures/indeterminate.json",
+    "components/progress/fixtures/compact.json",
+    "components/progress/fixtures/long-copy.json",
+    "components/progress/fixtures/escaped-copy.json",
+    "components/progress/fixtures/zero.json",
+    "components/progress/fixtures/complete.json"
+  ]
+}

@@ -1,0 +1,51 @@
+.cui-avatar {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  flex: none;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: var(--cui-avatar-border-width, 1px) solid transparent;
+  border-radius: var(--cui-avatar-radius, 999px);
+  font-weight: var(--cui-avatar-weight, 600);
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+}
+.cui-avatar__initials {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  max-inline-size: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.cui-avatar__image {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.cui-avatar--extra-small { inline-size: var(--cui-avatar-extra-small-size, 1.5rem); block-size: var(--cui-avatar-extra-small-size, 1.5rem); font-size: var(--cui-avatar-extra-small-font-size, .625rem); }
+.cui-avatar--small { inline-size: var(--cui-avatar-small-size, 2rem); block-size: var(--cui-avatar-small-size, 2rem); font-size: var(--cui-avatar-small-font-size, .6875rem); }
+.cui-avatar--medium { inline-size: var(--cui-avatar-medium-size, 2.5rem); block-size: var(--cui-avatar-medium-size, 2.5rem); font-size: var(--cui-avatar-medium-font-size, .75rem); }
+.cui-avatar--large { inline-size: var(--cui-avatar-large-size, 3rem); block-size: var(--cui-avatar-large-size, 3rem); font-size: var(--cui-avatar-large-font-size, .875rem); }
+.cui-avatar--extra-large { inline-size: var(--cui-avatar-extra-large-size, 4rem); block-size: var(--cui-avatar-extra-large-size, 4rem); font-size: var(--cui-avatar-extra-large-font-size, 1rem); }
+.cui-avatar--neutral {
+  border-color: var(--cui-avatar-neutral-border, var(--cui-border, #66738f));
+  background: var(--cui-avatar-neutral-background, var(--cui-surface, #f5f6fa));
+  color: var(--cui-avatar-neutral-text, var(--cui-muted, #45516e));
+}
+.cui-avatar--brand {
+  border-color: var(--cui-avatar-brand-border, var(--cui-accent-hover, #2448b5));
+  background: var(--cui-avatar-brand-background, #e8edff);
+  color: var(--cui-avatar-brand-text, var(--cui-accent-hover, #2448b5));
+}
+.cui-avatar--success {
+  border-color: var(--cui-avatar-success-border, var(--cui-badge-success-border, #15803d));
+  background: var(--cui-avatar-success-background, var(--cui-badge-success-background, #dcfce7));
+  color: var(--cui-avatar-success-text, var(--cui-badge-success-text, #166534));
+}

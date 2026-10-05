@@ -1,0 +1,76 @@
+@layer clanker.components {
+  .cui-layer {
+    display: grid;
+    isolation: isolate;
+    min-inline-size: 0;
+  }
+
+  .cui-layer__base,
+  .cui-layer__foreground {
+    grid-area: 1 / 1;
+    min-inline-size: 0;
+  }
+
+  .cui-layer__foreground {
+    z-index: 1;
+    display: flex;
+    pointer-events: none;
+  }
+
+  .cui-layer__foreground > * {
+    pointer-events: auto;
+  }
+
+  .cui-layer--placement-center .cui-layer__foreground {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cui-layer--placement-top-start .cui-layer__foreground {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .cui-layer--placement-top-end .cui-layer__foreground {
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  .cui-layer--placement-bottom-start .cui-layer__foreground {
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  .cui-layer--placement-bottom-end .cui-layer__foreground {
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  .cui-layer--placement-stretch .cui-layer__foreground {
+    align-items: stretch;
+  }
+
+  .cui-layer--placement-stretch .cui-layer__foreground > * {
+    flex: 1 1 auto;
+  }
+
+  .cui-layer--inset-none .cui-layer__foreground {
+    padding: var(--cui-layer-inset-none, 0);
+  }
+
+  .cui-layer--inset-compact .cui-layer__foreground {
+    padding: var(--cui-layer-inset-compact);
+  }
+
+  .cui-layer--inset-standard .cui-layer__foreground {
+    padding: var(--cui-layer-inset-standard);
+  }
+
+  .cui-layer--inset-spacious .cui-layer__foreground {
+    padding: var(--cui-layer-inset-spacious);
+  }
+
+  .cui-layer--inset-generous .cui-layer__foreground {
+    padding: var(--cui-layer-inset-generous);
+  }
+}

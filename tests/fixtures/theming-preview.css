@@ -1,0 +1,3 @@
+.theming-proof { max-inline-size: 64rem; margin-inline: auto; padding: 2rem; }
+.theme-proof-scoped { --cui-heading-text: #166534; }
+.theme-proof-exception { --cui-heading-text: #166534; --cui-data-table-head-text: #6b21a8; }

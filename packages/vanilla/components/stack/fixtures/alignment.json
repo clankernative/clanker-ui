@@ -1,0 +1,5 @@
+{
+  "options": { "gap": "spacious", "alignment": "center" },
+  "children": { "body": "<section>Centered</section>" },
+  "expectedHtml": "<div class=\"cui-stack cui-stack--gap-spacious cui-stack--align-center\" data-cui-component=\"stack\"><section>Centered</section></div>\n"
+}

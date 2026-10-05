@@ -1,0 +1,26 @@
+{
+  "expectedHtml": "<nav class=\"cui-segmented-control\" data-cui-component=\"segmented-control\" aria-label=\"Record visibility\"><ul class=\"cui-segmented-control__list\"><li class=\"cui-segmented-control__item cui-segmented-control__item--link\"><a class=\"cui-segmented-control__link\" href=\"?scope=all\">All records</a></li><li class=\"cui-segmented-control__item cui-segmented-control__item--current\"><span class=\"cui-segmented-control__current\" aria-current=\"page\">Shared</span></li><li class=\"cui-segmented-control__item cui-segmented-control__item--link\"><a class=\"cui-segmented-control__link\" href=\"?scope=private\">Private</a></li><li class=\"cui-segmented-control__item cui-segmented-control__item--disabled\"><span class=\"cui-segmented-control__disabled\" aria-disabled=\"true\">Archived</span></li></ul></nav>\n",
+  "options": {
+    "items": [
+      {
+        "href": "?scope=all",
+        "kind": "link",
+        "label": "All records"
+      },
+      {
+        "kind": "current",
+        "label": "Shared"
+      },
+      {
+        "href": "?scope=private",
+        "kind": "link",
+        "label": "Private"
+      },
+      {
+        "kind": "disabled",
+        "label": "Archived"
+      }
+    ],
+    "label": "Record visibility"
+  }
+}

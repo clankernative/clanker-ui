@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "icon",
+  "status": "ready",
+  "target": "native-html",
+  "category": "actions",
+  "summary": "Renders a closed set of scalable SVG icons with decorative or standalone image semantics.",
+  "keywords": ["icon", "glyph", "symbol", "svg", "visual cue"],
+  "agent": {
+    "useWhen": "An interface action, status, or navigation cue benefits from a familiar glyph. Use a package catalog name and small, medium, or large size; add a label only when the icon stands alone and conveys meaning.",
+    "avoidWhen": "Text alone is clearer, the icon is interactive, or a product illustration is required.",
+    "composeWith": ["button", "badge"]
+  },
+  "contract": {
+    "role": "img",
+    "variants": ["small", "medium", "large"],
+    "requiredFields": [],
+    "invariants": [
+      "Configuration supplies a closed icon name, size and optional accessible label; there is no browser-local state or event output.",
+      "Composition belongs to the surrounding app control or text; replacing an icon during a server patch requires no component lifecycle hook.",
+      "Icon names are a closed set loaded from the package icons.json resource; arbitrary SVG is never accepted.",
+      "Icons are decorative and hidden from assistive technology by default.",
+      "A standalone meaningful icon requires a nonblank text label and is exposed as role img with aria-label.",
+      "The fragment has exactly one [[attributes]] slot and one [[geometry]] slot; the target adapter supplies SVG attributes and checked catalog geometry.",
+      "Icons are noninteractive and never enter the tab order."
+    ]
+  },
+  "tokens": [
+    "--cui-icon-color",
+    "--cui-icon-large-size",
+    "--cui-icon-size",
+    "--cui-icon-small-size",
+    "--cui-icon-stroke-width"
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/icon/fragment.html",
+    "styles": "components/icon/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/icon/fixtures/small-decorative.json",
+    "components/icon/fixtures/medium-labeled.json",
+    "components/icon/fixtures/large-decorative.json"
+  ]
+}

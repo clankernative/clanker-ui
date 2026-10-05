@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "pagination",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Renders safe linked pagination with explicit current, gap, and disabled previous/next semantics.",
+  "keywords": ["navigation", "pages", "results", "pagination"],
+  "agent": {"useWhen": "A server-owned result set spans stable navigable destinations and needs page, current, previous, next, and gap controls.", "avoidWhen": "More results load into one continuous list or page destinations are not safe hrefs; this component does not own routes or result state.", "composeWith": ["data-table"]},
+  "contract": {"role": "labelled pagination navigation landmark", "variants": ["standard", "outlined", "compact"], "requiredFields": ["items"], "invariants": ["Exactly one item has kind=current and no href; it receives aria-current=page.", "Page items require safe hrefs; previous and next may be links or disabled nonlinks; previous/next links emit rel=prev/next.", "Gaps are noninteractive and aria-hidden; hrefs follow the closed safe destination policy.", "Labels and href attributes are escaped; no routes, commands, arbitrary HTML, or scripts are emitted.", "The fragment contains exactly one [[attributes]], [[label]], and [[items]] slot; expansion is exact and single-pass."]},
+  "tokens": ["--cui-pagination-gap", "--cui-pagination-size", "--cui-pagination-padding", "--cui-pagination-radius", "--cui-pagination-font-size", "--cui-pagination-text", "--cui-pagination-hover-background", "--cui-pagination-hover-text", "--cui-pagination-focus-ring", "--cui-pagination-current-background", "--cui-pagination-current-text", "--cui-pagination-gap-text", "--cui-pagination-border", "--cui-pagination-background", "--cui-pagination-current-border", "--cui-pagination-container-radius"],
+  "dependencies": [], "assets": {"template": "components/pagination/fragment.html", "styles": "components/pagination/styles.css", "scripts": []},
+  "fixtures": ["components/pagination/fixtures/typical.json", "components/pagination/fixtures/many-pages.json", "components/pagination/fixtures/compact-disabled.json"]
+}

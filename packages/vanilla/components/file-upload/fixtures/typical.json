@@ -1,0 +1,14 @@
+{
+  "name": "attachments",
+  "label": "Attachments",
+  "prompt": "Select supporting files",
+  "dropLabel": "or drop them here",
+  "fileListLabel": "Files on this request",
+  "hint": "PDF or PNG files, up to 10 MB each.",
+  "accept": ".pdf,.png,image/png,application/pdf",
+  "multiple": true,
+  "files": [
+    {"id": "requirements", "name": "requirements.pdf", "meta": "PDF · 1.2 MB", "status": {"state": "uploading", "progress": 48}, "statusLabel": "Uploading 48%", "action": {"label": "Cancel", "href": "/uploads/requirements/cancel"}},
+    {"id": "diagram", "name": "architecture.png", "status": {"state": "complete"}, "statusLabel": "Uploaded"}
+  ]
+}

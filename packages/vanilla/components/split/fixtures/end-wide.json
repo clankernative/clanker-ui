@@ -1,0 +1,5 @@
+{
+  "options": { "ratio": "end-wide" },
+  "children": { "start": "<p>Start region.</p>", "end": "<p>End region.</p>" },
+  "expectedHtml": "<div class=\"cui-split cui-split--ratio-end-wide cui-split--gap-standard cui-split--align-stretch cui-split--collapse-standard\" data-cui-component=\"split\"><div class=\"cui-split__regions\"><div class=\"cui-split__start\"><p>Start region.</p></div><div class=\"cui-split__end\"><p>End region.</p></div></div></div>\n"
+}

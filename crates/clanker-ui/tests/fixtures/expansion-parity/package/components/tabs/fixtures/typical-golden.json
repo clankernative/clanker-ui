@@ -1,0 +1,23 @@
+{
+  "expectedHtml": "<nav class=\"cui-tabs\" data-cui-component=\"tabs\" aria-label=\"Repository sections\"><ul class=\"cui-tabs__list\"><li class=\"cui-tabs__item\"><a class=\"cui-tabs__link\" href=\"/settings\">Overview</a></li><li class=\"cui-tabs__item\"><a class=\"cui-tabs__link cui-tabs__link--active\" href=\"/settings/members\" aria-current=\"page\">Members</a></li><li class=\"cui-tabs__item\"><a class=\"cui-tabs__link\" href=\"/settings/audit\">Audit log</a></li></ul></nav>\n",
+  "options": {
+    "items": [
+      {
+        "active": false,
+        "href": "/settings",
+        "label": "Overview"
+      },
+      {
+        "active": true,
+        "href": "/settings/members",
+        "label": "Members"
+      },
+      {
+        "active": false,
+        "href": "/settings/audit",
+        "label": "Audit log"
+      }
+    ],
+    "label": "Repository sections"
+  }
+}

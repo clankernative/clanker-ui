@@ -1,0 +1,9 @@
+{
+  "options": {
+    "height": "compact"
+  },
+  "children": {
+    "body": "<section>Rows</section>"
+  },
+  "expectedHtml": "<div class=\"cui-pane cui-pane--height-compact cui-pane--bounded cui-pane--scroll\" data-cui-component=\"pane\"><div class=\"cui-pane__body\" tabindex=\"0\"><section>Rows</section></div></div>\n"
+}

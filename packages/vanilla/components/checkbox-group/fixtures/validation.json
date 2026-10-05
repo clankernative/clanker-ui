@@ -1,0 +1,1 @@
+{"name":"scope","legend":"Workspace access","description":"Select requested access.","error":"Choose at least one area.","choices":[{"value":"read","label":"Read catalog"},{"value":"billing","label":"Manage billing","disabled":true}]}

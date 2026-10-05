@@ -1,0 +1,6 @@
+{
+  "title": "Deployments",
+  "description": "Review recent activity.",
+  "children": {"actions": "<a href=\"https://example.test/new\">Create</a>"},
+  "expectedHtml": "<header class=\"cui-page-header\" data-cui-component=\"page-header\"><div class=\"cui-page-header__content\"><h1 class=\"cui-page-header__title\">Deployments</h1><p class=\"cui-page-header__description\">Review recent activity.</p></div><div class=\"cui-page-header__actions\"><a href=\"https://example.test/new\">Create</a></div></header>\n"
+}

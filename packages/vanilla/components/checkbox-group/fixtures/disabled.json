@@ -1,0 +1,1 @@
+{"name":"alerts","legend":"Alerts","disabled":true,"choices":[{"value":"email","label":"Email","checked":true},{"value":"sms","label":"SMS"}]}

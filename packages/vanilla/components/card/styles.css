@@ -1,0 +1,10 @@
+@layer clanker.components {
+  .cui-card { container: cui-card / inline-size; display: grid; gap: var(--cui-card-gap, 1rem); padding: var(--cui-card-padding, 1.5rem); border: var(--cui-border-width, 1px) solid var(--cui-card-border, var(--cui-border-subtle, #d8dee8)); border-radius: var(--cui-card-radius, var(--cui-radius-surface, .75rem)); background: var(--cui-card-background, var(--cui-surface-raised, #fff)); color: var(--cui-card-text, var(--cui-text-primary, #172033)); }
+  .cui-card--compact { gap: var(--cui-card-compact-gap, .75rem); padding: var(--cui-card-compact-padding, .75rem); }
+  .cui-card--none { gap: 0; padding: 0; }
+  .cui-card__header { display: grid; gap: var(--cui-card-header-gap, .25rem); min-inline-size: 0; }
+  .cui-card__title { margin: 0; color: var(--cui-card-title-text, var(--cui-heading-text, inherit)); font-size: var(--cui-card-title-size, 1.25rem); font-weight: var(--cui-card-title-weight, 700); line-height: var(--cui-line-height-tight, 1.2); letter-spacing: var(--cui-letter-spacing-snug, -.01em); overflow-wrap: anywhere; }
+  .cui-card__subtitle { margin: 0; color: var(--cui-card-subtitle-text, var(--cui-text-secondary, #536176)); font-size: var(--cui-font-size-small, .875rem); line-height: var(--cui-line-height-body, 1.5); overflow-wrap: anywhere; }
+  .cui-card__body { min-inline-size: 0; }
+  .cui-card__actions { display: flex; flex-wrap: wrap; gap: var(--cui-card-action-gap, .5rem); padding-block-start: var(--cui-card-action-offset, .25rem); }
+}

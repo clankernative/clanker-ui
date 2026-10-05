@@ -1,0 +1,10 @@
+{
+  "options": {
+    "placement": "stretch"
+  },
+  "children": {
+    "base": "<article>Base</article>",
+    "foreground": "<button>Action</button>"
+  },
+  "expectedHtml": "<div class=\"cui-layer cui-layer--placement-stretch cui-layer--inset-standard\" data-cui-component=\"layer\"><div class=\"cui-layer__base\"><article>Base</article></div><div class=\"cui-layer__foreground\"><button>Action</button></div></div>\n"
+}

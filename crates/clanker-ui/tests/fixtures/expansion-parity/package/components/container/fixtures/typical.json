@@ -1,0 +1,5 @@
+{
+  "options": {},
+  "children": { "body": "<main>Content</main>" },
+  "expectedHtml": "<div class=\"cui-container cui-container--standard cui-container--gutter-standard\" data-cui-component=\"container\"><main>Content</main></div>\n"
+}

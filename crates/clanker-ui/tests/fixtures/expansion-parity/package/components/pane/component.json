@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1, "name": "pane", "status": "ready", "target": "native-html", "category": "layout",
+  "summary": "Frames optional chrome around content with explicit scroll ownership.", "keywords": ["pane", "frame", "scroll", "viewport", "header", "footer"],
+  "agent": {"useWhen":"A table, editor, log, or inspector needs fixed chrome and one scroll owner.","avoidWhen":"Content should extend normal page flow without a block-size boundary.","composeWith":["sidebar","split","data-table","pagination"]},
+  "contract": {"role":"bounded-content-pane","variants":["content","compact","standard","fill","viewport"],"requiredFields":[],"invariants":["Body is required; header and footer are optional.","Bounded height and body scrolling are independent options; bounded heights default to body scrolling.","Neutral wrappers add no landmarks, controls, scripts, routes, or commands."]},
+  "tokens":["--cui-pane-height-compact","--cui-pane-height-standard","--cui-pane-viewport-offset"], "dependencies":[],
+  "assets":{"template":"components/pane/fragment.html","styles":"components/pane/styles.css","scripts":[]},
+  "fixtures":["components/pane/fixtures/content.json","components/pane/fixtures/compact.json","components/pane/fixtures/standard.json","components/pane/fixtures/fill.json","components/pane/fixtures/viewport.json","components/pane/fixtures/content-scroll.json","components/pane/fixtures/bounded-no-scroll.json"]
+}

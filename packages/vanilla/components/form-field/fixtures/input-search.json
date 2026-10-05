@@ -1,0 +1,9 @@
+{
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"site-search\">Search</label><input class=\"cui-form-field__control\" id=\"site-search\" name=\"query\" type=\"search\" value=\"\" placeholder=\"Search titles\" maxlength=\"255\"></div>\n",
+  "id": "site-search",
+  "inputType": "search",
+  "label": "Search",
+  "maxLength": 255,
+  "name": "query",
+  "placeholder": "Search titles"
+}

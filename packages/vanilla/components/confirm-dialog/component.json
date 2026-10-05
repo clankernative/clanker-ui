@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "name": "confirm-dialog",
+  "status": "ready",
+  "integration": {
+    "native": {"status": "adapter-required", "scope": "Native forbids the current external form association. An admitted submission adapter must preserve the original submitter, native validation, and signed transport."},
+    "ports": [{"name": "confirmed-submit", "direction": "output", "typeSource": "components/confirm-dialog/browser.d.ts", "export": "ConfirmDialogInstallOptions", "purpose": "The app handles confirmed intent using the original form, submitter, and cancellation signal. The component does not authorize, own an endpoint, or assert command success.", "required": false}]
+  },
+  "target": "native-html",
+  "category": "overlay",
+  "summary": "Confirms a consequential existing form submission through a native dialog with an honest no-JavaScript submit trigger.",
+  "keywords": [
+    "confirmation",
+    "destructive-action",
+    "dialog",
+    "form"
+  ],
+  "agent": {
+    "useWhen": "An existing form submits a costly, destructive, or difficult-to-reverse operation.",
+    "avoidWhen": "The action is safe or reversible, requires a new endpoint, or has no existing validated form.",
+    "composeWith": [
+      "alert",
+      "button",
+      "form-field"
+    ]
+  },
+  "contract": {
+    "role": "native confirmation dialog for an existing form submitter",
+    "variants": [
+      "neutral",
+      "danger"
+    ],
+    "requiredFields": [
+      "id",
+      "form_id",
+      "title",
+      "body",
+      "trigger_label",
+      "confirm_label"
+    ],
+    "invariants": [
+      "Title and body are plain escaped text; configuration cannot provide markup.",
+      "The trigger is a real submit button with an explicit existing form association and remains a no-JavaScript fallback.",
+      "Enhancement requires the associated form, original submitter, native dialog API, and requestSubmit; otherwise native submit behavior is untouched.",
+      "Without a custom adapter, confirmation calls requestSubmit with the original submitter. A supplied app port receives that form/submitter and a cancellation signal; native constraint validation and signed transport remain app-owned.",
+      "Cancel, Escape, or backdrop close never submits. The app/server remains responsible for validation, authorization, and destructive effects.",
+      "Derived IDs include the dialog, title, and body; reserve all against page collisions.",
+      "The current Native host forbids external form= associations and has no confirm-dialog adapter seam. Native integration remains adapter-required; do not bypass host admission or add an endpoint."
+    ]
+  },
+  "tokens": [
+    "--cui-backdrop",
+    "--cui-confirm-dialog-backdrop",
+    "--cui-confirm-dialog-backdrop-blur",
+    "--cui-confirm-dialog-padding",
+    "--cui-confirm-dialog-radius",
+    "--cui-confirm-dialog-surface",
+    "--cui-confirm-dialog-title-size",
+    "--cui-confirm-dialog-width",
+    "--cui-danger-surface",
+    "--cui-danger-text",
+    "--cui-info-surface",
+    "--cui-info-text",
+    "--cui-radius-pill",
+    "--cui-radius-surface",
+    "--cui-shadow-raised",
+    "--cui-surface-raised",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-confirm-dialog-backdrop",
+      "role": "background",
+      "purpose": "Controls visual treatment for  confirm dialog."
+    },
+    {
+      "name": "--cui-confirm-dialog-backdrop-blur",
+      "role": "background",
+      "purpose": "Controls visual treatment for backdrop confirm dialog."
+    },
+    {
+      "name": "--cui-confirm-dialog-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for confirm dialog."
+    },
+    {
+      "name": "--cui-confirm-dialog-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for confirm dialog."
+    },
+    {
+      "name": "--cui-confirm-dialog-surface",
+      "role": "background",
+      "purpose": "Controls surface color for  confirm dialog."
+    },
+    {
+      "name": "--cui-confirm-dialog-title-size",
+      "role": "sizing",
+      "purpose": "Controls title font size for  confirm dialog."
+    },
+    {
+      "name": "--cui-confirm-dialog-width",
+      "role": "sizing",
+      "purpose": "Controls width for confirm dialog."
+    }
+  ],
+  "dependencies": [
+    "button",
+    "icon"
+  ],
+  "assets": {
+    "template": "components/confirm-dialog/fragment.html",
+    "styles": "components/confirm-dialog/styles.css",
+    "scripts": [
+      "components/confirm-dialog/interaction.js"
+    ],
+    "contracts": ["components/confirm-dialog/browser.d.ts"]
+  },
+  "fixtures": [
+    "components/confirm-dialog/fixtures/neutral-golden.json",
+    "components/confirm-dialog/fixtures/danger-golden.json"
+  ]
+}

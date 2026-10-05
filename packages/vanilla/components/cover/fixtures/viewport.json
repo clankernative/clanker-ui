@@ -1,0 +1,11 @@
+{
+  "options": {
+    "height": "viewport"
+  },
+  "children": {
+    "primary": "<main>Task</main>",
+    "top": "<header>Product</header>",
+    "bottom": "<footer>Help</footer>"
+  },
+  "expectedHtml": "<div class=\"cui-cover cui-cover--height-viewport cui-cover--gap-standard\" data-cui-component=\"cover\"><div class=\"cui-cover__top\"><header>Product</header></div><div class=\"cui-cover__primary\"><main>Task</main></div><div class=\"cui-cover__bottom\"><footer>Help</footer></div></div>\n"
+}

@@ -1,0 +1,17 @@
+/* Mechanical application of the existing gallery palette; scoped demonstration. */
+#native-enhancement-proof { display: grid; gap: 1rem; }
+#native-enhancement-proof > .specimen { padding: 1rem; }
+#native-enhancement-proof .demo-frame { display: grid; gap: 1rem; }
+#native-enhancement-proof {
+  --cui-copy-field-background: var(--gallery-bg);
+  --cui-copy-field-border: var(--gallery-control-border);
+  --cui-copy-field-text: var(--gallery-text);
+  --cui-copy-field-hint-text: var(--gallery-muted);
+  --cui-copy-field-focus-ring: var(--gallery-accent);
+  --cui-theme-switcher-background: var(--gallery-panel);
+  --cui-theme-switcher-selected: var(--gallery-accent);
+  --cui-theme-switcher-focus-ring: var(--gallery-accent);
+}
+.enhancement-theme-sample { padding: 1rem; border-radius: .5rem; }
+.enhancement-theme-sample[data-cui-theme="dark"] { color: #e8e8e9; background: #242829; }
+.enhancement-theme-sample[data-cui-theme="light"] { color: #20242a; background: #f1f3f5; }

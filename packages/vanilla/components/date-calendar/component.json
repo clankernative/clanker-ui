@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "name": "date-calendar",
+  "status": "ready",
+  "integration": {
+    "native": {"status": "adapter-required", "scope": "Native declaration and calendar browser lifecycle are not yet verified. Selection is browser draft state; application validation remains authoritative."},
+    "ports": [{"name": "calendar-selection", "direction": "output", "typeSource": "components/date-calendar/browser.d.ts", "export": "CalendarSelectionDetail", "purpose": "A bubbling cui:date-calendar-changed event exposes a bounded single/range browser draft. The app owns validation and any subsequent workflow.", "required": false}]
+  },
+  "target": "native-html",
+  "category": "date-time",
+  "summary": "Deterministic Gregorian month grid with explicit localized labels and optional bounded keyboard interaction.",
+  "keywords": [
+    "date",
+    "calendar",
+    "month",
+    "range"
+  ],
+  "agent": {
+    "useWhen": "A page needs a visible single-date or date-range calendar with deterministic explicit month/today and localized labels.",
+    "avoidWhen": "Do not treat this library contract as host admission or use it where no-JS selection is required; unavailable dates require app/server validation.",
+    "composeWith": [
+      "date-picker"
+    ]
+  },
+  "contract": {
+    "role": "calendar grid",
+    "variants": [
+      "readonly",
+      "interactive",
+      "disabled"
+    ],
+    "requiredFields": [
+      "id",
+      "month",
+      "today",
+      "label",
+      "monthLabels",
+      "weekdayShortLabels",
+      "weekdayFullLabels",
+      "previousLabel",
+      "nextLabel",
+      "firstDay"
+    ],
+    "invariants": [
+      "Gregorian dates are strict ISO dates in years 0001..9999; month is explicit and first-of-month and today is explicit.",
+      "The caller supplies all 12 month labels and seven short and full weekday labels; Native has no CultureInfo or implicit locale fallback.",
+      "Renders exactly six weeks and 42 cells with explicit outside-month, today, selection, range, and unavailable states.",
+      "Selection mode is single or range; range dates are ordered and may have an open end.",
+      "Readonly calendars are useful without JavaScript; interactive dates and month navigation require the admitted interaction module.",
+      "Calendar selection is presentation only; host admission and app/server validation remain authoritative."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-accent-text",
+    "--cui-border",
+    "--cui-date-calendar-border",
+    "--cui-date-calendar-focus",
+    "--cui-date-calendar-gap",
+    "--cui-date-calendar-padding",
+    "--cui-date-calendar-radius",
+    "--cui-date-calendar-surface",
+    "--cui-date-calendar-width",
+    "--cui-radius-surface",
+    "--cui-selected-surface",
+    "--cui-space-3",
+    "--cui-surface",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-date-calendar-border",
+      "role": "border",
+      "purpose": "Controls border color for  date calendar."
+    },
+    {
+      "name": "--cui-date-calendar-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for  date calendar."
+    },
+    {
+      "name": "--cui-date-calendar-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for date calendar."
+    },
+    {
+      "name": "--cui-date-calendar-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for date calendar."
+    },
+    {
+      "name": "--cui-date-calendar-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for date calendar."
+    },
+    {
+      "name": "--cui-date-calendar-surface",
+      "role": "background",
+      "purpose": "Controls surface color for  date calendar."
+    },
+    {
+      "name": "--cui-date-calendar-width",
+      "role": "sizing",
+      "purpose": "Controls width for date calendar."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
+  "assets": {
+    "template": "components/date-calendar/fragment.html",
+    "styles": "components/date-calendar/styles.css",
+    "scripts": [
+      "components/date-calendar/interaction.js"
+    ],
+    "contracts": ["components/date-calendar/browser.d.ts"]
+  },
+  "fixtures": [
+    "components/date-calendar/fixtures/typical-golden.json",
+    "components/date-calendar/fixtures/readonly-golden.json",
+    "components/date-calendar/fixtures/disabled-golden.json"
+  ]
+}

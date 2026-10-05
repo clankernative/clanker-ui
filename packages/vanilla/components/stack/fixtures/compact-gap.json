@@ -1,0 +1,5 @@
+{
+  "options": { "gap": "compact" },
+  "children": { "body": "<p>Layout fixture.</p>" },
+  "expectedHtml": "<div class=\"cui-stack cui-stack--gap-compact cui-stack--align-stretch\" data-cui-component=\"stack\"><p>Layout fixture.</p></div>\n"
+}

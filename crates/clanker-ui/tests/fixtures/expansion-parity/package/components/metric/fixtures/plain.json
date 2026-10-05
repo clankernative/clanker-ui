@@ -1,0 +1,5 @@
+{
+  "expectedHtml": "<article class=\"cui-metric cui-metric--plain\" data-cui-component=\"metric\"><dl class=\"cui-metric__content\"><dt class=\"cui-metric__label\">Active users</dt><dd class=\"cui-metric__value\">2,420</dd></dl></article>\n",
+  "label": "Active users",
+  "value": "2,420"
+}

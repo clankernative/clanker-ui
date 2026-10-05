@@ -1,0 +1,9 @@
+{
+  "caption": "No matching records",
+  "columns": [
+    "Name",
+    "Status"
+  ],
+  "expectedHtml": "<div class=\"cui-data-table\" data-cui-component=\"data-table\" tabindex=\"0\" role=\"region\" aria-label=\"No matching records\"><table class=\"cui-data-table__table\"><caption class=\"cui-data-table__caption\">No matching records</caption><thead class=\"cui-data-table__head\"><tr><th scope=\"col\">Name</th><th scope=\"col\">Status</th></tr></thead><tbody class=\"cui-data-table__body\"></tbody></table></div>\n",
+  "rows": []
+}

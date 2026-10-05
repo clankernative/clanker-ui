@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "date-picker",
+  "status": "draft",
+  "target": "native-html",
+  "category": "date-time",
+  "summary": "Native single or separately named range date inputs with optional inline or disclosure calendar enhancement.",
+  "keywords": ["date", "date picker", "range", "calendar", "form"],
+  "agent": {"useWhen":"A Native form needs a strict ISO single date or date range with separate start/end names and a Gregorian calendar enhancement.","avoidWhen":"Do not rely on enhanced unavailable-date restrictions for app validation, or assume a host admits the declared assets/constraints or client interaction.","composeWith":["date-calendar","form-field"]},
+  "contract": {"role":"native date form controls with optional calendar enhancement","variants":["single-inline","single-dropdown","range-inline","range-dropdown"],"requiredFields":["id","label","month","today","month_labels","weekday_short_labels","weekday_full_labels","previous_label","next_label","calendar_label","open_calendar_label"],"invariants":["Native type=date inputs own submitted values and no-JS fallback; range uses separate startName and endName.","The caller supplies explicit localized month and weekday labels because the Native contract has no ambient culture provider.","Unavailable dates are enforced only by enhanced calendar interaction; app/server validation remains required, including without JavaScript.","Selection, constraints, required, disabled, hint, error and labels are typed and validated; selected endpoints are ordered.","Dropdown uses native details/summary without JavaScript; enhancement never hides native inputs and Escape restores trigger focus.","Date-picker and calendar events report bounded selection only; they do not submit, mutate application state, or establish admission.","Manifest remains draft until host constraint admission and browser behavior are independently proven."]},
+  "tokens": ["--cui-date-picker-border","--cui-date-picker-focus","--cui-date-picker-panel-shadow","--cui-date-picker-radius","--cui-date-picker-surface"],
+  "dependencies": ["date-calendar"],
+  "assets": {"template":"components/date-picker/fragment.html","styles":"components/date-picker/styles.css","scripts":["components/date-picker/interaction.js"]},
+  "fixtures": ["components/date-picker/fixtures/single.json","components/date-picker/fixtures/range.json","components/date-picker/fixtures/single-golden.json","components/date-picker/fixtures/range-golden.json"]
+}

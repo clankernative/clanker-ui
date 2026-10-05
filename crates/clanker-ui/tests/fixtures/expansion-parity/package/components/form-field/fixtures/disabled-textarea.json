@@ -1,0 +1,9 @@
+{
+  "disabled": true,
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"textarea\"><label class=\"cui-form-field__label\" for=\"summary\">Summary</label><textarea class=\"cui-form-field__control cui-form-field__control--textarea\" id=\"summary\" name=\"summary\" rows=\"3\" disabled>Generated summary</textarea></div>\n",
+  "id": "summary",
+  "kind": "textarea",
+  "label": "Summary",
+  "name": "summary",
+  "value": "Generated summary"
+}

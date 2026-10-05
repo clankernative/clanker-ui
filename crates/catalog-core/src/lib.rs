@@ -1,7 +1,59 @@
 //! Pure package and component rules. No filesystem, process, or browser dependencies.
 
+pub use clanker_ui_runtime as template_values;
+
+pub mod activity_feed;
+pub mod alert;
+pub mod authoring;
+pub mod avatar;
+pub mod badge;
+pub mod breadcrumbs;
 pub mod button;
+pub mod button_group;
+pub mod checkbox_group;
+pub mod command_menu;
+pub mod confirm_dialog;
+pub mod copy_field;
+pub mod css_check;
+pub mod data_table;
+pub mod data_viewport;
+pub mod date;
+pub mod date_calendar;
+pub mod date_picker;
+pub mod definition_list;
+pub mod disclosure;
+pub mod divider;
+pub mod drawer;
+pub mod empty_state;
+pub mod expansion;
+pub mod file_upload;
+pub mod filter_bar;
+pub mod form_field;
+pub mod fragment;
 pub mod icon;
+pub mod integration;
+pub mod layout;
+pub mod metric;
+pub mod modal;
+pub mod page_header;
+pub mod pagination;
+pub mod popover;
+pub mod progress;
+pub mod progress_steps;
+pub mod properties;
+pub mod radio_group;
+pub mod segmented_control;
+pub mod select_field;
+pub mod skeleton;
+pub mod status_indicator;
+pub mod tabs;
+pub mod tag;
+pub mod theme;
+pub mod theme_switcher;
+pub mod toast;
+pub mod toggle;
+pub mod tokens;
+pub mod tooltip;
 
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
@@ -16,6 +68,8 @@ pub struct PackageManifest {
     pub version: String,
     pub summary: String,
     pub theme: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub token_metadata: Option<String>,
     #[serde(default)]
     pub resources: Vec<String>,
 }
@@ -33,9 +87,16 @@ pub struct Component {
     pub agent: AgentGuidance,
     pub contract: Contract,
     pub tokens: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub token_descriptions: Vec<tokens::TokenDefinition>,
     pub dependencies: Vec<String>,
     pub assets: Assets,
     pub fixtures: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub template_authoring: Option<authoring::TemplateAuthoring>,
+    /// Ready means component-complete; this separately describes host wiring.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub integration: Option<integration::ComponentIntegration>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Deserialize, Serialize)]
@@ -68,6 +129,9 @@ pub struct Assets {
     pub template: String,
     pub styles: String,
     pub scripts: Vec<String>,
+    /// Locked, non-executable type contracts for app-owned adapter ports.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub contracts: Vec<String>,
 }
 
 #[derive(Clone, Debug)]
@@ -105,7 +169,7 @@ fn field_name(value: &str) -> bool {
     !value.is_empty()
         && value
             .bytes()
-            .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'_')
+            .all(|byte| byte.is_ascii_alphanumeric() || byte == b'_')
 }
 
 fn unique(values: &[String]) -> bool {
@@ -128,6 +192,9 @@ impl PackageManifest {
             || !meaningful(&manifest.version)
             || !meaningful(&manifest.summary)
             || !safe_path(&manifest.theme)
+            || manifest.token_metadata.as_ref().is_some_and(|path| {
+                !safe_path(path) || !path.ends_with(".json") || !manifest.resources.contains(path)
+            })
             || manifest.resources.iter().any(|path| !safe_path(path))
             || !unique(&manifest.resources)
         {
@@ -154,6 +221,17 @@ impl Component {
             || !unique(&component.contract.variants)
             || !unique(&component.contract.required_fields)
             || !unique(&component.tokens)
+            || !unique(
+                &component
+                    .token_descriptions
+                    .iter()
+                    .map(|token| token.name.clone())
+                    .collect::<Vec<_>>(),
+            )
+            || component
+                .token_descriptions
+                .iter()
+                .any(|token| token.validate().is_err() || !component.tokens.contains(&token.name))
             || component
                 .contract
                 .required_fields
@@ -169,6 +247,18 @@ impl Component {
                 .any(|keyword| !meaningful(keyword))
         {
             return Err("invalid component identity, target, guidance, or contract".into());
+        }
+        if let Some(integration) = &component.integration {
+            integration.validate(&component.name, &component.assets.contracts)?;
+        }
+        if !unique(&component.assets.contracts)
+            || component.assets.contracts.iter().any(|path| {
+                !safe_path(path)
+                    || !path.ends_with(".d.ts")
+                    || !path.starts_with(&format!("components/{}/", component.name))
+            })
+        {
+            return Err("invalid component-owned port type assets".into());
         }
         if component.dependencies.iter().any(|name| !identifier(name))
             || component
@@ -191,11 +281,15 @@ impl Component {
                 .assets
                 .scripts
                 .iter()
+                .chain(component.assets.contracts.iter())
                 .chain([&component.assets.template, &component.assets.styles])
                 .chain(component.fixtures.iter())
                 .any(|path| !safe_path(path))
         {
             return Err("invalid dependency, variant, or asset path".into());
+        }
+        if let Some(metadata) = &component.template_authoring {
+            metadata.validate(&component.name, &component.target)?;
         }
         Ok(component)
     }
@@ -331,14 +425,28 @@ mod tests {
                 invariants: vec!["Label is visible".into()],
             },
             tokens: vec!["--cui-accent".into()],
+            token_descriptions: vec![],
             dependencies: dependencies.iter().map(|d| (*d).into()).collect(),
             assets: Assets {
                 template: "components/button/template.html".into(),
                 styles: "components/button/styles.css".into(),
                 scripts: vec![],
+                contracts: vec![],
             },
             fixtures: vec!["components/button/fixtures/primary.json".into()],
+            template_authoring: None,
+            integration: None,
         }
+    }
+
+    #[test]
+    fn required_fields_accept_actual_serialized_camel_case_names() {
+        let mut contract = component("button", Status::Ready, &[]);
+        contract.contract.required_fields =
+            vec!["monthLabels".into(), "weekday_short_labels".into()];
+        assert!(Component::parse(&serde_json::to_vec(&contract).unwrap()).is_ok());
+        contract.contract.required_fields.push("not a field".into());
+        assert!(Component::parse(&serde_json::to_vec(&contract).unwrap()).is_err());
     }
 
     #[test]

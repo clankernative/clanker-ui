@@ -1,0 +1,60 @@
+{
+  "id": "release-date",
+  "label": "Release date",
+  "value": {
+    "mode": "single",
+    "date": "2026-08-25"
+  },
+  "month": "2026-08-01",
+  "today": "2026-08-25",
+  "monthLabels": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ],
+  "weekdayShortLabels": [
+    "Su",
+    "Mo",
+    "Tu",
+    "We",
+    "Th",
+    "Fr",
+    "Sa"
+  ],
+  "weekdayFullLabels": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ],
+  "firstDay": 0,
+  "previousLabel": "Previous month",
+  "nextLabel": "Next month",
+  "startLabel": "Date",
+  "endLabel": "End date",
+  "calendarLabel": "Choose a release date",
+  "openCalendarLabel": "Open calendar",
+  "minimum": "2026-01-01",
+  "maximum": "2026-12-31",
+  "unavailableDates": [],
+  "presentation": "inline",
+  "hint": "Choose a business day.",
+  "error": null,
+  "required": true,
+  "disabled": false,
+  "name": "releaseDate",
+  "startName": null,
+  "endName": null
+}

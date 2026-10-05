@@ -1,0 +1,12 @@
+{
+  "id": "audit-events",
+  "label": "Audit events",
+  "height": "standard",
+  "mode": "windowed",
+  "window": {"start": 40, "total": 10000, "itemSize": 72, "overscan": 8, "anchor": "event-40"},
+  "pagination": "Load previous and next audit event pages",
+  "items": [
+    {"id": "event-40", "content": "Policy updated"},
+    {"id": "event-41", "content": "Access granted"}
+  ]
+}

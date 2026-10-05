@@ -1,0 +1,8 @@
+{
+  "count": "4 & more",
+  "countLabel": "Four matching records",
+  "expectedHtml": "<span class=\"cui-tag cui-tag--info cui-tag--medium\" data-cui-component=\"tag\" data-cui-tone=\"info\"><span class=\"cui-tag__icon\"><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"tag\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"M20 13 11 22l-9-9V4h9zM7 8h.01\"></path></svg></span><span class=\"cui-tag__label\">Needs &lt;review&gt; &amp; &quot;owner&quot; [[tag]]</span><span class=\"cui-tag__count\" aria-hidden=\"true\">4 &amp; more</span><span class=\"cui-tag__count-label\">Four matching records</span></span>\n",
+  "icon": "tag",
+  "label": "Needs <review> & \"owner\" [[tag]]",
+  "tone": "info"
+}

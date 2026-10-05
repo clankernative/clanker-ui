@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "name": "checkbox-group",
+  "status": "draft",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders a bounded native fieldset of independently selectable checkbox choices.",
+  "keywords": ["checkbox", "group", "form", "choice", "validation"],
+  "agent": {
+    "useWhen": "An app-owned form needs 1–20 independently selectable options with shared context.",
+    "avoidWhen": "Choices are dynamic, require rich content, custom transport, client-side state, or a command lifecycle.",
+    "composeWith": ["form-field"]
+  },
+  "contract": {
+    "role": "native form control group",
+    "variants": ["stacked", "inline", "disabled", "invalid"],
+    "requiredFields": ["name", "legend", "choices"],
+    "invariants": [
+      "Uses native fieldset/legend and repeated checkbox names; the browser owns successful-control form semantics.",
+      "Contains 1..=20 choices with unique nonblank values; each choice has a nonblank label and optional nonblank hint.",
+      "An optional safe explicit id names the fieldset; otherwise name is used. Choice, hint, error, and description IDs are deterministic and reserved.",
+      "Layout is stacked or inline. Group and per-choice disabled states use native disabled controls.",
+      "Names and IDs are non-reserved safe tokens; all copy and values are control-safe plain text escaped as HTML.",
+      "The app owns form, submission, transport, routes, and domain validation. No hidden transport, JavaScript, commands, arbitrary attributes, or raw markup are emitted.",
+      "The fragment has exactly one [[attributes]], [[legend]], [[choices]], and [[description]] slot; expansion is exact and single-pass.",
+      "Draft status remains until a Native host build and browser review prove admission and behavior."
+    ]
+  },
+  "tokens": ["--cui-checkbox-group-gap", "--cui-checkbox-group-choice-gap", "--cui-checkbox-group-choice-padding", "--cui-checkbox-group-border", "--cui-checkbox-group-radius", "--cui-checkbox-group-accent", "--cui-checkbox-group-focus-ring", "--cui-checkbox-group-hint-text", "--cui-checkbox-group-error-text"],
+  "dependencies": [],
+  "assets": {"template": "components/checkbox-group/fragment.html", "styles": "components/checkbox-group/styles.css", "scripts": []},
+  "fixtures": ["components/checkbox-group/fixtures/typical-golden.json", "components/checkbox-group/fixtures/validation-golden.json", "components/checkbox-group/fixtures/disabled-golden.json", "components/checkbox-group/fixtures/inline-golden.json"]
+}

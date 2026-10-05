@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "name": "disclosure",
+  "status": "ready",
+  "target": "native-html",
+  "category": "data",
+  "summary": "Reveals optional supporting content through native details and summary semantics.",
+  "keywords": [
+    "details",
+    "accordion",
+    "collapsible"
+  ],
+  "agent": {
+    "useWhen": "Optional supporting detail can remain collapsed until a user requests it.",
+    "avoidWhen": "The content is required to complete the task or needs exclusive accordion behavior.",
+    "composeWith": [
+      "alert",
+      "card",
+      "stack"
+    ]
+  },
+  "contract": {
+    "role": "native details and summary disclosure",
+    "variants": [
+      "contained",
+      "plain"
+    ],
+    "requiredFields": [
+      "summary",
+      "body"
+    ],
+    "invariants": [
+      "Summary is nonblank escaped text; body is provided only through the host-admitted body slot.",
+      "Default appearance is contained and default state is closed.",
+      "The native disclosure works without JavaScript; no ARIA state is recreated.",
+      "Fragment slots are exactly [[attributes]], [[summary]], and [[body]]."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border",
+    "--cui-disclosure-background",
+    "--cui-disclosure-border",
+    "--cui-disclosure-focus-ring",
+    "--cui-disclosure-hover-background",
+    "--cui-disclosure-icon-text",
+    "--cui-disclosure-padding",
+    "--cui-disclosure-radius",
+    "--cui-disclosure-summary-text",
+    "--cui-radius-surface",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-disclosure-background",
+      "role": "background",
+      "purpose": "Controls background color for  disclosure."
+    },
+    {
+      "name": "--cui-disclosure-border",
+      "role": "border",
+      "purpose": "Controls border color for  disclosure."
+    },
+    {
+      "name": "--cui-disclosure-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  disclosure."
+    },
+    {
+      "name": "--cui-disclosure-hover-background",
+      "role": "background",
+      "purpose": "Controls background color for hover state disclosure."
+    },
+    {
+      "name": "--cui-disclosure-icon-text",
+      "role": "text",
+      "purpose": "Controls text color for icon disclosure."
+    },
+    {
+      "name": "--cui-disclosure-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for disclosure."
+    },
+    {
+      "name": "--cui-disclosure-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for disclosure."
+    },
+    {
+      "name": "--cui-disclosure-summary-text",
+      "role": "text",
+      "purpose": "Controls text color for summary disclosure."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/disclosure/fragment.html",
+    "styles": "components/disclosure/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/disclosure/fixtures/contained-golden.json",
+    "components/disclosure/fixtures/plain-open-golden.json"
+  ]
+}

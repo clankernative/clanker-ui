@@ -1,0 +1,11 @@
+{
+  "detail": "Validating localized fields and linked media references.",
+  "expectedHtml": "<div class=\"cui-progress cui-progress--info cui-progress--regular cui-progress--determinate\" data-cui-component=\"progress\" data-cui-tone=\"info\" data-cui-size=\"regular\" data-cui-state=\"determinate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Importing records</span><span class=\"cui-progress__suffix\">42 of 100 records</span></div><progress class=\"cui-progress__track\" value=\"42\" max=\"100\" aria-label=\"Importing records\"></progress><p class=\"cui-progress__detail\">Validating localized fields and linked media references.</p></div>\n",
+  "label": "Importing records",
+  "maximum": 100,
+  "size": "regular",
+  "state": "determinate",
+  "suffix": "42 of 100 records",
+  "tone": "info",
+  "value": 42
+}

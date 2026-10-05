@@ -1,0 +1,5 @@
+{
+  "title": "Records <live> & \"workers\"",
+  "description": "Review <strong>plain text</strong> & supporting context.",
+  "expectedHtml": "<header class=\"cui-page-header\" data-cui-component=\"page-header\"><div class=\"cui-page-header__content\"><h1 class=\"cui-page-header__title\">Records &lt;live&gt; &amp; &quot;workers&quot;</h1><p class=\"cui-page-header__description\">Review &lt;strong&gt;plain text&lt;/strong&gt; &amp; supporting context.</p></div></header>\n"
+}

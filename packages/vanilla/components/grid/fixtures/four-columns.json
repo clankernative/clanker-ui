@@ -1,0 +1,5 @@
+{
+  "options": { "columns": "four" },
+  "children": { "body": "<article>Grid item.</article>" },
+  "expectedHtml": "<div class=\"cui-grid cui-grid--columns-four cui-grid--minimum-standard cui-grid--gap-standard cui-grid--align-stretch cui-grid--collapse-standard\" data-cui-component=\"grid\"><div class=\"cui-grid__items\"><article>Grid item.</article></div></div>\n"
+}

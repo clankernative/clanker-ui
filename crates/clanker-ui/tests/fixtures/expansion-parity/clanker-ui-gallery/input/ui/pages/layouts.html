@@ -1,0 +1,211 @@
+<!-- Inherited direction: neutral white/soft-gray atlas with Studio orange accents, system sans, and compact editorial hierarchy. All task, metric, and status examples here are illustrative static content; no business action is simulated. -->
+<div id="gallery-app" class="atlas-page gallery-shell">
+  {% include "components/gallery-sidebar.html" %}
+  <div class="gallery-main"><div class="gallery-topbar"><cui-breadcrumbs label="Breadcrumbs"><cui-crumb label="Gallery" href="{{ routes.workspace() }}" /><cui-crumb label="Layout atlas" current="true" /></cui-breadcrumbs><span class="small-note">Illustrative samples · locked Native components</span></div>
+  <div class="page-content">
+    <cui-page-header title="Layout atlas" description="14 layout components. Native declarations, visible options, and compositions you can resize." />
+
+    <nav class="atlas-nav" aria-label="Atlas contents">
+      <a href="#container">Container</a><a href="#stack">Stack</a><a href="#cluster">Cluster</a><a href="#grid">Grid</a>
+      <a href="#split">Split</a><a href="#switch">Switch</a><a href="#sidebar">Sidebar</a><a href="#cover">Cover</a>
+      <a href="#layer">Layer</a><a href="#pane">Pane</a><a href="#reel">Reel</a><a href="#card">Card</a>
+      <a href="#divider">Divider</a><a href="#page-header">Page Header</a><a href="#recipes">Workspace recipes</a><a href="#other-components">Other components</a>
+    </nav>
+
+    <div class="atlas-main">
+      <section class="atlas-section" id="container">
+        <h2>Container</h2><p class="section-description">Bounds a page or region while keeping responsive inline gutters. Width presets: reading, compact, standard, wide, full. Gutters: none, compact, standard (default), generous.</p>
+        <dl class="option-list"><dt>width</dt><dd>reading · compact · standard (default) · wide · full</dd><dt>gutter</dt><dd>none · compact · standard (default) · generous</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Reading measure</h3><div class="demo-frame"><cui-container width="reading" gutter="standard"><p class="demo-block">A comfortable line length for long-form notes and documentation.</p></cui-container></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-container width="reading" gutter="standard"&gt;…&lt;/cui-container&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Compact and wide</h3><div class="demo-frame"><cui-container width="compact" gutter="generous"><p class="demo-block">Compact region</p></cui-container><cui-container width="wide" gutter="compact"><p class="demo-block">Wide region</p></cui-container></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-container width="compact" gutter="generous"&gt;…&lt;/cui-container&gt;
+&lt;cui-container width="wide" gutter="compact"&gt;…&lt;/cui-container&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Standard and full</h3><div class="demo-frame"><cui-container width="standard"><p class="demo-block">Standard (default)</p></cui-container><cui-container width="full" gutter="none"><p class="demo-block">Full width · no gutter</p></cui-container></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-container width="standard"&gt;…&lt;/cui-container&gt;
+&lt;cui-container width="full" gutter="none"&gt;…&lt;/cui-container&gt;</code></pre></details></article>
+        </div><p class="layout-note">The app's container-query breakpoints are 32rem, 48rem, and 64rem. Choose width and gutters from the containing region, not an assumed device size.</p>
+      </section>
+
+      <section class="atlas-section" id="stack">
+        <h2>Stack</h2><p class="section-description">Creates vertical rhythm between direct children while preserving their reading order.</p>
+        <dl class="option-list"><dt>gap</dt><dd>none · compact · standard (default) · spacious · generous</dd><dt>alignment</dt><dd>stretch (default) · start · center · end · baseline</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Gap range</h3><div class="demo-frame"><div class="demo-row"><cui-stack gap="compact"><div class="demo-block">Compact</div><div class="demo-block">Rhythm</div></cui-stack><cui-stack gap="generous"><div class="demo-block">Generous</div><div class="demo-block">Rhythm</div></cui-stack></div></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-stack gap="compact"&gt;…&lt;/cui-stack&gt;
+&lt;cui-stack gap="generous"&gt;…&lt;/cui-stack&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Alignment</h3><div class="demo-frame"><cui-stack gap="standard" alignment="start"><div class="demo-block">Start aligned</div><div class="demo-block">A narrower child</div></cui-stack><cui-stack gap="none" alignment="center"><div class="demo-block">No gap</div><div class="demo-block">Centered children</div></cui-stack><cui-stack gap="spacious" alignment="end"><div class="demo-block">Spacious rhythm</div><div class="demo-block">End alignment</div></cui-stack></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-stack gap="standard" alignment="start"&gt;…&lt;/cui-stack&gt;</code></pre></details></article>
+        </div>
+      </section>
+
+      <section class="atlas-section" id="cluster">
+        <h2>Cluster</h2><p class="section-description">Groups short peer items horizontally. Wrapping is the safe default for narrow regions.</p>
+        <dl class="option-list"><dt>gap</dt><dd>none · compact (default) · standard · spacious · generous</dd><dt>alignment</dt><dd>center (default) · stretch · start · end · baseline</dd><dt>justification</dt><dd>start (default) · center · end · between</dd><dt>wrapping</dt><dd>wrap (default) · nowrap</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Wrapping and alignment</h3><div class="demo-frame"><cui-cluster gap="standard" alignment="center" justification="between" wrapping="wrap"><span class="demo-block">Status</span><span class="demo-block">Owner: Atlas</span><span class="demo-block">Updated today</span><span class="demo-block">Four independent items</span></cui-cluster></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-cluster gap="standard" alignment="center" justification="between" wrapping="wrap"&gt;…&lt;/cui-cluster&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Explicit nowrap</h3><div class="demo-frame"><cui-cluster gap="compact" alignment="baseline" justification="start" wrapping="nowrap"><span class="demo-block">Short label</span><span class="demo-block">Peer</span><span class="demo-block">Peer</span></cui-cluster></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-cluster gap="compact" alignment="baseline" justification="start" wrapping="nowrap"&gt;…&lt;/cui-cluster&gt;</code></pre></details></article>
+        </div><p class="layout-note">Use nowrap only when the surrounding region has an intentional overflow or scroll strategy.</p>
+      </section>
+
+      <section class="atlas-section" id="grid">
+        <h2>Grid</h2><p class="section-description">Arranges repeated content in responsive or bounded fixed tracks. It is not masonry; source order remains the reading order.</p>
+        <dl class="option-list"><dt>columns</dt><dd>responsive (default) · two · three · four</dd><dt>minimum</dt><dd>narrow · standard (default) · wide</dd><dt>gap / alignment</dt><dd>gap presets · stretch (default), start, center, end, baseline</dd><dt>collapse-at</dt><dd>compact · standard (default) · wide · never (immediate expanded layout)</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Intrinsic responsive</h3><div class="demo-frame"><cui-grid columns="responsive" minimum="standard" gap="standard"><div class="demo-block">Queue A</div><div class="demo-block">Queue B</div><div class="demo-block">Queue C</div></cui-grid></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-grid columns="responsive" minimum="standard" gap="standard"&gt;…&lt;/cui-grid&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Two and three columns</h3><div class="demo-frame"><cui-grid columns="two" collapse-at="compact"><div class="demo-block">Two tracks</div><div class="demo-block">Two tracks</div></cui-grid><cui-grid columns="three" collapse-at="standard"><div class="demo-block">Three</div><div class="demo-block">Three</div><div class="demo-block">Three</div></cui-grid></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-grid columns="two" collapse-at="compact"&gt;…&lt;/cui-grid&gt;
+&lt;cui-grid columns="three" collapse-at="standard"&gt;…&lt;/cui-grid&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Four columns, never collapse</h3><div class="demo-frame"><cui-grid columns="four" minimum="narrow" gap="compact" collapse-at="never"><div class="demo-block">One</div><div class="demo-block">Two</div><div class="demo-block">Three</div><div class="demo-block">Four</div></cui-grid></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-grid columns="four" minimum="narrow" gap="compact" collapse-at="never"&gt;…&lt;/cui-grid&gt;</code></pre></details></article>
+        </div><p class="layout-note">Responsive columns size from the available inline space. Fixed columns expand at their container-query breakpoint; never means always expanded, even in a narrow parent.</p>
+      </section>
+
+      <section class="atlas-section" id="split">
+        <h2>Split</h2><p class="section-description">Composes exactly two named regions with a deliberate ratio. Start and end are required and retain their DOM order.</p>
+        <dl class="option-list"><dt>ratio</dt><dd>equal (default) · start-wide · end-wide · start-dominant · end-dominant</dd><dt>gap / alignment</dt><dd>gap presets · stretch (default), start, center, end, baseline</dd><dt>collapse-at</dt><dd>compact · standard (default) · wide · never (immediate expanded layout)</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Equal and start-wide</h3><div class="demo-frame"><cui-split ratio="equal" gap="standard"><cui-slot name="start"><div class="demo-block">Start · required</div></cui-slot><cui-slot name="end"><div class="demo-block">End · required</div></cui-slot></cui-split><cui-split ratio="start-wide" gap="standard"><cui-slot name="start"><div class="demo-block">Start wide</div></cui-slot><cui-slot name="end"><div class="demo-block">End</div></cui-slot></cui-split></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-split ratio="start-wide"&gt;
+  &lt;cui-slot name="start"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="end"&gt;…&lt;/cui-slot&gt;
+&lt;/cui-split&gt;</code></pre></details></article>
+          <article class="specimen"><h3>End-wide and dominant ratios</h3><div class="demo-frame"><cui-split ratio="end-wide"><cui-slot name="start"><div class="demo-block">Start</div></cui-slot><cui-slot name="end"><div class="demo-block">End wide</div></cui-slot></cui-split><cui-split ratio="start-dominant" collapse-at="never"><cui-slot name="start"><div class="demo-block">Start dominant</div></cui-slot><cui-slot name="end"><div class="demo-block">End</div></cui-slot></cui-split><cui-split ratio="end-dominant"><cui-slot name="start"><div class="demo-block">Start</div></cui-slot><cui-slot name="end"><div class="demo-block">End dominant</div></cui-slot></cui-split></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-split ratio="end-wide"&gt;…&lt;/cui-split&gt;
+&lt;cui-split ratio="start-dominant" collapse-at="never"&gt;…&lt;/cui-split&gt;
+&lt;cui-split ratio="end-dominant"&gt;…&lt;/cui-split&gt;</code></pre></details></article>
+        </div><p class="layout-note">Split stacks below its selected container breakpoint. Never means always expanded, not permanently stacked.</p>
+      </section>
+
+      <section class="atlas-section" id="switch">
+        <h2>Switch</h2><p class="section-description">Changes the complete group from a column to one row at a container-query boundary; unlike Cluster, it never wraps individual items.</p>
+        <dl class="option-list"><dt>sizing</dt><dd>natural (default) · equal</dd><dt>gap / alignment / justification</dt><dd>gap presets · stretch, start, center, end, baseline · start, center, end, between</dd><dt>collapse-at</dt><dd>compact · standard (default) · wide · never (immediate expanded row)</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Natural width</h3><div class="demo-frame"><cui-switch sizing="natural" gap="standard" collapse-at="standard"><div class="demo-block">Search scope</div><div class="demo-block">Filters</div><div class="demo-block">Optional context</div></cui-switch></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-switch sizing="natural" gap="standard" collapse-at="standard"&gt;…&lt;/cui-switch&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Equal-width row</h3><div class="demo-frame"><cui-switch sizing="equal" gap="compact" alignment="center" justification="between" collapse-at="wide"><div class="demo-block">Primary region</div><div class="demo-block">Secondary region</div></cui-switch></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-switch sizing="equal" gap="compact" alignment="center" justification="between" collapse-at="wide"&gt;…&lt;/cui-switch&gt;</code></pre></details></article>
+        </div><p class="layout-note">At collapse-at="never", the full row is always expanded, including in a narrow parent.</p>
+      </section>
+
+      <section class="atlas-section" id="sidebar">
+        <h2>Sidebar</h2><p class="section-description">Pairs a flexible main region with a supporting rail. The rail side controls visual order; the rendered DOM order follows that choice.</p>
+        <dl class="option-list"><dt>side</dt><dd>start · end (default)</dd><dt>width</dt><dd>narrow · standard (default) · wide</dd><dt>gap / alignment</dt><dd>gap presets · start (default), stretch, center, end, baseline</dd><dt>collapse-at</dt><dd>compact · standard (default) · wide · never</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Start rail</h3><div class="demo-frame"><cui-sidebar side="start" width="narrow" gap="standard" collapse-at="compact"><cui-slot name="aside"><nav class="demo-rail" aria-label="Example sections"><a href="#sidebar">Overview</a><a href="#recipes">Activity</a></nav></cui-slot><cui-slot name="main"><div class="demo-block">Main content follows the start rail in both visual and DOM order.</div></cui-slot></cui-sidebar></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-sidebar side="start" width="narrow" collapse-at="compact"&gt;
+  &lt;cui-slot name="aside"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="main"&gt;…&lt;/cui-slot&gt;
+&lt;/cui-sidebar&gt;</code></pre></details></article>
+          <article class="specimen"><h3>End rail · wider</h3><div class="demo-frame"><cui-sidebar side="end" width="standard" gap="standard" alignment="start"><cui-slot name="main"><div class="demo-block">Standard end rail</div></cui-slot><cui-slot name="aside"><div class="demo-rail">Supporting detail</div></cui-slot></cui-sidebar><cui-sidebar side="end" width="wide" gap="spacious" alignment="start" collapse-at="wide"><cui-slot name="main"><div class="demo-block">Primary content with room to grow.</div></cui-slot><cui-slot name="aside"><div class="demo-rail">Wide rail · related details · illustrative</div></cui-slot></cui-sidebar></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-sidebar side="end" width="wide" gap="spacious" alignment="start" collapse-at="wide"&gt;…&lt;/cui-sidebar&gt;</code></pre></details></article>
+        </div><p class="layout-note">On collapse, source order still matches visual order. Keep supporting navigation in the correct admitted slot instead of relying on CSS reordering.</p>
+      </section>
+
+      <section class="atlas-section" id="cover">
+        <h2>Cover</h2><p class="section-description">Centers one primary task between optional top and bottom regions. The primary slot is required; chrome does not change its placement.</p>
+        <dl class="option-list"><dt>height</dt><dd>compact · standard (default) · fill · viewport</dd><dt>gap</dt><dd>none · compact · standard · spacious · generous</dd><dt>fill / viewport</dt><dd>fill requires a parent with a definite block size; viewport subtracts the app-overridden viewport offset</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Compact and standard</h3><div class="demo-frame"><cui-cover height="compact"><cui-slot name="primary"><div class="demo-block">Compact focused task</div></cui-slot></cui-cover><cui-cover height="standard"><cui-slot name="top"><div class="demo-rail">Optional top context</div></cui-slot><cui-slot name="primary"><div class="demo-block">Primary content is centered</div></cui-slot><cui-slot name="bottom"><div class="demo-rail">Optional bottom help</div></cui-slot></cui-cover></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-cover height="standard"&gt;
+  &lt;cui-slot name="top"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="primary"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="bottom"&gt;…&lt;/cui-slot&gt;
+&lt;/cui-cover&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Fill and viewport</h3><div class="demo-frame"><div class="demo-height-parent"><cui-cover height="fill" gap="compact"><cui-slot name="primary"><div class="demo-block">Fill within definite parent</div></cui-slot></cui-cover></div><div class="demo-viewport"><cui-cover height="viewport"><cui-slot name="primary"><div class="demo-block">Viewport preview</div></cui-slot></cui-cover></div><p class="layout-note">Viewport specimen uses the app-overridden viewport offset.</p></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-cover height="fill" gap="compact"&gt;…&lt;/cui-cover&gt;
+&lt;cui-cover height="viewport"&gt;…&lt;/cui-cover&gt;</code></pre></details></article>
+        </div>
+      </section>
+
+      <section class="atlas-section" id="layer">
+        <h2>Layer</h2><p class="section-description">Overlaps foreground content on a base using local grid placement. This is not a modal, focus trap, or page-blocking overlay.</p>
+        <dl class="option-list"><dt>placement</dt><dd>center · top-start · top-end · bottom-start · bottom-end · stretch</dd><dt>inset</dt><dd>none · compact · standard (default) · spacious · generous</dd><dt>composition</dt><dd>required base and foreground slots, in that DOM order; base interactions remain available outside foreground content</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Base link with foreground control</h3><div class="demo-frame"><cui-layer placement="top-end" inset="standard"><cui-slot name="base"><a class="demo-block demo-base-link" href="#recipes">Open the illustrative workspace preview</a></cui-slot><cui-slot name="foreground"><div class="demo-rail demo-foreground"><cui-button kind="link" route="workspace" label="Visit workspace" size="compact" /></div></cui-slot></cui-layer></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-layer placement="top-end" inset="standard"&gt;
+  &lt;cui-slot name="base"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="foreground"&gt;…&lt;/cui-slot&gt;
+&lt;/cui-layer&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Placement vocabulary</h3><div class="demo-frame"><div class="demo-row"><cui-layer placement="center"><cui-slot name="base"><div class="demo-block demo-layer-base">Center</div></cui-slot><cui-slot name="foreground"><span class="demo-rail demo-foreground">center</span></cui-slot></cui-layer><cui-layer placement="top-start"><cui-slot name="base"><div class="demo-block demo-layer-base">Top start</div></cui-slot><cui-slot name="foreground"><span class="demo-rail demo-foreground">top-start</span></cui-slot></cui-layer><cui-layer placement="bottom-start"><cui-slot name="base"><div class="demo-block demo-layer-base">Bottom start</div></cui-slot><cui-slot name="foreground"><span class="demo-rail demo-foreground">bottom-start</span></cui-slot></cui-layer><cui-layer placement="bottom-end"><cui-slot name="base"><div class="demo-block demo-layer-base">Bottom end</div></cui-slot><cui-slot name="foreground"><span class="demo-rail demo-foreground">bottom-end</span></cui-slot></cui-layer><cui-layer placement="stretch"><cui-slot name="base"><div class="demo-block demo-layer-base">Stretch</div></cui-slot><cui-slot name="foreground"><span class="demo-rail demo-foreground">stretch</span></cui-slot></cui-layer></div></div><p class="layout-note">top-end is demonstrated above; the sample set also includes all other placements listed.</p></article>
+        </div>
+      </section>
+
+      <section class="atlas-section" id="pane">
+        <h2>Pane</h2><p class="section-description">Frames optional chrome around a required body and makes scroll ownership explicit. Bounded heights scroll the body by default; content height does not.</p>
+        <dl class="option-list"><dt>height</dt><dd>content (default) · compact · standard · fill · viewport</dd><dt>body-scrolling</dt><dd>true / false override; omitted means default for selected height</dd><dt>fill / viewport</dt><dd>fill requires a definite-height parent; viewport subtracts the app-overridden offset</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Content flow and bounded scroll</h3><div class="demo-frame"><cui-pane height="content"><cui-slot name="body"><div class="demo-tall-content"><p>Content-sized body · no forced scroll owner.</p><p>More illustrative body content follows in normal flow.</p></div></cui-slot></cui-pane><cui-pane height="content" body-scrolling="true"><cui-slot name="body"><p>Content height with explicit body-scrolling="true" is legal; height remains content-sized.</p></cui-slot></cui-pane><cui-pane height="compact" body-scrolling="true"><cui-slot name="header"><h4>Recent activity</h4></cui-slot><cui-slot name="body"><div class="demo-tall-content"><p>Keyboard-scrollable body · entry one.</p><p>Entry two: the body owns this scroll.</p><p>Entry three: the header stays in place.</p><p>Entry four: the footer stays in place.</p><p>Entry five: Tab to this region.</p><p>Entry six: use the arrow keys.</p><p>Entry seven: or use Page Down.</p><p>Entry eight: ordinary browser scrolling.</p><p>Entry nine: no component script.</p><p>Entry ten: enough content to overflow.</p><p>Entry eleven: no hidden carousel.</p><p>Entry twelve: end of illustrative activity.</p></div></cui-slot><cui-slot name="footer"><a href="#recipes">View recipe</a></cui-slot></cui-pane></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-pane height="compact" body-scrolling="true"&gt;
+  &lt;cui-slot name="header"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="body"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="footer"&gt;…&lt;/cui-slot&gt;
+&lt;/cui-pane&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Standard, fill, viewport, and no-scroll override</h3><div class="demo-frame"><cui-pane height="standard"><cui-slot name="body"><div class="demo-tall-content"><p>Standard bounded body · scrolling defaults on.</p><p>Illustrative detail.</p></div></cui-slot></cui-pane><div class="demo-height-parent"><cui-pane height="fill" body-scrolling="false"><cui-slot name="body"><div class="demo-block">Fill, explicit no-scroll</div></cui-slot></cui-pane></div><div class="demo-viewport"><cui-pane height="viewport"><cui-slot name="body"><div class="demo-block">Viewport pane · app-overridden viewport offset</div></cui-slot></cui-pane></div></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-pane height="standard"&gt;…&lt;/cui-pane&gt;
+&lt;cui-pane height="fill" body-scrolling="false"&gt;…&lt;/cui-pane&gt;
+&lt;cui-pane height="viewport"&gt;…&lt;/cui-pane&gt;</code></pre></details></article>
+        </div><p class="layout-note">Native scrolling is keyboard-accessible. If body-scrolling is false for a bounded pane, ensure its content fits to avoid clipping.</p>
+      </section>
+
+      <section class="atlas-section" id="reel">
+        <h2>Reel</h2><p class="section-description">Keeps peers at useful widths in a labelled native horizontal scroll region. It is a scrollable collection, not a carousel with hidden behavior.</p>
+        <dl class="option-list"><dt>label</dt><dd>required, meaningful accessible name</dd><dt>item-width</dt><dd>narrow · standard (default) · wide · content</dd><dt>snap</dt><dd>free (default) · start · center</dd><dt>interaction</dt><dd>native horizontal scrolling, focusable region, source order preserved</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Free scroll · standard items</h3><div class="demo-frame"><cui-reel label="Illustrative project snapshots" item-width="standard" snap="free" gap="standard"><a class="demo-block" href="#recipes"><strong>Northstar</strong><span>Planning · illustrative</span></a><a class="demo-block" href="#pane"><strong>Wayfinder</strong><span>Review · illustrative</span></a><a class="demo-block" href="#card"><strong>Fieldnotes</strong><span>Active · illustrative</span></a></cui-reel></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-reel label="Illustrative project snapshots" item-width="standard" snap="free"&gt;…&lt;/cui-reel&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Width and snap choices</h3><div class="demo-frame"><cui-reel label="Narrow cards with start snapping" item-width="narrow" snap="start"><a class="demo-block" href="#card">Narrow · item one</a><a class="demo-block" href="#grid">Narrow · item two</a></cui-reel><cui-reel label="Wide cards with center snapping" item-width="wide" snap="center"><a class="demo-block" href="#split">Wide · centered item</a><a class="demo-block" href="#switch">Wide · next item</a></cui-reel><cui-reel label="Content-sized cards" item-width="content" snap="free"><a class="demo-block" href="#cover">Content width</a><a class="demo-block" href="#layer">Another content-sized item</a></cui-reel></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-reel label="Narrow cards with start snapping" item-width="narrow" snap="start"&gt;…&lt;/cui-reel&gt;
+&lt;cui-reel label="Wide cards with center snapping" item-width="wide" snap="center"&gt;…&lt;/cui-reel&gt;
+&lt;cui-reel label="Content-sized cards" item-width="content" snap="free"&gt;…&lt;/cui-reel&gt;</code></pre></details></article>
+        </div><p class="layout-note">Tab to the labelled region and use the browser's native horizontal scroll keys or trackpad. Item links are focusable and remain in source order.</p>
+      </section>
+
+      <section class="atlas-section" id="card">
+        <h2>Card</h2><p class="section-description">Adds a neutral surface around required body content, with optional heading, supporting text, and a separate app-owned actions slot.</p>
+        <dl class="option-list"><dt>padding</dt><dd>none · compact · standard (default)</dd><dt>title / subtitle</dt><dd>optional plain text; heading-level h2 (default), h3, h4</dd><dt>slots</dt><dd>required body · optional actions</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Standard card with heading and action</h3><div class="demo-frame"><cui-card padding="standard" title="Implementation notes" subtitle="Illustrative content" heading-level="h3"><cui-slot name="body"><p class="demo-copy">A bounded region can have its own semantic heading and explanatory copy.</p></cui-slot><cui-slot name="actions"><a href="#recipes">Open workspace recipe</a></cui-slot></cui-card></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-card padding="standard" title="Implementation notes" subtitle="Illustrative content" heading-level="h3"&gt;
+  &lt;cui-slot name="body"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="actions"&gt;…&lt;/cui-slot&gt;
+&lt;/cui-card&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Compact and no padding</h3><div class="demo-frame"><cui-card padding="compact" title="Compact surface" heading-level="h4"><cui-slot name="body"><p class="demo-copy">Compact body spacing.</p></cui-slot></cui-card><cui-card padding="none"><cui-slot name="body"><p class="demo-copy">Unpadded body. The app owns its inner spacing.</p></cui-slot></cui-card></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-card padding="compact" title="Compact surface" heading-level="h4"&gt;…&lt;/cui-card&gt;
+&lt;cui-card padding="none"&gt;…&lt;/cui-card&gt;</code></pre></details></article>
+        </div>
+      </section>
+
+      <section class="atlas-section" id="divider">
+        <h2>Divider</h2><p class="section-description">Use a visible separator when it clarifies grouping; spacing alone is often enough.</p>
+        <dl class="option-list"><dt>orientation</dt><dd>horizontal (default) · vertical</dd><dt>label / alignment</dt><dd>optional nonblank label for horizontal only · start (default), center, end</dd></dl>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Horizontal, labelled and plain</h3><div class="demo-frame"><cui-divider orientation="horizontal" label="Optional section" alignment="start" /><div class="demo-block">Content before</div><cui-divider orientation="horizontal" /><div class="demo-block">Content after</div><cui-divider orientation="horizontal" label="Centered label" alignment="center" /></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-divider orientation="horizontal" label="Optional section" alignment="start" /&gt;
+&lt;cui-divider orientation="horizontal" /&gt;
+&lt;cui-divider orientation="horizontal" label="Centered label" alignment="center" /&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Vertical separator</h3><div class="demo-frame"><div class="demo-row"><span>First region</span><cui-divider orientation="vertical" /><span>Second region</span></div></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-divider orientation="vertical" /&gt;</code></pre></details></article>
+        </div><p class="layout-note">Vertical dividers cannot have labels. The divider is a noninteractive separator and its orientation is announced semantically.</p>
+      </section>
+
+      <section class="atlas-section" id="page-header">
+        <h2>Page Header</h2><p class="section-description">The atlas title at the top is the real page-header specimen and the page's only h1. A second header here would create a misleading duplicate heading.</p>
+        <dl class="option-list"><dt>title</dt><dd>required plain text, rendered as the page's h1</dd><dt>description</dt><dd>optional supporting text</dd><dt>actions</dt><dd>optional named admitted actions child; no raw HTML option</dd></dl>
+        <div class="specimen"><h3>Live page use</h3><p class="layout-note">See the real page header above: “Layout atlas” with its supporting description. This instance demonstrates the described variant without adding another heading to the document outline.</p></div>
+      </section>
+
+      <section class="atlas-section" id="recipes">
+        <h2>Workspace recipes</h2><p class="section-description">Three practical compositions. These static sketches combine primitives; task names, counts, and statuses are illustrative, not connected to business data or actions.</p>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Navigation + main + inspector</h3><div class="demo-frame"><cui-sidebar side="start" width="narrow" collapse-at="standard"><cui-slot name="aside"><nav class="demo-rail" aria-label="Workspace sections"><a href="#recipes">Overview</a><a href="#pane">Activity</a><a href="#other-components">People</a></nav></cui-slot><cui-slot name="main"><cui-split ratio="start-dominant" collapse-at="wide"><cui-slot name="start"><cui-stack gap="standard"><div class="demo-block"><h4>Atlas migration</h4><p>Illustrative task · in review</p></div><div class="demo-block"><h4>Reference audit</h4><p>Illustrative task · planned</p></div></cui-stack></cui-slot><cui-slot name="end"><aside class="demo-rail"><h4>Inspector</h4><p>Owner: Studio sample</p><p>Due: illustrative</p></aside></cui-slot></cui-split></cui-slot></cui-sidebar></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-sidebar side="start" width="narrow"&gt;
+  &lt;cui-slot name="aside"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="main"&gt;
+    &lt;cui-split ratio="start-dominant"&gt;…&lt;/cui-split&gt;
+  &lt;/cui-slot&gt;
+&lt;/cui-sidebar&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Bounded task pane + labelled reel</h3><div class="demo-frame"><cui-pane height="standard" body-scrolling="true"><cui-slot name="header"><h4>Task list · sample</h4></cui-slot><cui-slot name="body"><cui-stack gap="compact"><div class="demo-block">Review the component map · illustrative</div><div class="demo-block">Check responsive behavior · illustrative</div><div class="demo-block">Capture keyboard notes · illustrative</div><div class="demo-block">Record follow-up · illustrative</div><div class="demo-block">Review keyboard focus · illustrative</div><div class="demo-block">Check scroll ownership · illustrative</div><div class="demo-block">Read the component contract · illustrative</div><div class="demo-block">Inspect the locked assets · illustrative</div><div class="demo-block">Compare narrow layouts · illustrative</div><div class="demo-block">Summarize the results · illustrative</div></cui-stack></cui-slot><cui-slot name="footer"><p>Static sample · no task action is simulated.</p></cui-slot></cui-pane><cui-reel label="Related illustrative projects" item-width="standard" snap="start"><a class="demo-block" href="#grid">Grid study</a><a class="demo-block" href="#split">Split study</a><a class="demo-block" href="#cover">Cover study</a></cui-reel></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-pane height="standard" body-scrolling="true"&gt;…&lt;/cui-pane&gt;
+&lt;cui-reel label="Related illustrative projects" item-width="standard" snap="start"&gt;…&lt;/cui-reel&gt;</code></pre></details></article>
+          <article class="specimen"><h3>Focused empty cover</h3><div class="demo-frame"><cui-cover height="standard" gap="spacious"><cui-slot name="top"><p class="demo-rail">Workspace · illustrative</p></cui-slot><cui-slot name="primary"><cui-container width="reading"><cui-empty-state title="Nothing in this sample yet" body="This static example has no matching tasks. In a real app, the page owns the query and any next step." alignment="center" heading-level="h3" /></cui-container></cui-slot><cui-slot name="bottom"><p class="demo-rail">Sample state only · no command or route action.</p></cui-slot></cui-cover></div><details class="declaration"><summary>View declaration</summary><pre><code>&lt;cui-cover height="standard"&gt;
+  &lt;cui-slot name="top"&gt;…&lt;/cui-slot&gt;
+  &lt;cui-slot name="primary"&gt;
+    &lt;cui-container width="reading"&gt;
+      &lt;cui-empty-state title="Nothing in this sample yet" … /&gt;
+    &lt;/cui-container&gt;
+  &lt;/cui-slot&gt;
+  &lt;cui-slot name="bottom"&gt;…&lt;/cui-slot&gt;
+&lt;/cui-cover&gt;</code></pre></details></article>
+        </div><p class="layout-note">Responsive advice: test compositions at 32rem, 48rem, and 64rem container boundaries. Keep mobile navigation and supporting regions in intentional source order; no JavaScript is needed for these layout changes.</p>
+      </section>
+
+      <section class="atlas-section" id="other-components">
+        <h2>Other components</h2><p class="section-description">Twelve non-layout components complete the 26-component catalog. These are static examples: task statuses and metrics are illustrative; no business actions are simulated.</p>
+        <div class="variant-grid">
+          <article class="specimen"><h3>Button, icon, badge, status, and tag</h3><div class="demo-frame"><div class="demo-row"><cui-button kind="link" route="workspace" label="Open workspace" variant="primary" icon="arrow-right" /><cui-button kind="link" href="#recipes" label="See recipes" variant="secondary" /><cui-button kind="action" label="Illustrative disabled control" disabled="true" /><cui-icon name="search" size="medium" label="Search" /></div><div class="demo-row"><cui-badge tone="neutral" label="Draft" /><cui-badge tone="info" label="Review" /><cui-badge tone="success" label="Complete" /><cui-badge tone="warning" label="Needs care" /><cui-badge tone="danger" label="Blocked sample" /><cui-badge tone="running" label="In progress" /></div><div class="demo-row"><cui-status-indicator tone="neutral" label="Unassigned" /><cui-status-indicator tone="info" label="Queued" /><cui-status-indicator tone="success" label="Ready" /><cui-status-indicator tone="warning" label="At risk" /><cui-status-indicator tone="danger" label="Blocked · illustrative" /></div><div class="demo-row"><cui-tag label="Design" tone="brand" size="small" /><cui-tag label="Illustrative count" tone="neutral" count="3" count-label="3 sample items" /><cui-tag label="Workspace navigation" tone="info" href="#recipes" /><cui-tag label="Ready sample" tone="success" /><cui-tag label="Review sample" tone="warning" /><cui-tag label="Blocked sample" tone="danger" /></div></div><p class="layout-note">Buttons navigate only to the workspace route or an in-page anchor; disabled sample is inert. Icons use the closed catalog.</p></article>
+          <article class="specimen"><h3>Alert, progress, and metric</h3><div class="demo-frame"><cui-alert tone="info" appearance="soft" title="Illustrative note" body="This message is an atlas caption, not a real alert or incident." heading-level="h4" /><cui-alert tone="success" appearance="outlined" title="Sample complete" body="A success-tone presentation example." heading-level="h4" /><cui-alert tone="warning" appearance="accent" title="Sample caution" body="A warning-tone presentation example." heading-level="h4" /><cui-alert tone="danger" appearance="soft" title="Sample blocked state" body="Illustrative only; no recovery action is offered." heading-level="h4" /><cui-progress label="Illustrative task completion" state="determinate" value="3" maximum="5" suffix="3 of 5 sample steps" tone="info" detail="Static sample values." /><cui-progress label="Illustrative wait with unknown duration" state="indeterminate" tone="warning" detail="No estimate is available in this example." size="compact" /><div class="demo-row"><cui-metric label="Sample tasks" value="12" appearance="contained" trend="up" trend-tone="neutral" trend-label="2 in this illustrative set" /><cui-metric label="Sample checks passing" value="8 / 9" appearance="plain" detail="Illustrative only" /></div></div></article>
+          <article class="specimen"><h3>Form Field states · static draft examples</h3><p class="layout-note">Unique IDs; these controls are outside any form and are not bound to data-live or a command.</p><div class="demo-frame"><div class="demo-row"><cui-form-field id="atlas-field-normal" name="sample-normal" label="Normal field" value="Illustrative draft" hint="No submission is connected." /><cui-form-field id="atlas-field-error" name="sample-error" label="Error example" value="Needs correction" error="Example validation message." /></div><div class="demo-row"><cui-form-field id="atlas-field-readonly" name="sample-readonly" label="Readonly sample" value="Static value" readonly="true" /><cui-form-field id="atlas-field-disabled" name="sample-disabled" label="Disabled sample" value="Unavailable example" disabled="true" /></div></div></article>
+          <article class="specimen"><h3>Avatar, empty state, and skeleton</h3><div class="demo-frame"><div class="demo-row"><cui-avatar initials="AL" label="Avery Lane · illustrative" size="small" tone="brand" /><cui-avatar initials="ST" label="Studio team · illustrative" size="medium" tone="neutral" /><cui-avatar initials="QA" label="Quality sample" size="large" tone="success" /></div><cui-empty-state title="No saved filters" body="The empty-state component is shown as a static composition example." alignment="start" heading-level="h4" /><div class="demo-row" aria-label="Illustrative loading placeholder shapes"><cui-skeleton shape="text" size="small" width="short" animated="false" /><cui-skeleton shape="rectangle" size="medium" width="medium" animated="false" /><cui-skeleton shape="circle" size="small" animated="false" /></div><p class="layout-note">Skeleton shapes are decorative and aria-hidden; the app owns loading copy and any aria-busy state. Animation is disabled in this atlas example.</p></div></article>
+        </div>
+        <p class="layout-note">For complete typed options, inspect each component manifest and fixtures. Field drafts here are standalone visual examples: no form, command, submission, or live data binding is present.</p>
+      </section>
+    </div>
+  </div>
+  </div>
+</div>

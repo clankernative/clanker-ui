@@ -1,0 +1,7 @@
+{
+  "initials": "OPS",
+  "label": "Operations team",
+  "size": "medium",
+  "tone": "success",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--medium cui-avatar--success\" role=\"img\" aria-label=\"Operations team\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">OPS</span></span>\n"
+}

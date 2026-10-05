@@ -1,0 +1,19 @@
+{
+  "choices": [
+    {
+      "label": "North America",
+      "value": "na"
+    },
+    {
+      "label": "Europe",
+      "value": "eu"
+    }
+  ],
+  "expectedHtml": "<div class=\"cui-select-field\" data-cui-component=\"select-field\"><label class=\"cui-select-field__label\" for=\"region\">Region <span class=\"cui-select-field__required\" aria-hidden=\"true\">*</span></label><div class=\"cui-select-field__control-wrap\"><select class=\"cui-select-field__control\" id=\"region\" name=\"region\" required><option value=\"\" data-cui-placeholder disabled>Choose a region</option><option value=\"na\">North America</option><option value=\"eu\" selected>Europe</option></select></div></div>\n",
+  "id": "region",
+  "label": "Region",
+  "name": "region",
+  "placeholder": "Choose a region",
+  "required": true,
+  "selected": "eu"
+}

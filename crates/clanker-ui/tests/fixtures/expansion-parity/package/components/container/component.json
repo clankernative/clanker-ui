@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "container",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Bounds page or region width with configurable responsive gutters.",
+  "keywords": ["container", "shell", "gutter", "measure"],
+  "agent": { "useWhen": "A page or nested region needs a predictable maximum width and inline edge.", "avoidWhen": "The parent already owns the required width and gutter.", "composeWith": ["stack", "grid", "split", "card"] },
+  "contract": { "role": "neutral-width-container", "variants": ["reading", "compact", "standard", "wide", "full"], "requiredFields": [], "invariants": ["Children are already admitted host markup, never a raw HTML instance field.", "Width includes responsive inline gutters through border-box sizing; non-full widths center.", "The neutral wrapper owns no landmarks, keyboard behavior, JavaScript, routes, or commands."] },
+  "tokens": ["--cui-container-gutter-compact", "--cui-container-gutter-generous", "--cui-container-gutter-standard", "--cui-container-width-compact", "--cui-container-width-reading", "--cui-container-width-standard", "--cui-container-width-wide"],
+  "dependencies": [],
+  "assets": { "template": "components/container/fragment.html", "styles": "components/container/styles.css", "scripts": [] },
+  "fixtures": ["components/container/fixtures/typical.json", "components/container/fixtures/full-width.json", "components/container/fixtures/reading-width.json", "components/container/fixtures/compact-width.json", "components/container/fixtures/wide-width.json"]
+}

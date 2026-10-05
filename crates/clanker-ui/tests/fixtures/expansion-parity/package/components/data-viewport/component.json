@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "data-viewport",
+  "status": "draft",
+  "target": "native-html",
+  "category": "data-display",
+  "summary": "Bounds a stable list or table with server paging, incremental controls, or window metadata.",
+  "keywords": ["list", "table", "viewport", "window", "paging"],
+  "agent": {"useWhen": "A bounded result list or table needs a stable scroll owner and server-owned navigation or windowing.", "avoidWhen": "The collection is short, the host cannot admit the real app-owned paging/navigation subtree, or the feature needs a component-owned query/fetch endpoint.", "composeWith": ["data-table", "pagination", "empty-state"]},
+  "contract": {"role": "labelled keyboard-scrollable bounded list or table", "variants": ["list", "table", "paged", "incremental", "windowed", "compact", "standard", "viewport"], "requiredFields": ["id", "label", "pagination"], "invariants": ["Lists and tables contain 1..=500 stable unique item IDs; tables have 1..=12 columns and exact cell counts.", "IDs are checked against region/items/navigation/label/scroll derived IDs; fixture content is plain text and escaped.", "Host-admitted child content is accepted only through a non-serialized AdmittedChildren boundary after ordinary host admission.", "Window bounds, item size, overscan, anchor, aria positions and spacer dimensions are fully validated and bounded.", "This static package declares no script. Any separately host-admitted scroll enhancement may dispatch metadata only (start/end/total); it must not fetch or query. The application owns query, navigation, records and response. Paged/incremental no-JS usage needs real admitted navigation controls.", "The current Native host has no declared checked viewport query/navigation seam or package-script lifecycle hook, so browser enhancement and window/incremental integration are draft and must not claim data loading."]},
+  "tokens": ["--cui-data-viewport-border", "--cui-data-viewport-radius", "--cui-data-viewport-background", "--cui-data-viewport-height-compact", "--cui-data-viewport-height-standard", "--cui-data-viewport-padding", "--cui-data-viewport-gap", "--cui-data-viewport-focus", "--cui-data-viewport-head-background", "--cui-data-viewport-head-text", "--cui-data-viewport-row-highlight", "--cui-data-viewport-loading"],
+  "dependencies": [],
+  "assets": {"template": "components/data-viewport/fragment.html", "styles": "components/data-viewport/styles.css", "scripts": []},
+  "fixtures": ["components/data-viewport/fixtures/paged.json", "components/data-viewport/fixtures/windowed.json", "components/data-viewport/fixtures/paged-golden.json", "components/data-viewport/fixtures/windowed-golden.json"]
+}

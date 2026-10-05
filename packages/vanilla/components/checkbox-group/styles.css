@@ -1,0 +1,13 @@
+.cui-checkbox-group{display:grid;gap:var(--cui-checkbox-group-gap,.75rem);min-inline-size:0;margin:0;padding:0;border:0;color:var(--cui-checkbox-group-text,#20242a)}
+.cui-checkbox-group__legend{padding:0;color:var(--cui-checkbox-group-legend-text,inherit);font-size:var(--cui-checkbox-group-label-size,1rem);font-weight:var(--cui-checkbox-group-label-weight,600)}
+.cui-checkbox-group__choices{display:grid;gap:var(--cui-checkbox-group-choice-gap,.5rem)}
+.cui-checkbox-group--inline .cui-checkbox-group__choices{grid-template-columns:repeat(auto-fit,minmax(min(14rem,100%),1fr))}
+.cui-checkbox-group__choice{display:grid;grid-template-columns:1.25rem minmax(0,1fr);align-items:start;gap:.75rem;min-inline-size:0;min-block-size:44px;padding:var(--cui-checkbox-group-choice-padding,.75rem);border:1px solid var(--cui-checkbox-group-border,#c6cbd2);border-radius:var(--cui-checkbox-group-radius,.375rem);color:inherit;cursor:pointer;overflow-wrap:anywhere}
+.cui-checkbox-group__control{inline-size:1.25rem;block-size:1.25rem;margin:.125rem 0 0;accent-color:var(--cui-checkbox-group-accent,#2457a7);cursor:inherit}
+.cui-checkbox-group__choice:focus-within{outline:var(--cui-checkbox-group-focus-width,2px) solid var(--cui-checkbox-group-focus-ring,#2457a7);outline-offset:var(--cui-checkbox-group-focus-offset,2px)}
+.cui-checkbox-group__choice:has(:checked){border-color:var(--cui-checkbox-group-checked-border,#2457a7);background:var(--cui-checkbox-group-checked-background,#f0f5ff)}
+.cui-checkbox-group__choice:has(:disabled){opacity:var(--cui-checkbox-group-disabled-opacity,.62);cursor:not-allowed}
+.cui-checkbox-group__text{display:grid;gap:.25rem;min-inline-size:0}.cui-checkbox-group__label{font-weight:var(--cui-checkbox-group-label-weight,600)}
+.cui-checkbox-group__choice-hint,.cui-checkbox-group__hint{color:var(--cui-checkbox-group-hint-text,#4d5662);font-size:var(--cui-checkbox-group-hint-size,.875rem)}
+.cui-checkbox-group__description{display:grid;gap:.25rem}.cui-checkbox-group__hint,.cui-checkbox-group__error{margin:0;overflow-wrap:anywhere}.cui-checkbox-group__error{color:var(--cui-checkbox-group-error-text,#a22626);font-weight:600}
+@media(forced-colors:active){.cui-checkbox-group__choice{border-color:CanvasText}.cui-checkbox-group__choice:has(:checked){border-color:Highlight}.cui-checkbox-group__control{accent-color:Highlight}.cui-checkbox-group__choice:focus-within{outline-color:Highlight}}

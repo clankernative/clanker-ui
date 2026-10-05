@@ -1,0 +1,7 @@
+{
+  "initials": "MZ",
+  "label": "Morgan Zhao",
+  "size": "large",
+  "tone": "neutral",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--large cui-avatar--neutral\" role=\"img\" aria-label=\"Morgan Zhao\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">MZ</span></span>\n"
+}

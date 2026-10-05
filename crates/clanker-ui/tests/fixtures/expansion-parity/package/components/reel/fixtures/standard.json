@@ -1,0 +1,10 @@
+{
+  "options": {
+    "label": "Recent activity",
+    "itemWidth": "standard"
+  },
+  "children": {
+    "body": "<article>Item</article>"
+  },
+  "expectedHtml": "<div class=\"cui-reel cui-reel--width-standard cui-reel--snap-free cui-reel--gap-standard\" role=\"region\" aria-label=\"Recent activity\" tabindex=\"0\" data-cui-component=\"reel\"><div class=\"cui-reel__items\"><article>Item</article></div></div>\n"
+}

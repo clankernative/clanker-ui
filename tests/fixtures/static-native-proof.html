@@ -1,0 +1,32 @@
+<section class="atlas-section" id="static-port-proof" aria-labelledby="static-port-title">
+  <h2 id="static-port-title">Static component proof</h2>
+  <p class="section-description">Illustrative content. Links use this gallery's existing pages; no specimen owns a command, route or client-side state.</p>
+  <div class="variant-grid">
+    <article class="specimen" id="proof-activity-feed"><h3>Activity Feed</h3><div class="demo-frame">
+      <cui-activity-feed label="Illustrative project history" entries='[{"title":"Planning opened","detail":"Avery prepared the sample project","actor":"Avery Lane","occurredAt":"2026-09-30T09:00:00Z","timeLabel":"30 September, 09:00 UTC","tone":"info","href":"{{ routes.tasks() }}"},{"title":"Review completed","detail":"The sample passed review","actor":"Sam Taylor","occurredAt":"2026-10-01T09:00:00Z","timeLabel":"1 October, 09:00 UTC","tone":"success"}]' />
+    </div></article>
+    <article class="specimen" id="proof-definition-list"><h3>Definition List</h3><div class="demo-frame">
+      <cui-definition-list items='[{"term":"Owner","value":"Avery Lane · illustrative"},{"term":"Region","value":"Europe West"},{"term":"Status","value":"Ready for review"}]' />
+      <cui-definition-list density="compact"><cui-definition term="Workspace"><a href="{{ routes.tasks() }}">Browse sample tasks</a></cui-definition></cui-definition-list>
+    </div></article>
+    <article class="specimen" id="proof-disclosure"><h3>Disclosure</h3><div class="demo-frame">
+      <cui-disclosure summary="Why is this optional?"><cui-slot name="body"><p id="proof-disclosure-body">Supporting content remains in the document and works without JavaScript.</p><a href="{{ routes.tasks() }}">Browse task workspace</a></cui-slot></cui-disclosure>
+      <cui-disclosure summary="Initially expanded" appearance="plain" open="true"><cui-slot name="body"><p>The app supplies the initial open state, not a recreated ARIA toggle.</p></cui-slot></cui-disclosure>
+    </div></article>
+    <article class="specimen" id="proof-button-group"><h3>Button Group</h3><div class="demo-frame">
+      <cui-button-group label="Gallery destinations" appearance="joined"><cui-button kind="link" route="tasks" label="Task workspace" /><cui-button kind="link" route="components" label="Component explorer" /></cui-button-group>
+      <cui-button-group label="Illustrative inactive actions" appearance="spaced" full-width="true"><cui-button label="Unavailable action" disabled="true" /><cui-button label="Working" busy="true" busy-label="Working…" /></cui-button-group>
+    </div></article>
+    <article class="specimen" id="proof-tabs"><h3>Tabs · page navigation</h3><div class="demo-frame">
+      <cui-tabs label="Gallery sections" items='[{"label":"Layout atlas","href":"{{ routes.layouts() }}","active":true},{"label":"Task workspace","href":"{{ routes.tasks() }}"},{"label":"Components","href":"{{ routes.components() }}"}]' />
+      <p class="small-note">Ordinary links with one current page, not a client-side tablist.</p>
+    </div></article>
+    <article class="specimen" id="proof-segmented-control"><h3>Segmented Control</h3><div class="demo-frame">
+      <cui-segmented-control label="Sample gallery scope" equal-width="true" items='[{"kind":"current","label":"Layouts"},{"kind":"link","label":"Tasks","href":"{{ routes.tasks() }}"},{"kind":"disabled","label":"Unavailable"}]' />
+    </div></article>
+    <article class="specimen" id="proof-progress-steps"><h3>Progress Steps</h3><div class="demo-frame">
+      <cui-progress-steps label="Illustrative review workflow" items='[{"state":"complete","label":"Request","href":"{{ routes.tasks() }}","detail":"Prepared sample"},{"state":"current","label":"Review","detail":"Current sample stage"},{"state":"upcoming","label":"Approval"}]' />
+      <cui-progress-steps label="Illustrative blocked workflow" orientation="vertical" appearance="compact" state-labels='{"complete":"Done","current":"Now","error":"Blocked","upcoming":"Next"}' items='[{"state":"error","label":"Review","detail":"Illustrative failure, not live task data"},{"state":"upcoming","label":"Finish"}]' />
+    </div></article>
+  </div>
+</section>

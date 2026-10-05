@@ -1,0 +1,9 @@
+{
+  "children": {
+    "controls": "<select aria-label=\"Status\"><option>Any</option></select>"
+  },
+  "expectedHtml": "<div class=\"cui-filter-bar\" data-cui-component=\"filter-bar\" role=\"group\" aria-label=\"Choose filters\"><div class=\"cui-filter-bar__controls\"><select aria-label=\"Status\"><option>Any</option></select></div></div>\n",
+  "options": {
+    "label": "Choose filters"
+  }
+}

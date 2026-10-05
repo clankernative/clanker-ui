@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "name": "file-upload",
+  "status": "ready",
+  "integration": {
+    "native": {"status": "adapter-required", "scope": "Native has no browser multipart file carrier. The app adapter owns bytes, upload transport, file policy, validation, and authoritative upload state."},
+    "ports": [{"name": "file-selection", "direction": "output", "typeSource": "components/file-upload/browser.d.ts", "export": "FileUploadAdapter", "purpose": "An explicit app adapter receives native File selection and cancellation with browser context and a cancellation lifetime. Callback completion is not upload completion.", "required": false}]
+  },
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Presents native file selection alongside explicitly server-owned file states.",
+  "keywords": [
+    "file",
+    "upload",
+    "attachment",
+    "form"
+  ],
+  "agent": {
+    "useWhen": "A form accepts attachments and the application supplies any upload lifecycle or persisted-file state.",
+    "avoidWhen": "The component would need to transfer bytes, validate server files, or invent an upload transport; the Native host currently admits no multipart file carrier.",
+    "composeWith": [
+      "form-field",
+      "progress",
+      "pagination"
+    ]
+  },
+  "contract": {
+    "role": "labelled native file input with server-owned file rows",
+    "variants": [
+      "single",
+      "multiple",
+      "disabled",
+      "error",
+      "server-file-states"
+    ],
+    "requiredFields": [
+      "name",
+      "label"
+    ],
+    "invariants": [
+      "Input name/id, labels, accept grammar, descriptions, rows, localized statuses and action URLs are strictly validated and escaped.",
+      "At most 25 file rows with unique IDs are rendered; uploading progress is 0..=100.",
+      "The declared browser module may show local selection and report native File references to an explicit app adapter; it must never fabricate upload success, persist bytes, fetch, or own transport.",
+      "Component completeness is separate from Native multipart carrier support. Authoritative upload rows, validation, progress, and completion remain app-owned.",
+      "Serialized fixture/config values contain no raw HTML; action links are safe HTTPS or app-relative paths."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border",
+    "--cui-border-strong",
+    "--cui-danger",
+    "--cui-file-upload-active-background",
+    "--cui-file-upload-active-border",
+    "--cui-file-upload-background",
+    "--cui-file-upload-border",
+    "--cui-file-upload-error",
+    "--cui-file-upload-focus",
+    "--cui-file-upload-gap",
+    "--cui-file-upload-muted",
+    "--cui-file-upload-padding",
+    "--cui-file-upload-progress",
+    "--cui-file-upload-radius",
+    "--cui-file-upload-success",
+    "--cui-file-upload-text",
+    "--cui-link",
+    "--cui-radius-surface",
+    "--cui-success",
+    "--cui-surface",
+    "--cui-surface-subtle",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-file-upload-active-background",
+      "role": "background",
+      "purpose": "Controls background color for active state file upload."
+    },
+    {
+      "name": "--cui-file-upload-active-border",
+      "role": "border",
+      "purpose": "Controls border color for active state file upload."
+    },
+    {
+      "name": "--cui-file-upload-background",
+      "role": "background",
+      "purpose": "Controls background color for  file upload."
+    },
+    {
+      "name": "--cui-file-upload-border",
+      "role": "border",
+      "purpose": "Controls border color for  file upload."
+    },
+    {
+      "name": "--cui-file-upload-error",
+      "role": "color",
+      "purpose": "Controls error state for  file upload."
+    },
+    {
+      "name": "--cui-file-upload-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for  file upload."
+    },
+    {
+      "name": "--cui-file-upload-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for file upload."
+    },
+    {
+      "name": "--cui-file-upload-muted",
+      "role": "text",
+      "purpose": "Controls visual treatment for  file upload."
+    },
+    {
+      "name": "--cui-file-upload-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for file upload."
+    },
+    {
+      "name": "--cui-file-upload-progress",
+      "role": "sizing",
+      "purpose": "Runtime progress value displayed by File Upload; this is data, not a theme setting."
+    },
+    {
+      "name": "--cui-file-upload-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for file upload."
+    },
+    {
+      "name": "--cui-file-upload-success",
+      "role": "text",
+      "purpose": "Controls success state for  file upload."
+    },
+    {
+      "name": "--cui-file-upload-text",
+      "role": "text",
+      "purpose": "Controls text color for  file upload."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/file-upload/fragment.html",
+    "styles": "components/file-upload/styles.css",
+    "scripts": ["components/file-upload/interaction.js"],
+    "contracts": ["components/file-upload/browser.d.ts"]
+  },
+  "fixtures": [
+    "components/file-upload/fixtures/typical-golden.json",
+    "components/file-upload/fixtures/validation-golden.json",
+    "components/file-upload/fixtures/disabled-golden.json"
+  ]
+}

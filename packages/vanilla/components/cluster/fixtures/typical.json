@@ -1,0 +1,5 @@
+{
+  "options": {},
+  "children": { "body": "<button>One</button><button>Two</button>" },
+  "expectedHtml": "<div class=\"cui-cluster cui-cluster--gap-compact cui-cluster--align-center cui-cluster--justify-start cui-cluster--wrap\" data-cui-component=\"cluster\"><button>One</button><button>Two</button></div>\n"
+}

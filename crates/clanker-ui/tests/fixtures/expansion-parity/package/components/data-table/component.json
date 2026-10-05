@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "data-table",
+  "status": "ready",
+  "target": "native-html",
+  "category": "data-display",
+  "summary": "Renders a responsive, keyboard-scrollable labelled data table with accessible headers and text fixture rows.",
+  "keywords": ["table", "data", "rows", "responsive", "results"],
+  "agent": {"useWhen": "A result set is best compared across labelled columns; use text fixture rows or have the Native host compose admitted app-owned rich cells.", "avoidWhen": "The data is better represented as cards, the host cannot prove composed row/cell structure and stable IDs, or the component would need to own application operations.", "composeWith": ["filter-bar", "pagination"]},
+  "contract": {"role": "keyboard-focusable labelled responsive table region", "variants": ["caption-hidden", "caption-visible", "text-rows", "host-composed-body"], "requiredFields": ["caption", "columns"], "invariants": ["Caption is nonblank; 1..=16 nonblank columns and up to 100 fixture rows are admitted.", "Text rows must match the column count exactly; optional stable IDs are unique safe tokens; all fixture cells are escaped text.", "Column headers use scope=col; the overflow wrapper is tabindex=0 role=region labelled by the caption.", "Responsive narrow presentation preserves every cell and column label; first cell spans the row.", "Host-composed tbody markup is admitted only after the host proves row/cell structure, labels, budgets, and stable IDs; AdmittedChildren is not a sanitizer.", "The fragment contains exactly one [[attributes]], [[caption]], [[head]], and [[body]] slot; expansion is exact and single-pass."]},
+  "tokens": ["--cui-data-table-border", "--cui-data-table-radius", "--cui-data-table-background", "--cui-data-table-scrollbar", "--cui-data-table-focus", "--cui-data-table-size", "--cui-data-table-caption-padding", "--cui-data-table-caption-text", "--cui-data-table-cell-padding", "--cui-data-table-strong-border", "--cui-data-table-head-background", "--cui-data-table-head-text", "--cui-data-table-row-hover", "--cui-data-table-compact-padding", "--cui-data-table-label-text"],
+  "dependencies": [], "assets": {"template": "components/data-table/fragment.html", "styles": "components/data-table/styles.css", "scripts": []},
+  "fixtures": ["components/data-table/fixtures/typical.json", "components/data-table/fixtures/empty.json", "components/data-table/fixtures/dense-long-text.json", "components/data-table/fixtures/host-composed-body.json"]
+}

@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "name": "card",
+  "status": "ready",
+  "target": "native-html",
+  "category": "surface",
+  "summary": "Presents admitted body content on a neutral surface with optional heading, supporting text, and actions.",
+  "keywords": [
+    "card",
+    "surface",
+    "content",
+    "actions"
+  ],
+  "agent": {
+    "useWhen": "A bounded piece of content needs a neutral surface, optional local heading, or separate action region.",
+    "avoidWhen": "Content is a page section or should remain unboxed in the surrounding flow.",
+    "composeWith": [
+      "stack",
+      "cluster",
+      "button",
+      "grid"
+    ]
+  },
+  "contract": {
+    "role": "neutral-content-surface",
+    "variants": [
+      "none",
+      "compact",
+      "standard"
+    ],
+    "requiredFields": [
+      "body"
+    ],
+    "invariants": [
+      "Body and optional actions are separately host-admitted slots, never raw HTML instance strings.",
+      "Title and subtitle are escaped plain text; heading level is h2, h3, or h4.",
+      "The neutral div creates no landmark, interaction, script lifecycle, route, or command."
+    ]
+  },
+  "tokens": [
+    "--cui-border-subtle",
+    "--cui-border-width",
+    "--cui-card-action-gap",
+    "--cui-card-action-offset",
+    "--cui-card-background",
+    "--cui-card-border",
+    "--cui-card-compact-gap",
+    "--cui-card-compact-padding",
+    "--cui-card-gap",
+    "--cui-card-header-gap",
+    "--cui-card-padding",
+    "--cui-card-radius",
+    "--cui-card-subtitle-text",
+    "--cui-card-text",
+    "--cui-card-title-size",
+    "--cui-card-title-text",
+    "--cui-card-title-weight",
+    "--cui-font-size-small",
+    "--cui-heading-text",
+    "--cui-letter-spacing-snug",
+    "--cui-line-height-body",
+    "--cui-line-height-tight",
+    "--cui-radius-surface",
+    "--cui-surface-raised",
+    "--cui-text-primary",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-card-action-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for card."
+    },
+    {
+      "name": "--cui-card-action-offset",
+      "role": "spacing",
+      "purpose": "Controls offset for card."
+    },
+    {
+      "name": "--cui-card-background",
+      "role": "background",
+      "purpose": "Controls background color for  card."
+    },
+    {
+      "name": "--cui-card-border",
+      "role": "border",
+      "purpose": "Controls border color for  card."
+    },
+    {
+      "name": "--cui-card-compact-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for card."
+    },
+    {
+      "name": "--cui-card-compact-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for card."
+    },
+    {
+      "name": "--cui-card-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for card."
+    },
+    {
+      "name": "--cui-card-header-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for card."
+    },
+    {
+      "name": "--cui-card-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for card."
+    },
+    {
+      "name": "--cui-card-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for card."
+    },
+    {
+      "name": "--cui-card-subtitle-text",
+      "role": "text",
+      "purpose": "Controls text color for subtitle card."
+    },
+    {
+      "name": "--cui-card-text",
+      "role": "text",
+      "purpose": "Controls text color for  card."
+    },
+    {
+      "name": "--cui-card-title-size",
+      "role": "sizing",
+      "purpose": "Controls title font size for  card."
+    },
+    {
+      "name": "--cui-card-title-text",
+      "role": "text",
+      "purpose": "Controls text color for title card.",
+      "semantic": "heading"
+    },
+    {
+      "name": "--cui-card-title-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for card."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/card/fragment.html",
+    "styles": "components/card/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/card/fixtures/typical.json",
+    "components/card/fixtures/heading-level.json",
+    "components/card/fixtures/escaped.json"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "name": "skeleton",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Preserves a known layout with a decorative, non-announcing loading placeholder.",
+  "keywords": ["skeleton", "loading", "placeholder", "shimmer"],
+  "agent": {
+    "useWhen": "Loading data should preserve the shape of a known final interface layout.",
+    "avoidWhen": "The final layout is unknown or measurable task progress should be communicated.",
+    "composeWith": ["alert", "progress", "status-indicator"]
+  },
+  "contract": {
+    "role": "presentation",
+    "variants": ["text", "rectangle", "circle", "small", "medium", "large", "short", "full", "animated", "static"],
+    "requiredFields": ["shape"],
+    "invariants": [
+      "Shape is required; size defaults to medium, width to full, and animated to true. Unknown fields and enum values are rejected.",
+      "Every placeholder is aria-hidden and has no role, live region, busy state, content, script, or runtime style input; the parent application owns aria-busy and its concise loading announcement.",
+      "Width presets are orthogonal to shape and size for text and rectangles; circles keep their size-defined square geometry, so width presets do not change circle dimensions.",
+      "The width presets use intrinsic percentages of the containing block, capped at the available inline size; circles preserve a 1:1 aspect ratio and clamp to narrow containers.",
+      "Animation is decorative and runs without JavaScript by default, can be disabled explicitly, and is disabled for reduced-motion users.",
+      "The adapter fragment contains exactly one [[skeleton]] slot; no arbitrary CSS dimensions or runtime HTML attributes are accepted."
+    ]
+  },
+  "tokens": [
+    "--cui-skeleton-background", "--cui-skeleton-shimmer", "--cui-skeleton-radius",
+    "--cui-skeleton-short-width", "--cui-skeleton-medium-width",
+    "--cui-skeleton-small-text-height", "--cui-skeleton-medium-text-height", "--cui-skeleton-large-text-height",
+    "--cui-skeleton-small-rectangle-height", "--cui-skeleton-medium-rectangle-height", "--cui-skeleton-large-rectangle-height",
+    "--cui-skeleton-circle-size", "--cui-skeleton-small-circle-size", "--cui-skeleton-large-circle-size",
+    "--cui-skeleton-animation-duration"
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/skeleton/fragment.html",
+    "styles": "components/skeleton/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/skeleton/fixtures/text.json",
+    "components/skeleton/fixtures/rectangle.json",
+    "components/skeleton/fixtures/circle.json",
+    "components/skeleton/fixtures/small.json",
+    "components/skeleton/fixtures/medium.json",
+    "components/skeleton/fixtures/large.json",
+    "components/skeleton/fixtures/short.json",
+    "components/skeleton/fixtures/width-medium.json",
+    "components/skeleton/fixtures/full.json",
+    "components/skeleton/fixtures/animated.json",
+    "components/skeleton/fixtures/static.json"
+  ]
+}

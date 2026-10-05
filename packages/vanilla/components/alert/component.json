@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "name": "alert",
+  "status": "ready",
+  "target": "native-html",
+  "category": "feedback",
+  "summary": "Explains contextual information, success, warnings, or failures with optional recovery navigation.",
+  "keywords": [
+    "alert",
+    "callout",
+    "error",
+    "message",
+    "recovery"
+  ],
+  "agent": {
+    "useWhen": "A page region needs a short explanation, consequence, or real recovery destination; choose a heading level appropriate to its document outline and an appearance that fits the surface.",
+    "avoidWhen": "The message is a transient toast, field validation, empty result, dismissible notice, command, or lifecycle-driven interaction.",
+    "composeWith": [
+      "button",
+      "form-field",
+      "icon"
+    ]
+  },
+  "contract": {
+    "role": "section",
+    "variants": [
+      "info",
+      "success",
+      "warning",
+      "danger",
+      "soft",
+      "outlined",
+      "accent",
+      "h2",
+      "h3",
+      "h4"
+    ],
+    "requiredFields": [
+      "title",
+      "body",
+      "tone"
+    ],
+    "invariants": [
+      "Configuration selects one of info, success, warning, or danger tone; appearance is soft, outlined, or accent (default soft).",
+      "Heading level is h2, h3, or h4 (default h2); it changes semantic heading markup without changing the visual title style.",
+      "Title and body are required nonblank plain text and are escaped; markup, template expressions, and event attributes are never admitted from values.",
+      "The tone selects a decorative icon from the closed package catalog: info uses info, success uses check, warning and danger use alert. Text remains meaningful without color or icon.",
+      "recoveryLabel and recoveryHref must be supplied together and render as one real navigation link; unsafe destinations are rejected. No command or dismissal is created.",
+      "Announcement defaults to none; only explicit polite or assertive choices create the corresponding role and aria-live value. Announcement choice is configuration, not browser-managed lifecycle.",
+      "The section contains the selected heading, description, decorative icon, and optional recovery link in source order; the app owns any dynamic replacement lifecycle.",
+      "Recovery link placement adapts to the component container width, not the viewport. There is no browser-local state, dismissal, event output, script, or hidden follow-up behavior.",
+      "The fragment requires exactly one [[attributes]], [[icon]], [[heading]], [[body]], and [[recovery]] slot and is expanded in one pass."
+    ]
+  },
+  "tokens": [
+    "--cui-alert-accent-background",
+    "--cui-alert-accent-border",
+    "--cui-alert-body-gap",
+    "--cui-alert-danger-background",
+    "--cui-alert-danger-border",
+    "--cui-alert-danger-text",
+    "--cui-alert-gap",
+    "--cui-alert-info-background",
+    "--cui-alert-info-border",
+    "--cui-alert-info-text",
+    "--cui-alert-measure",
+    "--cui-alert-outlined-background",
+    "--cui-alert-padding",
+    "--cui-alert-radius",
+    "--cui-alert-recovery-focus-offset",
+    "--cui-alert-recovery-focus-ring",
+    "--cui-alert-recovery-focus-width",
+    "--cui-alert-success-background",
+    "--cui-alert-success-border",
+    "--cui-alert-success-text",
+    "--cui-alert-title-size",
+    "--cui-alert-title-weight",
+    "--cui-alert-tone-background",
+    "--cui-alert-tone-border",
+    "--cui-alert-tone-text",
+    "--cui-alert-warning-background",
+    "--cui-alert-warning-border",
+    "--cui-alert-warning-text",
+    "--cui-danger",
+    "--cui-focus",
+    "--cui-icon-size",
+    "--cui-radius",
+    "--cui-space-1",
+    "--cui-space-2",
+    "--cui-space-3",
+    "--cui-surface"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-alert-accent-background",
+      "role": "background",
+      "purpose": "Controls background color for accent color alert."
+    },
+    {
+      "name": "--cui-alert-accent-border",
+      "role": "border",
+      "purpose": "Controls border color for accent color alert."
+    },
+    {
+      "name": "--cui-alert-body-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for alert."
+    },
+    {
+      "name": "--cui-alert-danger-background",
+      "role": "background",
+      "purpose": "Controls background color for danger state alert."
+    },
+    {
+      "name": "--cui-alert-danger-border",
+      "role": "border",
+      "purpose": "Controls border color for danger state alert."
+    },
+    {
+      "name": "--cui-alert-danger-text",
+      "role": "text",
+      "purpose": "Controls text color for danger state alert."
+    },
+    {
+      "name": "--cui-alert-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for alert."
+    },
+    {
+      "name": "--cui-alert-info-background",
+      "role": "background",
+      "purpose": "Controls background color for information state alert."
+    },
+    {
+      "name": "--cui-alert-info-border",
+      "role": "border",
+      "purpose": "Controls border color for information state alert."
+    },
+    {
+      "name": "--cui-alert-info-text",
+      "role": "text",
+      "purpose": "Controls text color for information state alert."
+    },
+    {
+      "name": "--cui-alert-measure",
+      "role": "sizing",
+      "purpose": "Controls maximum text width for alert."
+    },
+    {
+      "name": "--cui-alert-outlined-background",
+      "role": "focus",
+      "purpose": "Controls background color for outlined alert."
+    },
+    {
+      "name": "--cui-alert-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for alert."
+    },
+    {
+      "name": "--cui-alert-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for alert."
+    },
+    {
+      "name": "--cui-alert-recovery-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for alert."
+    },
+    {
+      "name": "--cui-alert-recovery-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for recovery alert."
+    },
+    {
+      "name": "--cui-alert-recovery-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for alert."
+    },
+    {
+      "name": "--cui-alert-success-background",
+      "role": "background",
+      "purpose": "Controls background color for success state alert."
+    },
+    {
+      "name": "--cui-alert-success-border",
+      "role": "border",
+      "purpose": "Controls border color for success state alert."
+    },
+    {
+      "name": "--cui-alert-success-text",
+      "role": "text",
+      "purpose": "Controls text color for success state alert."
+    },
+    {
+      "name": "--cui-alert-title-size",
+      "role": "sizing",
+      "purpose": "Controls title font size for  alert."
+    },
+    {
+      "name": "--cui-alert-title-weight",
+      "role": "typography",
+      "purpose": "Controls font weight for alert."
+    },
+    {
+      "name": "--cui-alert-tone-background",
+      "role": "background",
+      "purpose": "Runtime tone selection for alert; this selects component state rather than a theme color."
+    },
+    {
+      "name": "--cui-alert-tone-border",
+      "role": "border",
+      "purpose": "Runtime tone selection for alert; this selects component state rather than a theme color."
+    },
+    {
+      "name": "--cui-alert-tone-text",
+      "role": "text",
+      "purpose": "Runtime tone selection for alert; this selects component state rather than a theme color."
+    },
+    {
+      "name": "--cui-alert-warning-background",
+      "role": "background",
+      "purpose": "Controls background color for warning state alert."
+    },
+    {
+      "name": "--cui-alert-warning-border",
+      "role": "border",
+      "purpose": "Controls border color for warning state alert."
+    },
+    {
+      "name": "--cui-alert-warning-text",
+      "role": "text",
+      "purpose": "Controls text color for warning state alert."
+    }
+  ],
+  "dependencies": [
+    "icon"
+  ],
+  "assets": {
+    "template": "components/alert/fragment.html",
+    "styles": "components/alert/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/alert/fixtures/info.json",
+    "components/alert/fixtures/success.json",
+    "components/alert/fixtures/warning.json",
+    "components/alert/fixtures/danger.json",
+    "components/alert/fixtures/recovery.json",
+    "components/alert/fixtures/escaped.json",
+    "components/alert/fixtures/polite.json",
+    "components/alert/fixtures/assertive.json",
+    "components/alert/fixtures/outlined-h2.json",
+    "components/alert/fixtures/outlined-h3.json",
+    "components/alert/fixtures/outlined-h4.json",
+    "components/alert/fixtures/accent-h2.json",
+    "components/alert/fixtures/accent-h3.json",
+    "components/alert/fixtures/accent-h4.json",
+    "components/alert/fixtures/soft-h3.json",
+    "components/alert/fixtures/soft-h4.json"
+  ]
+}

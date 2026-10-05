@@ -1,0 +1,6 @@
+{
+  "label": "Unavailable",
+  "tone": "danger",
+  "size": "large",
+  "expectedHtml": "<span class=\"cui-status-indicator cui-status-indicator--danger cui-status-indicator--large\" data-cui-component=\"status-indicator\"><span class=\"cui-status-indicator__dot\" aria-hidden=\"true\"></span><span class=\"cui-status-indicator__label\">Unavailable</span></span>\n"
+}

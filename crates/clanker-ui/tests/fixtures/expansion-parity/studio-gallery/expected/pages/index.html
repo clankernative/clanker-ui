@@ -1,0 +1,132 @@
+<div id="gallery-app" class="workspace-page">
+  <!-- THESIS: A working project/task demo proves the components with real data.
+       OWN-WORLD: Inherited neutral workspace, graphite text, Studio-family orange.
+       STORY: Create a task, edit it, and observe Native live reads without losing drafts.
+       FIRST VIEWPORT: Project rail, task list, and an independent create form.
+       FORM: Approved bounded workspace; no new visual identity or runtime UI framework. -->
+  <header class="appbar">
+    <a class="brand" href="{{ routes.workspace() }}">Clanker gallery</a>
+    <nav class="app-nav" aria-label="Gallery">
+      <a href="{{ routes.workspace() }}" aria-current="page">Workspace</a>
+      <a href="{{ routes.layouts() }}">Layout atlas</a>
+    </nav>
+    <p class="app-note">Illustrative data · real Native commands</p>
+  </header>
+
+  <div class="page-content">
+    <div class="cui-sidebar cui-sidebar--side-start cui-sidebar--width-narrow cui-sidebar--gap-generous cui-sidebar--align-start cui-sidebar--collapse-standard" data-cui-component="sidebar"><div class="cui-sidebar__regions"><div class="cui-sidebar__aside">
+        <aside class="project-rail" aria-labelledby="project-rail-title">
+          <h2 id="project-rail-title">Projects</h2>
+          <div id="project-navigation" data-live class="project-names" aria-label="Sample projects">
+            {% for project in workspace.projects.items %}
+            <p>{{ project.name }}</p>
+            {% else %}
+            <p>No projects yet.</p>
+            {% endfor %}
+          </div>
+          <nav aria-label="Workspace sections"><a href="#workspace-tasks">Browse tasks</a><a href="#create-title">Create a task</a></nav>
+          <details class="rail-note">
+            <summary>Demo details</summary>
+            <p>Typed commands, live read regions, and revision-safe edits. All project data is illustrative.</p>
+            <form id="ensure-demo" data-command="gallery.seed_demo">
+              <button class="cui-button cui-button--secondary cui-button--compact" type="submit"><span>Initialize sample data</span></button>
+
+            </form>
+            <p class="small-note">Initializes an empty gallery. Existing projects and tasks are left unchanged.</p>
+          </details>
+        </aside>
+      </div><div class="cui-sidebar__main">
+        <div class="cui-stack cui-stack--gap-generous cui-stack--align-stretch" data-cui-component="stack">
+          <header class="cui-page-header" data-cui-component="page-header"><div class="cui-page-header__content"><h1 class="cui-page-header__title">Project workspace</h1><p class="cui-page-header__description">Create a task, edit its status, and watch the workspace update. Sample projects give the components real data to work with.</p></div></header>
+
+
+          <section id="workspace-summary" data-live aria-label="Live workspace summary" class="workspace-summary">
+            <div class="cui-cluster cui-cluster--gap-generous cui-cluster--align-start cui-cluster--justify-start cui-cluster--wrap" data-cui-component="cluster">
+              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Tasks</dt><dd class="cui-metric__value">{{ cui_text(workspace.total) }}</dd></dl></article>
+
+              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Open</dt><dd class="cui-metric__value">{{ cui_text(workspace.active) }}</dd></dl></article>
+
+              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Completed</dt><dd class="cui-metric__value">{{ cui_text(workspace.completed) }}</dd></dl></article>
+
+              <span class="cui-status-indicator cui-status-indicator--info cui-status-indicator--small" data-cui-component="status-indicator"><span class="cui-status-indicator__dot" aria-hidden="true"></span><span class="cui-status-indicator__label">Live query data</span><span class="cui-status-indicator__detail">Updated by Native, not a component signal.</span></span>
+
+            </div>
+
+            <div class="cui-progress cui-progress--info cui-progress--compact cui-progress--determinate{% if cui_progress_complete(workspace.completion, "100") %} cui-progress--complete{% endif %}" data-cui-component="progress" data-cui-tone="info" data-cui-size="compact" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Task completion</span></div><progress class="cui-progress__track" value="{{ cui_progress_value(workspace.completion, "100") }}" max="{{ cui_progress_maximum(workspace.completion, "100") }}" aria-label="Task completion"></progress></div>
+
+          </section>
+
+          <div class="cui-sidebar cui-sidebar--side-end cui-sidebar--width-wide cui-sidebar--gap-generous cui-sidebar--align-start cui-sidebar--collapse-standard" data-cui-component="sidebar"><div class="cui-sidebar__regions"><div class="cui-sidebar__main">
+              <section id="workspace-tasks" data-live aria-label="Project tasks">
+                {% for project in workspace.projects.items %}
+                <section id="project-{{ project.id }}" class="project-section" aria-label="{{ project.name }}">
+                  <h2>{{ project.name }}</h2>
+                  <p class="section-description">{{ project.summary }}</p>
+                  <div class="cui-pane cui-pane--height-standard cui-pane--bounded cui-pane--scroll cui-pane--has-header cui-pane--has-footer" data-cui-component="pane"><div class="cui-pane__header"><div class="list-header"><span>Task</span><span>Status</span><span>Action</span></div></div><div class="cui-pane__body" tabindex="0">
+                      <ul class="task-list">
+                        {% for item in workspace.tasks.items %}
+                        {% if item.project_id == project.id %}
+                        <li class="task-row">
+                          <div class="task-copy"><a class="task-title" href="{{ routes.task(task_id=item.id) }}">{{ item.title }}</a><p>{{ item.detail }}</p><span class="small-note">{{ item.owner }} · revision {{ item.version }}</span></div>
+                          <div class="task-status">
+                            {% if item.state == 2 %}<span class="cui-badge cui-badge--success" data-cui-component="badge" data-cui-tone="success"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m20 6-11 11-5-5"></path></svg></span><span class="cui-badge__label">Completed</span></span>
+
+                            {% elif item.state == 1 %}<span class="cui-badge cui-badge--info" data-cui-component="badge" data-cui-tone="info"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 11v5M12 8h.01"></path></svg></span><span class="cui-badge__label">In progress</span></span>
+
+                            {% else %}<span class="cui-badge cui-badge--neutral" data-cui-component="badge" data-cui-tone="neutral"><span class="cui-badge__label">To do</span></span>
+{% endif %}
+                          </div>
+                          <a class="task-action" href="{{ routes.task(task_id=item.id) }}">Edit<span class="sr-only"> {{ item.title }}</span></a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                      </ul>
+                    </div><div class="cui-pane__footer"><p class="list-footer">Read data only. Open a task to edit it outside this live region.</p></div></div>
+
+                </section>
+                {% else %}
+                <section class="cui-empty-state cui-empty-state--start" data-cui-component="empty-state"><div class="cui-empty-state__layout"><div class="cui-empty-state__content"><h2 class="cui-empty-state__title">Start with sample projects</h2><p class="cui-empty-state__body">Use Initialize sample data, then reload the workspace. The demo creates real local records only when both tables are empty.</p></div></div></section>
+
+                {% endfor %}
+              </section>
+            </div><div class="cui-sidebar__aside">
+              <aside class="create-panel" aria-labelledby="create-title">
+                <h2 id="create-title">Create a task</h2>
+                <p class="section-description">An independent form. Live updates leave its draft alone.</p>
+                <form id="create-task" data-command="gallery.create_task" class="task-form">
+                  <label class="select-field" for="create-project"><span>Project</span><select id="create-project" name="project_id" required>{% for project in workspace.projects.items %}<option value="{{ project.id }}">{{ project.name }}</option>{% endfor %}</select></label>
+                  <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="create-title-field">Task title</label><input class="cui-form-field__control" id="create-title-field" name="title" type="text" value="" placeholder="What needs checking?" autocomplete="off" maxlength="160" aria-describedby="create-title-field-hint"><div class="cui-form-field__description"><p class="cui-form-field__hint" id="create-title-field-hint">Enter a meaningful title. Blank titles are rejected by the app.</p></div></div>
+
+                  <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="textarea"><label class="cui-form-field__label" for="create-detail">Details</label><textarea class="cui-form-field__control cui-form-field__control--textarea" id="create-detail" name="detail" rows="4" placeholder="A short note for this task" maxlength="4000" aria-describedby="create-detail-hint"></textarea><div class="cui-form-field__description"><p class="cui-form-field__hint" id="create-detail-hint">Details are required; the server accepts up to 4,000 UTF-8 bytes.</p></div></div>
+
+                  {% if workspace.projects.items | length > 0 %}
+                  <button class="cui-button cui-button--primary" type="submit"><span class="cui-button__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></span><span>Create task</span></button>
+
+                  {% else %}
+                  <button class="cui-button cui-button--primary" type="submit" disabled><span>Initialize projects first</span></button>
+
+                  <p>Add the sample projects, then <a href="{{ routes.workspace() }}">reload</a> to create a task.</p>
+                  {% endif %}
+                  <p class="small-note">Saved through an app-owned command. After a rejection, copy your draft and reload before retrying.</p>
+                </form>
+              </aside>
+            </div></div></div>
+
+
+          <section class="workspace-guide" aria-labelledby="try-title">
+            <h2 id="try-title">Try the data boundary</h2>
+            <div class="cui-grid cui-grid--columns-three cui-grid--minimum-standard cui-grid--gap-spacious cui-grid--align-stretch cui-grid--collapse-compact" data-cui-component="grid"><div class="cui-grid__items">
+              <div><h3>Keep a draft</h3><p>Type here, then edit a task in another tab. The live list changes; this form stays yours.</p></div>
+              <div><h3>Reject an invalid edit</h3><p>Submit a blank title or an invalid state. No record changes, and your draft remains available. Copy it and reload before retrying.</p></div>
+              <div><h3>Check a stale revision</h3><p>Open one task in two tabs. Save the first, then submit the older form. Reload before retrying.</p></div>
+            </div></div>
+
+          </section>
+          <footer class="page-footer"><p>Real local records. Illustrative project content. <a href="{{ routes.layouts() }}">Explore all 14 layouts and the other ported components.</a></p></footer>
+        </div>
+
+      </div></div></div>
+
+  </div>
+</div>

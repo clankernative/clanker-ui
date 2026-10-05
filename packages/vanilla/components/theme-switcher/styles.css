@@ -1,0 +1,11 @@
+@layer cui.components {
+  .cui-theme-switcher { display: inline-grid; gap: var(--cui-theme-switcher-gap, .5rem); }
+  .cui-theme-switcher__fallback { margin: 0; color: inherit; }
+  .cui-theme-switcher__choices { display: flex; flex-wrap: wrap; gap: var(--cui-theme-switcher-gap, .375rem); }
+  .cui-theme-switcher__option { display: inline-flex; align-items: center; justify-content: center; gap: .375rem; padding: var(--cui-theme-switcher-padding, .5rem .75rem); border: 1px solid transparent; border-radius: var(--cui-theme-switcher-radius, .5rem); background: var(--cui-theme-switcher-background, #f1f5f9); color: inherit; cursor: pointer; }
+  .cui-theme-switcher [hidden] { display: none !important; }
+  .cui-theme-switcher__option[aria-pressed="true"] { border-color: var(--cui-theme-switcher-selected, #64748b); }
+  .cui-theme-switcher__option:focus-visible { outline: 2px solid var(--cui-theme-switcher-focus-ring, #2563eb); outline-offset: 2px; }
+  .cui-theme-switcher--icons .cui-theme-switcher__label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .cui-theme-switcher[data-cui-enhanced] .cui-theme-switcher__fallback { display: none; }
+}

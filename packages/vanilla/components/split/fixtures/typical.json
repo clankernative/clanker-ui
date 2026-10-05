@@ -1,0 +1,5 @@
+{
+  "options": {},
+  "children": { "start": "<section>Primary</section>", "end": "<aside>Secondary</aside>" },
+  "expectedHtml": "<div class=\"cui-split cui-split--ratio-equal cui-split--gap-standard cui-split--align-stretch cui-split--collapse-standard\" data-cui-component=\"split\"><div class=\"cui-split__regions\"><div class=\"cui-split__start\"><section>Primary</section></div><div class=\"cui-split__end\"><aside>Secondary</aside></div></div></div>\n"
+}

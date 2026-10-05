@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "filter-bar",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Arranges host-admitted filter controls, actions, applied-filter content, and an optional result summary.",
+  "keywords": ["filter", "search", "results", "controls"],
+  "agent": {"useWhen": "An app-owned search or result page needs a labelled presentation group around already-admitted controls and actions.", "avoidWhen": "The component must own a GET form, query parameters, search state, command, route, applied-filter semantics, or JavaScript behavior.", "composeWith": ["form-field", "button", "data-table"]},
+  "contract": {"role": "presentation-only labelled control group", "variants": ["with-summary", "without-summary"], "requiredFields": ["label", "controls"], "invariants": ["The output is a div role=group, never a form; the host owns form/query binding and all operations.", "Controls are required host-admitted markup; actions and applied content are optional host-admitted markup.", "The optional result summary is nonblank escaped text announced with role=status.", "AdmittedChildren is a host trust marker, not an HTML sanitizer.", "The fragment contains exactly one [[attributes]], [[label]], [[summary]], [[controls]], [[actions]], and [[applied]] slot; expansion is exact and single-pass."]},
+  "tokens": ["--cui-filter-bar-gap", "--cui-filter-bar-padding", "--cui-filter-bar-border", "--cui-filter-bar-radius", "--cui-filter-bar-background", "--cui-filter-bar-summary-text"],
+  "dependencies": [], "assets": {"template": "components/filter-bar/fragment.html", "styles": "components/filter-bar/styles.css", "scripts": []},
+  "fixtures": ["components/filter-bar/fixtures/typical.json", "components/filter-bar/fixtures/empty-optional.json", "components/filter-bar/fixtures/long-summary.json"]
+}

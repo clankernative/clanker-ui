@@ -1,0 +1,11 @@
+{
+  "autocomplete": "email",
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"contact-email\">Email address <span class=\"cui-form-field__required\" aria-hidden=\"true\">*</span></label><input class=\"cui-form-field__control\" id=\"contact-email\" name=\"email\" type=\"email\" value=\"\" placeholder=\"you@example.com\" autocomplete=\"email\" aria-describedby=\"contact-email-hint\" required><div class=\"cui-form-field__description\"><p class=\"cui-form-field__hint\" id=\"contact-email-hint\">Use your work address.</p></div></div>\n",
+  "hint": "Use your work address.",
+  "id": "contact-email",
+  "inputType": "email",
+  "label": "Email address",
+  "name": "email",
+  "placeholder": "you@example.com",
+  "required": true
+}

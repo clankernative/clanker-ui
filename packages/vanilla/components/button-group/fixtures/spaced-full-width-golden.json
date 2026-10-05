@@ -1,0 +1,12 @@
+{
+  "children": [
+    "<button type=\"button\">List</button>",
+    "<button type=\"button\">Grid</button>"
+  ],
+  "expectedHtml": "<div class=\"cui-button-group cui-button-group--spaced cui-button-group--full-width\" data-cui-component=\"button-group\" role=\"group\" aria-label=\"Display mode\"><button type=\"button\">List</button><button type=\"button\">Grid</button></div>\n",
+  "options": {
+    "appearance": "spaced",
+    "fullWidth": true,
+    "label": "Display mode"
+  }
+}

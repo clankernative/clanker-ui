@@ -1,0 +1,451 @@
+<div id="golinks-app">
+  <div id="page-heading" class="header">
+    <header class="cui-page-header" data-cui-component="page-header"><div class="cui-page-header__content"><h1 class="cui-page-header__title">Component demo</h1><p class="cui-page-header__description">Clanker Native UI in GoLinks. Twenty components, sample states, the existing app theme, and native controls.</p></div><div class="cui-page-header__actions"><a class="cui-button cui-button--secondary" href="{{ routes.links() }}"><span>Open dashboard</span></a>
+</div></header>
+
+    <nav class="nav" aria-label="Go Links">
+      <a data-nav="dashboard" href="{{ routes.links() }}">Dashboard</a>
+      <a href="{{ routes.component_demo() }}" aria-current="page">UI Demo</a>
+    </nav>
+  </div>
+
+  <div class="cui-demo">
+    <nav class="actions" aria-label="Component examples">
+      <a href="#page-heading">Page Header</a>
+      <a href="#layouts">Layouts</a>
+      <a href="#avatars">Avatar</a>
+      <a href="#empty-states">Empty State</a>
+      <a href="#metrics">Metric</a>
+      <a href="#skeletons">Skeleton</a>
+      <a href="#form-fields">Form Field</a>
+      <a href="#tags">Tag</a>
+      <a href="#alerts">Alert</a>
+      <a href="#progress">Progress</a>
+      <a href="#existing-components">Existing components</a>
+    </nav>
+
+    <section class="cui-demo-section" aria-labelledby="page-header-title">
+      <h2 id="page-header-title">Page Header</h2>
+      <p class="subtitle">The page header owns this page’s only h1 and description. Its named actions slot admits the GoLinks-owned dashboard link; navigation remains app-owned.</p>
+    </section>
+
+    <section id="layouts" class="cui-demo-section" aria-labelledby="layouts-title">
+      <h2 id="layouts-title">Layout components</h2>
+      <p class="subtitle">Six neutral layout components arrange admitted child markup. Their responsive behavior comes from package components, not app-authored layout CSS.</p>
+      <div class="cui-stack cui-stack--gap-spacious cui-stack--align-stretch" data-cui-component="stack">
+        <div class="cui-container cui-container--reading cui-container--gutter-generous" data-cui-component="container"><div class="cui-stack cui-stack--gap-standard cui-stack--align-stretch" data-cui-component="stack"><h3>Container and Stack</h3><p>A reading-width region with generous gutters and a standard vertical rhythm. The outer container keeps long copy comfortable.</p><div class="cui-stack cui-stack--gap-compact cui-stack--align-center" data-cui-component="stack"><span class="cui-badge cui-badge--info" data-cui-component="badge" data-cui-tone="info"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 11v5M12 8h.01"></path></svg></span><span class="cui-badge__label">Nested stack</span></span>
+<span>Compact spacing, centered alignment.</span></div>
+</div>
+</div>
+
+        <div class="cui-cluster cui-cluster--gap-standard cui-cluster--align-center cui-cluster--justify-between cui-cluster--wrap" data-cui-component="cluster"><div class="cui-cluster cui-cluster--gap-compact cui-cluster--align-center cui-cluster--justify-start cui-cluster--wrap" data-cui-component="cluster"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" role="img" aria-label="Link"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"></path></svg>
+<h3>Cluster: paired actions</h3></div>
+<a class="cui-button cui-button--secondary" href="{{ routes.links() }}"><span>Open dashboard</span></a>
+</div>
+
+        <div class="cui-grid cui-grid--columns-three cui-grid--minimum-narrow cui-grid--gap-standard cui-grid--align-stretch cui-grid--collapse-standard" data-cui-component="grid"><div class="cui-grid__items">
+          <div class="cui-card cui-card--standard" data-cui-component="card"><header class="cui-card__header"><h3 class="cui-card__title">Card with body content</h3><p class="cui-card__subtitle">Optional subtitle</p></header><div class="cui-card__body"><p>Default child markup remains the card body. This card uses the component’s native heading level.</p></div><footer class="cui-card__actions"><a class="cui-button cui-button--secondary" href="{{ routes.links() }}"><span>View links</span></a>
+</footer></div>
+
+          <div class="cui-card cui-card--compact" data-cui-component="card"><header class="cui-card__header"><h3 class="cui-card__title">Compact card</h3></header><div class="cui-card__body"><p>Card padding and heading level are explicit options.</p></div></div>
+
+          <div class="cui-card cui-card--none" data-cui-component="card"><header class="cui-card__header"><h4 class="cui-card__title">Unpadded card</h4></header><div class="cui-card__body"><p>Cards compose within a responsive grid without custom wrappers.</p></div></div>
+
+        </div></div>
+
+        <div class="cui-split cui-split--ratio-start-dominant cui-split--gap-standard cui-split--align-start cui-split--collapse-standard" data-cui-component="split"><div class="cui-split__regions"><div class="cui-split__start"><div class="cui-card cui-card--standard" data-cui-component="card"><header class="cui-card__header"><h3 class="cui-card__title">Start region</h3></header><div class="cui-card__body"><p>The start region is deliberately wider on large containers, then stacks before it gets cramped.</p></div></div>
+</div><div class="cui-split__end"><div class="cui-card cui-card--compact" data-cui-component="card"><header class="cui-card__header"><h3 class="cui-card__title">End region</h3></header><div class="cui-card__body"><p>Named regions preserve source order. This narrow column demonstrates container-driven recovery.</p><section class="cui-alert cui-alert--warning cui-alert--accent" data-cui-component="alert" data-cui-tone="warning">
+  <div class="cui-alert__layout">
+    <span class="cui-alert__icon"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 8v4.5"></path>
+<path d="M12 16h.01"></path></svg>
+</span>
+    <div class="cui-alert__content">
+      <h4 class="cui-alert__title">Narrow-column recovery</h4>
+      <p class="cui-alert__body">Longer content wraps inside the stacked region without forcing page overflow.</p>
+    </div>
+    <a class="cui-alert__recovery" href="{{ routes.links() }}">Review links</a>
+  </div>
+</section>
+</div></div>
+</div></div></div>
+
+      </div>
+
+    </section>
+
+    <section id="avatars" class="cui-demo-section" aria-labelledby="avatars-title">
+      <h2 id="avatars-title">Avatar</h2>
+      <p class="subtitle">Named identities with initials fallback. Initials-only examples are sample people, not accounts. HTTPS images load directly in the browser; the server does not fetch them.</p>
+      <div class="cui-cluster cui-cluster--gap-generous cui-cluster--align-end cui-cluster--justify-start cui-cluster--wrap" data-cui-component="cluster">
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--extra-small cui-avatar--neutral" role="img" aria-label="Avery Lane, sample person" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">AL</span></span>
+<span>Extra small</span></div>
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--small cui-avatar--brand" role="img" aria-label="Morgan Kim, sample person" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">MK</span></span>
+<span>Small · brand</span></div>
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--medium cui-avatar--success" role="img" aria-label="Sam Rivera, sample person" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">SR</span></span>
+<span>Medium · success</span></div>
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--large cui-avatar--neutral" role="img" aria-label="Jordan Park, sample person" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">JP</span></span>
+<span>Large</span></div>
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--extra-large cui-avatar--brand" role="img" aria-label="Émile Laurent, sample person" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">ÉL</span></span>
+<span>Extra large</span></div>
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--medium cui-avatar--neutral" role="img" aria-label="Sample photo, not an account" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">ET</span><img class="cui-avatar__image" src="{{ cui_image("https://i.pravatar.cc/160?img=12") }}" alt="" aria-hidden="true" referrerpolicy="no-referrer" loading="lazy" decoding="async"></span>
+<span>HTTPS sample photo</span></div>
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--medium cui-avatar--neutral" role="img" aria-label="Packaged sample photo, not an account" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">ET</span><img class="cui-avatar__image" src="{{ asset("avatar_sample") }}" alt="" aria-hidden="true" referrerpolicy="no-referrer" loading="lazy" decoding="async"></span>
+<span>Admitted local photo</span></div>
+        <div class="cui-demo-avatar-example"><span class="cui-avatar cui-avatar--medium cui-avatar--neutral" role="img" aria-label="Broken sample photo fallback" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">ET</span><img class="cui-avatar__image" src="{{ cui_image("https://invalid.example.test/cui-avatar-does-not-exist.png") }}" alt="" aria-hidden="true" referrerpolicy="no-referrer" loading="lazy" decoding="async"></span>
+<span>Broken image · initials fallback</span></div>
+      </div>
+
+    </section>
+
+    <section id="empty-states" class="cui-demo-section" aria-labelledby="empty-states-title">
+      <h2 id="empty-states-title">Empty State</h2>
+      <p class="subtitle">An empty result explains what is missing and offers admitted navigation. These examples are illustrative; the live list below uses the same component when no links match.</p>
+      <div class="cui-demo-stack">
+        <section class="cui-empty-state cui-empty-state--start cui-empty-state--with-action" data-cui-component="empty-state"><div class="cui-empty-state__layout"><div class="cui-empty-state__content"><h3 class="cui-empty-state__title">No sample results</h3><p class="cui-empty-state__body">Change your search or create a link to start a useful directory.</p></div><a class="cui-empty-state__action" href="#form-fields">Create a test link</a></div></section>
+
+        <section class="cui-empty-state cui-empty-state--center" data-cui-component="empty-state"><div class="cui-empty-state__layout"><div class="cui-empty-state__content"><h3 class="cui-empty-state__title">A fresh collection</h3><p class="cui-empty-state__body">There is nothing to review yet. This centered state intentionally has no action.</p></div></div></section>
+
+        <section class="cui-empty-state cui-empty-state--start cui-empty-state--with-action" data-cui-component="empty-state"><div class="cui-empty-state__layout"><div class="cui-empty-state__content"><h4 class="cui-empty-state__title">No archived examples</h4><p class="cui-empty-state__body">A smaller heading fits an empty state nested under a section. The app still owns the destination.</p></div><a class="cui-empty-state__action" href="{{ routes.links() }}">Open dashboard</a></div></section>
+
+      </div>
+    </section>
+
+    <section id="metrics" class="cui-demo-section" aria-labelledby="metrics-title">
+      <h2 id="metrics-title">Metric</h2>
+      <p class="subtitle">Illustrative formatted values, not current GoLinks totals. Direction and favorability are independent: a falling error rate is positive, while rising errors are negative. No metric is a live announcement.</p>
+      <div class="cui-demo-metrics">
+        <article class="cui-metric cui-metric--plain" data-cui-component="metric"><span class="cui-metric__icon" aria-hidden="true"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"></path></svg>
+</span><dl class="cui-metric__content"><dt class="cui-metric__label">Sample links reviewed</dt><dd class="cui-metric__value">128</dd></dl><p class="cui-metric__footer"><span class="cui-metric__change cui-metric__change--up cui-metric__change--positive"><span class="cui-visually-hidden">Increased, favorable change: </span><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>
+<span>12 more than last week</span></span><span class="cui-metric__detail">Illustrative weekly total</span></p></article>
+
+        <article class="cui-metric cui-metric--contained" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Sample errors</dt><dd class="cui-metric__value">2</dd></dl><p class="cui-metric__footer"><span class="cui-metric__change cui-metric__change--down cui-metric__change--positive"><span class="cui-visually-hidden">Decreased, favorable change: </span><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>
+<span>3 fewer than yesterday</span></span><span class="cui-metric__detail">Illustrative daily count</span></p></article>
+
+        <article class="cui-metric cui-metric--contained" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Sample review queue</dt><dd class="cui-metric__value">24</dd></dl><p class="cui-metric__footer"><span class="cui-metric__change cui-metric__change--up cui-metric__change--negative"><span class="cui-visually-hidden">Increased, unfavorable change: </span><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>
+<span>8 more waiting</span></span></p></article>
+
+        <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Sample completion rate</dt><dd class="cui-metric__value">92%</dd></dl><p class="cui-metric__footer"><span class="cui-metric__change cui-metric__change--down cui-metric__change--negative"><span class="cui-visually-hidden">Decreased, unfavorable change: </span><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>
+<span>2 percentage points lower</span></span></p></article>
+
+        <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Sample active collections</dt><dd class="cui-metric__value">6</dd></dl><p class="cui-metric__footer"><span class="cui-metric__change cui-metric__change--flat cui-metric__change--neutral"><span class="cui-visually-hidden">The sample collection count is unchanged; neither favorable nor unfavorable: </span><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M5 12h14"></path></svg>
+<span>No change</span></span></p></article>
+
+        <article class="cui-metric cui-metric--contained" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">A longer sample metric label that must wrap cleanly</dt><dd class="cui-metric__value">1,234,567</dd></dl><p class="cui-metric__footer"><span class="cui-metric__detail">A formatted text value; the component does not calculate or parse the number.</span></p></article>
+
+      </div>
+    </section>
+
+    <section id="skeletons" class="cui-demo-section" aria-labelledby="skeletons-title">
+      <h2 id="skeletons-title">Skeleton</h2>
+      <p class="subtitle">Decorative loading shapes, always hidden from assistive technology. The app supplies the busy region and meaningful loading text. These are illustrative placeholders, not an actual pending request.</p>
+      <p class="cui-demo-caption">Loading sample content (illustrative). Reduced motion removes the animation.</p>
+      <div class="cui-demo-skeleton-layout" role="group" aria-label="Illustrative content loading" aria-busy="true">
+        <span class="cui-skeleton cui-skeleton--circle cui-skeleton--large cui-skeleton--width-full cui-skeleton--animated" data-cui-component="skeleton" aria-hidden="true"></span>
+
+        <div class="cui-demo-stack">
+          <span class="cui-skeleton cui-skeleton--text cui-skeleton--small cui-skeleton--width-short cui-skeleton--animated" data-cui-component="skeleton" aria-hidden="true"></span>
+
+          <span class="cui-skeleton cui-skeleton--text cui-skeleton--medium cui-skeleton--width-medium cui-skeleton--animated" data-cui-component="skeleton" aria-hidden="true"></span>
+
+          <span class="cui-skeleton cui-skeleton--rectangle cui-skeleton--large cui-skeleton--width-full cui-skeleton--animated" data-cui-component="skeleton" aria-hidden="true"></span>
+
+        </div>
+      </div>
+      <h3>Static placeholders</h3>
+      <div class="cui-demo-skeleton-layout">
+        <span class="cui-skeleton cui-skeleton--circle cui-skeleton--small cui-skeleton--width-full cui-skeleton--static" data-cui-component="skeleton" aria-hidden="true"></span>
+
+        <div class="cui-demo-stack">
+          <span class="cui-skeleton cui-skeleton--text cui-skeleton--large cui-skeleton--width-full cui-skeleton--static" data-cui-component="skeleton" aria-hidden="true"></span>
+
+          <span class="cui-skeleton cui-skeleton--rectangle cui-skeleton--small cui-skeleton--width-medium cui-skeleton--static" data-cui-component="skeleton" aria-hidden="true"></span>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="form-fields" class="cui-demo-section" aria-labelledby="form-fields-title">
+      <h2 id="form-fields-title">Form Field</h2>
+      <p class="subtitle">The component owns the label, control, and accessible descriptions. GoLinks owns the form and command.</p>
+      <div class="grid cui-demo-fields">
+        <div class="card">
+          <div class="card-header"><h3>Create a test link</h3></div>
+          <div class="card-body">
+            <p class="form-hint">This submits the existing GoLinks create command. Use a unique name; it creates a real link in this local instance.</p>
+            <form id="demo-create-link" data-command="golinks.create" class="form">
+              <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-name">Name <span class="cui-form-field__required" aria-hidden="true">*</span></label><input class="cui-form-field__control" id="demo-name" name="name" type="text" value="" placeholder="cui-review-link" autocomplete="off" maxlength="255" aria-describedby="demo-name-hint" required><div class="cui-form-field__description"><p class="cui-form-field__hint" id="demo-name-hint">Use a short name without spaces. Required fields are marked *.</p></div></div>
+
+              <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-url">Destination URL <span class="cui-form-field__required" aria-hidden="true">*</span></label><input class="cui-form-field__control" id="demo-url" name="url" type="url" value="" placeholder="https://example.com/docs" autocomplete="off" required></div>
+
+              <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="textarea"><label class="cui-form-field__label" for="demo-description">Description</label><textarea class="cui-form-field__control cui-form-field__control--textarea" id="demo-description" name="description" rows="3" placeholder="Describe your test link" aria-describedby="demo-description-hint"></textarea><div class="cui-form-field__description"><p class="cui-form-field__hint" id="demo-description-hint">Optional. Multiline text stays plain text.</p></div></div>
+
+              <div class="cui-divider cui-divider--horizontal" data-cui-component="divider" role="separator" aria-orientation="horizontal"></div>
+
+              <div class="actions"><button class="cui-button cui-button--primary" type="submit"><span class="cui-button__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></span><span>Create test link</span></button>
+</div>
+            </form>
+          </div>
+        </div>
+        <div class="form cui-demo-field-states">
+          <h3>Review states</h3>
+          <div class="cui-form-field cui-form-field--invalid" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-error">Name with a validation error</label><input class="cui-form-field__control" id="demo-error" name="demo_error" type="text" value="team handbook" aria-describedby="demo-error-hint demo-error-error" aria-invalid="true"><div class="cui-form-field__description"><p class="cui-form-field__hint" id="demo-error-hint">Illustrative state, not a submitted field.</p><p class="cui-form-field__error" id="demo-error-error">Names cannot contain spaces. Try team-handbook.</p></div></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-readonly">Read-only value</label><input class="cui-form-field__control" id="demo-readonly" name="demo_readonly" type="text" value="engineering-handbook" aria-describedby="demo-readonly-hint" readonly><div class="cui-form-field__description"><p class="cui-form-field__hint" id="demo-readonly-hint">Read-only controls remain focusable. These review fields are outside the command form.</p></div></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-disabled">Disabled sample field</label><input class="cui-form-field__control" id="demo-disabled" name="demo_disabled" type="text" value="Not editable or submitted" aria-describedby="demo-disabled-hint" disabled><div class="cui-form-field__description"><p class="cui-form-field__hint" id="demo-disabled-hint">An inactive native control, outside the command form. Disabled named controls cannot supply command inputs.</p></div></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="textarea"><label class="cui-form-field__label" for="demo-disabled-notes">Disabled sample notes</label><textarea class="cui-form-field__control cui-form-field__control--textarea" id="demo-disabled-notes" name="demo_disabled_notes" rows="3" disabled>Illustrative inactive textarea.</textarea></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-email">Email input</label><input class="cui-form-field__control" id="demo-email" name="demo_email" type="email" value="" placeholder="you@example.com" autocomplete="email"></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="textarea"><label class="cui-form-field__label" for="demo-long-label">A longer field label that should wrap without crowding its control</label><textarea class="cui-form-field__control cui-form-field__control--textarea" id="demo-long-label" name="demo_notes" rows="3">Plain text: &lt;script&gt; is not markup.</textarea></div>
+
+        </div>
+      </div>
+      <h3>Native input types</h3>
+      <div class="grid">
+        <div class="form">
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-number">Number</label><input class="cui-form-field__control" id="demo-number" name="demo_number" type="number" value="3"></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-date">Date</label><input class="cui-form-field__control" id="demo-date" name="demo_date" type="date" value="2026-09-29"></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-tel">Telephone</label><input class="cui-form-field__control" id="demo-tel" name="demo_tel" type="tel" value="" placeholder="Enter a telephone number"></div>
+
+        </div>
+        <div class="form">
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-search">Search input</label><input class="cui-form-field__control" id="demo-search" name="demo_search" type="search" value="" placeholder="Try the native clear control"></div>
+
+          <div class="cui-form-field" data-cui-component="form-field" data-cui-kind="input"><label class="cui-form-field__label" for="demo-password">Password</label><input class="cui-form-field__control" id="demo-password" name="demo_password" type="password" value="" autocomplete="new-password" aria-describedby="demo-password-hint"><div class="cui-form-field__description"><p class="cui-form-field__hint" id="demo-password-hint">No stored secret is preloaded.</p></div></div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="tags" class="cui-demo-section" aria-labelledby="tags-title">
+      <h2 id="tags-title">Tag</h2>
+      <p class="subtitle">Metadata is distinct from operational status. Linked tags navigate; a removal affordance is an app-owned destination, not client-side dismissal.</p>
+      <div class="actions">
+        <span class="cui-tag cui-tag--neutral cui-tag--medium" data-cui-component="tag" data-cui-tone="neutral"><span class="cui-tag__label">Metadata</span></span>
+
+        <span class="cui-tag cui-tag--brand cui-tag--medium" data-cui-component="tag" data-cui-tone="brand"><span class="cui-tag__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M20 13 11 22l-9-9V4h9zM7 8h.01"></path></svg>
+</span><span class="cui-tag__label">Engineering</span></span>
+
+        <span class="cui-tag cui-tag--info cui-tag--medium" data-cui-component="tag" data-cui-tone="info"><span class="cui-tag__label">Reference</span></span>
+
+        <span class="cui-tag cui-tag--success cui-tag--medium" data-cui-component="tag" data-cui-tone="success"><span class="cui-tag__label">Reviewed</span></span>
+
+        <span class="cui-tag cui-tag--warning cui-tag--medium" data-cui-component="tag" data-cui-tone="warning"><span class="cui-tag__label">Needs review</span></span>
+
+        <span class="cui-tag cui-tag--danger cui-tag--medium" data-cui-component="tag" data-cui-tone="danger"><span class="cui-tag__label">Restricted</span></span>
+
+      </div>
+      <div class="actions">
+        <span class="cui-tag cui-tag--neutral cui-tag--small" data-cui-component="tag" data-cui-tone="neutral"><span class="cui-tag__label">Small</span></span>
+
+        <span class="cui-tag cui-tag--neutral cui-tag--medium" data-cui-component="tag" data-cui-tone="neutral"><span class="cui-tag__label">Medium</span><span class="cui-tag__count" aria-hidden="true">12</span><span class="cui-tag__count-label">12 sample links</span></span>
+
+        <span class="cui-tag cui-tag--neutral cui-tag--large" data-cui-component="tag" data-cui-tone="neutral"><span class="cui-tag__label">Large</span></span>
+
+        <a class="cui-tag cui-tag--brand cui-tag--medium cui-tag--linked" href="{{ routes.links() }}" data-cui-component="tag" data-cui-tone="brand"><span class="cui-tag__label">Open dashboard</span></a>
+
+        <span class="cui-tag cui-tag--neutral cui-tag--medium" data-cui-component="tag" data-cui-tone="neutral"><span class="cui-tag__label">Sample filter</span><a class="cui-tag__remove" href="#tags" aria-label="Review sample filter"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+</a></span>
+
+      </div>
+      <p class="cui-demo-caption">The sample filter link returns to this section; it does not remove data.</p>
+      <span class="cui-tag cui-tag--neutral cui-tag--medium" data-cui-component="tag" data-cui-tone="neutral"><span class="cui-tag__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M20 13 11 22l-9-9V4h9zM7 8h.01"></path></svg>
+</span><span class="cui-tag__label">A longer metadata label that wraps at narrow widths instead of pushing the page sideways</span></span>
+
+    </section>
+
+    <section id="alerts" class="cui-demo-section" aria-labelledby="alerts-title">
+      <h2 id="alerts-title">Alert</h2>
+      <p class="subtitle">These are illustrative messages, not current GoLinks incidents. Announcements are opt-in; these static examples do not interrupt assistive technology.</p>
+      <div class="cui-demo-stack">
+        <section class="cui-alert cui-alert--info cui-alert--soft" data-cui-component="alert" data-cui-tone="info">
+  <div class="cui-alert__layout">
+    <span class="cui-alert__icon"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 11v5M12 8h.01"></path></svg>
+</span>
+    <div class="cui-alert__content">
+      <h2 class="cui-alert__title">A place for useful context</h2>
+      <p class="cui-alert__body">Share the consequence or next step, not just a color-coded status.</p>
+    </div>
+    
+  </div>
+</section>
+
+        <section class="cui-alert cui-alert--success cui-alert--outlined" data-cui-component="alert" data-cui-tone="success">
+  <div class="cui-alert__layout">
+    <span class="cui-alert__icon"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m20 6-11 11-5-5"></path></svg>
+</span>
+    <div class="cui-alert__content">
+      <h3 class="cui-alert__title">Outlined treatment</h3>
+      <p class="cui-alert__body">A success message can remain clear without a filled surface.</p>
+    </div>
+    
+  </div>
+</section>
+
+        <section class="cui-alert cui-alert--warning cui-alert--accent" data-cui-component="alert" data-cui-tone="warning">
+  <div class="cui-alert__layout">
+    <span class="cui-alert__icon"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 8v4.5"></path>
+<path d="M12 16h.01"></path></svg>
+</span>
+    <div class="cui-alert__content">
+      <h4 class="cui-alert__title">Accent treatment</h4>
+      <p class="cui-alert__body">The accent appearance emphasizes a message while preserving the GoLinks palette.</p>
+    </div>
+    
+  </div>
+</section>
+
+        <section class="cui-alert cui-alert--success cui-alert--soft" data-cui-component="alert" data-cui-tone="success">
+  <div class="cui-alert__layout">
+    <span class="cui-alert__icon"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m20 6-11 11-5-5"></path></svg>
+</span>
+    <div class="cui-alert__content">
+      <h2 class="cui-alert__title">Your changes are saved</h2>
+      <p class="cui-alert__body">A successful outcome stays understandable without its decorative icon.</p>
+    </div>
+    
+  </div>
+</section>
+
+        <section class="cui-alert cui-alert--warning cui-alert--soft" data-cui-component="alert" data-cui-tone="warning">
+  <div class="cui-alert__layout">
+    <span class="cui-alert__icon"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 8v4.5"></path>
+<path d="M12 16h.01"></path></svg>
+</span>
+    <div class="cui-alert__content">
+      <h2 class="cui-alert__title">This link needs review</h2>
+      <p class="cui-alert__body">Its destination may be out of date. Review the link before sharing it with your team.</p>
+    </div>
+    <a class="cui-alert__recovery" href="{{ routes.links() }}">Review links</a>
+  </div>
+</section>
+
+        <section class="cui-alert cui-alert--danger cui-alert--soft" data-cui-component="alert" data-cui-tone="danger">
+  <div class="cui-alert__layout">
+    <span class="cui-alert__icon"><svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 8v4.5"></path>
+<path d="M12 16h.01"></path></svg>
+</span>
+    <div class="cui-alert__content">
+      <h2 class="cui-alert__title">The link could not be saved</h2>
+      <p class="cui-alert__body">This is an illustrative error state. Explain what went wrong and offer a real recovery destination.</p>
+    </div>
+    <a class="cui-alert__recovery" href="#form-fields">Return to the form</a>
+  </div>
+</section>
+
+      </div>
+    </section>
+
+    <section id="progress" class="cui-demo-section" aria-labelledby="progress-title">
+      <h2 id="progress-title">Progress</h2>
+      <p class="subtitle">Illustrative task data. Determinate values are checked, not clamped. Unknown progress uses a native indeterminate element, not a fake percentage.</p>
+      <div class="cui-demo-stack cui-demo-progress">
+        <div class="cui-progress cui-progress--info cui-progress--regular cui-progress--determinate" data-cui-component="progress" data-cui-tone="info" data-cui-size="regular" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Illustrative import goal</span><span class="cui-progress__suffix">42 of 100 links</span></div><progress class="cui-progress__track" value="42" max="100" aria-label="Illustrative import goal"></progress><p class="cui-progress__detail">Example progress, not current app activity.</p></div>
+
+        <div class="cui-progress cui-progress--info cui-progress--regular cui-progress--determinate" data-cui-component="progress" data-cui-tone="info" data-cui-size="regular" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Importing sample links</span><span class="cui-progress__suffix">42 of 100 links</span></div><progress class="cui-progress__track" value="42" max="100" aria-label="Importing sample links"></progress><p class="cui-progress__detail">Regular track, information tone.</p></div>
+
+        <div class="cui-progress cui-progress--success cui-progress--regular cui-progress--determinate cui-progress--complete" data-cui-component="progress" data-cui-tone="success" data-cui-size="regular" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Import complete</span><span class="cui-progress__suffix">100 of 100 links</span></div><progress class="cui-progress__track" value="100" max="100" aria-label="Import complete"></progress></div>
+
+        <div class="cui-progress cui-progress--warning cui-progress--compact cui-progress--determinate" data-cui-component="progress" data-cui-tone="warning" data-cui-size="compact" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Waiting for review</span><span class="cui-progress__suffix">3 of 10 reviewed</span></div><progress class="cui-progress__track" value="3" max="10" aria-label="Waiting for review"></progress><p class="cui-progress__detail">Compact track; the app supplies the measured values.</p></div>
+
+        <div class="cui-progress cui-progress--danger cui-progress--regular cui-progress--determinate" data-cui-component="progress" data-cui-tone="danger" data-cui-size="regular" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Import interrupted</span></div><progress class="cui-progress__track" value="24" max="100" aria-label="Import interrupted"></progress><p class="cui-progress__detail">A recovery action belongs in an Alert, not the progress element.</p></div>
+
+        <div class="cui-progress cui-progress--info cui-progress--regular cui-progress--indeterminate" data-cui-component="progress" data-cui-tone="info" data-cui-size="regular" data-cui-state="indeterminate"><div class="cui-progress__header"><span class="cui-progress__label">Preparing the import</span></div><progress class="cui-progress__track" aria-label="Preparing the import"></progress><p class="cui-progress__detail">No reliable completion estimate is available.</p></div>
+
+        <div class="cui-progress cui-progress--info cui-progress--compact cui-progress--determinate" data-cui-component="progress" data-cui-tone="info" data-cui-size="compact" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Not started</span><span class="cui-progress__suffix">0 of 100 links</span></div><progress class="cui-progress__track" value="0" max="100" aria-label="Not started"></progress></div>
+
+      </div>
+    </section>
+
+    <section id="existing-components" class="cui-demo-section" aria-labelledby="existing-title">
+      <h2 id="existing-title">Existing components</h2>
+      <p class="subtitle">The first five ports use the same theme and compose with the new components.</p>
+      <h3>Button and Icon</h3>
+      <div class="actions">
+        <a class="cui-button cui-button--primary" href="{{ routes.links() }}"><span class="cui-button__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"></path></svg></span><span>Open dashboard</span></a>
+
+        <button class="cui-button cui-button--secondary" type="button" disabled><span>Disabled</span></button>
+
+        <button class="cui-button cui-button--quiet" type="button" disabled aria-busy="true"><span>Saving…</span></button>
+
+        <svg class="cui-icon cui-icon--large" data-cui-component="icon" data-cui-icon="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" role="img" aria-label="Search"><circle cx="11" cy="11" r="7"></circle>
+<path d="m21 21-5-5"></path></svg>
+
+      </div>
+      <h3>Badge</h3>
+      <div class="actions">
+        <span class="cui-badge cui-badge--neutral" data-cui-component="badge" data-cui-tone="neutral"><span class="cui-badge__label">Metadata</span></span>
+
+        <span class="cui-badge cui-badge--info" data-cui-component="badge" data-cui-tone="info"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 11v5M12 8h.01"></path></svg></span><span class="cui-badge__label">Information</span></span>
+
+        <span class="cui-badge cui-badge--success" data-cui-component="badge" data-cui-tone="success"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="m20 6-11 11-5-5"></path></svg></span><span class="cui-badge__label">Saved</span></span>
+
+        <span class="cui-badge cui-badge--warning" data-cui-component="badge" data-cui-tone="warning"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 8v4.5"></path>
+<path d="M12 16h.01"></path></svg></span><span class="cui-badge__label">Needs attention</span></span>
+
+        <span class="cui-badge cui-badge--danger" data-cui-component="badge" data-cui-tone="danger"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 8v4.5"></path>
+<path d="M12 16h.01"></path></svg></span><span class="cui-badge__label">Failed</span></span>
+
+        <span class="cui-badge cui-badge--running" data-cui-component="badge" data-cui-tone="running"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="restore" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"></path></svg></span><span class="cui-badge__label">Running</span></span>
+
+      </div>
+      <h3>Status Indicator and Divider</h3>
+      <div class="actions">
+        <span class="cui-status-indicator cui-status-indicator--success cui-status-indicator--small" data-cui-component="status-indicator"><span class="cui-status-indicator__dot" aria-hidden="true"></span><span class="cui-status-indicator__label">Available</span></span>
+
+        <div class="cui-divider cui-divider--vertical" data-cui-component="divider" role="separator" aria-orientation="vertical"></div>
+
+        <span class="cui-status-indicator cui-status-indicator--warning cui-status-indicator--small" data-cui-component="status-indicator"><span class="cui-status-indicator__dot" aria-hidden="true"></span><span class="cui-status-indicator__label">Waiting</span><span class="cui-status-indicator__detail">Sample state</span></span>
+
+      </div>
+      <div class="cui-divider cui-divider--horizontal cui-divider--labelled cui-divider--center" data-cui-component="divider" role="separator" aria-orientation="horizontal" aria-label="End of examples"><span class="cui-divider__label">End of examples</span></div>
+
+    </section>
+
+    <section class="cui-demo-section" aria-labelledby="demo-links-title">
+      <h2 id="demo-links-title">Live app data</h2>
+      <p class="subtitle">This region follows the existing GoLinks list query. Server updates do not replace an in-progress form draft. The disposable cui-photo-sample link uses description “AL” as checked initials and its HTTPS destination as the image source.</p>
+      <div id="demo-links" data-live>
+        {% for link in component_demo.items %}
+        <div class="cui-demo-live-link">
+          <p><a href="{{ routes.link(link_id=link.id) }}">go/{{ link.name }}</a> — {{ link.description }}</p>
+          <article class="cui-metric cui-metric--plain" data-cui-component="metric"><span class="cui-metric__icon" aria-hidden="true"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"></path></svg>
+</span><dl class="cui-metric__content"><dt class="cui-metric__label">{{ cui_text(link.name) }}</dt><dd class="cui-metric__value">{{ cui_text(link.visit_count) }}</dd></dl><p class="cui-metric__footer"><span class="cui-metric__detail">Committed visits to this local test link</span></p></article>
+
+          <div class="cui-progress cui-progress--info cui-progress--regular cui-progress--determinate{% if cui_progress_complete(link.visit_count, "100") %} cui-progress--complete{% endif %}" data-cui-component="progress" data-cui-tone="info" data-cui-size="regular" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Committed visits (illustrative goal: 100)</span><span class="cui-progress__suffix">Current sample link visits; scale ends at 100</span></div><progress class="cui-progress__track" value="{{ cui_progress_value(link.visit_count, "100") }}" max="{{ cui_progress_maximum(link.visit_count, "100") }}" aria-label="Committed visits (illustrative goal: 100)"></progress><p class="cui-progress__detail">Bound to this link’s checked U64 count; values above 100 are intentionally not clamped.</p></div>
+
+          <span class="cui-tag cui-tag--neutral cui-tag--medium" data-cui-component="tag" data-cui-tone="neutral"><span class="cui-tag__label">{{ cui_text(link.name) }}</span><span class="cui-tag__count" aria-hidden="true">{{ cui_text(link.visit_count) }}</span><span class="cui-tag__count-label">Committed visits</span></span>
+
+          <span class="cui-badge cui-badge--info" data-cui-component="badge" data-cui-tone="info"><span class="cui-badge__icon"><svg class="cui-icon cui-icon--small" data-cui-component="icon" data-cui-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle>
+<path d="M12 11v5M12 8h.01"></path></svg></span><span class="cui-badge__label">{{ cui_text(link.name) }}</span></span>
+
+          <svg class="cui-icon cui-icon--medium" data-cui-component="icon" data-cui-icon="link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" focusable="false" role="img" aria-label="{{ cui_text(link.name) }}"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"></path></svg>
+
+          <span class="cui-status-indicator cui-status-indicator--success cui-status-indicator--small" data-cui-component="status-indicator"><span class="cui-status-indicator__dot" aria-hidden="true"></span><span class="cui-status-indicator__label">{{ cui_text(link.owner) }}</span><span class="cui-status-indicator__detail">{{ cui_text(link.name) }}</span></span>
+
+          <div class="cui-divider cui-divider--horizontal cui-divider--labelled cui-divider--center" data-cui-component="divider" role="separator" aria-orientation="horizontal" aria-label="{{ cui_text(link.name) }}"><span class="cui-divider__label">{{ cui_text(link.name) }}</span></div>
+
+          {% if link.name == 'cui-photo-sample' %}<span class="cui-avatar cui-avatar--medium cui-avatar--neutral" role="img" aria-label="{{ cui_text(link.name) }}" data-cui-component="avatar"><span class="cui-avatar__initials" aria-hidden="true">{{ cui_initials(link.description) }}</span><img class="cui-avatar__image" src="{{ cui_image(link.url) }}" alt="" aria-hidden="true" referrerpolicy="no-referrer" loading="lazy" decoding="async"></span>
+{% endif %}
+        </div>
+        {% else %}
+        <section class="cui-empty-state cui-empty-state--start cui-empty-state--with-action" data-cui-component="empty-state"><div class="cui-empty-state__layout"><div class="cui-empty-state__content"><h3 class="cui-empty-state__title">No links match</h3><p class="cui-empty-state__body">Try another search or create a test link above.</p></div><a class="cui-empty-state__action" href="#form-fields">Create a test link</a></div></section>
+
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>

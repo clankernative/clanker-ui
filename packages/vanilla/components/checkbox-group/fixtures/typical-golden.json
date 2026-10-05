@@ -1,0 +1,22 @@
+{
+  "expectedHtml": "<fieldset id=\"notification-options\" class=\"cui-checkbox-group cui-checkbox-group--inline\" data-cui-component=\"checkbox-group\" aria-describedby=\"notification-options-description\"><legend class=\"cui-checkbox-group__legend\">Notify me about</legend><div class=\"cui-checkbox-group__choices\"><label class=\"cui-checkbox-group__choice\" for=\"notification-options-choice-1\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"notification-options-choice-1\" name=\"notifications\" value=\"failures\" checked aria-describedby=\"notification-options-choice-1-hint\"><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">Failed runs</span><span class=\"cui-checkbox-group__choice-hint\" id=\"notification-options-choice-1-hint\">Immediate alerts.</span></span></label><label class=\"cui-checkbox-group__choice\" for=\"notification-options-choice-2\"><input class=\"cui-checkbox-group__control\" type=\"checkbox\" id=\"notification-options-choice-2\" name=\"notifications\" value=\"reports\"><span class=\"cui-checkbox-group__text\"><span class=\"cui-checkbox-group__label\">Weekly reports</span></span></label></div><div class=\"cui-checkbox-group__description\" id=\"notification-options-description\"><p class=\"cui-checkbox-group__hint\">Choose applicable updates.</p></div></fieldset>\n",
+  "options": {
+    "choices": [
+      {
+        "checked": true,
+        "hint": "Immediate alerts.",
+        "label": "Failed runs",
+        "value": "failures"
+      },
+      {
+        "label": "Weekly reports",
+        "value": "reports"
+      }
+    ],
+    "description": "Choose applicable updates.",
+    "id": "notification-options",
+    "layout": "inline",
+    "legend": "Notify me about",
+    "name": "notifications"
+  }
+}

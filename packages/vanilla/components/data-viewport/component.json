@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "name": "data-viewport",
+  "status": "ready",
+  "integration": {
+    "native": {"status": "adapter-required", "scope": "Native query forms exist, but viewport declaration, admitted navigation, and bounded window-request integration are not yet verified."},
+    "ports": [{"name": "viewport-intent", "direction": "output", "typeSource": "components/data-viewport/browser.d.ts", "export": "DataViewportAdapter", "purpose": "An explicit app adapter receives bounded window metadata or admitted navigation context. The app owns query execution, transport, records, and response rendering.", "required": false}]
+  },
+  "target": "native-html",
+  "category": "data-display",
+  "summary": "Bounds a stable list or table with server paging, incremental controls, or window metadata.",
+  "keywords": [
+    "list",
+    "table",
+    "viewport",
+    "window",
+    "paging"
+  ],
+  "agent": {
+    "useWhen": "A bounded result list or table needs a stable scroll owner and server-owned navigation or windowing.",
+    "avoidWhen": "The collection is short, the host cannot admit the real app-owned paging/navigation subtree, or the feature needs a component-owned query/fetch endpoint.",
+    "composeWith": [
+      "data-table",
+      "pagination",
+      "empty-state"
+    ]
+  },
+  "contract": {
+    "role": "labelled keyboard-scrollable bounded list or table",
+    "variants": [
+      "list",
+      "table",
+      "paged",
+      "incremental",
+      "windowed",
+      "compact",
+      "standard",
+      "viewport"
+    ],
+    "requiredFields": [
+      "id",
+      "label",
+      "pagination"
+    ],
+    "invariants": [
+      "Lists and tables contain 1..=500 stable unique item IDs; tables have 1..=12 columns and exact cell counts.",
+      "IDs are checked against region/items/navigation/label/scroll derived IDs; fixture content is plain text and escaped.",
+      "Host-admitted child content is accepted only through a non-serialized AdmittedChildren boundary after ordinary host admission.",
+      "Window bounds, item size, overscan, anchor, aria positions and spacer dimensions are fully validated and bounded.",
+      "The declared browser module may report bounded window intent and admitted navigation context to an explicit app adapter; it must not fetch, query, reconstruct records, or own transport. Paged/incremental no-JS usage needs real admitted navigation controls.",
+      "Native integration remains adapter-required until its checked declaration, navigation, window-request and lifecycle seams are proven. Component ports and simulators do not establish production data loading."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border",
+    "--cui-border-strong",
+    "--cui-data-viewport-background",
+    "--cui-data-viewport-border",
+    "--cui-data-viewport-focus",
+    "--cui-data-viewport-gap",
+    "--cui-data-viewport-head-background",
+    "--cui-data-viewport-head-text",
+    "--cui-data-viewport-height-compact",
+    "--cui-data-viewport-height-standard",
+    "--cui-data-viewport-item-size",
+    "--cui-data-viewport-error",
+    "--cui-data-viewport-padding",
+    "--cui-data-viewport-radius",
+    "--cui-data-viewport-row-highlight",
+    "--cui-radius-surface",
+    "--cui-surface",
+    "--cui-surface-subtle",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-data-viewport-background",
+      "role": "background",
+      "purpose": "Controls background color for  data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-border",
+      "role": "border",
+      "purpose": "Controls border color for  data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-focus",
+      "role": "focus",
+      "purpose": "Controls focus treatment for  data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-head-background",
+      "role": "background",
+      "purpose": "Controls background color for column heading data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-head-text",
+      "role": "text",
+      "purpose": "Controls text color for column heading data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-height-compact",
+      "role": "sizing",
+      "purpose": "Controls compact for height data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-height-standard",
+      "role": "sizing",
+      "purpose": "Controls visual treatment for height data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-item-size",
+      "role": "sizing",
+      "purpose": "Derived from the checked window itemSize configuration; do not independently override it, because row height must match spacer arithmetic."
+    },
+    {
+      "name": "--cui-data-viewport-error",
+      "role": "color",
+      "purpose": "Colors browser-local adapter failure feedback; it does not represent backend loading or completion."
+    },
+    {
+      "name": "--cui-data-viewport-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for data viewport."
+    },
+    {
+      "name": "--cui-data-viewport-row-highlight",
+      "role": "color",
+      "purpose": "Controls visual treatment for table row data viewport."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/data-viewport/fragment.html",
+    "styles": "components/data-viewport/styles.css",
+    "scripts": ["components/data-viewport/interaction.js"],
+    "contracts": ["components/data-viewport/browser.d.ts"]
+  },
+  "fixtures": [
+    "components/data-viewport/fixtures/paged-navigation-golden.json",
+    "components/data-viewport/fixtures/windowed-golden.json",
+    "components/data-viewport/fixtures/windowed-viewport-golden.json",
+    "components/data-viewport/fixtures/incremental-standard-golden.json"
+  ]
+}

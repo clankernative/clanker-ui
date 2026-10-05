@@ -1,0 +1,27 @@
+{
+  "expectedHtml": "<fieldset id=\"retention-period\" class=\"cui-radio-group cui-radio-group--inline\" data-cui-component=\"radio-group\" aria-describedby=\"retention-period-description\"><legend class=\"cui-radio-group__legend\">Retention period <span class=\"cui-radio-group__required\" aria-hidden=\"true\">*</span></legend><div class=\"cui-radio-group__choices\"><label class=\"cui-radio-group__choice\" for=\"retention-period-choice-1\"><input class=\"cui-radio-group__control\" type=\"radio\" id=\"retention-period-choice-1\" name=\"retention\" value=\"30\" required><span class=\"cui-radio-group__text\"><span class=\"cui-radio-group__label\">30 days</span></span></label><label class=\"cui-radio-group__choice\" for=\"retention-period-choice-2\"><input class=\"cui-radio-group__control\" type=\"radio\" id=\"retention-period-choice-2\" name=\"retention\" value=\"90\" checked required aria-describedby=\"retention-period-choice-2-hint\"><span class=\"cui-radio-group__text\"><span class=\"cui-radio-group__label\">90 days</span><span class=\"cui-radio-group__choice-hint\" id=\"retention-period-choice-2-hint\">Recommended.</span></span></label><label class=\"cui-radio-group__choice\" for=\"retention-period-choice-3\"><input class=\"cui-radio-group__control\" type=\"radio\" id=\"retention-period-choice-3\" name=\"retention\" value=\"365\" required><span class=\"cui-radio-group__text\"><span class=\"cui-radio-group__label\">One year</span></span></label></div><div class=\"cui-radio-group__description\" id=\"retention-period-description\"><p class=\"cui-radio-group__hint\">Applies to new records.</p></div></fieldset>\n",
+  "options": {
+    "choices": [
+      {
+        "label": "30 days",
+        "value": "30"
+      },
+      {
+        "hint": "Recommended.",
+        "label": "90 days",
+        "value": "90"
+      },
+      {
+        "label": "One year",
+        "value": "365"
+      }
+    ],
+    "description": "Applies to new records.",
+    "id": "retention-period",
+    "layout": "inline",
+    "legend": "Retention period",
+    "name": "retention",
+    "required": true,
+    "selected": "90"
+  }
+}

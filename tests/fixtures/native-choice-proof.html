@@ -1,0 +1,21 @@
+<section class="atlas-section" id="native-choice-proof" aria-labelledby="native-choice-title">
+  <h2 id="native-choice-title">Native choice control proof</h2>
+  <p class="section-description">Illustrative preferences. The app-owned command validates and echoes submitted values; it does not alter projects or tasks.</p>
+  <form data-command="gallery.capture_choices" id="native-choice-form" class="panel">
+    <cui-toggle id="choice-enabled" name="enabled" label="Enable illustrative notifications" checked="true" hint="Unchecked submits the Boolean false through the admitted native carrier." />
+    <cui-radio-group id="choice-density" name="density" legend="Illustrative density" selected="compact" required="true" choices='[{"value":"compact","label":"Compact"},{"value":"comfortable","label":"Comfortable","hint":"A little more space"},{"value":"unsupported","label":"Server rejected choice","hint":"Exercises app-owned domain validation"},{"value":"disabled","label":"Unavailable choice","disabled":true}]' />
+    <cui-checkbox-group id="choice-channels" name="channels" legend="Illustrative notification channels" choices='[{"value":"email","label":"Email","checked":true,"hint":"Illustrative selection"},{"value":"push","label":"Push"},{"value":"disabled","label":"Unavailable channel","disabled":true,"checked":true}]' />
+    <cui-button kind="submit" label="Check illustrative preferences" variant="primary" />
+  </form>
+  <form data-command="gallery.capture_choices" id="native-choice-readonly-form" class="panel">
+    <cui-toggle id="readonly-enabled" name="enabled" label="Fixed illustrative notifications" checked="true" disabled="true" />
+    <cui-radio-group id="readonly-density" name="density" legend="Fixed illustrative density" selected="comfortable" disabled="true" choices='[{"value":"compact","label":"Compact"},{"value":"comfortable","label":"Comfortable"}]' />
+    <cui-checkbox-group id="readonly-channels" name="channels" legend="Fixed illustrative channels" disabled="true" choices='[{"value":"email","label":"Email","checked":true},{"value":"push","label":"Push"}]' />
+    <cui-button kind="submit" label="Check fixed illustrative values" variant="secondary" />
+  </form>
+  <article class="specimen" id="native-choice-disabled"><h3>Native disabled and error presentation</h3><div class="demo-frame">
+    <cui-toggle id="choice-disabled-toggle" name="disabled-flag" label="Unavailable illustrative setting" checked="true" disabled="true" hint="This specimen is not part of a command form." />
+    <cui-radio-group id="choice-disabled-radio" name="disabled-radio" legend="Unavailable illustrative density" selected="compact" disabled="true" layout="inline" choices='[{"value":"compact","label":"Compact"},{"value":"comfortable","label":"Comfortable"}]' />
+    <cui-checkbox-group id="choice-error-checkboxes" name="error-channels" legend="Illustrative validation error" layout="inline" error="Choose an available channel." description="The app owns this error text." choices='[{"value":"email","label":"Email"},{"value":"push","label":"Push"}]' />
+  </div></article>
+</section>

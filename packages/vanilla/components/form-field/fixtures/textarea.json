@@ -1,0 +1,14 @@
+{
+  "autocomplete": "off",
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"textarea\"><label class=\"cui-form-field__label\" for=\"notes\">Notes</label><textarea class=\"cui-form-field__control cui-form-field__control--textarea\" id=\"notes\" name=\"notes\" rows=\"6\" placeholder=\"Add context\" autocomplete=\"off\" maxlength=\"255\" aria-describedby=\"notes-hint\" readonly>One &lt;two&gt;\n[[label]] &amp; {{ value }}</textarea><div class=\"cui-form-field__description\"><p class=\"cui-form-field__hint\" id=\"notes-hint\">Keep it concise.\nOne note per line.</p></div></div>\n",
+  "hint": "Keep it concise.\nOne note per line.",
+  "id": "notes",
+  "kind": "textarea",
+  "label": "Notes",
+  "maxLength": 255,
+  "name": "notes",
+  "placeholder": "Add context",
+  "readonly": true,
+  "rows": 6,
+  "value": "One <two>\n[[label]] & {{ value }}"
+}

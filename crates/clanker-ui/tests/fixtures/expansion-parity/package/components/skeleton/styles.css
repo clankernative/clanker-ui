@@ -1,0 +1,45 @@
+.cui-skeleton {
+  display: block;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+  border-radius: var(--cui-skeleton-radius, var(--cui-radius-small, 0.25rem));
+  background-color: var(--cui-skeleton-background, var(--cui-border-subtle, #cbd2df));
+}
+.cui-skeleton--width-short { inline-size: var(--cui-skeleton-short-width, 30%); }
+.cui-skeleton--width-medium { inline-size: var(--cui-skeleton-medium-width, 60%); }
+.cui-skeleton--width-full { inline-size: 100%; }
+.cui-skeleton--text.cui-skeleton--small { block-size: var(--cui-skeleton-small-text-height, 0.5rem); }
+.cui-skeleton--text.cui-skeleton--medium { block-size: var(--cui-skeleton-medium-text-height, 0.75rem); }
+.cui-skeleton--text.cui-skeleton--large { block-size: var(--cui-skeleton-large-text-height, 1.25rem); }
+.cui-skeleton--rectangle.cui-skeleton--small { block-size: var(--cui-skeleton-small-rectangle-height, 3rem); }
+.cui-skeleton--rectangle.cui-skeleton--medium { block-size: var(--cui-skeleton-medium-rectangle-height, 6rem); }
+.cui-skeleton--rectangle.cui-skeleton--large { block-size: var(--cui-skeleton-large-rectangle-height, 10rem); }
+.cui-skeleton--circle {
+  inline-size: var(--cui-skeleton-circle-size, 3rem);
+  block-size: auto;
+  aspect-ratio: 1;
+  max-inline-size: min(100%, var(--cui-skeleton-circle-size, 3rem));
+  border-radius: 50%;
+}
+.cui-skeleton--circle.cui-skeleton--small {
+  inline-size: var(--cui-skeleton-small-circle-size, 2rem);
+  max-inline-size: min(100%, var(--cui-skeleton-small-circle-size, 2rem));
+}
+.cui-skeleton--circle.cui-skeleton--large {
+  inline-size: var(--cui-skeleton-large-circle-size, 4rem);
+  max-inline-size: min(100%, var(--cui-skeleton-large-circle-size, 4rem));
+}
+.cui-skeleton--animated {
+  background-image: linear-gradient(90deg, transparent, var(--cui-skeleton-shimmer, color-mix(in srgb, var(--cui-surface-raised, #fff) 70%, transparent)), transparent);
+  background-size: 200% 100%;
+  animation: cui-skeleton-shimmer var(--cui-skeleton-animation-duration, 1.6s) linear infinite;
+}
+.cui-skeleton--static { animation: none; }
+@keyframes cui-skeleton-shimmer {
+  from { background-position-x: 100%; }
+  to { background-position-x: -100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cui-skeleton--animated { animation: none; background-position-x: 50%; }
+}

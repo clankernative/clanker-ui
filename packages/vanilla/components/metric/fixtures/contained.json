@@ -1,0 +1,6 @@
+{
+  "expectedHtml": "<article class=\"cui-metric cui-metric--contained\" data-cui-component=\"metric\"><dl class=\"cui-metric__content\"><dt class=\"cui-metric__label\">Requests</dt><dd class=\"cui-metric__value\">184</dd></dl></article>\n",
+  "label": "Requests",
+  "value": "184",
+  "appearance": "contained"
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "select-field",
+  "status": "ready",
+  "target": "native-html",
+  "category": "forms",
+  "summary": "Renders an accessible native select with checked choices, optional help, errors, and disabled state.",
+  "keywords": ["select", "form", "choice", "label", "validation"],
+  "agent": {"useWhen": "An app-owned form needs a labelled selection from a fixed, validated set of options.", "avoidWhen": "Options are dynamic or require rich content, searchable widgets, runtime scripts, or component-owned submission and validation behavior.", "composeWith": ["form-field", "filter-bar"]},
+  "contract": {"role": "native form control", "variants": ["standard", "disabled", "invalid"], "requiredFields": ["id", "name", "label", "choices"], "invariants": ["Every control has a visible label associated by for/id; hint and error descriptions use deterministic described-by wiring.", "Choices contain 1..=100 unique nonblank values; selected must match an enabled choice.", "All values and labels are escaped plain text; choice values are not HTML or raw attributes.", "required and disabled are native boolean attributes; the app owns its form, command, route, submission, and domain validation.", "No raw markup, arbitrary attributes, scripts, routes, or commands are emitted.", "The fragment contains exactly one [[attributes]], [[label]], [[control]], and [[description]] slot; expansion is exact and single-pass."]},
+  "tokens": ["--cui-select-field-gap", "--cui-select-field-measure", "--cui-select-field-label-text", "--cui-select-field-label-size", "--cui-select-field-label-weight", "--cui-select-field-required-text", "--cui-select-field-height", "--cui-select-field-padding", "--cui-select-field-border", "--cui-select-field-radius", "--cui-select-field-background", "--cui-select-field-text", "--cui-select-field-focus-width", "--cui-select-field-focus-ring", "--cui-select-field-focus-offset", "--cui-select-field-error-border", "--cui-select-field-hint-text", "--cui-select-field-error-text"],
+  "dependencies": [], "assets": {"template": "components/select-field/fragment.html", "styles": "components/select-field/styles.css", "scripts": []},
+  "fixtures": ["components/select-field/fixtures/typical.json", "components/select-field/fixtures/invalid-state.json", "components/select-field/fixtures/long-text.json", "components/select-field/fixtures/disabled.json"]
+}

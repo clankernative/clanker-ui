@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "name": "tabs",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Navigates peer sections through bookmarkable links, without client-side tab panels.",
+  "keywords": [
+    "tabs",
+    "navigation",
+    "sections"
+  ],
+  "agent": {
+    "useWhen": "Peer pages or server-owned filter states have stable URLs.",
+    "avoidWhen": "Content switches only in local browser state; use a tablist interaction then.",
+    "composeWith": [
+      "page-header"
+    ]
+  },
+  "contract": {
+    "role": "navigation",
+    "variants": [
+      "linked",
+      "current"
+    ],
+    "requiredFields": [
+      "label",
+      "items"
+    ],
+    "invariants": [
+      "Contains 2 to 32 safe destinations, exactly one current; current uses aria-current=page.",
+      "The labelled navigation contains ordinary links and owns no panel, route, or client-side state.",
+      "Native JSON hrefs accept whole named routes calls; the host checks route existence, argument types, codecs and emission provenance."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border-subtle",
+    "--cui-link",
+    "--cui-tabs-active-text",
+    "--cui-tabs-border",
+    "--cui-tabs-focus-offset",
+    "--cui-tabs-focus-ring",
+    "--cui-tabs-focus-width",
+    "--cui-tabs-gap",
+    "--cui-tabs-hover-text",
+    "--cui-tabs-indicator",
+    "--cui-tabs-padding",
+    "--cui-tabs-text",
+    "--cui-text-primary",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-tabs-active-text",
+      "role": "text",
+      "purpose": "Controls text color for active state tabs."
+    },
+    {
+      "name": "--cui-tabs-border",
+      "role": "border",
+      "purpose": "Controls border color for  tabs."
+    },
+    {
+      "name": "--cui-tabs-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for tabs."
+    },
+    {
+      "name": "--cui-tabs-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  tabs."
+    },
+    {
+      "name": "--cui-tabs-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for tabs."
+    },
+    {
+      "name": "--cui-tabs-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for tabs."
+    },
+    {
+      "name": "--cui-tabs-hover-text",
+      "role": "text",
+      "purpose": "Controls text color for hover state tabs."
+    },
+    {
+      "name": "--cui-tabs-indicator",
+      "role": "color",
+      "purpose": "Controls visual treatment for  tabs."
+    },
+    {
+      "name": "--cui-tabs-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for tabs."
+    },
+    {
+      "name": "--cui-tabs-text",
+      "role": "text",
+      "purpose": "Controls text color for  tabs."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/tabs/fragment.html",
+    "styles": "components/tabs/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/tabs/fixtures/typical-golden.json",
+    "components/tabs/fixtures/escaped-localized-golden.json"
+  ]
+}

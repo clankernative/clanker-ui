@@ -1,7 +1,127 @@
 //! Typed selection and safe rendering for the package's closed SVG icon catalog.
 
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
+
+/// Versioned human-readable metadata for the package's closed icon geometry map.
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct IconCatalog {
+    pub schema_version: u32,
+    pub categories: Vec<IconCategory>,
+    pub icons: Vec<IconDefinition>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct IconDefinition {
+    pub name: String,
+    pub label: String,
+    pub category: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct IconCategory {
+    pub name: String,
+    pub label: String,
+}
+
+impl IconCatalog {
+    /// Parses and validates metadata against the existing closed geometry map.
+    pub fn parse(bytes: &[u8], geometries: &BTreeMap<String, String>) -> Result<Self, String> {
+        let catalog: Self = serde_json::from_slice(bytes).map_err(|error| error.to_string())?;
+        catalog.validate(geometries)?;
+        Ok(catalog)
+    }
+
+    pub fn validate(&self, geometries: &BTreeMap<String, String>) -> Result<(), String> {
+        if self.schema_version != 1 {
+            return Err(format!(
+                "unsupported icon catalog schema version: {}",
+                self.schema_version
+            ));
+        }
+        let mut categories = BTreeSet::new();
+        for category in &self.categories {
+            if !valid_icon_identifier(&category.name) || !categories.insert(category.name.as_str())
+            {
+                return Err(format!(
+                    "invalid or duplicate icon category: {}",
+                    category.name
+                ));
+            }
+            if category.label.trim().is_empty() {
+                return Err(format!(
+                    "icon category label must not be blank: {}",
+                    category.name
+                ));
+            }
+        }
+
+        let mut names = BTreeSet::new();
+        let mut previous: Option<&str> = None;
+        for icon in &self.icons {
+            if !valid_icon_identifier(&icon.name) || !names.insert(icon.name.as_str()) {
+                return Err(format!("invalid or duplicate icon name: {}", icon.name));
+            }
+            if previous.is_some_and(|name| name >= icon.name.as_str()) {
+                return Err("icon metadata names must be sorted".into());
+            }
+            previous = Some(&icon.name);
+            if icon.label.trim().is_empty() {
+                return Err(format!("icon label must not be blank: {}", icon.name));
+            }
+            if !categories.contains(icon.category.as_str()) {
+                return Err(format!(
+                    "unknown category for icon {}: {}",
+                    icon.name, icon.category
+                ));
+            }
+        }
+
+        let geometry_names: BTreeSet<_> = geometries.keys().map(String::as_str).collect();
+        if names != geometry_names {
+            let missing: Vec<_> = geometry_names.difference(&names).copied().collect();
+            let extra: Vec<_> = names.difference(&geometry_names).copied().collect();
+            return Err(format!(
+                "icon metadata does not match geometry names (missing: {missing:?}, extra: {extra:?})"
+            ));
+        }
+        Ok(())
+    }
+
+    /// Returns every definition whose name, label, or category contains `query`.
+    pub fn find(&self, query: &str) -> Vec<&IconDefinition> {
+        let query = query.to_lowercase();
+        self.icons
+            .iter()
+            .filter(|icon| {
+                icon.name.to_lowercase().contains(&query)
+                    || icon.label.to_lowercase().contains(&query)
+                    || icon.category.to_lowercase().contains(&query)
+            })
+            .collect()
+    }
+
+    pub fn lookup(&self, name: &str) -> Option<&IconDefinition> {
+        self.icons.iter().find(|icon| icon.name == name)
+    }
+
+    pub fn category_label(&self, name: &str) -> Option<&str> {
+        self.categories
+            .iter()
+            .find(|category| category.name == name)
+            .map(|category| category.label.as_str())
+    }
+}
+
+fn valid_icon_identifier(value: &str) -> bool {
+    !value.is_empty()
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'-')
+}
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
@@ -116,13 +236,10 @@ pub fn render(
             None => " aria-hidden=\"true\"".into(),
         }
     );
-    let output = fragment
-        .replace("[[attributes]]", &attributes)
-        .replace("[[geometry]]", geometry);
-    if output.contains("[[") {
-        return Err("icon fragment contains an unsupported slot".into());
-    }
-    Ok(output)
+    crate::fragment::fill(
+        fragment,
+        &[("[[attributes]]", &attributes), ("[[geometry]]", geometry)],
+    )
 }
 
 #[cfg(test)]
@@ -143,6 +260,38 @@ mod tests {
 
     const FRAGMENT: &str = "<svg [[attributes]]>[[geometry]]</svg>";
 
+    fn package_geometries() -> BTreeMap<String, String> {
+        serde_json::from_str(include_str!("../../../packages/vanilla/icons.json")).unwrap()
+    }
+
+    #[test]
+    fn package_icon_metadata_validates_and_supports_search_and_lookup() {
+        let catalog = IconCatalog::parse(
+            include_bytes!("../../../packages/vanilla/icon-catalog.json"),
+            &package_geometries(),
+        )
+        .unwrap();
+        assert_eq!(catalog.icons.len(), 100);
+        assert_eq!(catalog.categories.len(), 7);
+        assert_eq!(catalog.lookup("cpu").unwrap().label, "Processor");
+        assert_eq!(catalog.category_label("system-tools"), Some("System"));
+        assert_eq!(catalog.find("ARROW").len(), 4);
+        assert_eq!(catalog.find("communication").len(), 11);
+    }
+
+    #[test]
+    fn icon_catalog_rejects_duplicate_names_unknown_categories_and_geometry_mismatch() {
+        let geometry = BTreeMap::from([("alpha".to_string(), "<path/>".to_string())]);
+        let invalid = [
+            r#"{"schemaVersion":1,"categories":[{"name":"actions","label":"Actions"}],"icons":[{"name":"alpha","label":"Alpha","category":"actions"},{"name":"alpha","label":"Again","category":"actions"}]}"#,
+            r#"{"schemaVersion":1,"categories":[{"name":"actions","label":"Actions"}],"icons":[{"name":"alpha","label":"Alpha","category":"unknown"}]}"#,
+            r#"{"schemaVersion":1,"categories":[{"name":"actions","label":"Actions"}],"icons":[{"name":"beta","label":"Beta","category":"actions"}]}"#,
+        ];
+        for json in invalid {
+            assert!(IconCatalog::parse(json.as_bytes(), &geometry).is_err());
+        }
+    }
+
     #[test]
     fn decorative_is_hidden_and_labeled_icon_is_an_image() {
         let decorative = render(&icon(), FRAGMENT, &icons()).unwrap();
@@ -156,6 +305,17 @@ mod tests {
         assert!(labeled.contains("role=\"img\""));
         assert!(labeled.contains("aria-label=\"Status &amp; &lt;check&gt;&quot;\""));
         assert!(!labeled.contains("aria-hidden"));
+    }
+
+    #[test]
+    fn slot_looking_labels_cannot_inject_geometry_into_attributes() {
+        let instance = IconInstance {
+            label: Some("[[geometry]] & <check>".into()),
+            ..icon()
+        };
+        let rendered = render(&instance, FRAGMENT, &icons()).unwrap();
+        assert!(rendered.contains("aria-label=\"[[geometry]] &amp; &lt;check&gt;\""));
+        assert_eq!(rendered.matches("<path").count(), 1);
     }
 
     #[test]

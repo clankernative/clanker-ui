@@ -1,0 +1,6 @@
+{
+  "variant": "vertical",
+  "orientation": "vertical",
+  "alignment": "center",
+  "expectedHtml": "<div class=\"cui-divider cui-divider--vertical\" data-cui-component=\"divider\" role=\"separator\" aria-orientation=\"vertical\"></div>\n"
+}

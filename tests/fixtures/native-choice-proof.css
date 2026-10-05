@@ -1,0 +1,28 @@
+/* Consumer-owned extension of the gallery's existing dark palette. */
+.gallery-shell {
+  --cui-checkbox-group-text: var(--gallery-text);
+  --cui-checkbox-group-border: var(--gallery-control-border);
+  --cui-checkbox-group-checked-border: var(--gallery-accent);
+  --cui-checkbox-group-checked-background: var(--gallery-panel);
+  --cui-checkbox-group-accent: var(--gallery-accent);
+  --cui-checkbox-group-focus-ring: var(--gallery-accent);
+  --cui-checkbox-group-hint-text: var(--gallery-muted);
+  --cui-checkbox-group-error-text: #f0a3a0;
+  --cui-radio-group-text: var(--gallery-text);
+  --cui-radio-group-border: var(--gallery-control-border);
+  --cui-radio-group-checked-border: var(--gallery-accent);
+  --cui-radio-group-checked-background: var(--gallery-panel);
+  --cui-radio-group-accent: var(--gallery-accent);
+  --cui-radio-group-focus-ring: var(--gallery-accent);
+  --cui-radio-group-hint-text: var(--gallery-muted);
+  --cui-radio-group-error-text: #f0a3a0;
+  --cui-toggle-text: var(--gallery-text);
+  --cui-toggle-track: var(--gallery-control-border);
+  --cui-toggle-track-border: var(--gallery-subtle);
+  --cui-toggle-checked-background: var(--gallery-accent);
+  --cui-toggle-focus-ring: var(--gallery-accent);
+  --cui-toggle-hint-text: var(--gallery-muted);
+  --cui-toggle-error-text: #f0a3a0;
+}
+#native-choice-form, #native-choice-readonly-form { display: grid; gap: 1.5rem; padding: 1.25rem; margin-block: 1rem; }
+#native-choice-form > .cui-button, #native-choice-readonly-form > .cui-button { justify-self: start; }

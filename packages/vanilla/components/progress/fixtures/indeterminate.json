@@ -1,0 +1,8 @@
+{
+  "detail": "This usually completes in under a minute. You can leave this page while preparation continues.",
+  "expectedHtml": "<div class=\"cui-progress cui-progress--warning cui-progress--compact cui-progress--indeterminate\" data-cui-component=\"progress\" data-cui-tone=\"warning\" data-cui-size=\"compact\" data-cui-state=\"indeterminate\"><div class=\"cui-progress__header\"><span class=\"cui-progress__label\">Preparing the production release and checking required approvals</span></div><progress class=\"cui-progress__track\" aria-label=\"Preparing the production release and checking required approvals\"></progress><p class=\"cui-progress__detail\">This usually completes in under a minute. You can leave this page while preparation continues.</p></div>\n",
+  "label": "Preparing the production release and checking required approvals",
+  "size": "compact",
+  "state": "indeterminate",
+  "tone": "warning"
+}

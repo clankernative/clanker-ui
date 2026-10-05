@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "name": "pagination",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Renders safe linked pagination with explicit current, gap, and disabled previous/next semantics.",
+  "keywords": [
+    "navigation",
+    "pages",
+    "results",
+    "pagination"
+  ],
+  "agent": {
+    "useWhen": "A server-owned result set spans stable navigable destinations and needs page, current, previous, next, and gap controls.",
+    "avoidWhen": "More results load into one continuous list or page destinations are not safe hrefs; this component does not own routes or result state.",
+    "composeWith": [
+      "data-table"
+    ]
+  },
+  "contract": {
+    "role": "labelled pagination navigation landmark",
+    "variants": [
+      "standard",
+      "outlined",
+      "compact"
+    ],
+    "requiredFields": [
+      "items"
+    ],
+    "invariants": [
+      "Exactly one item has kind=current and no href; it receives aria-current=page.",
+      "Page items require safe hrefs; previous and next may be links or disabled nonlinks; previous/next links emit rel=prev/next.",
+      "Gaps are noninteractive and aria-hidden; hrefs follow the closed safe destination policy.",
+      "Labels and href attributes are escaped; no routes, commands, arbitrary HTML, or scripts are emitted.",
+      "The fragment contains exactly one [[attributes]], [[label]], and [[items]] slot; expansion is exact and single-pass."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-accent-subtle",
+    "--cui-border",
+    "--cui-link",
+    "--cui-pagination-background",
+    "--cui-pagination-border",
+    "--cui-pagination-container-radius",
+    "--cui-pagination-current-background",
+    "--cui-pagination-current-border",
+    "--cui-pagination-current-text",
+    "--cui-pagination-focus-ring",
+    "--cui-pagination-font-size",
+    "--cui-pagination-gap",
+    "--cui-pagination-gap-text",
+    "--cui-pagination-hover-background",
+    "--cui-pagination-hover-text",
+    "--cui-pagination-padding",
+    "--cui-pagination-radius",
+    "--cui-pagination-size",
+    "--cui-pagination-text",
+    "--cui-radius-control",
+    "--cui-space-1",
+    "--cui-surface",
+    "--cui-surface-hover",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-pagination-background",
+      "role": "background",
+      "purpose": "Controls background color for  pagination."
+    },
+    {
+      "name": "--cui-pagination-border",
+      "role": "border",
+      "purpose": "Controls border color for  pagination."
+    },
+    {
+      "name": "--cui-pagination-container-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for pagination."
+    },
+    {
+      "name": "--cui-pagination-current-background",
+      "role": "background",
+      "purpose": "Controls background color for current pagination."
+    },
+    {
+      "name": "--cui-pagination-current-border",
+      "role": "border",
+      "purpose": "Controls border color for current pagination."
+    },
+    {
+      "name": "--cui-pagination-current-text",
+      "role": "text",
+      "purpose": "Controls text color for current pagination."
+    },
+    {
+      "name": "--cui-pagination-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  pagination."
+    },
+    {
+      "name": "--cui-pagination-font-size",
+      "role": "typography",
+      "purpose": "Controls font size for pagination."
+    },
+    {
+      "name": "--cui-pagination-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for pagination."
+    },
+    {
+      "name": "--cui-pagination-gap-text",
+      "role": "spacing",
+      "purpose": "Controls text color for spacing between elements pagination."
+    },
+    {
+      "name": "--cui-pagination-hover-background",
+      "role": "background",
+      "purpose": "Controls background color for hover state pagination."
+    },
+    {
+      "name": "--cui-pagination-hover-text",
+      "role": "text",
+      "purpose": "Controls text color for hover state pagination."
+    },
+    {
+      "name": "--cui-pagination-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for pagination."
+    },
+    {
+      "name": "--cui-pagination-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for pagination."
+    },
+    {
+      "name": "--cui-pagination-size",
+      "role": "sizing",
+      "purpose": "Controls size for pagination."
+    },
+    {
+      "name": "--cui-pagination-text",
+      "role": "text",
+      "purpose": "Controls text color for  pagination."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/pagination/fragment.html",
+    "styles": "components/pagination/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/pagination/fixtures/typical.json",
+    "components/pagination/fixtures/many-pages.json",
+    "components/pagination/fixtures/compact-disabled.json"
+  ],
+  "templateAuthoring": {
+    "schemaVersion": 1,
+    "rootTag": "cui-pagination",
+    "elements": [
+      {
+        "tag": "cui-pagination",
+        "form": "paired",
+        "allowedParents": [],
+        "attributes": [
+          {
+            "name": "label",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Must be nonblank plain text."
+            ]
+          },
+          {
+            "name": "variant",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "One of standard, outlined, or compact; defaults to standard."
+            ]
+          }
+        ],
+        "content": "helpers",
+        "allowedChildren": [
+          "cui-page"
+        ],
+        "controlFlow": [
+          "for",
+          "if",
+          "elif",
+          "else",
+          "endif",
+          "endfor"
+        ],
+        "rules": [
+          "Content consists only of self-closing page helpers and supported template control flow."
+        ]
+      },
+      {
+        "tag": "cui-page",
+        "form": "self-closing",
+        "allowedParents": [
+          "cui-pagination"
+        ],
+        "attributes": [
+          {
+            "name": "kind",
+            "required": true,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "One of previous, page, current, next, or gap."
+            ]
+          },
+          {
+            "name": "label",
+            "required": true,
+            "valueForms": [
+              "literal",
+              "string-field"
+            ],
+            "rules": [
+              "A literal or one whole checked string field; must be nonblank plain text."
+            ]
+          },
+          {
+            "name": "href",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "named-route"
+            ],
+            "rules": [
+              "Use a safe internal literal or one whole named route call when this item is enabled and navigable."
+            ]
+          },
+          {
+            "name": "disabled",
+            "required": false,
+            "valueForms": [
+              "literal"
+            ],
+            "rules": [
+              "Boolean literal true or false; current items cannot be disabled. Disabled navigable items must not have href; use disabled previous/next items for unavailable adjacent pages."
+            ]
+          },
+          {
+            "name": "current",
+            "required": false,
+            "valueForms": [
+              "literal",
+              "boolean-field"
+            ],
+            "rules": [
+              "Only valid for kind=current; literal true or false, or one whole checked boolean field. Current items cannot have href or be disabled."
+            ]
+          }
+        ],
+        "content": "none",
+        "allowedChildren": [],
+        "controlFlow": [],
+        "rules": [
+          "Current and gap items cannot have href; gaps are noninteractive.",
+          "Enabled previous, page, and next items require href; disabled navigable items must not have href.",
+          "kind=current emits aria-current only when current is omitted, true, or a bound Bool evaluates true; false renders an unmarked span. The final navigation must contain exactly one marked current item."
+        ]
+      }
+    ],
+    "rules": [
+      "At least one current helper declaration is required lexically by expansion; ensure the final host-rendered output has exactly one current item.",
+      "Host route registration, route argument/type checks, destination safety, binding types, and runtime page/range admission remain host-owned; package metadata does not establish these guarantees.",
+      "Labels and destinations are emitted as escaped text and attributes."
+    ],
+    "examples": [
+      {
+        "name": "customer-pages",
+        "summary": "Previous and next destinations are conditional while a current page is marked explicitly.",
+        "template": "<cui-pagination label=\"Customer pages\">\n  {% if has_previous %}<cui-page kind=\"previous\" label=\"Previous\" href=\"{{ routes.customers_page(page=previous_page) }}\" />{% else %}<cui-page kind=\"previous\" label=\"Previous\" disabled=\"true\" />{% endif %}\n  <cui-page kind=\"current\" label=\"{{ page_number }}\" current=\"true\" />\n  {% if has_next %}<cui-page kind=\"next\" label=\"Next\" href=\"{{ routes.customers_page(page=next_page) }}\" />{% endif %}\n</cui-pagination>",
+        "requirements": [
+          "Register customers_page route accepting page if using the navigation links.",
+          "App provides has_previous and has_next as Bool fields, previous_page and next_page with the route's declared page argument type, and page_number as a formatted string label.",
+          "The app/host must ensure the rendered navigation has exactly one current page item and valid page ranges."
+        ]
+      }
+    ]
+  }
+}

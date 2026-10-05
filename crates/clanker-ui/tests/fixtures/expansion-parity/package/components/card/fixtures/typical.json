@@ -1,0 +1,5 @@
+{
+  "options": { "title": "Summary", "subtitle": "Recent activity" },
+  "children": { "body": "<p>Three deployments completed.</p>", "actions": "<a href=\"/deployments\">View deployments</a>" },
+  "expectedHtml": "<div class=\"cui-card cui-card--standard\" data-cui-component=\"card\"><header class=\"cui-card__header\"><h2 class=\"cui-card__title\">Summary</h2><p class=\"cui-card__subtitle\">Recent activity</p></header><div class=\"cui-card__body\"><p>Three deployments completed.</p></div><footer class=\"cui-card__actions\"><a href=\"/deployments\">View deployments</a></footer></div>\n"
+}

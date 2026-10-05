@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "name": "segmented-control",
+  "status": "ready",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Presents a compact set of mutually exclusive linked views or filters.",
+  "keywords": [
+    "segments",
+    "filter",
+    "view switcher"
+  ],
+  "agent": {
+    "useWhen": "A compact set of links switches a resource list, filter, or presentation mode.",
+    "avoidWhen": "Content panels switch in place as tabs or options submit one form value.",
+    "composeWith": [
+      "badge",
+      "page-header"
+    ]
+  },
+  "contract": {
+    "role": "navigation",
+    "variants": [
+      "link",
+      "current",
+      "disabled"
+    ],
+    "requiredFields": [
+      "label",
+      "items"
+    ],
+    "invariants": [
+      "Two to eight items contain exactly one current item. Link requires a safe href; current and disabled forbid href.",
+      "Current uses aria-current=page and disabled content is noninteractive with aria-disabled=true.",
+      "equalWidth defaults to false. Native JSON hrefs accept whole named routes calls; the host checks route existence, argument types, codecs and emission provenance."
+    ]
+  },
+  "tokens": [
+    "--cui-border-strong",
+    "--cui-border-subtle",
+    "--cui-segmented-control-active-background",
+    "--cui-segmented-control-active-border",
+    "--cui-segmented-control-active-text",
+    "--cui-segmented-control-background",
+    "--cui-segmented-control-border",
+    "--cui-segmented-control-disabled-opacity",
+    "--cui-segmented-control-disabled-text",
+    "--cui-segmented-control-focus-offset",
+    "--cui-segmented-control-focus-ring",
+    "--cui-segmented-control-focus-width",
+    "--cui-segmented-control-gap",
+    "--cui-segmented-control-hover-background",
+    "--cui-segmented-control-padding",
+    "--cui-segmented-control-radius",
+    "--cui-segmented-control-text",
+    "--cui-surface-hover",
+    "--cui-surface-raised",
+    "--cui-surface-sunken",
+    "--cui-text-muted",
+    "--cui-text-primary",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-segmented-control-active-background",
+      "role": "background",
+      "purpose": "Controls background color for active state segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-active-border",
+      "role": "border",
+      "purpose": "Controls border color for active state segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-active-text",
+      "role": "text",
+      "purpose": "Controls text color for active state segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-background",
+      "role": "background",
+      "purpose": "Controls background color for  segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-border",
+      "role": "border",
+      "purpose": "Controls border color for  segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-disabled-opacity",
+      "role": "opacity",
+      "purpose": "Controls opacity for segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-disabled-text",
+      "role": "text",
+      "purpose": "Controls text color for disabled state segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-focus-offset",
+      "role": "focus",
+      "purpose": "Controls focus outline offset for segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-focus-ring",
+      "role": "focus",
+      "purpose": "Controls focus ring color for  segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-focus-width",
+      "role": "focus",
+      "purpose": "Controls focus outline width for segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-hover-background",
+      "role": "background",
+      "purpose": "Controls background color for hover state segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-padding",
+      "role": "spacing",
+      "purpose": "Controls inner padding for segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-radius",
+      "role": "radius",
+      "purpose": "Controls corner radius for segmented control."
+    },
+    {
+      "name": "--cui-segmented-control-text",
+      "role": "text",
+      "purpose": "Controls text color for  segmented control."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/segmented-control/fragment.html",
+    "styles": "components/segmented-control/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/segmented-control/fixtures/typical-golden.json",
+    "components/segmented-control/fixtures/equal-width-golden.json",
+    "components/segmented-control/fixtures/escaped-localized-golden.json"
+  ]
+}

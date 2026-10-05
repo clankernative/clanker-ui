@@ -1,0 +1,31 @@
+{
+  "expectedHtml": "<nav class=\"cui-pagination cui-pagination--standard\" data-cui-component=\"pagination\" aria-label=\"Project pages\"><ol class=\"cui-pagination__list\"><li class=\"cui-pagination__item cui-pagination__item--previous\"><a class=\"cui-pagination__link\" href=\"/projects?page=1\" rel=\"prev\">Previous</a></li><li class=\"cui-pagination__item cui-pagination__item--page\"><a class=\"cui-pagination__link\" href=\"/projects?page=1\">Page &lt;1&gt;</a></li><li class=\"cui-pagination__item cui-pagination__item--current\"><span class=\"cui-pagination__current\" aria-current=\"page\">2</span></li><li class=\"cui-pagination__item cui-pagination__item--page\"><a class=\"cui-pagination__link\" href=\"/projects?page=3\">3</a></li><li class=\"cui-pagination__item cui-pagination__item--next\"><a class=\"cui-pagination__link\" href=\"/projects?page=3\" rel=\"next\">Next</a></li></ol></nav>\n",
+  "items": [
+    {
+      "href": "/projects?page=1",
+      "kind": "previous",
+      "label": "Previous"
+    },
+    {
+      "href": "/projects?page=1",
+      "kind": "page",
+      "label": "Page <1>"
+    },
+    {
+      "kind": "current",
+      "label": "2"
+    },
+    {
+      "href": "/projects?page=3",
+      "kind": "page",
+      "label": "3"
+    },
+    {
+      "href": "/projects?page=3",
+      "kind": "next",
+      "label": "Next"
+    }
+  ],
+  "label": "Project pages",
+  "variant": "standard"
+}

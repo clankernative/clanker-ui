@@ -1,0 +1,16 @@
+{
+  "expectedHtml": "<div class=\"cui-confirm-dialog cui-confirm-dialog--danger\" data-cui-component=\"confirm-dialog\"><button class=\"cui-button cui-button--danger cui-button--standard\" type=\"submit\" form=\"remove-connection-form\" data-cui-confirm-trigger name=\"operation\" value=\"remove\">Remove connection</button><dialog class=\"cui-confirm-dialog__dialog\" id=\"remove-connection\" aria-labelledby=\"remove-connection-title\" aria-describedby=\"remove-connection-body\" data-cui-confirm-dialog><div class=\"cui-confirm-dialog__surface\"><span class=\"cui-confirm-dialog__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--large\" data-cui-component=\"icon\" data-cui-icon=\"alert\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n<path d=\"M12 8v4.5\"></path>\n<path d=\"M12 16h.01\"></path></svg></span><div class=\"cui-confirm-dialog__content\"><h3 class=\"cui-confirm-dialog__title\" id=\"remove-connection-title\">Remove connection?</h3><p class=\"cui-confirm-dialog__body\" id=\"remove-connection-body\">Scheduled imports will stop immediately.</p></div><div class=\"cui-confirm-dialog__actions\"><button class=\"cui-button cui-button--secondary cui-button--standard\" type=\"button\" data-cui-confirm-cancel>Keep connection</button><button class=\"cui-button cui-button--danger cui-button--standard\" type=\"button\" data-cui-confirm-accept>Yes, remove</button></div></div></dialog></div>\n",
+  "options": {
+    "body": "Scheduled imports will stop immediately.",
+    "cancelLabel": "Keep connection",
+    "confirmLabel": "Yes, remove",
+    "formId": "remove-connection-form",
+    "headingLevel": "h3",
+    "id": "remove-connection",
+    "submitName": "operation",
+    "submitValue": "remove",
+    "title": "Remove connection?",
+    "tone": "danger",
+    "triggerLabel": "Remove connection"
+  }
+}

@@ -1,0 +1,50 @@
+.cui-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cui-page-header-gap, 1.25rem);
+  min-inline-size: 0;
+  padding-block-end: var(--cui-page-header-padding, 1.5rem);
+  border-block-end: var(--cui-border-width, 1px) solid var(--cui-page-header-border, var(--cui-border-subtle, #d0d5dd));
+}
+
+.cui-page-header__content {
+  flex: 1 1 24rem;
+  display: grid;
+  gap: var(--cui-page-header-content-gap, 0.5rem);
+  min-inline-size: 0;
+  max-inline-size: var(--cui-page-header-measure, 70ch);
+}
+
+.cui-page-header__title {
+  margin: 0;
+  color: var(--cui-page-header-title-text, var(--cui-text, #17202a));
+  font-size: clamp(
+    var(--cui-page-header-title-min-size, 2rem),
+    1.25rem + 2vw,
+    var(--cui-page-header-title-max-size, 3rem)
+  );
+  font-weight: var(--cui-page-header-title-weight, var(--cui-font-weight-bold, 700));
+  line-height: var(--cui-page-header-title-line-height, 1.1);
+  letter-spacing: var(--cui-page-header-title-tracking, -0.025em);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.cui-page-header__description {
+  margin: 0;
+  color: var(--cui-page-header-description-text, var(--cui-text-secondary, #475467));
+  font-size: var(--cui-page-header-description-size, var(--cui-font-size-large, 1.125rem));
+  line-height: var(--cui-line-height-body, 1.5);
+  overflow-wrap: anywhere;
+  max-inline-size: 70ch;
+}
+
+.cui-page-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cui-page-header-content-gap, .5rem);
+  min-inline-size: 0;
+}

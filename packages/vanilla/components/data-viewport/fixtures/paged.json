@@ -1,0 +1,12 @@
+{
+  "id": "recent-activity",
+  "label": "Recent activity",
+  "height": "compact",
+  "mode": "paged",
+  "pagination": "Previous · Page 1 · Next",
+  "columns": ["Event", "Owner", "Status"],
+  "rows": [
+    {"id": "activity-1", "cells": ["Quarterly review", "Mina Chen", "Open"]},
+    {"id": "activity-2", "cells": ["Access request", "Sam Rivera", "Complete"], "highlighted": true}
+  ]
+}

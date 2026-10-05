@@ -1,0 +1,1 @@
+{"name":"notifications","id":"notification-options","legend":"Notify me about","description":"Choose applicable updates.","layout":"inline","choices":[{"value":"failures","label":"Failed runs","hint":"Immediate alerts.","checked":true},{"value":"reports","label":"Weekly reports"}]}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "name": "page-header",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Introduces a page with one H1, supporting description, and admitted app-owned actions.",
+  "keywords": ["page-heading", "heading", "title", "description"],
+  "agent": {
+    "useWhen": "A page needs its primary H1, optional supporting context, and a responsive actions slot.",
+    "avoidWhen": "A nested card, dialog, or section needs a local heading rather than the page's H1.",
+    "composeWith": ["breadcrumbs", "button", "tabs"]
+  },
+  "contract": {
+    "role": "page-heading",
+    "variants": ["title-only", "described", "actions"],
+    "requiredFields": ["title"],
+    "invariants": [
+      "The title is always rendered as the page's H1; a nonblank description is optional supporting text.",
+      "Title and description are plain text, HTML-escaped, nonblank when supplied, and contain no control characters.",
+      "Title and description are text inputs. The optional actions child slot takes app-authored markup admitted by the host, never a data-bound or deserialized raw-HTML property.",
+      "The static header owns no IDs, events, commands, routes, client state, or JavaScript lifecycle.",
+      "The adapter fragment contains exactly one [[page-header]] slot; the renderer expands it as a single-pass substitution."
+    ]
+  },
+  "tokens": [
+    "--cui-page-header-border",
+    "--cui-page-header-content-gap",
+    "--cui-page-header-description-size",
+    "--cui-page-header-description-text",
+    "--cui-page-header-gap",
+    "--cui-page-header-measure",
+    "--cui-page-header-padding",
+    "--cui-page-header-title-line-height",
+    "--cui-page-header-title-max-size",
+    "--cui-page-header-title-min-size",
+    "--cui-page-header-title-text",
+    "--cui-page-header-title-tracking",
+    "--cui-page-header-title-weight"
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/page-header/fragment.html",
+    "styles": "components/page-header/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/page-header/fixtures/title-only.json",
+    "components/page-header/fixtures/described.json",
+    "components/page-header/fixtures/escaped.json",
+    "components/page-header/fixtures/long-copy.json",
+    "components/page-header/fixtures/actions.json"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "children": {
+    "controls": "<input type=\"search\" aria-label=\"Search\">"
+  },
+  "expectedHtml": "<div class=\"cui-filter-bar\" data-cui-component=\"filter-bar\" role=\"group\" aria-label=\"Search results\"><div class=\"cui-filter-bar__controls\"><input type=\"search\" aria-label=\"Search\"></div><p class=\"cui-filter-bar__summary\" role=\"status\">Showing all matching records across every region and business unit</p></div>\n",
+  "options": {
+    "label": "Search results",
+    "resultSummary": "Showing all matching records across every region and business unit"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "label": "Current state",
+  "tone": "neutral",
+  "expectedHtml": "<span class=\"cui-status-indicator cui-status-indicator--neutral cui-status-indicator--small\" data-cui-component=\"status-indicator\"><span class=\"cui-status-indicator__dot\" aria-hidden=\"true\"></span><span class=\"cui-status-indicator__label\">Current state</span></span>\n"
+}

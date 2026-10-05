@@ -1,0 +1,14 @@
+{
+  "options": {
+    "label": "Recent changes",
+    "entries": [
+      {
+        "title": "Deployment failed",
+        "occurredAt": "2025-01-15T11:00:00Z",
+        "timeLabel": "11:00 AM",
+        "tone": "danger"
+      }
+    ]
+  },
+  "expectedHtml": "<div class=\"cui-activity-feed\" data-cui-component=\"activity-feed\"><ol class=\"cui-activity-feed__list\" aria-label=\"Recent changes\"><li class=\"cui-activity-feed__item\"><span class=\"cui-activity-feed__marker cui-activity-feed__tone--danger\" aria-hidden=\"true\"></span><div class=\"cui-activity-feed__content\"><div class=\"cui-activity-feed__title\">Deployment failed</div><div class=\"cui-activity-feed__meta\"><time class=\"cui-activity-feed__time\" datetime=\"2025-01-15T11:00:00Z\">11:00 AM</time></div></div></li></ol></div>\n"
+}

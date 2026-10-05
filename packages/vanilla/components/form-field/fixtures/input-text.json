@@ -1,0 +1,10 @@
+{
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"title\">Title</label><input class=\"cui-form-field__control\" id=\"title\" name=\"title\" type=\"text\" value=\"Quarterly review\" placeholder=\"Add a title\" maxlength=\"255\"></div>\n",
+  "id": "title",
+  "inputType": "text",
+  "label": "Title",
+  "maxLength": 255,
+  "name": "title",
+  "placeholder": "Add a title",
+  "value": "Quarterly review"
+}

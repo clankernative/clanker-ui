@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "tokens": [
+    {
+      "name": "--cui-accent",
+      "role": "text",
+      "purpose": "Defines the shared accent color."
+    },
+    {
+      "name": "--cui-accent-active",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared accent role."
+    },
+    {
+      "name": "--cui-accent-hover",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared accent role."
+    },
+    {
+      "name": "--cui-accent-subtle",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared accent role."
+    },
+    {
+      "name": "--cui-accent-text",
+      "role": "text",
+      "purpose": "Defines text color for the shared accent role."
+    },
+    {
+      "name": "--cui-backdrop",
+      "role": "background",
+      "purpose": "Defines the shared overlay backdrop."
+    },
+    {
+      "name": "--cui-border",
+      "role": "border",
+      "purpose": "Defines the shared border color."
+    },
+    {
+      "name": "--cui-border-strong",
+      "role": "border",
+      "purpose": "Defines visual setting for the shared border role."
+    },
+    {
+      "name": "--cui-border-subtle",
+      "role": "border",
+      "purpose": "Defines visual setting for the shared border role."
+    },
+    {
+      "name": "--cui-border-width",
+      "role": "sizing",
+      "purpose": "Defines width for the shared border role."
+    },
+    {
+      "name": "--cui-control-height",
+      "role": "sizing",
+      "purpose": "Defines height for the shared control role."
+    },
+    {
+      "name": "--cui-control-height-compact",
+      "role": "sizing",
+      "purpose": "Defines visual setting for the shared control height role."
+    },
+    {
+      "name": "--cui-danger",
+      "role": "text",
+      "purpose": "Defines the shared visual setting."
+    },
+    {
+      "name": "--cui-danger-hover",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared danger role."
+    },
+    {
+      "name": "--cui-danger-surface",
+      "role": "background",
+      "purpose": "Defines surface color for the shared danger role."
+    },
+    {
+      "name": "--cui-danger-text",
+      "role": "text",
+      "purpose": "Defines text color for the shared danger role."
+    },
+    {
+      "name": "--cui-focus",
+      "role": "focus",
+      "purpose": "Defines the shared focus treatment."
+    },
+    {
+      "name": "--cui-focus-ring",
+      "role": "focus",
+      "purpose": "Defines focus ring color for the shared focus role."
+    },
+    {
+      "name": "--cui-font-family-body",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared font family role."
+    },
+    {
+      "name": "--cui-font-family-mono",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared font family role."
+    },
+    {
+      "name": "--cui-font-mono",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared font role."
+    },
+    {
+      "name": "--cui-font-size-large",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared font size role."
+    },
+    {
+      "name": "--cui-font-size-small",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared font size role."
+    },
+    {
+      "name": "--cui-font-weight-bold",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared font weight role."
+    },
+    {
+      "name": "--cui-font-weight-medium",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared font weight role."
+    },
+    {
+      "name": "--cui-heading-text",
+      "role": "text",
+      "purpose": "Foreground color for structural headings when an app does not provide a local heading override.",
+      "semantic": "heading"
+    },
+    {
+      "name": "--cui-icon-small",
+      "role": "color",
+      "purpose": "Defines visual setting for the shared icon role."
+    },
+    {
+      "name": "--cui-info",
+      "role": "text",
+      "purpose": "Defines the shared visual setting."
+    },
+    {
+      "name": "--cui-info-surface",
+      "role": "background",
+      "purpose": "Defines surface color for the shared info role."
+    },
+    {
+      "name": "--cui-info-text",
+      "role": "text",
+      "purpose": "Defines text color for the shared info role."
+    },
+    {
+      "name": "--cui-letter-spacing-snug",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared letter spacing role."
+    },
+    {
+      "name": "--cui-line-height-body",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared line height role."
+    },
+    {
+      "name": "--cui-line-height-tight",
+      "role": "typography",
+      "purpose": "Defines visual setting for the shared line height role."
+    },
+    {
+      "name": "--cui-link",
+      "role": "text",
+      "purpose": "Defines the shared visual setting."
+    },
+    {
+      "name": "--cui-link-hover",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared link role."
+    },
+    {
+      "name": "--cui-measure-compact",
+      "role": "sizing",
+      "purpose": "Defines visual setting for the shared measure role."
+    },
+    {
+      "name": "--cui-motion",
+      "role": "motion",
+      "purpose": "Defines the shared motion."
+    },
+    {
+      "name": "--cui-motion-distance-medium",
+      "role": "motion",
+      "purpose": "Defines visual setting for the shared motion distance role."
+    },
+    {
+      "name": "--cui-motion-distance-small",
+      "role": "motion",
+      "purpose": "Defines visual setting for the shared motion distance role."
+    },
+    {
+      "name": "--cui-motion-duration",
+      "role": "motion",
+      "purpose": "Defines animation duration for the shared motion role."
+    },
+    {
+      "name": "--cui-motion-duration-fast",
+      "role": "motion",
+      "purpose": "Defines visual setting for the shared motion duration role."
+    },
+    {
+      "name": "--cui-motion-duration-slow",
+      "role": "motion",
+      "purpose": "Defines visual setting for the shared motion duration role."
+    },
+    {
+      "name": "--cui-motion-scale-enter",
+      "role": "motion",
+      "purpose": "Defines visual setting for the shared motion scale role."
+    },
+    {
+      "name": "--cui-motion-transition",
+      "role": "motion",
+      "purpose": "Defines visual setting for the shared motion role."
+    },
+    {
+      "name": "--cui-muted",
+      "role": "text",
+      "purpose": "Defines the shared visual setting."
+    },
+    {
+      "name": "--cui-radius",
+      "role": "radius",
+      "purpose": "Defines the shared corner radius."
+    },
+    {
+      "name": "--cui-radius-control",
+      "role": "radius",
+      "purpose": "Defines visual setting for the shared radius role."
+    },
+    {
+      "name": "--cui-radius-pill",
+      "role": "radius",
+      "purpose": "Defines visual setting for the shared radius role."
+    },
+    {
+      "name": "--cui-radius-small",
+      "role": "radius",
+      "purpose": "Defines visual setting for the shared radius role."
+    },
+    {
+      "name": "--cui-radius-surface",
+      "role": "radius",
+      "purpose": "Defines surface color for the shared radius role."
+    },
+    {
+      "name": "--cui-selected-surface",
+      "role": "background",
+      "purpose": "Defines surface color for the shared selected role."
+    },
+    {
+      "name": "--cui-selection-background",
+      "role": "background",
+      "purpose": "Defines background color for the shared selection role."
+    },
+    {
+      "name": "--cui-selection-text",
+      "role": "text",
+      "purpose": "Defines text color for the shared selection role."
+    },
+    {
+      "name": "--cui-shadow",
+      "role": "shadow",
+      "purpose": "Defines the shared shadow."
+    },
+    {
+      "name": "--cui-shadow-control",
+      "role": "shadow",
+      "purpose": "Defines visual setting for the shared shadow role."
+    },
+    {
+      "name": "--cui-shadow-overlay",
+      "role": "shadow",
+      "purpose": "Defines visual setting for the shared shadow role."
+    },
+    {
+      "name": "--cui-shadow-raised",
+      "role": "shadow",
+      "purpose": "Defines visual setting for the shared shadow role."
+    },
+    {
+      "name": "--cui-space-1",
+      "role": "spacing",
+      "purpose": "Defines visual setting for the shared space role."
+    },
+    {
+      "name": "--cui-space-2",
+      "role": "spacing",
+      "purpose": "Defines visual setting for the shared space role."
+    },
+    {
+      "name": "--cui-space-3",
+      "role": "spacing",
+      "purpose": "Defines visual setting for the shared space role."
+    },
+    {
+      "name": "--cui-space-4",
+      "role": "spacing",
+      "purpose": "Defines visual setting for the shared space role."
+    },
+    {
+      "name": "--cui-space-5",
+      "role": "spacing",
+      "purpose": "Defines visual setting for the shared space role."
+    },
+    {
+      "name": "--cui-space-6",
+      "role": "spacing",
+      "purpose": "Defines visual setting for the shared space role."
+    },
+    {
+      "name": "--cui-success",
+      "role": "text",
+      "purpose": "Defines the shared visual setting."
+    },
+    {
+      "name": "--cui-success-text",
+      "role": "text",
+      "purpose": "Defines text color for the shared success role."
+    },
+    {
+      "name": "--cui-surface",
+      "role": "background",
+      "purpose": "Defines the shared surface color."
+    },
+    {
+      "name": "--cui-surface-hover",
+      "role": "background",
+      "purpose": "Defines visual setting for the shared surface role."
+    },
+    {
+      "name": "--cui-surface-overlay",
+      "role": "background",
+      "purpose": "Defines visual setting for the shared surface role."
+    },
+    {
+      "name": "--cui-surface-raised",
+      "role": "background",
+      "purpose": "Defines visual setting for the shared surface role."
+    },
+    {
+      "name": "--cui-surface-selected",
+      "role": "background",
+      "purpose": "Defines visual setting for the shared surface role."
+    },
+    {
+      "name": "--cui-surface-subtle",
+      "role": "background",
+      "purpose": "Background color for subtly distinguished surfaces, such as table column headers."
+    },
+    {
+      "name": "--cui-surface-sunken",
+      "role": "background",
+      "purpose": "Defines visual setting for the shared surface role."
+    },
+    {
+      "name": "--cui-text",
+      "role": "text",
+      "purpose": "Primary foreground color for ordinary component content."
+    },
+    {
+      "name": "--cui-text-muted",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared text role."
+    },
+    {
+      "name": "--cui-text-primary",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared text role."
+    },
+    {
+      "name": "--cui-text-secondary",
+      "role": "text",
+      "purpose": "Defines visual setting for the shared text role."
+    },
+    {
+      "name": "--cui-theme-accent",
+      "role": "text",
+      "purpose": "Defines the accent color used for the shared theme theme role."
+    },
+    {
+      "name": "--cui-theme-accent-active",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme accent role."
+    },
+    {
+      "name": "--cui-theme-accent-hover",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme accent role."
+    },
+    {
+      "name": "--cui-theme-accent-subtle",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme accent role."
+    },
+    {
+      "name": "--cui-theme-accent-text",
+      "role": "text",
+      "purpose": "Defines the text color used for the shared theme accent role."
+    },
+    {
+      "name": "--cui-theme-border-strong",
+      "role": "border",
+      "purpose": "Defines the visual setting used for the shared theme border role."
+    },
+    {
+      "name": "--cui-theme-border-subtle",
+      "role": "border",
+      "purpose": "Defines the visual setting used for the shared theme border role."
+    },
+    {
+      "name": "--cui-theme-danger-border",
+      "role": "border",
+      "purpose": "Defines the border color used for the shared theme danger role."
+    },
+    {
+      "name": "--cui-theme-danger-surface",
+      "role": "background",
+      "purpose": "Defines the surface color used for the shared theme danger role."
+    },
+    {
+      "name": "--cui-theme-danger-text",
+      "role": "text",
+      "purpose": "Defines the text color used for the shared theme danger role."
+    },
+    {
+      "name": "--cui-theme-focus-ring",
+      "role": "focus",
+      "purpose": "Defines the focus ring color used for the shared theme focus role."
+    },
+    {
+      "name": "--cui-theme-info-border",
+      "role": "border",
+      "purpose": "Defines the border color used for the shared theme info role."
+    },
+    {
+      "name": "--cui-theme-info-surface",
+      "role": "background",
+      "purpose": "Defines the surface color used for the shared theme info role."
+    },
+    {
+      "name": "--cui-theme-info-text",
+      "role": "text",
+      "purpose": "Defines the text color used for the shared theme info role."
+    },
+    {
+      "name": "--cui-theme-link",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme theme role."
+    },
+    {
+      "name": "--cui-theme-link-hover",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme link role."
+    },
+    {
+      "name": "--cui-theme-selection-background",
+      "role": "background",
+      "purpose": "Defines the background color used for the shared theme selection role."
+    },
+    {
+      "name": "--cui-theme-selection-text",
+      "role": "text",
+      "purpose": "Defines the text color used for the shared theme selection role."
+    },
+    {
+      "name": "--cui-theme-shadow-control",
+      "role": "shadow",
+      "purpose": "Defines the visual setting used for the shared theme shadow role."
+    },
+    {
+      "name": "--cui-theme-shadow-overlay",
+      "role": "shadow",
+      "purpose": "Defines the visual setting used for the shared theme shadow role."
+    },
+    {
+      "name": "--cui-theme-shadow-raised",
+      "role": "shadow",
+      "purpose": "Defines the visual setting used for the shared theme shadow role."
+    },
+    {
+      "name": "--cui-theme-success-border",
+      "role": "border",
+      "purpose": "Defines the border color used for the shared theme success role."
+    },
+    {
+      "name": "--cui-theme-success-surface",
+      "role": "background",
+      "purpose": "Defines the surface color used for the shared theme success role."
+    },
+    {
+      "name": "--cui-theme-success-text",
+      "role": "text",
+      "purpose": "Defines the text color used for the shared theme success role."
+    },
+    {
+      "name": "--cui-theme-surface-canvas",
+      "role": "background",
+      "purpose": "Defines the visual setting used for the shared theme surface role."
+    },
+    {
+      "name": "--cui-theme-surface-hover",
+      "role": "background",
+      "purpose": "Defines the visual setting used for the shared theme surface role."
+    },
+    {
+      "name": "--cui-theme-surface-overlay",
+      "role": "background",
+      "purpose": "Defines the visual setting used for the shared theme surface role."
+    },
+    {
+      "name": "--cui-theme-surface-raised",
+      "role": "background",
+      "purpose": "Defines the visual setting used for the shared theme surface role."
+    },
+    {
+      "name": "--cui-theme-surface-selected",
+      "role": "background",
+      "purpose": "Defines the visual setting used for the shared theme surface role."
+    },
+    {
+      "name": "--cui-theme-surface-sunken",
+      "role": "background",
+      "purpose": "Defines the visual setting used for the shared theme surface role."
+    },
+    {
+      "name": "--cui-theme-text-inverse",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme text role."
+    },
+    {
+      "name": "--cui-theme-text-muted",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme text role."
+    },
+    {
+      "name": "--cui-theme-text-primary",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme text role."
+    },
+    {
+      "name": "--cui-theme-text-secondary",
+      "role": "text",
+      "purpose": "Defines the visual setting used for the shared theme text role."
+    },
+    {
+      "name": "--cui-theme-warning-border",
+      "role": "border",
+      "purpose": "Defines the border color used for the shared theme warning role."
+    },
+    {
+      "name": "--cui-theme-warning-surface",
+      "role": "background",
+      "purpose": "Defines the surface color used for the shared theme warning role."
+    },
+    {
+      "name": "--cui-theme-warning-text",
+      "role": "text",
+      "purpose": "Defines the text color used for the shared theme warning role."
+    },
+    {
+      "name": "--cui-warning",
+      "role": "text",
+      "purpose": "Defines the shared visual setting."
+    },
+    {
+      "name": "--cui-warning-text",
+      "role": "text",
+      "purpose": "Defines text color for the shared warning role."
+    }
+  ]
+}

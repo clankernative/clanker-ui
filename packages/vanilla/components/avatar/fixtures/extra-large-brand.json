@@ -1,0 +1,7 @@
+{
+  "initials": "JL",
+  "label": "Jordan Lee",
+  "size": "extra-large",
+  "tone": "brand",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--extra-large cui-avatar--brand\" role=\"img\" aria-label=\"Jordan Lee\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">JL</span></span>\n"
+}

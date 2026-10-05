@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "tabs",
+  "status": "draft",
+  "target": "native-html",
+  "category": "navigation",
+  "summary": "Navigates peer sections through bookmarkable links, without client-side tab panels.",
+  "keywords": ["tabs", "navigation", "sections"],
+  "agent": { "useWhen": "Peer pages or server-owned filter states have stable URLs.", "avoidWhen": "Content switches only in local browser state; use a tablist interaction then.", "composeWith": ["page-header"] },
+  "contract": { "role": "navigation", "variants": ["linked", "current"], "requiredFields": ["label", "items"], "invariants": ["Contains 2 to 32 safe destinations, exactly one current; current uses aria-current=page.", "The labelled navigation contains ordinary links and owns no panel, route, or client-side state.", "Draft pending Native host admission and browser proof."] },
+  "tokens": ["--cui-tabs-active-text", "--cui-tabs-border", "--cui-tabs-focus-offset", "--cui-tabs-focus-ring", "--cui-tabs-focus-width", "--cui-tabs-gap", "--cui-tabs-hover-text", "--cui-tabs-indicator", "--cui-tabs-padding", "--cui-tabs-text"],
+  "dependencies": [],
+  "assets": { "template": "components/tabs/fragment.html", "styles": "components/tabs/styles.css", "scripts": [] },
+  "fixtures": ["components/tabs/fixtures/typical-golden.json", "components/tabs/fixtures/escaped-localized-golden.json"]
+}

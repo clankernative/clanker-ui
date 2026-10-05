@@ -197,37 +197,25 @@ mod tests {
     use crate::directory_sink::DirectorySink;
     use crate::local::LocalPackage;
 
+    fn copy_package_tree(from: &Path, to: &Path) {
+        fs::create_dir_all(to).unwrap();
+        for entry in fs::read_dir(from).unwrap() {
+            let entry = entry.unwrap();
+            let destination = to.join(entry.file_name());
+            if entry.file_type().unwrap().is_dir() {
+                copy_package_tree(&entry.path(), &destination);
+            } else {
+                fs::copy(entry.path(), destination).unwrap();
+            }
+        }
+    }
+
     #[test]
     fn lock_detects_source_changes_and_needs_explicit_update() {
         let root = tempfile::tempdir().unwrap();
         let package = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/vanilla");
         let local = root.path().join("local");
-        fs::create_dir_all(local.join("components/button/fixtures")).unwrap();
-        fs::create_dir_all(local.join("theme")).unwrap();
-        for path in [
-            "ui-package.json",
-            "icons.json",
-            "theme/default.css",
-            "components/button/fragment.html",
-            "components/button/component.json",
-            "components/button/template.html",
-            "components/button/styles.css",
-            "components/button/fixtures/primary.json",
-            "components/button/fixtures/secondary.json",
-            "components/button/fixtures/danger.json",
-            "components/button/fixtures/quiet.json",
-            "components/button/fixtures/escaped.json",
-            "components/icon/component.json",
-            "components/icon/fragment.html",
-            "components/icon/styles.css",
-            "components/icon/fixtures/small-decorative.json",
-            "components/icon/fixtures/medium-labeled.json",
-            "components/icon/fixtures/large-decorative.json",
-        ] {
-            let to = local.join(path);
-            fs::create_dir_all(to.parent().unwrap()).unwrap();
-            fs::copy(package.join(path), to).unwrap();
-        }
+        copy_package_tree(&package, &local);
         let app = Application {
             source: LocalPackage,
             output: DirectorySink,

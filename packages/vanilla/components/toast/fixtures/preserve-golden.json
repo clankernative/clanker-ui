@@ -1,0 +1,35 @@
+{
+  "expectedHtml": "<div class=\"cui-toast-region cui-toast-region--bottom-end\" role=\"region\" aria-label=\"Notifications\" data-cui-component=\"toast\" data-cui-history-policy=\"preserve\"><article class=\"cui-toast cui-toast--info\" role=\"status\" data-cui-toast><span class=\"cui-toast__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"info\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n<path d=\"M12 11v5M12 8h.01\"></path></svg></span><div class=\"cui-toast__content\"><p class=\"cui-toast__title\">info notice</p><p class=\"cui-toast__body\">A representative notification.</p></div><button class=\"cui-toast__dismiss\" type=\"button\" aria-label=\"Dismiss notification\" data-cui-toast-dismiss><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></button></article><article class=\"cui-toast cui-toast--success\" role=\"status\" data-cui-toast><span class=\"cui-toast__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"check\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m20 6-11 11-5-5\"></path></svg></span><div class=\"cui-toast__content\"><p class=\"cui-toast__title\">success notice</p><p class=\"cui-toast__body\">A representative notification.</p></div><button class=\"cui-toast__dismiss\" type=\"button\" aria-label=\"Dismiss notification\" data-cui-toast-dismiss><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></button></article><article class=\"cui-toast cui-toast--warning\" role=\"status\" data-cui-toast><span class=\"cui-toast__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"alert\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n<path d=\"M12 8v4.5\"></path>\n<path d=\"M12 16h.01\"></path></svg></span><div class=\"cui-toast__content\"><p class=\"cui-toast__title\">warning notice</p><p class=\"cui-toast__body\">A representative notification.</p></div><button class=\"cui-toast__dismiss\" type=\"button\" aria-label=\"Dismiss notification\" data-cui-toast-dismiss><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></button></article><article class=\"cui-toast cui-toast--danger\" role=\"alert\" data-cui-toast><span class=\"cui-toast__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"alert\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n<path d=\"M12 8v4.5\"></path>\n<path d=\"M12 16h.01\"></path></svg></span><div class=\"cui-toast__content\"><p class=\"cui-toast__title\">danger notice</p><p class=\"cui-toast__body\">A representative notification.</p></div><button class=\"cui-toast__dismiss\" type=\"button\" aria-label=\"Dismiss notification\" data-cui-toast-dismiss><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></button></article><article class=\"cui-toast cui-toast--progress\" role=\"status\" data-cui-toast><span class=\"cui-toast__icon\" aria-hidden=\"true\"><svg class=\"cui-icon cui-icon--medium\" data-cui-component=\"icon\" data-cui-icon=\"restore\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"M3 12a9 9 0 1 0 3-6.7M3 4v5h5\"></path></svg></span><div class=\"cui-toast__content\"><p class=\"cui-toast__title\">progress notice</p><p class=\"cui-toast__body\">A representative notification.</p></div><button class=\"cui-toast__dismiss\" type=\"button\" aria-label=\"Dismiss notification\" data-cui-toast-dismiss><svg class=\"cui-icon cui-icon--small\" data-cui-component=\"icon\" data-cui-icon=\"close\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" focusable=\"false\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"></path></svg></button></article></div>\n",
+  "options": {
+    "historyPolicy": "preserve",
+    "label": "Notifications",
+    "messages": [
+      {
+        "body": "A representative notification.",
+        "title": "info notice",
+        "tone": "info"
+      },
+      {
+        "body": "A representative notification.",
+        "title": "success notice",
+        "tone": "success"
+      },
+      {
+        "body": "A representative notification.",
+        "title": "warning notice",
+        "tone": "warning"
+      },
+      {
+        "body": "A representative notification.",
+        "title": "danger notice",
+        "tone": "danger"
+      },
+      {
+        "body": "A representative notification.",
+        "title": "progress notice",
+        "tone": "progress"
+      }
+    ],
+    "position": "bottom-end"
+  }
+}

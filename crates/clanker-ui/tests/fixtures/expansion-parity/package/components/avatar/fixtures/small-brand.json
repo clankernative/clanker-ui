@@ -1,0 +1,7 @@
+{
+  "initials": "AB",
+  "label": "Avery Brown",
+  "size": "small",
+  "tone": "brand",
+  "expectedHtml": "<span class=\"cui-avatar cui-avatar--small cui-avatar--brand\" role=\"img\" aria-label=\"Avery Brown\" data-cui-component=\"avatar\"><span class=\"cui-avatar__initials\" aria-hidden=\"true\">AB</span></span>\n"
+}

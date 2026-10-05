@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "name": "divider",
+  "status": "ready",
+  "target": "native-html",
+  "category": "layout",
+  "summary": "Separates related content with an optional aligned label and horizontal or vertical orientation.",
+  "keywords": [
+    "divider",
+    "separator",
+    "rule"
+  ],
+  "agent": {
+    "useWhen": "A visible rule materially clarifies content grouping or sequence.",
+    "avoidWhen": "Spacing alone communicates the relationship.",
+    "composeWith": []
+  },
+  "contract": {
+    "role": "separator",
+    "variants": [
+      "horizontal",
+      "vertical"
+    ],
+    "requiredFields": [],
+    "invariants": [
+      "Configuration supplies orientation, alignment and optional literal label; there is no server-data binding, browser-local state or event output.",
+      "The app owns grouped content and composition; server patches replace the separator as ordinary markup without mount or unmount hooks.",
+      "Dividers are noninteractive and expose role separator with their horizontal or vertical aria-orientation.",
+      "Horizontal dividers may have a nonblank text label aligned start, center, or end; vertical dividers cannot have labels. Label alignment is start, center, or end, defaulting to center.",
+      "Unlabelled horizontal dividers render as one uninterrupted rule.",
+      "Label text is HTML-encoded in both visible content and the accessible name.",
+      "The adapter fragment contains exactly one [[attributes]] slot and one [[label]] slot. The target adapter expands both slots using the typed catalog renderer."
+    ]
+  },
+  "tokens": [
+    "--cui-border-subtle",
+    "--cui-border-width",
+    "--cui-divider-gap",
+    "--cui-divider-label-edge",
+    "--cui-divider-label-size",
+    "--cui-divider-line",
+    "--cui-divider-text",
+    "--cui-divider-vertical-min-height",
+    "--cui-font-size-small",
+    "--cui-font-weight-medium",
+    "--cui-measure-compact",
+    "--cui-space-3",
+    "--cui-space-5",
+    "--cui-space-6",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-divider-gap",
+      "role": "spacing",
+      "purpose": "Controls spacing between elements for divider."
+    },
+    {
+      "name": "--cui-divider-label-edge",
+      "role": "color",
+      "purpose": "Controls visual treatment for label divider."
+    },
+    {
+      "name": "--cui-divider-label-size",
+      "role": "sizing",
+      "purpose": "Controls size for divider."
+    },
+    {
+      "name": "--cui-divider-line",
+      "role": "color",
+      "purpose": "Controls line height for divider."
+    },
+    {
+      "name": "--cui-divider-text",
+      "role": "text",
+      "purpose": "Controls text color for  divider."
+    },
+    {
+      "name": "--cui-divider-vertical-min-height",
+      "role": "sizing",
+      "purpose": "Controls minimum height for divider."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/divider/fragment.html",
+    "styles": "components/divider/styles.css",
+    "scripts": []
+  },
+  "fixtures": [
+    "components/divider/fixtures/typical.json",
+    "components/divider/fixtures/long-content.json",
+    "components/divider/fixtures/unlabelled.json",
+    "components/divider/fixtures/vertical.json"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "expectedHtml": "<div class=\"cui-form-field\" data-cui-component=\"form-field\" data-cui-kind=\"input\"><label class=\"cui-form-field__label\" for=\"start-date\">Start date</label><input class=\"cui-form-field__control\" id=\"start-date\" name=\"startDate\" type=\"date\" value=\"2025-04-17\"></div>\n",
+  "id": "start-date",
+  "inputType": "date",
+  "label": "Start date",
+  "name": "startDate",
+  "value": "2025-04-17"
+}

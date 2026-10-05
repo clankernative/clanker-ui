@@ -171,15 +171,15 @@ fn render_concrete(
     } else {
         &instance.label
     });
-    let html = fragment
-        .replace("[[open_tag]]", &format!("<{tag} {attrs}>"))
-        .replace("[[close_tag]]", &format!("</{close}>"))
-        .replace("[[icon]]", &icon)
-        .replace("[[label]]", &label);
-    if html.contains("[[") {
-        return Err("button fragment contains an unsupported slot".into());
-    }
-    Ok(html)
+    catalog_core::fragment::fill(
+        fragment,
+        &[
+            ("[[open_tag]]", &format!("<{tag} {attrs}>")),
+            ("[[close_tag]]", &format!("</{close}>")),
+            ("[[icon]]", &icon),
+            ("[[label]]", &label),
+        ],
+    )
 }
 
 fn digest(bytes: &[u8]) -> String {
