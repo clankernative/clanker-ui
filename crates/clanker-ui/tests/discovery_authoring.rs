@@ -21,7 +21,7 @@ fn invoke(args: &[&str]) -> Value {
 
 #[test]
 fn discovery_forwards_component_owned_grammar_without_editable_html_properties() {
-    let lock = root().join("examples/button-app/clanker-ui.lock.json");
+    let lock = root().join("examples/button-app/ui.lock.json");
     let lock = lock.to_str().unwrap();
     let exported = invoke(&["properties", "--lock", lock]);
     for name in [
@@ -170,7 +170,7 @@ fn rich_customer_example_renders_empty_and_composed_cells_with_escaped_app_data(
     fs::write(ui.join("app.css"), "").unwrap();
     fs::write(ui.join("pages/index.html"), &example.template).unwrap();
     let scene = temp.path().join("scene.json");
-    let lock = root().join("examples/button-app/clanker-ui.lock.json");
+    let lock = root().join("examples/button-app/ui.lock.json");
     for customers in [
         json!([]),
         json!([

@@ -36,7 +36,7 @@ fn assemble_errors_keep_the_protocol_envelope_and_cli_commands_are_explicit() {
 #[test]
 fn an_agent_can_discover_and_verify_static_components() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/button-app");
-    let lock = root.join("clanker-ui.lock.json");
+    let lock = root.join("ui.lock.json");
     let lock = lock.to_str().unwrap();
     let (ok, listed) = run(&["list", "--lock", lock]);
     assert!(ok, "{listed}");
@@ -153,7 +153,7 @@ fn an_agent_can_discover_and_verify_static_components() {
 #[test]
 fn an_agent_can_find_verify_preview_and_stage_a_button() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/button-app");
-    let lock = root.join("clanker-ui.lock.json");
+    let lock = root.join("ui.lock.json");
     let temp = tempfile::tempdir().unwrap();
     let out = temp.path().join("staged");
     let lock = lock.to_str().unwrap();

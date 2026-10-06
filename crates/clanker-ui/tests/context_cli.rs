@@ -28,8 +28,8 @@ fn capabilities_are_offline_and_honest_about_host_ownership() {
 
 #[test]
 fn context_is_locked_bounded_and_keeps_remaining_checks_explicit() {
-    let lock = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../examples/button-app/clanker-ui.lock.json");
+    let lock =
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/button-app/ui.lock.json");
     let lock = lock.to_str().unwrap();
     let (ok, context) = invoke(&["context", "badge", "--lock", lock]);
     assert!(ok, "{context}");

@@ -69,13 +69,9 @@ pub struct Resource {
     pub kind: String,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct LockedInput {
-    pub path: String,
-    pub digest: String,
-    pub bytes: usize,
-}
+pub use crate::lock::LockedInput;
+pub(crate) use crate::lock::{input_manifest_digest, package_inputs};
+use crate::lock::{safe_package_relative, PackageLock};
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -105,124 +101,30 @@ struct NativePackage {
     inputs: Vec<LockedInput>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-struct NativeLock {
-    schema_version: u32,
-    provider: String,
-    package: NativeLockPackage,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-struct NativeLockPackage {
-    name: String,
-    version: String,
-    path: String,
-    digest: String,
-    inputs: Vec<LockedInput>,
-}
-
 fn digest(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
-}
-
-pub(crate) fn input_manifest_digest(inputs: &[LockedInput]) -> String {
-    let mut hasher = Sha256::new();
-    for input in inputs {
-        hasher.update(input.path.as_bytes());
-        hasher.update([0]);
-        hasher.update(input.bytes.to_string().as_bytes());
-        hasher.update([0]);
-        hasher.update(input.digest.as_bytes());
-        hasher.update(b"\n");
-    }
-    format!("sha256:{:x}", hasher.finalize())
-}
-
-pub(crate) fn package_inputs(
-    assets: &BTreeMap<String, Vec<u8>>,
-) -> Result<Vec<LockedInput>, String> {
-    if assets.len() > MAX_INPUTS || assets.values().map(Vec::len).sum::<usize>() > MAX_TOTAL {
-        return Err("package declared input closure exceeds assembly limits".into());
-    }
-    let mut folded_paths = BTreeSet::new();
-    assets
-        .iter()
-        .map(|(path, bytes)| {
-            if !safe_manifest_path(path) || bytes.len() > MAX_FILE {
-                return Err(format!("unsafe or oversized package input: {path}"));
-            }
-            if !folded_paths.insert(path.to_ascii_lowercase()) {
-                return Err(format!("case-folded package input path collision: {path}"));
-            }
-            Ok(LockedInput {
-                path: path.clone(),
-                digest: digest(bytes),
-                bytes: bytes.len(),
-            })
-        })
-        .collect()
 }
 
 fn safe_manifest_path(value: &str) -> bool {
     safe_relative(value) && value.len() <= 512 && value.split('/').count() <= 8
 }
 
-fn safe_package_relative(value: &str) -> bool {
-    if value.is_empty() || value.contains('\\') || Path::new(value).is_absolute() {
-        return false;
-    }
-    let parts = value.split('/').collect::<Vec<_>>();
-    let parents = parts.iter().take_while(|part| **part == "..").count();
-    (1..=2).contains(&parents)
-        && parents < parts.len()
-        && parts[parents..].iter().all(|part| {
-            !part.is_empty()
-                && *part != "."
-                && *part != ".."
-                && part
-                    .bytes()
-                    .all(|byte| byte.is_ascii_alphanumeric() || b"-_.".contains(&byte))
-        })
+/// Author the same canonical lock as `lock`; refreshes require explicit consent.
+pub fn native_lock(lock_path: &Path, package_path: &str) -> Result<serde_json::Value, String> {
+    native_lock_with_update(lock_path, package_path, false)
 }
 
-/// Emit an app-side provider-neutral lock from one explicitly selected package.
-pub fn native_lock(lock_path: &Path, package_path: &str) -> Result<serde_json::Value, String> {
-    if !safe_package_relative(package_path) {
-        return Err("package path must be relative to the native lock file".into());
-    }
-    let parent = lock_path
-        .parent()
-        .ok_or("native lock needs a parent directory")?;
-    if !parent.is_dir() {
-        return Err(format!("lock parent does not exist: {}", parent.display()));
-    }
-    let mut loaded = crate::local::LocalPackage.load(&parent.join(package_path))?;
-    crate::local::LocalPackage.complete_declared_inputs(&mut loaded)?;
-    let inputs = package_inputs(&loaded.assets)?;
-    let lock = NativeLock {
-        schema_version: 1,
-        provider: "clanker-ui.native".into(),
-        package: NativeLockPackage {
-            name: loaded.catalog.package.name,
-            version: loaded.catalog.package.version,
-            path: package_path.into(),
-            digest: input_manifest_digest(&inputs),
-            inputs,
-        },
+pub fn native_lock_with_update(
+    lock_path: &Path,
+    package_path: &str,
+    update: bool,
+) -> Result<serde_json::Value, String> {
+    let app = Application {
+        source: LocalPackage,
+        output: DirectorySink,
     };
-    let bytes = serde_json::to_vec_pretty(&lock).map_err(|error| error.to_string())?;
-    if bytes.len() > MAX_FILE {
-        return Err("native lock exceeds 1 MiB".into());
-    }
-    let temp = tempfile::Builder::new()
-        .prefix(".clanker-ui-native-lock-")
-        .tempfile_in(parent)
-        .map_err(|error| error.to_string())?;
-    fs::write(temp.path(), bytes).map_err(|error| error.to_string())?;
-    temp.persist(lock_path).map_err(|error| error.to_string())?;
-    serde_json::to_value(lock).map_err(|error| error.to_string())
+    serde_json::to_value(app.lock(lock_path, package_path, update)?)
+        .map_err(|error| error.to_string())
 }
 
 pub(crate) fn current_host_target() -> Result<&'static str, String> {
@@ -353,7 +255,7 @@ fn validate_captured_ui_lock(ui: &Path, package: &NativePackage) -> Result<(), S
         Err(error) => Err(format!("{}: {error}", path.display())),
         Ok(_) => {
             let bytes = checked_ui_file(ui, "ui.lock.json")?;
-            let lock: NativeLock = serde_json::from_slice(&bytes)
+            let lock = PackageLock::parse(&bytes)
                 .map_err(|error| format!("{}: {error}", path.display()))?;
             let locked = lock.package;
             if lock.schema_version != 1

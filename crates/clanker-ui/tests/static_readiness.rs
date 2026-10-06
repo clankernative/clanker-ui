@@ -100,13 +100,9 @@ fn write_lock(package_path: &Path, lock_path: &Path) {
     let package = LocalPackage.load(package_path).unwrap();
     fs::write(
         lock_path,
-        serde_json::to_vec_pretty(&json!({
-            "schemaVersion": 1,
-            "package": package.catalog.package.name,
-            "version": package.catalog.package.version,
-            "path": "package",
-            "digest": package.digest,
-        }))
+        serde_json::to_vec_pretty(
+            &clanker_ui::application::PackageLock::from_package(&package, "package").unwrap(),
+        )
         .unwrap(),
     )
     .unwrap();
@@ -170,7 +166,7 @@ fn cli_verify_rejects_stale_properties_and_modified_golden_html() {
     let (_stale_temp, stale_package) = package_copy();
     write_fresh_property_catalog(&stale_package);
     fs::write(stale_package.join("property-catalog.json"), b"{}\n").unwrap();
-    let stale_lock = stale_package.parent().unwrap().join("clanker-ui.lock.json");
+    let stale_lock = stale_package.parent().unwrap().join("ui.lock.json");
     write_lock(&stale_package, &stale_lock);
     let stale = cli_verify(&stale_lock);
     assert!(!stale.status.success());
@@ -182,10 +178,7 @@ fn cli_verify_rejects_stale_properties_and_modified_golden_html() {
     let mut fixture: Value = serde_json::from_slice(&fs::read(&fixture_path).unwrap()).unwrap();
     fixture["expectedHtml"] = json!("<p>intentionally incorrect</p>");
     fs::write(&fixture_path, serde_json::to_vec_pretty(&fixture).unwrap()).unwrap();
-    let golden_lock = golden_package
-        .parent()
-        .unwrap()
-        .join("clanker-ui.lock.json");
+    let golden_lock = golden_package.parent().unwrap().join("ui.lock.json");
     write_lock(&golden_package, &golden_lock);
     let golden = cli_verify(&golden_lock);
     assert!(!golden.status.success());
