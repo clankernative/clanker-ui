@@ -104,6 +104,19 @@ The static declarations accept literal text or whole checked page-field bindings
 
 Badge requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, `danger`, and `running`, and can suppress or override its decorative icon with `show-icon` or a closed-catalog `icon` name. Divider defaults to a horizontal, unlabelled separator; it accepts a `start`, `center`, or `end` label alignment and rejects labels on vertical separators. Status Indicator requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, and `danger`, plus optional `detail`, `size` (`small` or `large`), and `pulse`; it is static, not an ARIA live region. Each component is noninteractive, checks unknown attributes, and uses app-overridable `--cui-*` tokens. A real GoLinks build in `../golinks-clanker-ui-button` exercises all three. This historical local proof used an empty sample list, not production data.
 
+## GoLinks consumer proof
+
+The actual GoLinks app's create/edit forms adopt Button and Form Field with an
+app-owned theme and explicit `ui/ui.lock.json`. Disposable local checks cover
+creation, editing, duplicate rejection with retained drafts, corrected retry,
+escaping, keyboard focus, and desktop/mobile rendering. The native HTTP form
+test is `tests/consumers/golinks-native-forms.test.mjs`; it requires an explicit
+loopback origin and private development-session cookie file, and skips otherwise.
+It does not execute browser JavaScript. Screenshots in
+`docs/screenshots/golinks-first-consumer-*.png` show synthetic local data, not a
+production deployment. These checks do not establish full isolated-build CI
+qualification or published distribution.
+
 ## Form Field, Tag, Alert, and Progress
 
 The `0.3.0` package adds four Native controls. The local GoLinks proof has a **UI Demo** navigation entry at `/ui-demo`, covering all twenty components, long copy, field errors and readonly values, tag counts and links, alert recovery, and measured/unknown progress. Sample task and error states are labeled illustrative; its create form uses the real app-owned command in the local instance. The dashboard and detail forms also use Form Field, including checked `link.url` and `link.description` value bindings. No generated component markup is pasted into the app. The historical `0.3.0` browser proof used a disposable local instance with two test links, not production data.
