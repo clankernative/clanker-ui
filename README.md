@@ -40,11 +40,11 @@ Standalone `expand` returns symbolic templates, typed binding metadata, a resour
 
 `expand` is a read-only local proof. It emits ABI-2 expressions and uses the same canonical Native locked-input manifest digest as the other commands; this does not establish host admission. App integration uses `assemble`, not `expand`.
 
-The earlier local adapter override uses `DAY2_UI_ADAPTER_PIN_JSON` and is separate from the provider-neutral executable pin. Portable CLI release pins are not published; never substitute a placeholder checksum or treat either local override as portable distribution.
+Local Platform execution uses the provider-neutral `DAY2_UI_PROVIDER_PIN_JSON` operator override. Verified installed bytes do not grant execution approval, and no hosted release is published by these setup commands. Never substitute a placeholder checksum or treat an app lock as executable authority.
 
 ### Provider-neutral Native assembly
 
-Protocol v1 uses MiniJinja 2.12.0 and binding ABI 2. Native captures private package/UI inputs, invokes `assemble --request FILE`, and independently admits the resulting bundle. The provider does not run while serving pages. ABI-1 bundles and component-specific `cui_*` callbacks are not accepted by this protocol.
+Assembly protocol 2 uses MiniJinja 2.12.0 and binding ABI 2. Native captures private package/UI inputs, invokes `assemble --request FILE`, and independently admits the resulting bundle. The provider does not run while serving pages. ABI-1 bundles and component-specific `cui_*` callbacks are not accepted by this protocol.
 
 `native-bundle` prepares a relocatable directory containing the exact current executable, the complete declared package input closure, `manifest.json`, and a relative `provider-pin.json`. It does not include generated app HTML or CSS. Prepare from a clean checkout of the exact source revision and use a fresh output path; offline mode requires the pinned Rust dependencies to be cached. The revision argument is an unsigned provenance claim, not a check that the executable was built from that commit:
 
