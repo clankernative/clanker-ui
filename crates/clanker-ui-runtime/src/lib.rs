@@ -1,5 +1,8 @@
-//! Canonical, pure runtime value guards shared by Native UI hosts.
-use anyhow::{ensure, Result};
+//! Pure package-side value guards conforming to Native's independent host ABI.
+//!
+//! The generic `ui_*` API is specified in `docs/ui-binding-abi-v2.md` and checked
+//! by shared vectors; Native hosts do not depend on this component runtime.
+use anyhow::{ensure, Context, Result};
 use minijinja::Value;
 use std::cmp::Ordering;
 use unicode_segmentation::UnicodeSegmentation;
@@ -210,135 +213,398 @@ fn template_error(error: impl std::fmt::Display) -> minijinja::Error {
     minijinja::Error::new(minijinja::ErrorKind::InvalidOperation, error.to_string())
 }
 
-fn generic_text(value: &Value, policy: &str, minimum: usize, maximum: usize) -> Result<String> {
-    let text = value.to_string();
+fn rendered(value: &Value) -> String {
+    value
+        .as_str()
+        .map(str::to_owned)
+        .unwrap_or_else(|| value.to_string())
+}
+
+pub fn ui_text(value: &Value, policy: &str, minimum: u64, maximum: u64) -> Result<String> {
     ensure!(
-        minimum <= 1_000_000 && maximum <= 1_000_000,
-        "ui_text_invalid_bounds"
+        matches!(policy, "nonblank" | "plain" | "multiline"),
+        "ui_text_policy"
     );
-    match policy {
-        "nonblank" => {
-            ensure!(!text.trim().is_empty(), "ui_text_requires_nonblank_text");
-            ensure!(
-                !text.chars().any(char::is_control),
-                "ui_text_control_character"
-            );
-        }
-        "plain" => ensure!(
-            !text.chars().any(char::is_control),
-            "ui_text_control_character"
-        ),
-        "multiline" => {
-            ensure!(!text.trim().is_empty(), "ui_text_requires_nonblank_text");
-            ensure!(
-                !text
-                    .chars()
-                    .any(|ch| ch.is_control() && !matches!(ch, '\t' | '\r' | '\n')),
-                "ui_text_control_character"
-            );
-        }
-        _ => anyhow::bail!("ui_text_invalid_policy"),
+    let text = rendered(value);
+    ensure!(
+        text.chars()
+            .all(|c| !c.is_control() || (policy == "multiline" && matches!(c, '\t' | '\r' | '\n'))),
+        "ui_text_control_character"
+    );
+    if policy != "plain" {
+        ensure!(!text.trim().is_empty(), "ui_text_blank");
     }
-    let graphemes = text.graphemes(true).count();
+    let count = text.graphemes(true).count() as u64;
+    ensure!(count >= minimum, "ui_text_below_minimum_graphemes");
     ensure!(
-        graphemes >= minimum && (maximum == 0 || graphemes <= maximum),
-        "ui_text_grapheme_limit"
+        maximum == 0 || count <= maximum,
+        "ui_text_above_maximum_graphemes"
     );
     Ok(text)
 }
 
-fn generic_integer(value: &Value, minimum: i64, maximum: i64) -> Result<String> {
+pub fn ui_key(value: &Value) -> Result<String> {
+    let key = rendered(value);
     ensure!(
-        minimum <= maximum && value.kind() == minijinja::value::ValueKind::Number,
-        "ui_integer_requires_bounded_number"
+        !key.is_empty()
+            && key.len() <= 128
+            && key
+                .bytes()
+                .all(|b| b.is_ascii_alphanumeric() || matches!(b, b'_' | b'-')),
+        "ui_key_invalid"
     );
-    let text = value.to_string();
-    ensure!(
-        !text.contains('.') && !text.contains('e') && !text.contains('E'),
-        "ui_integer_requires_integral_number"
-    );
-    let number = text
-        .parse::<i128>()
-        .map_err(|_| anyhow::anyhow!("ui_integer_out_of_range"))?;
-    ensure!(
-        number >= minimum as i128 && number <= maximum as i128,
-        "ui_integer_out_of_range"
-    );
-    Ok(text)
+    Ok(key)
 }
 
-fn generic_number(
+// Bounded exact decimal representation for the generic binding ABI only.
+// Input: <=256 bytes, exponent magnitude <=10_000. IEEE float expansion is
+// separately bounded by its binary exponent; no arbitrary-precision dependency.
+#[derive(Clone, Debug)]
+struct Decimal {
+    negative: bool,
+    digits: String,
+    scale: i32,
+}
+
+impl Decimal {
+    fn parse(input: &str) -> Result<Self> {
+        Self::parse_with_limit(input, 256)
+    }
+    fn parse_with_limit(input: &str, maximum_length: usize) -> Result<Self> {
+        ensure!(
+            !input.is_empty() && input.len() <= maximum_length,
+            "ui_number_invalid"
+        );
+        let (mantissa, exponent) =
+            if let Some((m, e)) = input.split_once('e').or_else(|| input.split_once('E')) {
+                (m, e.parse::<i32>().context("ui_number_invalid")?)
+            } else {
+                (input, 0)
+            };
+        ensure!(exponent.unsigned_abs() <= 10_000, "ui_number_invalid");
+        let (negative, body) = match input.as_bytes().first() {
+            Some(b'-') => (true, &mantissa[1..]),
+            Some(b'+') => (false, &mantissa[1..]),
+            _ => (false, mantissa),
+        };
+        let mut split = body.split('.');
+        let whole = split.next().unwrap_or_default();
+        let fraction = split.next().unwrap_or_default();
+        ensure!(
+            split.next().is_none()
+                && (!whole.is_empty() || !fraction.is_empty())
+                && whole.bytes().all(|b| b.is_ascii_digit())
+                && fraction.bytes().all(|b| b.is_ascii_digit()),
+            "ui_number_invalid"
+        );
+        let mut digits = format!("{whole}{fraction}");
+        let mut scale = i32::try_from(fraction.len())? - exponent;
+        while digits.len() > 1 && digits.starts_with('0') {
+            digits.remove(0);
+        }
+        while digits.len() > 1 && digits.ends_with('0') {
+            digits.pop();
+            scale -= 1;
+        }
+        if digits.bytes().all(|b| b == b'0') {
+            return Ok(Self {
+                negative: false,
+                digits: "0".into(),
+                scale: 0,
+            });
+        }
+        Ok(Self {
+            negative,
+            digits,
+            scale,
+        })
+    }
+    fn canonical(&self) -> String {
+        if self.digits == "0" {
+            return "0".into();
+        }
+        let point = self.digits.len() as i64 - i64::from(self.scale);
+        let value = if point <= 0 {
+            format!("0.{}{}", "0".repeat((-point) as usize), self.digits)
+        } else if point >= self.digits.len() as i64 {
+            format!(
+                "{}{}",
+                self.digits,
+                "0".repeat((point - self.digits.len() as i64) as usize)
+            )
+        } else {
+            format!(
+                "{}.{}",
+                &self.digits[..point as usize],
+                &self.digits[point as usize..]
+            )
+        };
+        if self.negative {
+            format!("-{value}")
+        } else {
+            value
+        }
+    }
+    fn cmp_abs(&self, other: &Self) -> std::cmp::Ordering {
+        if self.digits == "0" || other.digits == "0" {
+            return match (self.digits == "0", other.digits == "0") {
+                (true, true) => std::cmp::Ordering::Equal,
+                (true, false) => std::cmp::Ordering::Less,
+                (false, true) => std::cmp::Ordering::Greater,
+                (false, false) => unreachable!(),
+            };
+        }
+        let a = self.digits.len() as i64 - i64::from(self.scale);
+        let b = other.digits.len() as i64 - i64::from(other.scale);
+        a.cmp(&b).then_with(|| {
+            (0..self.digits.len().max(other.digits.len()))
+                .map(|i| self.digits.as_bytes().get(i).copied().unwrap_or(b'0'))
+                .cmp(
+                    (0..self.digits.len().max(other.digits.len()))
+                        .map(|i| other.digits.as_bytes().get(i).copied().unwrap_or(b'0')),
+                )
+        })
+    }
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        if self.negative != other.negative {
+            return if self.negative {
+                std::cmp::Ordering::Less
+            } else {
+                std::cmp::Ordering::Greater
+            };
+        }
+        let cmp = self.cmp_abs(other);
+        if self.negative {
+            cmp.reverse()
+        } else {
+            cmp
+        }
+    }
+}
+pub fn valid_number_literal(value: &str) -> bool {
+    Decimal::parse(value).is_ok()
+}
+pub fn compare_number_literals(left: &str, right: &str) -> Result<i8> {
+    Ok(match Decimal::parse(left)?.cmp(&Decimal::parse(right)?) {
+        std::cmp::Ordering::Less => -1,
+        std::cmp::Ordering::Equal => 0,
+        std::cmp::Ordering::Greater => 1,
+    })
+}
+fn decimal_times_small(digits: &str, factor: u8) -> String {
+    let mut output = Vec::with_capacity(digits.len() + 4);
+    let mut carry = 0u16;
+    for digit in digits.bytes().rev() {
+        let value = u16::from(digit - b'0') * u16::from(factor) + carry;
+        output.push(b'0' + (value % 10) as u8);
+        carry = value / 10;
+    }
+    while carry > 0 {
+        output.push(b'0' + (carry % 10) as u8);
+        carry /= 10;
+    }
+    output.reverse();
+    String::from_utf8(output).expect("decimal digits are valid UTF-8")
+}
+
+// Exact finite decimal representation of the IEEE-754 value, used only for
+// ordering. Unlike f64::to_string(), this retains the binary value exactly.
+fn exact_float(value: f64) -> Result<Decimal> {
+    ensure!(value.is_finite(), "ui_number_invalid");
+    if value == 0.0 {
+        return Decimal::parse("0");
+    }
+    let bits = value.abs().to_bits();
+    let exponent_bits = ((bits >> 52) & 0x7ff) as i32;
+    let fraction = bits & ((1u64 << 52) - 1);
+    let (mantissa, exponent) = if exponent_bits == 0 {
+        (fraction, -1074)
+    } else {
+        ((1u64 << 52) | fraction, exponent_bits - 1023 - 52)
+    };
+    let (mut digits, mut scale) = if exponent >= 0 {
+        let mut digits = mantissa.to_string();
+        for _ in 0..exponent {
+            digits = decimal_times_small(&digits, 2);
+        }
+        (digits, 0)
+    } else {
+        let mut digits = mantissa.to_string();
+        for _ in 0..-exponent {
+            digits = decimal_times_small(&digits, 5);
+        }
+        (digits, -exponent)
+    };
+    while digits.len() > 1 && digits.ends_with('0') {
+        digits.pop();
+        scale -= 1;
+    }
+    Ok(Decimal {
+        negative: value.is_sign_negative(),
+        digits,
+        scale,
+    })
+}
+
+#[derive(Clone, Debug)]
+struct BindingNumber {
+    order: Decimal,
+    canonical: String,
+}
+fn binding_number(value: &Value) -> Result<BindingNumber> {
+    let (order, canonical) = if let Some(text) = value.as_str() {
+        let decimal = Decimal::parse(text)?;
+        (decimal.clone(), decimal.canonical())
+    } else {
+        ensure!(
+            value.kind() == minijinja::value::ValueKind::Number,
+            "ui_number_invalid"
+        );
+        if value.is_integer() {
+            let decimal = Decimal::parse(&value.to_string())?;
+            (decimal.clone(), decimal.canonical())
+        } else {
+            let real = f64::try_from(value.clone()).context("ui_number_invalid")?;
+            let order = exact_float(real)?;
+            let canonical = Decimal::parse_with_limit(&real.to_string(), 1200)?.canonical();
+            (order, canonical)
+        }
+    };
+    Ok(BindingNumber { order, canonical })
+}
+/// Order numeric Values exactly; numeric strings are intentionally rejected.
+pub fn ui_compare(left: &Value, right: &Value) -> Result<i64> {
+    ensure!(
+        left.kind() == minijinja::value::ValueKind::Number
+            && right.kind() == minijinja::value::ValueKind::Number,
+        "ui_compare_number_required"
+    );
+    Ok(
+        match binding_number(left)?
+            .order
+            .cmp(&binding_number(right)?.order)
+        {
+            std::cmp::Ordering::Less => -1,
+            std::cmp::Ordering::Equal => 0,
+            std::cmp::Ordering::Greater => 1,
+        },
+    )
+}
+/// Guard an integer-typed Value with exact, mathematically integral string bounds.
+pub fn ui_integer(value: &Value, minimum: &str, maximum: &str) -> Result<String> {
+    let raw = value.to_string();
+    ensure!(
+        value.kind() == minijinja::value::ValueKind::Number && value.is_integer(),
+        "ui_integer_number_required"
+    );
+    let integer = raw;
+    let n = Decimal::parse(&integer)?;
+    let min = Decimal::parse(minimum)?;
+    let max = Decimal::parse(maximum)?;
+    ensure!(
+        n.scale <= 0 && min.scale <= 0 && max.scale <= 0,
+        "ui_integer_integral_required"
+    );
+    ensure!(
+        n.cmp(&min) != std::cmp::Ordering::Less && n.cmp(&max) != std::cmp::Ordering::Greater,
+        "ui_integer_out_of_bounds"
+    );
+    Ok(n.canonical())
+}
+/// Guard numbers or decimal strings; float ordering is exact, display is shortest.
+pub fn ui_number(
     value: &Value,
-    minimum: Option<&Value>,
-    maximum: Option<&Value>,
+    minimum: Option<&str>,
+    maximum: Option<&str>,
     exclusive_minimum: bool,
 ) -> Result<String> {
-    let number = Number::from_value(value)?;
-    if let Some(minimum) = minimum {
-        let order = number.compare(Number::from_value(minimum)?);
+    let n = binding_number(value)?;
+    if let Some(min) = minimum {
+        let cmp = n.order.cmp(&Decimal::parse(min)?);
         ensure!(
             if exclusive_minimum {
-                order == Ordering::Greater
+                cmp == std::cmp::Ordering::Greater
             } else {
-                order != Ordering::Less
+                cmp != std::cmp::Ordering::Less
             },
             "ui_number_below_minimum"
         );
     }
-    if let Some(maximum) = maximum {
+    if let Some(max) = maximum {
         ensure!(
-            number.compare(Number::from_value(maximum)?) != Ordering::Greater,
+            n.order.cmp(&Decimal::parse(max)?) != std::cmp::Ordering::Greater,
             "ui_number_above_maximum"
         );
     }
-    Ok(number.text())
+    Ok(n.canonical)
 }
-
+/// Guard credential-free remote HTTPS while preserving the supplied source text.
+pub fn ui_image(value: &Value) -> Result<ImageSource> {
+    let source = rendered(value);
+    validate_binding_image_source(&source)?;
+    Ok(ImageSource(source))
+}
+fn validate_binding_image_source(value: &str) -> Result<()> {
+    ensure!(value.len() <= 4096 && !value.is_empty(), "ui_image_length");
+    ensure!(
+        !value
+            .chars()
+            .any(|ch| ch.is_control() || ch.is_whitespace())
+            && !value.contains('\\'),
+        "ui_image_invalid_url"
+    );
+    let url = url::Url::parse(value).context("ui_image_invalid_url")?;
+    ensure!(
+        url.scheme() == "https"
+            && url.host_str().is_some()
+            && url.username().is_empty()
+            && url.password().is_none(),
+        "ui_image_https_required"
+    );
+    ensure!(
+        url.host_str()
+            .is_some_and(|host| !host.contains('*') && host.len() <= 253),
+        "ui_image_host_invalid"
+    );
+    Ok(())
+}
 /// Register only the protocol's closed provider-neutral value capabilities.
 pub fn install(environment: &mut minijinja::Environment<'_>) {
     environment.add_function(
         "ui_text",
-        |value: Value, policy: String, minimum: usize, maximum: usize| {
-            generic_text(&value, &policy, minimum, maximum).map_err(template_error)
+        |value: Value, policy: String, minimum: u64, maximum: u64| {
+            ui_text(&value, &policy, minimum, maximum).map_err(template_error)
         },
     );
-    environment.add_function("ui_key", |key: String| {
-        if key.is_empty()
-            || key.len() > 128
-            || !key
-                .bytes()
-                .all(|b| b.is_ascii_alphanumeric() || matches!(b, b'_' | b'-'))
-        {
-            return Err(template_error("ui_key_requires_bounded_ascii_key"));
-        }
-        Ok(key)
-    });
-    environment.add_function("ui_integer", |value: Value, minimum: i64, maximum: i64| {
-        generic_integer(&value, minimum, maximum).map_err(template_error)
+    environment.add_function("ui_key", |value: Value| {
+        ui_key(&value).map_err(template_error)
     });
     environment.add_function(
+        "ui_integer",
+        |value: Value, minimum: String, maximum: String| {
+            ui_integer(&value, &minimum, &maximum).map_err(template_error)
+        },
+    );
+    environment.add_function(
         "ui_number",
-        |value: Value, minimum: Option<Value>, maximum: Option<Value>, exclusive_minimum: bool| {
-            generic_number(
+        |value: Value,
+         minimum: Option<String>,
+         maximum: Option<String>,
+         exclusive_minimum: bool| {
+            ui_number(
                 &value,
-                minimum.as_ref(),
-                maximum.as_ref(),
+                minimum.as_deref(),
+                maximum.as_deref(),
                 exclusive_minimum,
             )
             .map_err(template_error)
         },
     );
     environment.add_function("ui_compare", |left: Value, right: Value| {
-        let left = Number::from_value(&left).map_err(template_error)?;
-        let right = Number::from_value(&right).map_err(template_error)?;
-        Ok::<i32, minijinja::Error>(match left.compare(right) {
-            Ordering::Less => -1,
-            Ordering::Equal => 0,
-            Ordering::Greater => 1,
-        })
+        ui_compare(&left, &right).map_err(template_error)
     });
-    environment.add_function("ui_image", |value: String| {
-        image(&value)
+    environment.add_function("ui_image", |value: Value| {
+        ui_image(&value)
             .map(minijinja::Value::from_object)
             .map_err(template_error)
     });
