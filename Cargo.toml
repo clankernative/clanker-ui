@@ -6,6 +6,13 @@ resolver = "2"
 edition = "2021"
 version = "0.1.0"
 
+# Keep the debug CLI and test-built executable below Native's 64 MiB admission guard.
+[profile.dev]
+debug = 0
+
+[profile.test]
+debug = 0
+
 [workspace.dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

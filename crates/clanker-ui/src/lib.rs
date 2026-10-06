@@ -9,6 +9,7 @@ pub mod lock;
 pub mod native;
 pub mod native_bundle;
 pub mod native_button;
+pub mod native_release;
 pub mod ports;
 pub mod preview;
 pub mod theming;

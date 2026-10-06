@@ -55,6 +55,29 @@ enum Command {
         #[arg(long)]
         bundle: PathBuf,
     },
+    /// Prepare deterministic versioned release assets locally; never publish them.
+    NativeRelease {
+        #[arg(long)]
+        bundle: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Explicit operator setup/restore; verifies SHA before extraction, never executes the compiler.
+    #[command(alias = "restore-native-bundle")]
+    InstallNativeBundle {
+        #[arg(long, conflicts_with_all = ["github_repository", "bundle"], required_unless_present_any = ["github_repository", "bundle"])]
+        archive: Option<PathBuf>,
+        #[arg(long, conflicts_with_all = ["archive", "github_repository", "version", "expected_sha256"])]
+        bundle: Option<PathBuf>,
+        #[arg(long, requires = "version", conflicts_with_all = ["archive", "bundle"])]
+        github_repository: Option<String>,
+        #[arg(long, requires = "github_repository")]
+        version: Option<String>,
+        #[arg(long, required_unless_present = "bundle", conflicts_with = "bundle")]
+        expected_sha256: Option<String>,
+        #[arg(long)]
+        output: PathBuf,
+    },
     /// Expand locked package declarations without executing application operations.
     Expand {
         #[arg(long)]
@@ -254,6 +277,35 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
             "verify-native-bundle",
             clanker_ui::native_bundle::verify(&bundle)?,
         )),
+        Command::NativeRelease { bundle, output } => Ok((
+            "native-release",
+            clanker_ui::native_release::prepare(&bundle, &output)?,
+        )),
+        Command::InstallNativeBundle {
+            archive,
+            bundle,
+            github_repository,
+            version,
+            expected_sha256,
+            output,
+        } => {
+            use clanker_ui::native_release::{self, GithubArchive, GithubRelease, LocalArchive};
+            let installed = if let Some(path) = bundle {
+                native_release::install_local_bundle(&path, &output)?
+            } else if let Some(path) = archive {
+                let sha = expected_sha256.ok_or("archive install needs expected SHA")?;
+                native_release::install(&LocalArchive(&path), &sha, &output, None)?
+            } else {
+                let version = version.ok_or("hosted install needs a version")?;
+                let source = GithubArchive(GithubRelease {
+                    repository: github_repository.ok_or("install needs a source")?,
+                    version: version.clone(),
+                });
+                let sha = expected_sha256.ok_or("hosted install needs expected SHA")?;
+                native_release::install(&source, &sha, &output, Some(&version))?
+            };
+            Ok(("install-native-bundle", installed))
+        }
         Command::Expand { lock, ui, out } => Ok((
             "expand",
             json!(clanker_ui::expand::expand(&lock, &ui, out.as_deref())?),
@@ -281,7 +333,7 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
                 "validation": ["verify", "doctor", "check-css"],
                 "theming": {"schemaVersion":1,"readOnly":true,"commands":["tokens","check-css"],"warningsFail":false,"unknownTokensFail":true,"componentDetailsField":"tokenDetails","analysis":"Static CSS and possible template structure; no JavaScript or computed cascade."},
                 "assembly": ["assemble", "expand", "render"],
-                "nativeBundle": {"commands":["native-bundle", "verify-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"artifact":"CI workflow artifact only; no published release or install channel","trust":"Unsigned identity only; operator approval required."},
+                "nativeBundle": {"commands":["native-bundle", "verify-native-bundle", "native-release", "install-native-bundle", "restore-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"candidateTargets":["linux-x86_64", "macos-aarch64"],"artifact":"Versioned operator-managed archives; no release has been published by this command.","acquisition":"Explicit operator install/restore only; local offline bundle/archive or replaceable GitHub exact-version adapter; expected SHA required for archives.","compilerExecution":false,"trust":"Hashes identify bytes, not provenance; operator approval required."},
                 "nativeLock": {"path":"ui/ui.lock.json","schemaVersion":1,"provider":"clanker-ui.native","commands":["lock","native-lock"],"updates":"Explicit --update only; no legacy lock schema."},
                 "nativePin": "Explicit local unsigned override output only; operator verifies executable trust.",
                 "integration": {"componentStatusField":"component.status","nativeStatusField":"component.integration.native","portsField":"component.integration.ports","portTypesField":"component.assets.contracts","missingHostMetadata":"No advertised host support; admission is independent.","readyMeaning":"Component-complete, not backend-integrated."},

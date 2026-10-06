@@ -13,10 +13,10 @@ use std::{
     path::{Path, PathBuf},
 };
 
-const MAX_EXECUTABLE: u64 = 64 * 1024 * 1024;
-const MAX_INPUTS: usize = 4096;
-const MAX_TOTAL: usize = 32 * 1024 * 1024;
-const MAX_FILE: usize = 1024 * 1024;
+pub(crate) const MAX_EXECUTABLE: u64 = 64 * 1024 * 1024;
+pub(crate) const MAX_INPUTS: usize = 4096;
+pub(crate) const MAX_TOTAL: usize = 32 * 1024 * 1024;
+pub(crate) const MAX_FILE: usize = 1024 * 1024;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -72,21 +72,37 @@ fn valid_revision(value: &str) -> bool {
             .bytes()
             .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
 }
-fn valid_tool_version(value: &str) -> bool {
-    if value.is_empty() || value.len() > 64 || !value.as_bytes()[0].is_ascii_digit() {
+pub(crate) fn valid_tool_version(value: &str) -> bool {
+    if value.is_empty() || value.len() > 64 {
         return false;
     }
-    let core = value.split(['-', '+']).next().unwrap_or_default();
+    let identifiers = |text: &str, prerelease: bool| {
+        text.split('.').all(|part| {
+            !part.is_empty()
+                && part.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-')
+                && !(prerelease
+                    && part.len() > 1
+                    && part.starts_with('0')
+                    && part.bytes().all(|b| b.is_ascii_digit()))
+        })
+    };
+    let (release, build) = value
+        .split_once('+')
+        .map_or((value, None), |(a, b)| (a, Some(b)));
+    let (core, prerelease) = release
+        .split_once('-')
+        .map_or((release, None), |(a, b)| (a, Some(b)));
     let parts = core.split('.').collect::<Vec<_>>();
     parts.len() == 3
-        && parts
-            .iter()
-            .all(|part| !part.is_empty() && part.bytes().all(|b| b.is_ascii_digit()))
-        && value
-            .bytes()
-            .all(|b| b.is_ascii_alphanumeric() || b".-+".contains(&b))
+        && parts.iter().all(|part| {
+            !part.is_empty()
+                && part.bytes().all(|b| b.is_ascii_digit())
+                && (part.len() == 1 || !part.starts_with('0'))
+        })
+        && prerelease.is_none_or(|part| identifiers(part, true))
+        && build.is_none_or(|part| identifiers(part, false))
 }
-fn safe_rel(value: &str) -> bool {
+pub(crate) fn safe_rel(value: &str) -> bool {
     !value.is_empty()
         && value.len() <= 512
         && !value.contains('\\')
@@ -130,7 +146,7 @@ fn check_source_tree(directory: &Path, depth: usize, count: &mut usize) -> Resul
     Ok(())
 }
 
-fn checked_read(path: &Path, limit: u64) -> Result<Vec<u8>, String> {
+pub(crate) fn checked_read(path: &Path, limit: u64) -> Result<Vec<u8>, String> {
     let meta = fs::symlink_metadata(path).map_err(|e| format!("{}: {e}", path.display()))?;
     if !meta.is_file() || meta.file_type().is_symlink() || meta.len() > limit {
         return Err(format!(
@@ -165,7 +181,7 @@ fn input_entries(inputs: &[LockedInput]) -> Vec<Entry> {
 fn input_digest(inputs: &[LockedInput]) -> String {
     expand::input_manifest_digest(inputs)
 }
-fn publish_noclobber(staged: &Path, output: &Path) -> Result<(), String> {
+pub(crate) fn publish_noclobber(staged: &Path, output: &Path) -> Result<(), String> {
     #[cfg(any(target_os = "linux", target_os = "macos"))]
     {
         use std::{ffi::CString, os::unix::ffi::OsStrExt};
@@ -212,7 +228,7 @@ fn publish_noclobber(staged: &Path, output: &Path) -> Result<(), String> {
     }
 }
 
-fn check_output_destination(output: &Path, source: &Path) -> Result<(PathBuf, PathBuf), String> {
+pub(crate) fn output_destination(output: &Path) -> Result<(PathBuf, PathBuf), String> {
     let parent = output
         .parent()
         .filter(|p| !p.as_os_str().is_empty())
@@ -224,9 +240,6 @@ fn check_output_destination(output: &Path, source: &Path) -> Result<(PathBuf, Pa
     let target = parent.join(leaf);
     if fs::symlink_metadata(&target).is_ok() {
         return Err("bundle output already exists; choose a fresh directory".into());
-    }
-    if target.starts_with(source) {
-        return Err("bundle output must not be inside the package source tree".into());
     }
     Ok((parent, target))
 }
@@ -255,7 +268,10 @@ pub fn prepare(
     {
         return Err("package declared input closure exceeds bundle limits".into());
     }
-    let (parent, target) = check_output_destination(output, &source)?;
+    let (parent, target) = output_destination(output)?;
+    if target.starts_with(&source) {
+        return Err("bundle output must not be inside the package source tree".into());
+    }
     let executable_path = fs::canonicalize(std::env::current_exe().map_err(|e| e.to_string())?)
         .map_err(|e| e.to_string())?;
     let executable = checked_read(&executable_path, MAX_EXECUTABLE)?;
@@ -528,13 +544,31 @@ pub fn verify(bundle: &Path) -> Result<serde_json::Value, String> {
         );
     }
     Ok(
-        serde_json::json!({"target":target,"package":manifest.package,"entries":manifest.entries.len(),"executableDigest":manifest.executable.digest,"verified":true,"trust":"unsigned; operator approval required"}),
+        serde_json::json!({"target":target,"toolVersion":manifest.tool_version,"sourceRevision":manifest.source_revision,"package":manifest.package,"entries":manifest.entries.len(),"executableDigest":manifest.executable.digest,"verified":true,"trust":"unsigned; operator approval required"}),
     )
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn tool_versions_have_bounded_semantic_version_identity() {
+        for value in ["0.1.0", "1.2.3-rc.1+build.001"] {
+            assert!(valid_tool_version(value));
+        }
+        for value in [
+            "latest",
+            "1.2",
+            "01.2.3",
+            "1.2.3-",
+            "1.2.3+",
+            "1.2.3-01",
+            "1.2.3+a+b",
+        ] {
+            assert!(!valid_tool_version(value));
+        }
+    }
 
     #[test]
     fn source_walk_rejects_excessive_depth_and_entry_count() {
