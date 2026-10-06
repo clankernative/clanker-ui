@@ -279,7 +279,7 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
                 "nativeLock": "Explicit generation only; does not rewrite catalog app locks.",
                 "nativePin": "Explicit local unsigned override output only; operator verifies executable trust.",
                 "integration": {"componentStatusField":"component.status","nativeStatusField":"component.integration.native","portsField":"component.integration.ports","portTypesField":"component.assets.contracts","missingHostMetadata":"No advertised host support; admission is independent.","readyMeaning":"Component-complete, not backend-integrated."},
-                "adapterProtocol": 1,
+                "adapterProtocol": 2,
                 "bindingAbi": 2,
                 "templateEngine": "minijinja-2.12.0",
                 "lock": "Exact declared local package bytes; updates are explicit.",

@@ -70,7 +70,7 @@ fn deterministic_relocatable_bundle_contains_complete_contracts_and_relative_pin
         fs::read(b.join("bin/clanker-ui")).unwrap()
     );
     assert_eq!(ma["sourceRevision"], revision());
-    assert_eq!(ma["assemblyProtocol"], 1);
+    assert_eq!(ma["assemblyProtocol"], 2);
     assert_eq!(ma["bindingAbi"], 2);
     assert_eq!(ma["templateEngine"], "minijinja-2.12.0");
     let entries = ma["entries"].as_array().unwrap();
@@ -263,7 +263,7 @@ fn preparation_rejects_bad_revision_clobber_source_nesting_and_source_symlinks()
 fn capabilities_describe_only_the_supported_local_bundle_protocol() {
     let (ok, result) = run(&["capabilities"]);
     assert!(ok, "{result}");
-    assert_eq!(result["data"]["adapterProtocol"], 1);
+    assert_eq!(result["data"]["adapterProtocol"], 2);
     assert_eq!(result["data"]["bindingAbi"], 2);
     assert_eq!(
         result["data"]["nativeBundle"]["ciArtifactTargets"][0],

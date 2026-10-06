@@ -266,7 +266,7 @@ pub fn prepare(
         tool_version: env!("CARGO_PKG_VERSION").into(),
         source_revision: source_revision.to_ascii_lowercase(),
         provider: "clanker-ui.native".into(),
-        assembly_protocol: 1,
+        assembly_protocol: 2,
         binding_abi: 2,
         template_engine: "minijinja-2.12.0".into(),
         executable: Entry {
@@ -284,7 +284,7 @@ pub fn prepare(
     let pin = Pin {
         schema_version: 1,
         provider: "clanker-ui.native".into(),
-        assembly_protocol: 1,
+        assembly_protocol: 2,
         binding_abi: 2,
         targets: [(
             target_name.into(),
@@ -401,7 +401,7 @@ pub fn verify(bundle: &Path) -> Result<serde_json::Value, String> {
     if manifest.schema_version != 1
         || manifest.target != target
         || manifest.provider != "clanker-ui.native"
-        || manifest.assembly_protocol != 1
+        || manifest.assembly_protocol != 2
         || manifest.binding_abi != 2
         || manifest.template_engine != "minijinja-2.12.0"
         || !valid_revision(&manifest.source_revision)

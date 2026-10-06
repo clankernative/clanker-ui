@@ -7,8 +7,10 @@ is loaded into the host renderer.
 
 ## Versioned boundary
 
-Protocol version 1 targets `minijinja-2.12.0` with binding ABI 2. ABI 1 bundles and
-component-specific `cui_*` callbacks are not supported by this protocol.
+Protocol version 2 targets `minijinja-2.12.0` with binding ABI 2. ABI 1 bundles and
+component-specific `cui_*` callbacks are not supported by this protocol. Assembly is
+optional preprocessing: the producer returns ordinary templates and resources; Native
+owns their normal admission and serving.
 
 An app opts in with `ui/ui.lock.json`:
 
@@ -38,8 +40,9 @@ package metadata. Native checks every captured byte. Files are not browser
 resources merely because they are locked inputs.
 
 The operator separately trusts an executable pin with `schemaVersion: 1`,
-`provider`, `assemblyProtocol: 1`, `bindingAbi: 2`, and a `targets` map of host
-targets to `{executable, digest}`. An app lock cannot authorize execution. The
+`provider`, `assemblyProtocol: 2`, `bindingAbi: 2`, and a `targets` map of host
+targets to `{executable, digest}`. Protocol 2 requires an updated operator pin;
+the app package lock schema and contents do not change. An app lock cannot authorize execution. The
 local explicit override is `DAY2_UI_PROVIDER_PIN_JSON`; no portable executable
 release is implied. Execution trusts that local executable: private snapshots,
 cleared environment variables, and time/output limits are not a hostile-code
@@ -51,7 +54,7 @@ The private request has this shape:
 ```json
 {
   "schemaVersion": 1,
-  "assemblyProtocol": 1,
+  "assemblyProtocol": 2,
   "provider": "clanker-ui.native",
   "target": {"bindingAbi": 2, "templateEngine": "minijinja-2.12.0"},
   "package": {"name": "@clanker/vanilla", "version": "0.7.0", "path": "/private/package", "digest": "sha256:<manifest-digest>", "inputs": []},
@@ -61,12 +64,18 @@ The private request has this shape:
 
 Absolute paths refer to Native's captured private inputs, never mutable app
 sources. The response is the CLI envelope `{schemaVersion: 1, ok, command:
-"assemble", data, diagnostics}`. Successful data contains `schemaVersion: 1`,
-`runtimeAbi: 2`, `templateEngine`, `packageDigest`, `templates`, `bindings`,
-`resources`, `entrypoints`, `inputs`, and `consumedInputs`. Existing bundle path,
-resource closure, byte budgets, collisions, and ordinary Native admission remain
-mandatory. Output paths must not collide by case or prefix. A provider cannot
-replace or consume `ui/ui.lock.json`. Diagnostic component/attribute labels are opaque to Native.
+"assemble", data, diagnostics}`. Successful data contains only `schemaVersion: 1`,
+`runtimeAbi: 2`, `templateEngine`, `packageDigest`, `templates`, `resources`,
+`inputs`, and `consumedInputs`. Producer-selected modules, including the generated
+`ui/ui-package.js` bootstrap when needed, are ordinary `module` resources with
+relative imports. That conventional module imports the producer's selected
+`ui/clanker-ui.js` entrypoint; no entrypoint or component binding manifest crosses the boundary.
+Generic checked value helpers remain unchanged. The producer validates collisions,
+resource closure, source preservation, and input/output byte budgets before returning
+or writing output. Native performs its ordinary independent template/resource admission.
+Output paths must not collide by case or prefix. A provider cannot replace or consume
+`ui/ui.lock.json`. Diagnostic component/attribute labels from standalone expansion are
+opaque and are not part of the assembly response.
 
 ## Host binding capabilities
 

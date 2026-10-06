@@ -3,6 +3,7 @@ use sha2::{Digest, Sha256};
 use std::{
     fs,
     path::{Path, PathBuf},
+    process::Command,
 };
 
 fn copy_tree(from: &Path, to: &Path) {
@@ -156,9 +157,14 @@ fn native_lock_and_assembly_request_are_closed_deterministic_and_abi2() {
         package_lock["digest"],
         format!("sha256:{:x}", manifest.finalize())
     );
+    fs::write(
+        ui.join("pages/index.html"),
+        b"<form><cui-form-field id=\"edit-url\" name=\"url\" label=\"Destination\" value=\"{{ link.url }}\" /><cui-button kind=\"submit\" label=\"Save\" /></form>",
+    )
+    .unwrap();
     let request = serde_json::json!({
         "schemaVersion": 1,
-        "assemblyProtocol": 1,
+        "assemblyProtocol": 2,
         "provider": "clanker-ui.native",
         "target": {"bindingAbi": 2, "templateEngine": "minijinja-2.12.0"},
         "package": {
@@ -182,6 +188,70 @@ fn native_lock_and_assembly_request_are_closed_deterministic_and_abi2() {
     assert_eq!(first, second);
     assert_eq!(first.runtime_abi, 2);
     assert_eq!(first.package_digest, package_lock["digest"]);
+    let form = &first.templates["pages/index.html"];
+    assert!(form.contains("value=\"{{ link.url }}\""));
+    assert!(form.contains("type=\"submit\""));
+    assert!(!form.contains("<cui-") && !form.contains("ui_text("));
+    let serialized = serde_json::to_value(&first).unwrap();
+    assert!(serialized.get("bindings").is_none());
+    assert!(serialized.get("entrypoints").is_none());
+    assert!(!serialized["resources"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|resource| {
+            resource["path"] == "ui/clanker-ui.js" || resource["path"] == "ui/ui-package.js"
+        }));
+    let cli = Command::new(env!("CARGO_BIN_EXE_clanker-ui"))
+        .args(["assemble", "--request", request_path.to_str().unwrap()])
+        .output()
+        .unwrap();
+    assert!(
+        cli.status.success(),
+        "{}",
+        String::from_utf8_lossy(&cli.stdout)
+    );
+    let cli_result: serde_json::Value = serde_json::from_slice(&cli.stdout).unwrap();
+    assert!(cli_result["data"].get("bindings").is_none());
+    assert!(cli_result["data"].get("entrypoints").is_none());
+    fs::write(
+        ui.join("pages/index.html"),
+        b"<cui-copy-field name=\"code\" label=\"Reference\" value=\"TASK-42\" />",
+    )
+    .unwrap();
+    let helper_result = expand::assemble_request(&request_path).unwrap();
+    let bootstrap = helper_result
+        .resources
+        .iter()
+        .find(|resource| resource.path == "ui/clanker-ui.js")
+        .and_then(|resource| resource.content.as_deref())
+        .expect("selected helper requires generated bootstrap module");
+    assert!(bootstrap.contains("./clanker-ui/browser/lifecycle.js"));
+    assert!(bootstrap.contains("./clanker-ui/components/copy-field/interaction.js"));
+    let loader = helper_result
+        .resources
+        .iter()
+        .find(|resource| resource.path == "ui/ui-package.js")
+        .unwrap();
+    assert_eq!(loader.kind, "module");
+    assert_eq!(
+        loader.content.as_deref(),
+        Some("import './clanker-ui.js';\n")
+    );
+    // An app-owned module cannot be silently overwritten, even though it is conventional.
+    fs::write(ui.join("ui-package.js"), b"export const appOwned = true;").unwrap();
+    assert!(expand::assemble_request(&request_path).is_err());
+    fs::write(ui.join("ui-package.js"), b"import './clanker-ui.js';\n").unwrap();
+    let idempotent = expand::assemble_request(&request_path).unwrap();
+    assert!(idempotent
+        .inputs
+        .iter()
+        .any(|input| input.path == "ui/ui-package.js"));
+    fs::remove_file(ui.join("ui-package.js")).unwrap();
+    assert!(helper_result.resources.iter().any(|resource| {
+        resource.path == "ui/clanker-ui/components/copy-field/interaction.js"
+            && resource.kind == "module"
+    }));
     assert!(first
         .inputs
         .iter()
@@ -190,7 +260,7 @@ fn native_lock_and_assembly_request_are_closed_deterministic_and_abi2() {
 
     let mutations: [fn(&mut serde_json::Value); 7] = [
         |value| value["schemaVersion"] = 2.into(),
-        |value| value["assemblyProtocol"] = 2.into(),
+        |value| value["assemblyProtocol"] = 1.into(),
         |value| value["target"]["bindingAbi"] = 1.into(),
         |value| value["target"]["templateEngine"] = "jinja".into(),
         |value| value["package"]["digest"] = "sha256:wrong".into(),
@@ -223,7 +293,7 @@ fn native_pin_is_explicit_local_unsigned_output_for_the_current_executable() {
     let pin = expand::native_pin(&output).unwrap();
     assert_eq!(pin["schemaVersion"], 1);
     assert_eq!(pin["provider"], "clanker-ui.native");
-    assert_eq!(pin["assemblyProtocol"], 1);
+    assert_eq!(pin["assemblyProtocol"], 2);
     assert_eq!(pin["bindingAbi"], 2);
     let host_target = match (std::env::consts::OS, std::env::consts::ARCH) {
         ("macos", "aarch64") => "macos-aarch64",

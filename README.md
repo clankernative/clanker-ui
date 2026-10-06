@@ -34,7 +34,7 @@ cargo run --locked --offline -- expand --lock examples/button-app/clanker-ui.loc
 cargo run --locked --offline -- render --lock examples/button-app/clanker-ui.lock.json --ui /path/to/app/ui --scene /tmp/scene.json --fragment components/example.html
 ```
 
-`expand` returns symbolic templates, typed binding metadata, a resource manifest, locked input digests, consumed source paths, selected module entrypoints, runtime ABI 2, and `minijinja-2.12.0`. Optional `--out <directory>` writes a separate proof bundle, never the app source. Component expansion, composition, binding syntax, resource selection, and CSS mappings live here. Native independently implements generic value and HTML safety capabilities.
+Standalone `expand` returns symbolic templates, typed binding metadata, a resource manifest, locked input digests, consumed source paths, and selected module entrypoints for agent diagnostics. Native `assemble` is protocol 2 and returns only ordinary templates/resources plus locked inputs; any needed `ui/clanker-ui.js` bootstrap is a generated module resource. Binding ABI remains 2. Optional `expand --out <directory>` writes a separate proof bundle, never the app source. Component expansion, composition, binding syntax, resource selection, and CSS mappings live here; Native independently implements generic value and HTML safety capabilities.
 
 `render` expands the same locked package and evaluates a bounded fake scene: `{"page":"pages/example.html","data":{"title":"Sample"},"routes":{"index":"/"},"width":1280}`. Without `--fragment`, `page` selects the template. Includes stay inside the captured UI. Text is escaped, numeric/image guards run, and fonts are embedded from locked bytes. The result is an inert, script-free HTML document: forms cannot submit and app modules do not run. Fake route maps are illustrative links, not Roc route checking. Studio must set the iframe viewport to the returned width; this command proves static presentation only.
 
@@ -103,6 +103,47 @@ The static declarations accept literal text or whole checked page-field bindings
 ```
 
 Badge requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, `danger`, and `running`, and can suppress or override its decorative icon with `show-icon` or a closed-catalog `icon` name. Divider defaults to a horizontal, unlabelled separator; it accepts a `start`, `center`, or `end` label alignment and rejects labels on vertical separators. Status Indicator requires visible `label` text, accepts tones `neutral`, `info`, `success`, `warning`, and `danger`, plus optional `detail`, `size` (`small` or `large`), and `pulse`; it is static, not an ARIA live region. Each component is noninteractive, checks unknown attributes, and uses app-overridable `--cui-*` tokens. A real GoLinks build in `../golinks-clanker-ui-button` exercises all three. This historical local proof used an empty sample list, not production data.
+
+## Continue on a fresh machine
+
+The development source is in Git; temporary bundles, build caches, and private
+session cookies are not handoff inputs. These are review branches, not releases.
+The Native development/isolated-build host is currently Apple Silicon macOS.
+Install Xcode Command Line Tools and rustup, and have read access to the private
+GoLinks repository.
+
+From a new workspace directory:
+
+```console
+git clone --branch feat/native-ui-assembly-contract https://github.com/clankernative/clanker-ui.git clanker-ui
+git clone --branch feat/provider-neutral-ui https://github.com/clankernative/platform.git platform
+git clone --branch feat/clanker-ui-first-consumer https://git.wonderly.info/internal-tools/golinks.git golinks
+(cd platform && cargo fetch --locked && cargo run --locked -p xtask -- bootstrap)
+(cd clanker-ui && cargo +1.98.1 build --locked --release --bin clanker-ui)
+mkdir -p packages .cache
+test ! -e packages/clanker-vanilla && cp -R clanker-ui/packages/vanilla packages/clanker-vanilla
+./clanker-ui/target/release/clanker-ui native-pin --output "$PWD/.cache/ui-provider-pin.json"
+(cd platform && DAY2_UI_PROVIDER_PIN_JSON="$PWD/../.cache/ui-provider-pin.json" cargo run --locked -p xtask -- build "$PWD/../golinks")
+```
+
+The copy provisions the source package at the lock's conventional build-input
+path; it is not generated HTML/CSS and does not modify GoLinks' lock. The builder
+checks its declared bytes against that lock. The pin is machine-local approval
+of the executable you just built, not permission supplied by the app. Record the
+three checkout SHAs before comparing results. Fetch dependencies during setup;
+`--offline` is appropriate only after the dependency cache is populated.
+
+This exercises the direct Native build, **not** the full isolated control-plane
+recipe. For an isolated builder, its private operator configuration additionally
+sets `ui_assembly.provider_pin`, `ui_assembly.package_root`, and
+`ui_assembly.package_key` (`clanker-vanilla`); see Platform's
+`docs/CONTROL-PLANE.md`. Full local development also has the OpenTofu/Temporal
+prerequisites documented in Platform's README.
+
+No registry resolver or published package/tool release is assumed here. This is
+a reproducible source-development setup, not the final Tailwind-like installation
+experience. Do not copy old absolute pins or private instance state to a new
+machine; regenerate approvals and create local test state there.
 
 ## GoLinks consumer proof
 
@@ -350,7 +391,7 @@ Keep three boundaries separate while developing them together in this folder:
 
 1. **Catalog and agent CLI.** Parse and validate package/component contracts, build the generated navigation and search index, expose `search`, `describe`, and dependency/verification information, and resolve local packages into an app-specific lock. This layer knows intent, compatibility, package identity, and provenance. Its pure expansion core renders symbolic templates without interpreting Roc business data; script-free scenes use explicitly supplied fake data. An MCP server could later wrap the same CLI/library API if agents benefit from it, not become a second catalog.
 2. **Vanilla component package.** Adapt the proven Toolframe components into portable semantic HTML, colocated CSS, small browser modules, themes, fixtures, and accessibility behavior. Keep a single component source contract with target-specific assets where necessary. The package does not own an app's design override, queries, commands, routes, or persistent state.
-3. **Clanker Native adapter.** Invoke the pinned CLI once, verify its declared inputs and outputs, and stage its bundle in the private snapshot. Independently admit templates, resources, and bindings against typed queries, routes, and commands. The platform owns admission, staging, serving, and Datastar integration—not component rendering or helper semantics. A future React adapter can consume the same discovery model without pretending that the rendering source is identical.
+3. **Clanker Native adapter.** Invoke the pinned CLI once, verify its declared inputs and outputs, and stage ordinary templates/resources in the private snapshot. Independently admit templates and resources against app capabilities. The platform owns admission, staging, serving, and Datastar integration—not component rendering or helper semantics. A future React adapter can consume the same discovery model without pretending that the rendering source is identical.
 
 The agent selects components and declares their options at the point of use; the build expands them deterministically. Avoid making the agent hand-copy template, CSS, and JS files or maintain a second manual asset list. Changes to an app-owned theme stay in the app and do not mutate the downloaded package. Keep a package's default tokens and required semantic roles explicit so an app can override values without forking component source.
 

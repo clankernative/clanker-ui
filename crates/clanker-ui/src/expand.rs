@@ -31,8 +31,21 @@ pub struct ExpansionBundle {
     pub inputs: Vec<LockedInput>,
     /// Authored inputs folded into managed outputs; remove only in a private host snapshot.
     pub consumed_inputs: Vec<String>,
-    /// Admitted module resources the host should load, without knowing component names.
+    /// Admitted module resources the standalone diagnostic can identify.
     pub entrypoints: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct AssemblyBundle {
+    pub schema_version: u32,
+    pub runtime_abi: u32,
+    pub template_engine: String,
+    pub package_digest: String,
+    pub templates: BTreeMap<String, String>,
+    pub resources: Vec<Resource>,
+    pub inputs: Vec<LockedInput>,
+    pub consumed_inputs: Vec<String>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -267,7 +280,7 @@ pub fn native_pin(output: &Path) -> Result<serde_json::Value, String> {
     let pin = serde_json::json!({
         "schemaVersion": 1,
         "provider": "clanker-ui.native",
-        "assemblyProtocol": 1,
+        "assemblyProtocol": 2,
         "bindingAbi": 2,
         "targets": targets
     });
@@ -283,12 +296,12 @@ pub fn native_pin(output: &Path) -> Result<serde_json::Value, String> {
 }
 
 /// Build an ABI-2 assembly envelope from Native's private captured request.
-pub fn assemble_request(request_path: &Path) -> Result<ExpansionBundle, String> {
+pub fn assemble_request(request_path: &Path) -> Result<AssemblyBundle, String> {
     let bytes = checked_file(request_path)?;
     let request: NativeAssemblyRequest = serde_json::from_slice(&bytes)
         .map_err(|error| format!("{}: {error}", request_path.display()))?;
     if request.schema_version != 1
-        || request.assembly_protocol != 1
+        || request.assembly_protocol != 2
         || request.provider != "clanker-ui.native"
         || request.target.binding_abi != 2
         || request.target.template_engine != "minijinja-2.12.0"
@@ -316,9 +329,20 @@ pub fn assemble_request(request_path: &Path) -> Result<ExpansionBundle, String> 
     }
     validate_captured_ui_lock(ui_path, &request.package)?;
     loaded.digest = request.package.digest.clone();
-    let mut bundle = expand_package(loaded, ui_path, None, &[request_path, package_path])?;
-    bundle.runtime_abi = 2;
-    bundle.package_digest = request.package.digest;
+    let mut expanded = expand_package(loaded, ui_path, None, &[request_path, package_path])?;
+    expanded.runtime_abi = 2;
+    expanded.package_digest = request.package.digest;
+    let bundle = AssemblyBundle {
+        schema_version: expanded.schema_version,
+        runtime_abi: expanded.runtime_abi,
+        template_engine: expanded.template_engine,
+        package_digest: expanded.package_digest,
+        templates: expanded.templates,
+        resources: expanded.resources,
+        inputs: expanded.inputs,
+        consumed_inputs: expanded.consumed_inputs,
+    };
+    // Expansion already validated the complete output; this projection drops diagnostics only.
     Ok(bundle)
 }
 
@@ -765,6 +789,16 @@ fn expand_package(
             "module",
             js.as_bytes(),
         )?);
+        // Native discovers this conventional module like any ordinary app resource.
+        // The producer, not the host, owns which library entrypoints it imports.
+        let bootstrap = b"import './clanker-ui.js';\n";
+        resources.push(resource(
+            "ui/ui-package.js",
+            None,
+            Some(bootstrap.to_vec()),
+            "module",
+            bootstrap,
+        )?);
     }
     for (source, target) in [
         (
@@ -897,8 +931,19 @@ fn expand_package(
 
 fn validate_bundle(bundle: &ExpansionBundle) -> Result<(), String> {
     let mut paths = BTreeSet::new();
+    let mut folded_paths = BTreeSet::new();
+    let mut total_output_bytes = 0usize;
+    for template in bundle.templates.keys() {
+        let path = format!("ui/{template}");
+        if !safe_relative(template) || !folded_paths.insert(path.to_ascii_lowercase()) {
+            return Err(format!("unsafe or colliding template path: {template}"));
+        }
+    }
     for resource in &bundle.resources {
-        if !safe_relative(&resource.path) || !paths.insert(resource.path.clone()) {
+        if !safe_relative(&resource.path)
+            || !paths.insert(resource.path.clone())
+            || !folded_paths.insert(resource.path.to_ascii_lowercase())
+        {
             return Err(format!(
                 "unsafe or duplicate resource path: {}",
                 resource.path
@@ -910,16 +955,64 @@ fn validate_bundle(bundle: &ExpansionBundle) -> Result<(), String> {
                 resource.path
             ));
         }
+        total_output_bytes = total_output_bytes.saturating_add(resource.bytes);
+        if resource.bytes > MAX_FILE {
+            return Err(format!("resource exceeds 1 MiB: {}", resource.path));
+        }
+        if let Some(content) = &resource.content {
+            if content.len() != resource.bytes || digest(content.as_bytes()) != resource.digest {
+                return Err(format!(
+                    "resource content digest/length mismatch: {}",
+                    resource.path
+                ));
+            }
+        }
         if let Some(source) = &resource.source {
             if !safe_relative(source) {
                 return Err(format!("unsafe resource source: {source}"));
             }
+            let input = bundle
+                .inputs
+                .iter()
+                .find(|input| input.path == format!("package/{source}"));
+            if input.is_none_or(|input| {
+                input.bytes != resource.bytes || input.digest != resource.digest
+            }) {
+                return Err(format!(
+                    "resource source is not preserved by locked inputs: {source}"
+                ));
+            }
         }
     }
-    for path in bundle.templates.keys() {
-        if !safe_relative(path) {
-            return Err(format!("unsafe template path: {path}"));
+    for (path, content) in &bundle.templates {
+        if content.len() > MAX_FILE {
+            return Err(format!("template exceeds 1 MiB: {path}"));
         }
+        total_output_bytes = total_output_bytes.saturating_add(content.len());
+    }
+    if bundle.resources.len() > MAX_FILES || total_output_bytes > MAX_TOTAL {
+        return Err("expanded output file/count/byte budget exceeded".into());
+    }
+    let mut input_paths = BTreeSet::new();
+    let mut total_input_bytes = 0usize;
+    for input in &bundle.inputs {
+        let relative = input
+            .path
+            .strip_prefix("package/")
+            .or_else(|| input.path.strip_prefix("ui/"));
+        if !relative.is_some_and(safe_manifest_path)
+            || !input_paths.insert(input.path.to_ascii_lowercase())
+            || input.bytes > MAX_FILE
+        {
+            return Err(format!(
+                "unsafe, duplicate, or oversized input: {}",
+                input.path
+            ));
+        }
+        total_input_bytes = total_input_bytes.saturating_add(input.bytes);
+    }
+    if bundle.inputs.len() > MAX_INPUTS || total_input_bytes > MAX_TOTAL {
+        return Err("expanded input file/count/byte budget exceeded".into());
     }
     let mut entries = BTreeSet::new();
     for entry in &bundle.entrypoints {
@@ -934,6 +1027,9 @@ fn validate_bundle(bundle: &ExpansionBundle) -> Result<(), String> {
             ));
         }
     }
+    let mut output_paths = paths.clone();
+    output_paths.extend(bundle.templates.keys().map(|path| format!("ui/{path}")));
+    validate_no_path_prefix_collisions(&output_paths)?;
     for path in &bundle.consumed_inputs {
         if !path.starts_with("ui/")
             || !safe_relative(path)
@@ -946,6 +1042,19 @@ fn validate_bundle(bundle: &ExpansionBundle) -> Result<(), String> {
             return Err(format!(
                 "consumed input must identify a captured, non-output UI resource: {path}"
             ));
+        }
+    }
+    Ok(())
+}
+
+fn validate_no_path_prefix_collisions(paths: &BTreeSet<String>) -> Result<(), String> {
+    for path in paths {
+        if paths.iter().any(|other| {
+            other.len() > path.len()
+                && other[..path.len()].eq_ignore_ascii_case(path)
+                && other.as_bytes().get(path.len()) == Some(&b'/')
+        }) {
+            return Err(format!("output paths collide by prefix: {path}"));
         }
     }
     Ok(())
@@ -1088,4 +1197,34 @@ fn write_new(root: &Path, relative: &str, bytes: &[u8]) -> Result<(), String> {
     file.write_all(bytes)
         .map_err(|e| format!("{}: {e}", path.display()))?;
     Ok(())
+}
+
+#[cfg(test)]
+mod output_validation_tests {
+    use super::*;
+
+    #[test]
+    fn captured_input_prefix_does_not_reduce_package_path_budget() {
+        let mut bundle = ExpansionBundle {
+            schema_version: 1,
+            runtime_abi: 2,
+            template_engine: "minijinja-2.12.0".into(),
+            package_digest: digest(b""),
+            templates: BTreeMap::new(),
+            bindings: Vec::new(),
+            resources: Vec::new(),
+            inputs: vec![LockedInput {
+                path: "package/a/b/c/d/e/f/g/file.css".into(),
+                bytes: 0,
+                digest: digest(b""),
+            }],
+            consumed_inputs: Vec::new(),
+            entrypoints: Vec::new(),
+        };
+        assert!(validate_bundle(&bundle).is_ok());
+        bundle.inputs[0].path = "package/a/b/c/d/e/f/g/h/file.css".into();
+        assert!(validate_bundle(&bundle).is_err());
+        bundle.inputs[0].path = "unexpected/file.css".into();
+        assert!(validate_bundle(&bundle).is_err());
+    }
 }
