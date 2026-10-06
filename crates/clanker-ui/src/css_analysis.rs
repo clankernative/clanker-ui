@@ -856,10 +856,7 @@ fn resolve_literal_includes(
         return Err(format!("expanded HTML exceeds {MAX_TOTAL} bytes"));
     }
     let mut offset = 0usize;
-    loop {
-        let Some(relative) = source[offset..].find("{% include") else {
-            break;
-        };
+    while let Some(relative) = source[offset..].find("{% include") {
         let start = offset + relative;
         let Some(end_rel) = source[start..].find("%}") else {
             limitations.push("dynamic or malformed template include was not resolved".into());
