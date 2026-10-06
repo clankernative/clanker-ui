@@ -8,21 +8,21 @@ Clanker Native remains usable without Clanker Native UI. Apps keep ownership of 
 
 ## Try the local proof
 
-The Rust workspace has a pure `catalog-core` crate, a `clanker-ui` discovery/assembly CLI, and private `clanker-ui-runtime` preview guards. Native does not link that crate. Clanker UI owns expansion; the Native build invokes the pinned CLI and independently admits its output in a private snapshot. The forty-five Native-supported vanilla components are `button`, `icon`, `badge`, `divider`, `status-indicator`, `tag`, `alert`, `progress`, `form-field`, `avatar`, `empty-state`, `metric`, `skeleton`, `page-header`, `card`, `cluster`, `container`, `grid`, `split`, `stack`, `cover`, `layer`, `pane`, `reel`, `sidebar`, `switch`, `select-field`, `filter-bar`, `data-table`, `breadcrumbs`, `pagination`, `activity-feed`, `button-group`, `definition-list`, `disclosure`, `progress-steps`, `segmented-control`, `tabs`, `checkbox-group`, `radio-group`, `toggle`, `copy-field`, `theme-switcher`, `tooltip`, and `toast`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/clanker-ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
+The Rust workspace has a pure `catalog-core` crate, a `clanker-ui` discovery/assembly CLI, and private `clanker-ui-runtime` preview guards. Native does not link that crate. Clanker UI owns expansion; the Native build invokes the pinned CLI and independently admits its output in a private snapshot. The forty-five Native-supported vanilla components are `button`, `icon`, `badge`, `divider`, `status-indicator`, `tag`, `alert`, `progress`, `form-field`, `avatar`, `empty-state`, `metric`, `skeleton`, `page-header`, `card`, `cluster`, `container`, `grid`, `split`, `stack`, `cover`, `layer`, `pane`, `reel`, `sidebar`, `switch`, `select-field`, `filter-bar`, `data-table`, `breadcrumbs`, `pagination`, `activity-feed`, `button-group`, `definition-list`, `disclosure`, `progress-steps`, `segmented-control`, `tabs`, `checkbox-group`, `radio-group`, `toggle`, `copy-field`, `theme-switcher`, `tooltip`, and `toast`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
 
 From this directory:
 
 ```sh
-cargo run --locked --offline -- find button --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- describe button --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- properties --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- graph button --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- verify --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- find icon --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- find-icon processor --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- describe icon --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- list --lock examples/button-app/clanker-ui.lock.json
-cargo run --locked --offline -- graph badge --lock examples/button-app/clanker-ui.lock.json
+cargo run --locked --offline -- find button --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- describe button --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- properties --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- graph button --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- verify --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- find icon --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- find-icon processor --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- describe icon --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- list --lock examples/button-app/ui.lock.json
+cargo run --locked --offline -- graph badge --lock examples/button-app/ui.lock.json
 ```
 
 `lock --lock <file> --package <path>` pins a local package relative to the lock file; changing its declared bytes requires `--update`. The CLI emits versioned JSON and nonzero status on failure. Its `verify` checks manifest shape, declared inputs, token references, and self-authored fixtures; it is not a substitute for Native's independent admission. Word matching is literal, not embedding-based search. The old `build` and `compose` commands still produce isolated generated files for the earlier proof, but **do not use them to integrate an app**.
@@ -30,8 +30,8 @@ cargo run --locked --offline -- graph badge --lock examples/button-app/clanker-u
 ### Build-time expansion and script-free scenes
 
 ```sh
-cargo run --locked --offline -- expand --lock examples/button-app/clanker-ui.lock.json --ui /path/to/app/ui
-cargo run --locked --offline -- render --lock examples/button-app/clanker-ui.lock.json --ui /path/to/app/ui --scene /tmp/scene.json --fragment components/example.html
+cargo run --locked --offline -- expand --lock examples/button-app/ui.lock.json --ui /path/to/app/ui
+cargo run --locked --offline -- render --lock examples/button-app/ui.lock.json --ui /path/to/app/ui --scene /tmp/scene.json --fragment components/example.html
 ```
 
 Standalone `expand` returns symbolic templates, typed binding metadata, a resource manifest, locked input digests, consumed source paths, and selected module entrypoints for agent diagnostics. Native `assemble` is protocol 2 and returns only ordinary templates/resources plus locked inputs; any needed `ui/ui-package.js` bootstrap is a generated module resource. Binding ABI remains 2. The producer-owned protocol fixture, default CLI golden test, and separately approved real-host smoke are documented in [`crates/clanker-ui/tests/fixtures/platform-assembly/README.md`](crates/clanker-ui/tests/fixtures/platform-assembly/README.md). Optional `expand --out <directory>` writes a separate proof bundle, never the app source. Component expansion, composition, binding syntax, resource selection, and CSS mappings live here; Native independently implements generic value and HTML safety capabilities.

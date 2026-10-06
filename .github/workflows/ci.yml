@@ -18,7 +18,7 @@ jobs:
       - name: Test
         run: cargo test --locked
       - name: Verify locked package
-        run: cargo run --locked -- verify --lock examples/button-app/clanker-ui.lock.json
+        run: cargo run --locked -- verify --lock examples/button-app/ui.lock.json
       - name: Build release CLI
         run: cargo build --locked --release --bin clanker-ui
       - name: Prepare and verify relocatable Native bundle
