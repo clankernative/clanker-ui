@@ -1,6 +1,5 @@
 use crate::ports::{LoadedPackage, PackageSource};
-use catalog_core::{safe_path, Catalog, Component, PackageManifest, Status};
-use sha2::{Digest, Sha256};
+use catalog_core::{safe_path, Catalog, Component, PackageManifest};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
@@ -61,13 +60,6 @@ fn capture(
     Ok(bytes)
 }
 
-fn digest_entry(hasher: &mut Sha256, path: &str, bytes: &[u8]) {
-    hasher.update((path.len() as u64).to_be_bytes());
-    hasher.update(path.as_bytes());
-    hasher.update((bytes.len() as u64).to_be_bytes());
-    hasher.update(bytes);
-}
-
 impl LocalPackage {
     /// Capture every asset declared by component metadata, including non-executable contracts.
     pub fn complete_declared_inputs(&self, package: &mut LoadedPackage) -> Result<(), String> {
@@ -83,6 +75,8 @@ impl LocalPackage {
                 capture(&mut package.assets, &package.root, asset)?;
             }
         }
+        package.digest =
+            crate::lock::input_manifest_digest(&crate::lock::package_inputs(&package.assets)?);
         Ok(())
     }
 }
@@ -146,7 +140,8 @@ impl PackageSource for LocalPackage {
                     path.display()
                 ));
             }
-            if component.status == Status::Ready {
+            // Lock all declared assets, including contracts of components not yet ready.
+            {
                 let assets = component
                     .assets
                     .scripts
@@ -161,14 +156,11 @@ impl PackageSource for LocalPackage {
             components.push(component);
         }
         let catalog = Catalog::new(manifest, components)?;
-        let mut hash = Sha256::new();
-        for (path, bytes) in &files {
-            digest_entry(&mut hash, path, bytes);
-        }
+        let inputs = crate::lock::package_inputs(&files)?;
         Ok(LoadedPackage {
             root: root.to_path_buf(),
             catalog,
-            digest: format!("sha256:{:x}", hash.finalize()),
+            digest: crate::lock::input_manifest_digest(&inputs),
             assets: files,
         })
     }

@@ -5,7 +5,7 @@ fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 fn lock() -> PathBuf {
-    root().join("examples/button-app/clanker-ui.lock.json")
+    root().join("examples/button-app/ui.lock.json")
 }
 fn invoke(args: &[&str]) -> (bool, Value) {
     let output = Command::new(env!("CARGO_BIN_EXE_clanker-ui"))

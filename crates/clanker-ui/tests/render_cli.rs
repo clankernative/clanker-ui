@@ -5,7 +5,7 @@ fn request(ui: &Path, scene: &Path, fragment: Option<&str>) -> std::process::Out
     let mut command = Command::new(env!("CARGO_BIN_EXE_clanker-ui"));
     command
         .args(["render", "--lock"])
-        .arg(root.join("examples/button-app/clanker-ui.lock.json"))
+        .arg(root.join("examples/button-app/ui.lock.json"))
         .arg("--ui")
         .arg(ui)
         .arg("--scene")

@@ -6,7 +6,7 @@ import { mkdtemp, mkdir, readFile, writeFile, rm, realpath } from 'node:fs/promi
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
-import { join, relative } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -26,8 +26,10 @@ test('Native Studio forwards authoring grammar from the real byte-pinned CLI', {
     await mkdir(join(app, 'ui/pages'), { recursive: true });
     await writeFile(join(app, 'ui/pages/index.html'), '<cui-page-header title="Discovery fixture" />');
     await writeFile(join(app, 'ui/app.css'), '');
-    const lock = join(app, 'ui/clanker-ui.lock.json');
-    await exec(cli, ['lock', '--lock', lock, '--package', relative(join(app, 'ui'), join(root, 'packages/vanilla'))]);
+    const lock = join(app, 'ui/ui.lock.json');
+    const { cp } = await import('node:fs/promises');
+    await cp(join(root, 'packages/vanilla'), join(base, 'package'), { recursive: true });
+    await exec(cli, ['lock', '--lock', lock, '--package', '../../package']);
     const digest = 'sha256:' + createHash('sha256').update(await readFile(cli)).digest('hex');
     studio = await createPageServer({
       root: fileURLToPath(new URL('../../../clanker-studio/', import.meta.url)),
@@ -47,7 +49,7 @@ test('Native Studio forwards authoring grammar from the real byte-pinned CLI', {
       assert.deepEqual(described.templateAuthoring, manifest.templateAuthoring);
     }
     const pinned = JSON.parse(await readFile(lock, 'utf8'));
-    assert.equal(studio.state().package.digest, pinned.digest);
+    assert.equal(studio.state().package.digest, pinned.package.digest);
   } finally {
     if (studio) await studio.close();
     await rm(base, { recursive: true, force: true });

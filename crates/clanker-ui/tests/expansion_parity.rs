@@ -17,6 +17,46 @@ fn copy_tree(source: &Path, target: &Path) {
         }
     }
 }
+// This historical corpus records rendered ports, not complete draft contracts.
+// Unregister its explicitly known design-only manifests in the private copy;
+// do not fill missing assets from the current package or weaken closure checks.
+fn copy_frozen_complete_package(root: &Path, package_root: &Path) {
+    copy_tree(
+        &root.join("tests/fixtures/expansion-parity/package"),
+        package_root,
+    );
+    for name in [
+        "checkbox-group",
+        "command-menu",
+        "confirm-dialog",
+        "copy-field",
+        "data-viewport",
+        "date-calendar",
+        "date-picker",
+        "drawer",
+        "file-upload",
+        "modal",
+        "popover",
+        "radio-group",
+        "theme-switcher",
+        "toast",
+        "toggle",
+        "tooltip",
+    ] {
+        let path = package_root.join(format!("components/{name}/component.json"));
+        let manifest: serde_json::Value =
+            serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        assert_eq!(
+            manifest["status"], "draft",
+            "Do not unregister a ready contract"
+        );
+        assert!(!package_root
+            .join(manifest["assets"]["template"].as_str().unwrap())
+            .exists());
+        fs::remove_file(path).unwrap();
+    }
+}
+
 struct PrivatePackage(std::path::PathBuf);
 impl Drop for PrivatePackage {
     fn drop(&mut self) {
@@ -31,10 +71,7 @@ fn seven_static_ports_match_reference_with_an_independent_frozen_package() {
     fs::create_dir(&path).unwrap();
     let temporary = PrivatePackage(path);
     let package_root = temporary.0.join("package");
-    copy_tree(
-        &root.join("tests/fixtures/expansion-parity/package"),
-        &package_root,
-    );
+    copy_frozen_complete_package(root, &package_root);
     let names = [
         "activity-feed",
         "definition-list",
@@ -60,8 +97,15 @@ fn seven_static_ports_match_reference_with_an_independent_frozen_package() {
     let ui = temporary.0.join("app/ui");
     let corpus = root.join("tests/fixtures/expansion-parity/static-ports");
     copy_tree(&corpus.join("input/ui"), &ui);
-    let lock = ui.join("clanker-ui.lock.json");
-    fs::write(&lock,serde_json::to_vec(&serde_json::json!({"schemaVersion":1,"package":package.catalog.package.name,"version":package.catalog.package.version,"path":"../../package","digest":package.digest})).unwrap()).unwrap();
+    let lock = ui.join("ui.lock.json");
+    fs::write(
+        &lock,
+        serde_json::to_vec(
+            &clanker_ui::application::PackageLock::from_package(&package, "../../package").unwrap(),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     let bundle = expand(&lock, &ui, None).unwrap();
     assert_eq!(bundle.templates.len(), 1);
     assert_eq!(
@@ -93,10 +137,7 @@ fn copied_consumers_preserve_every_expanded_template_and_managed_resource_byte()
     fs::create_dir(&path).unwrap();
     let temporary = PrivatePackage(path);
     let package_root = temporary.0.join("package");
-    copy_tree(
-        &root.join("tests/fixtures/expansion-parity/package"),
-        &package_root,
-    );
+    copy_frozen_complete_package(root, &package_root);
     let package = LocalPackage.load(&package_root).unwrap();
     let mut checked = 0;
     for name in [
@@ -107,8 +148,16 @@ fn copied_consumers_preserve_every_expanded_template_and_managed_resource_byte()
         let corpus = root.join("tests/fixtures/expansion-parity").join(name);
         let ui = temporary.0.join(name).join("ui");
         copy_tree(&corpus.join("input/ui"), &ui);
-        let lock = ui.join("clanker-ui.lock.json");
-        fs::write(&lock, serde_json::to_vec(&serde_json::json!({"schemaVersion":1,"package":package.catalog.package.name,"version":package.catalog.package.version,"path":"../../package","digest":package.digest})).unwrap()).unwrap();
+        let lock = ui.join("ui.lock.json");
+        fs::write(
+            &lock,
+            serde_json::to_vec(
+                &clanker_ui::application::PackageLock::from_package(&package, "../../package")
+                    .unwrap(),
+            )
+            .unwrap(),
+        )
+        .unwrap();
         let bundle = expand(&lock, &ui, None).unwrap();
         for (path, html) in &bundle.templates {
             assert_eq!(

@@ -27,12 +27,14 @@ enum Command {
         #[arg(long)]
         request: PathBuf,
     },
-    /// Write an explicit provider-neutral package lock for a selected local package.
+    /// Author the canonical Native UI lock (same schema as lock).
     NativeLock {
         #[arg(long)]
         lock: PathBuf,
         #[arg(long)]
         package: String,
+        #[arg(long)]
+        update: bool,
     },
     /// Write a local unsigned override pin; operator verification of executable trust remains required.
     NativePin {
@@ -229,9 +231,13 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
             "assemble",
             json!(clanker_ui::expand::assemble_request(&request)?),
         )),
-        Command::NativeLock { lock, package } => Ok((
+        Command::NativeLock {
+            lock,
+            package,
+            update,
+        } => Ok((
             "native-lock",
-            clanker_ui::expand::native_lock(&lock, &package)?,
+            clanker_ui::expand::native_lock_with_update(&lock, &package, update)?,
         )),
         Command::NativePin { output } => {
             Ok(("native-pin", clanker_ui::expand::native_pin(&output)?))
@@ -276,7 +282,7 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
                 "theming": {"schemaVersion":1,"readOnly":true,"commands":["tokens","check-css"],"warningsFail":false,"unknownTokensFail":true,"componentDetailsField":"tokenDetails","analysis":"Static CSS and possible template structure; no JavaScript or computed cascade."},
                 "assembly": ["assemble", "expand", "render"],
                 "nativeBundle": {"commands":["native-bundle", "verify-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"artifact":"CI workflow artifact only; no published release or install channel","trust":"Unsigned identity only; operator approval required."},
-                "nativeLock": "Explicit generation only; does not rewrite catalog app locks.",
+                "nativeLock": {"path":"ui/ui.lock.json","schemaVersion":1,"provider":"clanker-ui.native","commands":["lock","native-lock"],"updates":"Explicit --update only; no legacy lock schema."},
                 "nativePin": "Explicit local unsigned override output only; operator verifies executable trust.",
                 "integration": {"componentStatusField":"component.status","nativeStatusField":"component.integration.native","portsField":"component.integration.ports","portTypesField":"component.assets.contracts","missingHostMetadata":"No advertised host support; admission is independent.","readyMeaning":"Component-complete, not backend-integrated."},
                 "adapterProtocol": 2,

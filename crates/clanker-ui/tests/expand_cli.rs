@@ -31,12 +31,12 @@ fn fixture() -> (tempfile::TempDir, PathBuf, PathBuf) {
         b"<main><cui-button label=\"Save\"/></main>",
     )
     .unwrap();
-    let lock = temp.path().join("clanker-ui.lock.json");
+    let lock = ui.join("ui.lock.json");
     let app = clanker_ui::application::Application {
         source: clanker_ui::local::LocalPackage,
         output: clanker_ui::directory_sink::DirectorySink,
     };
-    app.lock(&lock, "package", false).unwrap();
+    app.lock(&lock, "../package", false).unwrap();
     (temp, lock, ui)
 }
 
@@ -121,7 +121,7 @@ fn lock_tampering_and_unsafe_templates_fail_closed() {
 
 #[test]
 fn native_lock_and_assembly_request_are_closed_deterministic_and_abi2() {
-    let (temp, _legacy_lock, ui) = fixture();
+    let (temp, _lock, ui) = fixture();
     let native_lock_path = ui.join("ui.lock.json");
     let generated = expand::native_lock(&native_lock_path, "../package").unwrap();
     let nested_ui = temp.path().join("app/ui");
@@ -132,7 +132,12 @@ fn native_lock_and_assembly_request_are_closed_deterministic_and_abi2() {
         nested_lock["package"]["digest"],
         generated["package"]["digest"]
     );
-    for path in ["package", "./package", "../../../package", "/package"] {
+    for path in [
+        "./package",
+        "../../../package",
+        "/package",
+        "../package/../package",
+    ] {
         assert!(expand::native_lock(&nested_ui.join("invalid.lock.json"), path).is_err());
     }
     let package_lock = generated["package"].clone();

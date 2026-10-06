@@ -1,21 +1,11 @@
 use crate::document;
+pub use crate::lock::{LockedPackage, PackageLock};
 use crate::native::NativeAdapter;
 use crate::native_button::{self, ButtonInstances};
 use crate::ports::{ArtifactSink, Bundle, LoadedPackage, PackageSource};
 use catalog_core::Component;
-use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct PackageLock {
-    pub schema_version: u32,
-    pub package: String,
-    pub version: String,
-    pub path: String,
-    pub digest: String,
-}
 
 pub struct Application<S, O> {
     pub source: S,
@@ -29,30 +19,20 @@ impl<S: PackageSource, O: ArtifactSink> Application<S, O> {
         package_path: &str,
         update: bool,
     ) -> Result<PackageLock, String> {
-        if package_path.is_empty()
-            || Path::new(package_path).is_absolute()
-            || package_path.contains('\\')
-        {
+        if !crate::lock::safe_package_relative(package_path) {
             return Err("package path must be relative to the lock file".into());
         }
         let parent = lock_path.parent().ok_or("lock needs a parent directory")?;
         let loaded = self.source.load(&parent.join(package_path))?;
-        let lock = PackageLock {
-            schema_version: 1,
-            package: loaded.catalog.package.name,
-            version: loaded.catalog.package.version,
-            path: package_path.into(),
-            digest: loaded.digest,
-        };
+        let lock = PackageLock::from_package(&loaded, package_path)?;
         let json = serde_json::to_vec_pretty(&lock).map_err(|e| e.to_string())?;
-        let bytes = if lock_path.extension().is_some_and(|ext| ext == "md") {
-            document::encode("Clanker Native UI package lock", &json)?
-        } else {
-            json
-        };
-        if lock_path.exists() {
-            let previous = fs::read(lock_path).map_err(|e| e.to_string())?;
-            if previous == bytes {
+        if json.len() > 1024 * 1024 {
+            return Err("Native UI lock exceeds 1 MiB".into());
+        }
+        let bytes = json;
+        if fs::symlink_metadata(lock_path).is_ok() {
+            let old = PackageLock::read(lock_path)?;
+            if old == lock {
                 return Ok(lock);
             }
             if !update {
@@ -61,9 +41,7 @@ impl<S: PackageSource, O: ArtifactSink> Application<S, O> {
                     lock_path.display()
                 ));
             }
-            let old: PackageLock =
-                serde_json::from_slice(document::decode(&previous)?).map_err(|e| e.to_string())?;
-            if old.package != lock.package {
+            if old.package.name != lock.package.name {
                 return Err("cannot replace a locked package with a different identity".into());
             }
         }
@@ -80,22 +58,11 @@ impl<S: PackageSource, O: ArtifactSink> Application<S, O> {
     }
 
     pub fn load(&self, lock_path: &Path) -> Result<LoadedPackage, String> {
-        let bytes = fs::read(lock_path).map_err(|e| e.to_string())?;
-        let lock: PackageLock = serde_json::from_slice(document::decode(&bytes)?)
-            .map_err(|e| format!("{}: {e}", lock_path.display()))?;
-        if lock.schema_version != 1
-            || lock.path.is_empty()
-            || Path::new(&lock.path).is_absolute()
-            || lock.path.contains('\\')
-        {
-            return Err("invalid lock schema or path".into());
-        }
+        let lock = PackageLock::read(lock_path)?;
         let parent = lock_path.parent().ok_or("lock needs a parent directory")?;
-        let package = self.source.load(&parent.join(&lock.path))?;
-        if lock.package != package.catalog.package.name
-            || lock.version != package.catalog.package.version
-            || lock.digest != package.digest
-        {
+        let package = self.source.load(&parent.join(&lock.package.path))?;
+        let captured = PackageLock::from_package(&package, &lock.package.path)?;
+        if lock != captured || package.digest != captured.package.digest {
             return Err(format!(
                 "{}: package bytes differ from lock; explicitly refresh the lock",
                 lock_path.display()

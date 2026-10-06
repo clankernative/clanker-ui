@@ -5,6 +5,7 @@ pub mod directory_sink;
 pub mod document;
 pub mod expand;
 pub mod local;
+pub mod lock;
 pub mod native;
 pub mod native_bundle;
 pub mod native_button;
