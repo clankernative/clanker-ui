@@ -22,6 +22,37 @@ struct Cli {
 enum Command {
     /// Report the installed tool's supported contracts without reading an app.
     Capabilities,
+    /// Assemble Native's private protocol-v1 request with binding ABI 2.
+    Assemble {
+        #[arg(long)]
+        request: PathBuf,
+    },
+    /// Write an explicit provider-neutral package lock for a selected local package.
+    NativeLock {
+        #[arg(long)]
+        lock: PathBuf,
+        #[arg(long)]
+        package: String,
+    },
+    /// Write a local unsigned override pin; operator verification of executable trust remains required.
+    NativePin {
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Prepare a relocatable, unsigned Native tool and package bundle.
+    NativeBundle {
+        #[arg(long)]
+        package: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+        #[arg(long)]
+        source_revision: String,
+    },
+    /// Verify a relocatable Native bundle without executing its binary.
+    VerifyNativeBundle {
+        #[arg(long)]
+        bundle: PathBuf,
+    },
     /// Expand locked package declarations without executing application operations.
     Expand {
         #[arg(long)]
@@ -194,6 +225,29 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
                 json!({"packageDigest":package.digest,"tokens":catalog.tokens,"resolutionScope":"Locked baseline CSS and declared component fallbacks; not computed browser styles."}),
             ))
         }
+        Command::Assemble { request } => Ok((
+            "assemble",
+            json!(clanker_ui::expand::assemble_request(&request)?),
+        )),
+        Command::NativeLock { lock, package } => Ok((
+            "native-lock",
+            clanker_ui::expand::native_lock(&lock, &package)?,
+        )),
+        Command::NativePin { output } => {
+            Ok(("native-pin", clanker_ui::expand::native_pin(&output)?))
+        }
+        Command::NativeBundle {
+            package,
+            output,
+            source_revision,
+        } => Ok((
+            "native-bundle",
+            clanker_ui::native_bundle::prepare(&package, &output, &source_revision)?,
+        )),
+        Command::VerifyNativeBundle { bundle } => Ok((
+            "verify-native-bundle",
+            clanker_ui::native_bundle::verify(&bundle)?,
+        )),
         Command::Expand { lock, ui, out } => Ok((
             "expand",
             json!(clanker_ui::expand::expand(&lock, &ui, out.as_deref())?),
@@ -220,9 +274,13 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
                 "discovery": ["list", "find", "find-icon", "describe", "properties", "graph", "context", "tokens"],
                 "validation": ["verify", "doctor", "check-css"],
                 "theming": {"schemaVersion":1,"readOnly":true,"commands":["tokens","check-css"],"warningsFail":false,"unknownTokensFail":true,"componentDetailsField":"tokenDetails","analysis":"Static CSS and possible template structure; no JavaScript or computed cascade."},
-                "assembly": ["expand", "render"],
+                "assembly": ["assemble", "expand", "render"],
+                "nativeBundle": {"commands":["native-bundle", "verify-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"artifact":"CI workflow artifact only; no published release or install channel","trust":"Unsigned identity only; operator approval required."},
+                "nativeLock": "Explicit generation only; does not rewrite catalog app locks.",
+                "nativePin": "Explicit local unsigned override output only; operator verifies executable trust.",
                 "integration": {"componentStatusField":"component.status","nativeStatusField":"component.integration.native","portsField":"component.integration.ports","portTypesField":"component.assets.contracts","missingHostMetadata":"No advertised host support; admission is independent.","readyMeaning":"Component-complete, not backend-integrated."},
                 "adapterProtocol": 1,
+                "bindingAbi": 2,
                 "templateEngine": "minijinja-2.12.0",
                 "lock": "Exact declared local package bytes; updates are explicit.",
                 "ownership": "Native/app owns operations, state and resource admission. This tool checks package contracts, not host or browser readiness.",
@@ -480,10 +538,12 @@ fn main() {
             }
         }
         Err(message) => {
-            println!(
-                "{}",
+            let envelope = if std::env::args().nth(1).as_deref() == Some("assemble") {
+                json!({"schemaVersion": 1, "ok": false, "command": "assemble", "data": null, "diagnostics": [{"code": "CUI001", "severity": "error", "message": message}]})
+            } else {
                 json!({"schemaVersion": 1, "ok": false, "diagnostics": [{"code": "CUI001", "severity": "error", "message": message}]})
-            );
+            };
+            println!("{envelope}");
             std::process::exit(1);
         }
     }

@@ -121,7 +121,7 @@ pub(super) fn render(
                 );
                 html = html.replacen(
                     needle,
-                    &format!(" data-cui-checked-flag=\"{{{{ {path} }}}}\"{needle}"),
+                    &format!(" data-ui-checked-flag=\"{{{{ {path} }}}}\"{needle}"),
                     1,
                 );
             }

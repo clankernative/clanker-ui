@@ -68,6 +68,25 @@ fn digest_entry(hasher: &mut Sha256, path: &str, bytes: &[u8]) {
     hasher.update(bytes);
 }
 
+impl LocalPackage {
+    /// Capture every asset declared by component metadata, including non-executable contracts.
+    pub fn complete_declared_inputs(&self, package: &mut LoadedPackage) -> Result<(), String> {
+        for component in package.catalog.components() {
+            let assets = component
+                .assets
+                .scripts
+                .iter()
+                .chain(component.assets.contracts.iter())
+                .chain([&component.assets.template, &component.assets.styles])
+                .chain(component.fixtures.iter());
+            for asset in assets {
+                capture(&mut package.assets, &package.root, asset)?;
+            }
+        }
+        Ok(())
+    }
+}
+
 impl PackageSource for LocalPackage {
     fn load(&self, root: &Path) -> Result<LoadedPackage, String> {
         let metadata =

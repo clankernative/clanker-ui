@@ -87,7 +87,7 @@ fn missing_data_unsafe_markup_and_invalid_runtime_values_fail_closed() {
     assert!(!request(&ui, &scene, None).status.success());
     fs::write(
         ui.join("components/message.html"),
-        "{{ cui_button_variant(variant) }}",
+        "{{ ui_integer(variant, 0, 3) }}",
     )
     .unwrap();
     fs::write(

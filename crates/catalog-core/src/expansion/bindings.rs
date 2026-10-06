@@ -2,22 +2,18 @@
 use super::*;
 use serde_json::to_string as json_string;
 
-fn progress_argument(value: &str) -> Result<(String, Option<f64>)> {
+fn progress_argument(value: &str) -> Result<String> {
     if let Some(path) = interpolation(value) {
-        return Ok((path.to_owned(), None));
+        return Ok(path.to_owned());
     }
     ensure!(
         !value.contains("{{") && !value.contains("}}"),
         "progress binding must be a whole checked page field"
     );
-    let number = value.parse::<f64>().context(
-        "progress value and maximum must be numeric literals or whole checked page fields",
-    )?;
-    ensure!(
-        number.is_finite(),
-        "progress numeric literals must be finite"
-    );
-    Ok((json_string(value)?, Some(number)))
+    let valid =
+        value.parse::<u64>().is_ok() || value.parse::<f64>().is_ok_and(|number| number.is_finite());
+    ensure!(valid, "progress numeric literal must be finite");
+    Ok(json_string(value)?)
 }
 
 /// Render determinate progress values that may come from checked numeric fields.
@@ -39,45 +35,25 @@ pub(super) fn render_progress(progress: &Button, package: &Package) -> Result<St
         .attrs
         .get("maximum")
         .context("determinate progress requires value and maximum")?;
-    let (value_arg, value_literal) = progress_argument(value_text)?;
-    let (maximum_arg, maximum_literal) = progress_argument(maximum_text)?;
-    if value_literal.is_some() && maximum_literal.is_some() {
-        return render_progress_literal(progress, package);
-    }
+    let value_arg = progress_argument(value_text)?;
+    let maximum_arg = progress_argument(maximum_text)?;
 
-    // Reuse the literal renderer for all nonnumeric validation and markup. Pick
-    // placeholders that keep mixed literal/bound inputs inside its valid range.
-    let placeholder_maximum =
-        maximum_literal.unwrap_or_else(|| value_literal.unwrap_or(0.0).max(1.0));
-    let placeholder_value = value_literal.unwrap_or(0.0);
-    ensure!(
-        placeholder_maximum > 0.0
-            && placeholder_value >= 0.0
-            && placeholder_value <= placeholder_maximum,
-        "progress requires maximum > 0 and 0 <= value <= maximum"
-    );
+    // This static placeholder is never used as runtime state; ordinary template
+    // expressions below validate and render the original exact operands.
     let mut literal = progress.clone();
-    literal
-        .attrs
-        .insert("value".into(), number(placeholder_value));
-    literal
-        .attrs
-        .insert("maximum".into(), number(placeholder_maximum));
+    literal.attrs.insert("value".into(), "0".into());
+    literal.attrs.insert("maximum".into(), "1".into());
     let mut html = render_progress_literal(&literal, package)?;
 
-    let track = format!(
-        "<progress class=\"cui-progress__track\" value=\"{}\" max=\"{}\" aria-label=\"",
-        number(placeholder_value),
-        number(placeholder_maximum)
-    );
+    let track = "<progress class=\"cui-progress__track\" value=\"0\" max=\"1\" aria-label=\"";
     let dynamic_track = format!(
-        "<progress class=\"cui-progress__track\" value=\"{{{{ cui_progress_value({value_arg}, {maximum_arg}) }}}}\" max=\"{{{{ cui_progress_maximum({value_arg}, {maximum_arg}) }}}}\" aria-label=\""
+        "<progress class=\"cui-progress__track\" value=\"{{{{ ui_number({value_arg}, \"0\", {maximum_arg}, false) }}}}\" max=\"{{{{ ui_number({maximum_arg}, \"0\", none, true) }}}}\" aria-label=\""
     );
     ensure!(
-        html.contains(&track),
+        html.contains(track),
         "progress renderer produced unexpected track markup"
     );
-    html = html.replacen(&track, &dynamic_track, 1);
+    html = html.replacen(track, &dynamic_track, 1);
 
     // Literal completion is only a placeholder artifact; completion is decided
     // by the runtime helper over the original checked arguments.
@@ -91,7 +67,7 @@ pub(super) fn render_progress(progress: &Button, package: &Package) -> Result<St
     }
     html.insert_str(
         class_end,
-        &format!("{{% if cui_progress_complete({value_arg}, {maximum_arg}) %}} cui-progress--complete{{% endif %}}"),
+        &format!("{{% if ui_compare({value_arg}, {maximum_arg}) == 0 %}} cui-progress--complete{{% endif %}}"),
     );
     Ok(html)
 }
@@ -113,7 +89,7 @@ pub(super) fn render_avatar(avatar: &Button, package: &Package) -> Result<String
         .context("cui-avatar requires initials")?;
     let bound_initials = interpolation(initials);
     let rendered_initials = if let Some(path) = bound_initials {
-        Some(format!("{{{{ cui_initials({path}) }}}}"))
+        Some(format!("{{{{ ui_text({path}, \"nonblank\", 1, 3) }}}}"))
     } else {
         ensure!(
             !initials.contains("{{") && !initials.contains("}}"),
@@ -133,7 +109,7 @@ pub(super) fn render_avatar(avatar: &Button, package: &Package) -> Result<String
         Some(format!("{{{{ asset({}) }}}}", json_string(key)?))
     } else if let Some(src) = avatar.attrs.get("src") {
         if let Some(path) = interpolation(src) {
-            Some(format!("{{{{ cui_image({path}) }}}}"))
+            Some(format!("{{{{ ui_image({path}) }}}}"))
         } else {
             ensure!(
                 !src.contains("{{") && !src.contains("}}"),
@@ -141,7 +117,7 @@ pub(super) fn render_avatar(avatar: &Button, package: &Package) -> Result<String
             );
             crate::template_values::validate_remote_image_source(src)
                 .context("avatar src must be a valid HTTPS image source")?;
-            Some(format!("{{{{ cui_image({}) }}}}", json_string(src)?))
+            Some(format!("{{{{ ui_image({}) }}}}", json_string(src)?))
         }
     } else {
         None
@@ -196,6 +172,10 @@ mod tests {
 
     #[test]
     fn json_literal_arguments_are_quoted() {
-        assert_eq!(progress_argument("12.5").unwrap().0, "\"12.5\"");
+        assert_eq!(progress_argument("12.5").unwrap(), "\"12.5\"");
+        assert_eq!(
+            progress_argument("18446744073709551615").unwrap(),
+            "\"18446744073709551615\""
+        );
     }
 }

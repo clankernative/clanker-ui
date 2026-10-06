@@ -192,7 +192,7 @@ fn control_flow(text: &str) -> Option<String> {
 }
 fn interp_text(value: &str, context: &str) -> Result<String> {
     if let Some(path) = interpolation(value) {
-        return Ok(format!("{{{{ cui_text({path}) }}}}"));
+        return Ok(format!("{{{{ ui_text({path}, \"nonblank\", 1, 0) }}}}"));
     }
     ensure!(
         !value.contains("{{") && !value.contains("}}"),
@@ -206,24 +206,29 @@ fn interp_text(value: &str, context: &str) -> Result<String> {
 }
 fn selected_attribute(value: &str) -> Result<String> {
     if let Some(path) = interpolation(value) {
-        Ok(format!(" data-cui-selected=\"{{{{ cui_text({path}) }}}}\""))
+        Ok(format!(
+            " data-ui-choice-value=\"{{{{ ui_text({path}, \"plain\", 0, 0) }}}}\""
+        ))
     } else {
         ensure!(
             !value.contains("{{") && !value.contains("}}"),
             "selected must be literal or a whole checked field"
         );
-        Ok(format!(" data-cui-selected=\"{}\"", escape(value)))
+        Ok(format!(" data-ui-choice-value=\"{}\"", escape(value)))
     }
 }
 fn comparison(value: &str) -> Result<String> {
     if let Some(path) = interpolation(value) {
-        Ok(format!("cui_text({path})"))
+        Ok(format!("ui_text({path}, \"plain\", 0, 0)"))
     } else {
         ensure!(
             !value.contains("{{") && !value.contains("}}"),
             "selection must be a literal or whole checked field"
         );
-        Ok(format!("cui_text(\"{}\")", escape(value)))
+        Ok(format!(
+            "ui_text({}, \"plain\", 0, 0)",
+            serde_json::to_string(value)?
+        ))
     }
 }
 
@@ -369,10 +374,10 @@ fn select_field(decl: &Button, body: &str, package: &Package) -> Result<String> 
     }
     if let Some(placeholder) = placeholder {
         let selected_placeholder = if selected.is_none() { " selected" } else { "" };
-        options.insert_str(0, &format!("<option data-cui-placeholder value=\"\" disabled{selected_placeholder}>{placeholder}</option>"));
+        options.insert_str(0, &format!("<option data-ui-placeholder value=\"\" disabled{selected_placeholder}>{placeholder}</option>"));
     }
     let control = format!(
-        "<select class=\"cui-select-field__control\" id=\"{}\" name=\"{}\"{selected_attr}{}{}{}{}>{options}</select>",
+        "<select class=\"cui-select-field__control\" id=\"{}\" name=\"{}\" data-ui-choice-set=\"true\"{selected_attr}{}{}{}{}>{options}</select>",
         escape(id),
         escape(name),
         if described.is_empty() {
@@ -428,7 +433,7 @@ fn option_markup(
         let compared = comparison(value)?;
         let selected_cmp = comparison(selected)?;
         format!(
-            " data-cui-selected-flag=\"{{{{ {compared} == {selected_cmp} and not ({disabled}) }}}}\""
+            " data-ui-selected-flag=\"{{{{ {compared} == {selected_cmp} and not ({disabled}) }}}}\""
         )
     } else {
         String::new()
@@ -614,7 +619,7 @@ fn data_table<const N: usize>(
             token(prefix, "row id prefix")?;
             let key = row.attrs.get("key").context("id-prefix requires key")?;
             let path = interpolation(key).context("row key must be one whole checked field")?;
-            format!("{prefix}-{{{{ cui_token({path}) }}}}")
+            format!("{prefix}-{{{{ ui_key({path}) }}}}")
         };
         if !id.contains("{{") {
             ensure!(ids.insert(id.clone()), "duplicate table row id");
@@ -804,7 +809,7 @@ fn breadcrumbs(decl: &Button, body: &str, package: &Package) -> Result<String> {
         &[
             (
                 "[[attributes]]",
-                "class=\"cui-breadcrumbs\" data-cui-component=\"breadcrumbs\"",
+                "class=\"cui-breadcrumbs\" data-cui-component=\"breadcrumbs\" data-ui-navigation=\"true\" data-ui-navigation-minimum-items=\"2\" data-ui-navigation-current-last=\"true\" data-ui-navigation-ancestor-links=\"true\"",
             ),
             ("[[label]]", &label),
             ("[[items]]", &items),
@@ -935,7 +940,7 @@ fn pagination(decl: &Button, body: &str, package: &Package) -> Result<String> {
             (
                 "[[attributes]]",
                 &format!(
-                    "class=\"cui-pagination cui-pagination--{variant}\" data-cui-component=\"pagination\""
+                    "class=\"cui-pagination cui-pagination--{variant}\" data-cui-component=\"pagination\" data-ui-navigation=\"true\" data-ui-navigation-minimum-items=\"1\" data-ui-navigation-current-last=\"false\""
                 ),
             ),
             ("[[label]]", &label),

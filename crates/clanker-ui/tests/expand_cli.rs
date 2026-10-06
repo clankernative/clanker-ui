@@ -1,4 +1,5 @@
 use clanker_ui::expand;
+use sha2::{Digest, Sha256};
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -115,6 +116,135 @@ fn lock_tampering_and_unsafe_templates_fail_closed() {
         .replacen("sha256:", "sha256:tampered", 1);
     fs::write(&lock, text).unwrap();
     assert!(expand::expand(&lock, &ui, None).is_err());
+}
+
+#[test]
+fn native_lock_and_assembly_request_are_closed_deterministic_and_abi2() {
+    let (temp, _legacy_lock, ui) = fixture();
+    let native_lock_path = ui.join("ui.lock.json");
+    let generated = expand::native_lock(&native_lock_path, "../package").unwrap();
+    let nested_ui = temp.path().join("app/ui");
+    fs::create_dir_all(&nested_ui).unwrap();
+    let nested_lock =
+        expand::native_lock(&nested_ui.join("ui.lock.json"), "../../package").unwrap();
+    assert_eq!(
+        nested_lock["package"]["digest"],
+        generated["package"]["digest"]
+    );
+    for path in ["package", "./package", "../../../package", "/package"] {
+        assert!(expand::native_lock(&nested_ui.join("invalid.lock.json"), path).is_err());
+    }
+    let package_lock = generated["package"].clone();
+    assert_eq!(generated["provider"], "clanker-ui.native");
+    let inputs = package_lock["inputs"].as_array().unwrap();
+    assert!(inputs
+        .iter()
+        .any(|input| input["path"] == "components/button/component.json"));
+    assert!(inputs
+        .iter()
+        .any(|input| input["path"] == "components/date-picker/browser.d.ts"));
+    let mut manifest = Sha256::new();
+    for input in inputs {
+        manifest.update(input["path"].as_str().unwrap().as_bytes());
+        manifest.update([0]);
+        manifest.update(input["bytes"].to_string().as_bytes());
+        manifest.update([0]);
+        manifest.update(input["digest"].as_str().unwrap().as_bytes());
+        manifest.update(b"\n");
+    }
+    assert_eq!(
+        package_lock["digest"],
+        format!("sha256:{:x}", manifest.finalize())
+    );
+    let request = serde_json::json!({
+        "schemaVersion": 1,
+        "assemblyProtocol": 1,
+        "provider": "clanker-ui.native",
+        "target": {"bindingAbi": 2, "templateEngine": "minijinja-2.12.0"},
+        "package": {
+            "name": package_lock["name"],
+            "version": package_lock["version"],
+            "path": temp.path().join("package"),
+            "digest": package_lock["digest"],
+            "inputs": package_lock["inputs"]
+        },
+        "ui": ui
+    });
+    let request_path = temp.path().join("request.json");
+    fs::write(&request_path, serde_json::to_vec(&request).unwrap()).unwrap();
+    let ui_lock_path = ui.join("ui.lock.json");
+    let valid_ui_lock = fs::read(&ui_lock_path).unwrap();
+    fs::write(&ui_lock_path, b"{}").unwrap();
+    assert!(expand::assemble_request(&request_path).is_err());
+    fs::write(&ui_lock_path, valid_ui_lock).unwrap();
+    let first = expand::assemble_request(&request_path).unwrap();
+    let second = expand::assemble_request(&request_path).unwrap();
+    assert_eq!(first, second);
+    assert_eq!(first.runtime_abi, 2);
+    assert_eq!(first.package_digest, package_lock["digest"]);
+    assert!(first
+        .inputs
+        .iter()
+        .any(|input| input.path == "ui/ui.lock.json"));
+    assert!(!first.consumed_inputs.contains(&"ui/ui.lock.json".into()));
+
+    let mutations: [fn(&mut serde_json::Value); 7] = [
+        |value| value["schemaVersion"] = 2.into(),
+        |value| value["assemblyProtocol"] = 2.into(),
+        |value| value["target"]["bindingAbi"] = 1.into(),
+        |value| value["target"]["templateEngine"] = "jinja".into(),
+        |value| value["package"]["digest"] = "sha256:wrong".into(),
+        |value| {
+            value["package"]["inputs"].as_array_mut().unwrap().pop();
+        },
+        |value| value["unexpected"] = true.into(),
+    ];
+    for mutate in mutations {
+        let mut invalid = request.clone();
+        mutate(&mut invalid);
+        fs::write(&request_path, serde_json::to_vec(&invalid).unwrap()).unwrap();
+        assert!(expand::assemble_request(&request_path).is_err());
+    }
+}
+
+#[test]
+fn native_pin_is_explicit_local_unsigned_output_for_the_current_executable() {
+    let temp = tempfile::tempdir().unwrap();
+    let app_lock = temp.path().join("ui.lock.json");
+    fs::write(&app_lock, b"app lock stays intact").unwrap();
+    assert!(expand::native_pin(&app_lock).is_err());
+    assert_eq!(fs::read(&app_lock).unwrap(), b"app lock stays intact");
+    let occupied = temp.path().join("occupied-pin.json");
+    fs::write(&occupied, b"keep").unwrap();
+    assert!(expand::native_pin(&occupied).is_err());
+    assert_eq!(fs::read(&occupied).unwrap(), b"keep");
+
+    let output = temp.path().join("provider-pin.json");
+    let pin = expand::native_pin(&output).unwrap();
+    assert_eq!(pin["schemaVersion"], 1);
+    assert_eq!(pin["provider"], "clanker-ui.native");
+    assert_eq!(pin["assemblyProtocol"], 1);
+    assert_eq!(pin["bindingAbi"], 2);
+    let host_target = match (std::env::consts::OS, std::env::consts::ARCH) {
+        ("macos", "aarch64") => "macos-aarch64",
+        ("macos", "x86_64") => "macos-x86_64",
+        ("linux", "aarch64") => "linux-aarch64",
+        ("linux", "x86_64") => "linux-x86_64",
+        target => panic!("unsupported test host target: {target:?}"),
+    };
+    assert_eq!(pin["targets"].as_object().unwrap().len(), 1);
+    let target = &pin["targets"][host_target];
+    let executable = PathBuf::from(target["executable"].as_str().unwrap());
+    let executable_bytes = fs::read(executable).unwrap();
+    assert!(executable_bytes.len() <= 64 * 1024 * 1024);
+    assert_eq!(
+        target["digest"],
+        format!("sha256:{:x}", Sha256::digest(executable_bytes))
+    );
+    assert_eq!(
+        serde_json::from_slice::<serde_json::Value>(&fs::read(output).unwrap()).unwrap(),
+        pin
+    );
 }
 
 #[test]

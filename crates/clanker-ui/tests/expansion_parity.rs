@@ -143,7 +143,7 @@ fn copied_consumers_preserve_every_expanded_template_and_managed_resource_byte()
             checked += 1;
         }
         assert!(bundle.entrypoints.is_empty());
-        assert_eq!(bundle.runtime_abi, 1);
+        assert_eq!(bundle.runtime_abi, 2);
         assert_eq!(bundle.template_engine, "minijinja-2.12.0");
     }
     assert_eq!(checked, 28, "Do not silently reduce parity corpus coverage");

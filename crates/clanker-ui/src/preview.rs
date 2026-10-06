@@ -164,9 +164,9 @@ fn static_markup(markup: &str) -> Result<String, String> {
         }
     }
     for (marker, attribute) in [
-        ("data-cui-selected-flag", "selected"),
-        ("data-cui-checked-flag", "checked"),
-        ("data-cui-hidden-flag", "hidden"),
+        ("data-ui-selected-flag", "selected"),
+        ("data-ui-checked-flag", "checked"),
+        ("data-ui-hidden-flag", "hidden"),
     ] {
         let nodes = document
             .tree
@@ -372,15 +372,15 @@ mod tests {
     use super::*;
     #[test]
     fn static_flags_and_executable_markup_are_checked() {
-        let output=static_markup("<select><option value=\"a\" selected data-cui-selected-flag=\"false\">A</option><option value=\"b\" data-cui-selected-flag=\"true\">B</option></select>").unwrap();
-        assert!(!output.contains("data-cui-selected-flag"));
+        let output=static_markup("<select><option value=\"a\" selected data-ui-selected-flag=\"false\">A</option><option value=\"b\" data-ui-selected-flag=\"true\">B</option></select>").unwrap();
+        assert!(!output.contains("data-ui-selected-flag"));
         assert_eq!(output.matches(" selected").count(), 1);
         for markup in [
             "<script>alert(1)</script>",
             "<img onerror=\"alert(1)\" src=\"x\">",
             "<iframe src=\"/\"></iframe>",
-            "<div data-cui-selected-flag=\"true\"></div>",
-            "<fieldset data-cui-hidden-flag=\"yes\"></fieldset>",
+            "<div data-ui-selected-flag=\"true\"></div>",
+            "<fieldset data-ui-hidden-flag=\"yes\"></fieldset>",
         ] {
             assert!(static_markup(markup).is_err(), "{markup}");
         }

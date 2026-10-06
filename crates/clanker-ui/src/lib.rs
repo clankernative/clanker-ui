@@ -6,6 +6,7 @@ pub mod document;
 pub mod expand;
 pub mod local;
 pub mod native;
+pub mod native_bundle;
 pub mod native_button;
 pub mod ports;
 pub mod preview;

@@ -1,11 +1,15 @@
 //! Read-only CLI expansion boundary for locked Native UI packages.
-use crate::{application::Application, directory_sink::DirectorySink, local::LocalPackage};
+use crate::{
+    application::Application, directory_sink::DirectorySink, local::LocalPackage,
+    ports::PackageSource,
+};
 use catalog_core::expansion::{self, Binding, Package};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{
     collections::{BTreeMap, BTreeSet},
     fs,
+    io::Read,
     path::{Component, Path},
 };
 
@@ -60,8 +64,290 @@ pub struct LockedInput {
     pub bytes: usize,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct NativeAssemblyRequest {
+    schema_version: u32,
+    assembly_protocol: u32,
+    provider: String,
+    target: NativeTarget,
+    package: NativePackage,
+    ui: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct NativeTarget {
+    binding_abi: u32,
+    template_engine: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct NativePackage {
+    name: String,
+    version: String,
+    path: String,
+    digest: String,
+    inputs: Vec<LockedInput>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct NativeLock {
+    schema_version: u32,
+    provider: String,
+    package: NativeLockPackage,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct NativeLockPackage {
+    name: String,
+    version: String,
+    path: String,
+    digest: String,
+    inputs: Vec<LockedInput>,
+}
+
 fn digest(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+pub(crate) fn input_manifest_digest(inputs: &[LockedInput]) -> String {
+    let mut hasher = Sha256::new();
+    for input in inputs {
+        hasher.update(input.path.as_bytes());
+        hasher.update([0]);
+        hasher.update(input.bytes.to_string().as_bytes());
+        hasher.update([0]);
+        hasher.update(input.digest.as_bytes());
+        hasher.update(b"\n");
+    }
+    format!("sha256:{:x}", hasher.finalize())
+}
+
+pub(crate) fn package_inputs(
+    assets: &BTreeMap<String, Vec<u8>>,
+) -> Result<Vec<LockedInput>, String> {
+    if assets.len() > MAX_INPUTS || assets.values().map(Vec::len).sum::<usize>() > MAX_TOTAL {
+        return Err("package declared input closure exceeds assembly limits".into());
+    }
+    let mut folded_paths = BTreeSet::new();
+    assets
+        .iter()
+        .map(|(path, bytes)| {
+            if !safe_manifest_path(path) || bytes.len() > MAX_FILE {
+                return Err(format!("unsafe or oversized package input: {path}"));
+            }
+            if !folded_paths.insert(path.to_ascii_lowercase()) {
+                return Err(format!("case-folded package input path collision: {path}"));
+            }
+            Ok(LockedInput {
+                path: path.clone(),
+                digest: digest(bytes),
+                bytes: bytes.len(),
+            })
+        })
+        .collect()
+}
+
+fn safe_manifest_path(value: &str) -> bool {
+    safe_relative(value) && value.len() <= 512 && value.split('/').count() <= 8
+}
+
+fn safe_package_relative(value: &str) -> bool {
+    if value.is_empty() || value.contains('\\') || Path::new(value).is_absolute() {
+        return false;
+    }
+    let parts = value.split('/').collect::<Vec<_>>();
+    let parents = parts.iter().take_while(|part| **part == "..").count();
+    (1..=2).contains(&parents)
+        && parents < parts.len()
+        && parts[parents..].iter().all(|part| {
+            !part.is_empty()
+                && *part != "."
+                && *part != ".."
+                && part
+                    .bytes()
+                    .all(|byte| byte.is_ascii_alphanumeric() || b"-_.".contains(&byte))
+        })
+}
+
+/// Emit an app-side provider-neutral lock from one explicitly selected package.
+pub fn native_lock(lock_path: &Path, package_path: &str) -> Result<serde_json::Value, String> {
+    if !safe_package_relative(package_path) {
+        return Err("package path must be relative to the native lock file".into());
+    }
+    let parent = lock_path
+        .parent()
+        .ok_or("native lock needs a parent directory")?;
+    if !parent.is_dir() {
+        return Err(format!("lock parent does not exist: {}", parent.display()));
+    }
+    let mut loaded = crate::local::LocalPackage.load(&parent.join(package_path))?;
+    crate::local::LocalPackage.complete_declared_inputs(&mut loaded)?;
+    let inputs = package_inputs(&loaded.assets)?;
+    let lock = NativeLock {
+        schema_version: 1,
+        provider: "clanker-ui.native".into(),
+        package: NativeLockPackage {
+            name: loaded.catalog.package.name,
+            version: loaded.catalog.package.version,
+            path: package_path.into(),
+            digest: input_manifest_digest(&inputs),
+            inputs,
+        },
+    };
+    let bytes = serde_json::to_vec_pretty(&lock).map_err(|error| error.to_string())?;
+    if bytes.len() > MAX_FILE {
+        return Err("native lock exceeds 1 MiB".into());
+    }
+    let temp = tempfile::Builder::new()
+        .prefix(".clanker-ui-native-lock-")
+        .tempfile_in(parent)
+        .map_err(|error| error.to_string())?;
+    fs::write(temp.path(), bytes).map_err(|error| error.to_string())?;
+    temp.persist(lock_path).map_err(|error| error.to_string())?;
+    serde_json::to_value(lock).map_err(|error| error.to_string())
+}
+
+pub(crate) fn current_host_target() -> Result<&'static str, String> {
+    match (std::env::consts::OS, std::env::consts::ARCH) {
+        ("macos", "aarch64") => Ok("macos-aarch64"),
+        ("macos", "x86_64") => Ok("macos-x86_64"),
+        ("linux", "aarch64") => Ok("linux-aarch64"),
+        ("linux", "x86_64") => Ok("linux-x86_64"),
+        (os, arch) => Err(format!("unsupported native pin host target: {os}-{arch}")),
+    }
+}
+
+/// Write an explicit, local-only unsigned override pin for this executable.
+pub fn native_pin(output: &Path) -> Result<serde_json::Value, String> {
+    let executable = std::env::current_exe().map_err(|error| error.to_string())?;
+    let executable = fs::canonicalize(&executable).map_err(|error| error.to_string())?;
+    let metadata = fs::symlink_metadata(&executable).map_err(|error| error.to_string())?;
+    const MAX_EXECUTABLE: u64 = 64 * 1024 * 1024;
+    if !metadata.is_file() || metadata.file_type().is_symlink() || metadata.len() > MAX_EXECUTABLE {
+        return Err("current executable is special or exceeds Native's 64 MiB pin budget".into());
+    }
+    let mut bytes = Vec::new();
+    fs::File::open(&executable)
+        .map_err(|error| error.to_string())?
+        .take(MAX_EXECUTABLE + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|error| error.to_string())?;
+    if bytes.len() as u64 != metadata.len() || bytes.len() as u64 > MAX_EXECUTABLE {
+        return Err("current executable changed or exceeds the pin budget".into());
+    }
+    let parent = output
+        .parent()
+        .ok_or("pin output needs a parent directory")?;
+    if !parent.is_dir() {
+        return Err(format!(
+            "pin output parent does not exist: {}",
+            parent.display()
+        ));
+    }
+    if matches!(
+        output.file_name().and_then(|name| name.to_str()),
+        Some("ui.lock.json" | "clanker-ui.lock.json")
+    ) {
+        return Err("pin output must remain separate from an app UI lock".into());
+    }
+    if fs::symlink_metadata(output).is_ok() {
+        return Err("pin output already exists; choose an unused path".into());
+    }
+    let target = current_host_target()?;
+    let mut targets = serde_json::Map::new();
+    targets.insert(
+        target.into(),
+        serde_json::json!({ "executable": executable, "digest": digest(&bytes) }),
+    );
+    let pin = serde_json::json!({
+        "schemaVersion": 1,
+        "provider": "clanker-ui.native",
+        "assemblyProtocol": 1,
+        "bindingAbi": 2,
+        "targets": targets
+    });
+    let encoded = serde_json::to_vec_pretty(&pin).map_err(|error| error.to_string())?;
+    let temp = tempfile::Builder::new()
+        .prefix(".clanker-ui-native-pin-")
+        .tempfile_in(parent)
+        .map_err(|error| error.to_string())?;
+    fs::write(temp.path(), encoded).map_err(|error| error.to_string())?;
+    temp.persist_noclobber(output)
+        .map_err(|error| error.to_string())?;
+    Ok(pin)
+}
+
+/// Build an ABI-2 assembly envelope from Native's private captured request.
+pub fn assemble_request(request_path: &Path) -> Result<ExpansionBundle, String> {
+    let bytes = checked_file(request_path)?;
+    let request: NativeAssemblyRequest = serde_json::from_slice(&bytes)
+        .map_err(|error| format!("{}: {error}", request_path.display()))?;
+    if request.schema_version != 1
+        || request.assembly_protocol != 1
+        || request.provider != "clanker-ui.native"
+        || request.target.binding_abi != 2
+        || request.target.template_engine != "minijinja-2.12.0"
+    {
+        return Err(
+            "unsupported native assembly protocol, provider, target, or binding ABI".into(),
+        );
+    }
+    let package_path = Path::new(&request.package.path);
+    let ui_path = Path::new(&request.ui);
+    if !package_path.is_absolute() || !ui_path.is_absolute() {
+        return Err("captured package and UI paths must be absolute".into());
+    }
+    let mut loaded = crate::local::LocalPackage.load(package_path)?;
+    crate::local::LocalPackage.complete_declared_inputs(&mut loaded)?;
+    let inputs = package_inputs(&loaded.assets)?;
+    if request.package.name != loaded.catalog.package.name
+        || request.package.version != loaded.catalog.package.version
+        || request.package.inputs != inputs
+        || request.package.digest != input_manifest_digest(&inputs)
+    {
+        return Err(
+            "captured package identity or complete input closure differs from request".into(),
+        );
+    }
+    validate_captured_ui_lock(ui_path, &request.package)?;
+    loaded.digest = request.package.digest.clone();
+    let mut bundle = expand_package(loaded, ui_path, None, &[request_path, package_path])?;
+    bundle.runtime_abi = 2;
+    bundle.package_digest = request.package.digest;
+    Ok(bundle)
+}
+
+fn validate_captured_ui_lock(ui: &Path, package: &NativePackage) -> Result<(), String> {
+    let path = ui.join("ui.lock.json");
+    match fs::symlink_metadata(&path) {
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        Err(error) => Err(format!("{}: {error}", path.display())),
+        Ok(_) => {
+            let bytes = checked_ui_file(ui, "ui.lock.json")?;
+            let lock: NativeLock = serde_json::from_slice(&bytes)
+                .map_err(|error| format!("{}: {error}", path.display()))?;
+            let locked = lock.package;
+            if lock.schema_version != 1
+                || lock.provider != "clanker-ui.native"
+                || !safe_package_relative(&locked.path)
+                || locked.name != package.name
+                || locked.version != package.version
+                || locked.digest != package.digest
+                || locked.inputs != package.inputs
+            {
+                return Err(format!(
+                    "{}: app UI lock differs from the captured package closure",
+                    path.display()
+                ));
+            }
+            Ok(())
+        }
+    }
 }
 
 fn safe_relative(value: &str) -> bool {
@@ -283,6 +569,20 @@ pub fn expand(lock: &Path, ui: &Path, out: Option<&Path>) -> Result<ExpansionBun
     {
         return Err(format!("invalid Native UI lock file: {}", lock.display()));
     }
+    let app = Application {
+        source: LocalPackage,
+        output: DirectorySink,
+    };
+    let package = app.load(lock)?;
+    expand_package(package, ui, out, &[lock])
+}
+
+fn expand_package(
+    package: crate::ports::LoadedPackage,
+    ui: &Path,
+    out: Option<&Path>,
+    extra_excluded_paths: &[&Path],
+) -> Result<ExpansionBundle, String> {
     let ui_meta = fs::symlink_metadata(ui).map_err(|e| format!("{}: {e}", ui.display()))?;
     if !ui_meta.is_dir() || ui_meta.file_type().is_symlink() {
         return Err(format!(
@@ -290,11 +590,6 @@ pub fn expand(lock: &Path, ui: &Path, out: Option<&Path>) -> Result<ExpansionBun
             ui.display()
         ));
     }
-    let app = Application {
-        source: LocalPackage,
-        output: DirectorySink,
-    };
-    let package = app.load(lock)?;
     let core = Package::from_assets(&package.assets)
         .map_err(|e| format!("locked package expansion context: {e:#}"))?;
     let mut html_inputs = BTreeMap::new();
@@ -319,11 +614,19 @@ pub fn expand(lock: &Path, ui: &Path, out: Option<&Path>) -> Result<ExpansionBun
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
         Err(e) => return Err(format!("{}: {e}", app_theme_path.display())),
     };
+    let ui_lock_path = ui.join("ui.lock.json");
+    let ui_lock = match fs::symlink_metadata(&ui_lock_path) {
+        Ok(_) => Some(checked_ui_file(ui, "ui.lock.json")?),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => None,
+        Err(error) => return Err(format!("{}: {error}", ui_lock_path.display())),
+    };
     let total_ui = html_inputs.values().map(Vec::len).sum::<usize>()
         + app_css.len()
-        + app_theme.as_ref().map_or(0, Vec::len);
+        + app_theme.as_ref().map_or(0, Vec::len)
+        + ui_lock.as_ref().map_or(0, Vec::len);
     let total_inputs = total_ui + package.assets.values().map(Vec::len).sum::<usize>();
-    let ui_file_count = html_inputs.len() + 1 + usize::from(app_theme.is_some());
+    let ui_file_count =
+        html_inputs.len() + 1 + usize::from(app_theme.is_some()) + usize::from(ui_lock.is_some());
     if ui_file_count + package.assets.len() > MAX_FILES || total_inputs > MAX_TOTAL {
         return Err("captured input file/count/byte budget exceeded".into());
     }
@@ -555,10 +858,17 @@ pub fn expand(lock: &Path, ui: &Path, out: Option<&Path>) -> Result<ExpansionBun
             bytes: theme.len(),
         });
     }
+    if let Some(lock) = &ui_lock {
+        inputs.push(LockedInput {
+            path: "ui/ui.lock.json".into(),
+            digest: digest(lock),
+            bytes: lock.len(),
+        });
+    }
     inputs.sort_by(|a, b| a.path.cmp(&b.path));
     let bundle = ExpansionBundle {
         schema_version: 1,
-        runtime_abi: 1,
+        runtime_abi: 2,
         template_engine: "minijinja-2.12.0".into(),
         package_digest: package.digest,
         templates,
@@ -578,7 +888,9 @@ pub fn expand(lock: &Path, ui: &Path, out: Option<&Path>) -> Result<ExpansionBun
     };
     validate_bundle(&bundle)?;
     if let Some(out) = out {
-        write_output(out, &bundle, &package.assets, &[ui, lock, &package.root])?;
+        let mut excluded = vec![ui, &package.root];
+        excluded.extend_from_slice(extra_excluded_paths);
+        write_output(out, &bundle, &package.assets, &excluded)?;
     }
     Ok(bundle)
 }

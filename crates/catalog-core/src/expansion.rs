@@ -207,10 +207,7 @@ fn render(button: &Button, package: &Package) -> Result<String> {
     let attrs = &button.attrs;
     // Closed ordinal bindings keep a typed configurator bounded without exposing
     // arbitrary classes, icon geometry, expressions, or HTML strings.
-    for (property, fallback, helper) in [
-        ("size", "standard", "cui_button_size"),
-        ("variant", "secondary", "cui_button_variant"),
-    ] {
+    for (property, fallback) in [("size", "standard"), ("variant", "secondary")] {
         if let Some(path) = attrs.get(property).and_then(|value| interpolation(value)) {
             let mut literal = button.clone();
             literal
@@ -219,13 +216,13 @@ fn render(button: &Button, package: &Package) -> Result<String> {
             let rendered = render(&literal, package)?;
             return Ok(if property == "variant" {
                 rendered.replace(
-                    "class=\"cui-button cui-button--secondary",
-                    &format!("class=\"cui-button cui-button--{{{{ {helper}({path}) }}}}"),
+                    "cui-button--secondary",
+                    &format!("{{% if ui_integer({path}, 0, 3) == \"0\" %}}cui-button--primary{{% elif ui_integer({path}, 0, 3) == \"1\" %}}cui-button--secondary{{% elif ui_integer({path}, 0, 3) == \"2\" %}}cui-button--quiet{{% else %}}cui-button--danger{{% endif %}}"),
                 )
             } else {
                 rendered.replace(
                     "class=\"cui-button ",
-                    &format!("class=\"cui-button {{{{ {helper}({path}) }}}} "),
+                    &format!("class=\"cui-button {{% if ui_integer({path}, 0, 1) == \"0\" %}}cui-button--compact {{% endif %}}"),
                 )
             });
         }
@@ -255,7 +252,7 @@ fn render(button: &Button, package: &Package) -> Result<String> {
             "label interpolation must be a full {{ page.field }}"
         );
         format!(
-            "{{{{ cui_text({}) }}}}",
+            "{{{{ ui_text({}, \"nonblank\", 1, 0) }}}}",
             interpolation(label).context("invalid page field interpolation")?
         )
     } else {
@@ -274,7 +271,7 @@ fn render(button: &Button, package: &Package) -> Result<String> {
                     "busy-label interpolation must be a full page field"
                 );
                 Ok(format!(
-                    "{{{{ cui_text({}) }}}}",
+                    "{{{{ ui_text({}, \"nonblank\", 1, 0) }}}}",
                     interpolation(v).context("invalid busy-label interpolation")?
                 ))
             } else {
@@ -996,14 +993,17 @@ fn render_form_field(field: &Button, package: &Package) -> Result<String> {
 
 fn field_text(value: &str, field: &str, multiline: bool, allow_blank: bool) -> Result<String> {
     if let Some(path) = interpolation(value) {
-        let helper = if multiline {
-            "cui_field_text"
+        let policy = if multiline {
+            "multiline"
         } else if allow_blank {
-            "cui_plain"
+            "plain"
         } else {
-            "cui_text"
+            "nonblank"
         };
-        return Ok(format!("{{{{ {helper}({path}) }}}}"));
+        let minimum = if allow_blank { 0 } else { 1 };
+        return Ok(format!(
+            "{{{{ ui_text({path}, \"{policy}\", {minimum}, 0) }}}}"
+        ));
     }
     ensure!(
         !value.contains("{{") && !value.contains("}}"),
@@ -1026,7 +1026,7 @@ fn checked_template_text(value: &str, field: &str) -> Result<String> {
     if let Some(path) = interpolation(value) {
         // The build checks a complete field path; only the Native runtime can
         // know whether the bound page value is nonblank.
-        return Ok(format!("{{{{ cui_text({path}) }}}}"));
+        return Ok(format!("{{{{ ui_text({path}, \"nonblank\", 1, 0) }}}}"));
     }
     ensure!(
         !value.contains("{{") && !value.contains("}}"),
@@ -1866,7 +1866,7 @@ mod tests {
         let bound = expand(r#"<cui-button label="{{ page.title }}"/>"#, &package()).unwrap();
         assert_eq!(
             bound.html,
-            "<button class=\"cui-button cui-button--secondary\" type=\"button\"><span>{{ cui_text(page.title) }}</span></button>\n"
+            "<button class=\"cui-button cui-button--secondary\" type=\"button\"><span>{{ ui_text(page.title, \"nonblank\", 1, 0) }}</span></button>\n"
         );
         assert_eq!(
             bound.bindings,

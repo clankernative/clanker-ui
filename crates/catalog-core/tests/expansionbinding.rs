@@ -46,6 +46,22 @@ fn binding(field_path: &str, expected_kind: &str, component: &str, attribute: &s
 
 #[test]
 fn records_whole_page_header_title_and_integer_button_variant() {
+    let package = Package::from_assets(&package_assets()).unwrap();
+    let expanded = expansion::expand(
+        r#"<cui-button label="{{ page.label }}" variant="{{ page.button_variant }}" size="{{ page.button_size }}"/>"#,
+        &package,
+    )
+    .unwrap();
+    assert!(expanded
+        .html
+        .contains(r#"ui_integer(page.button_variant, 0, 3) == "0""#));
+    assert!(expanded
+        .html
+        .contains(r#"ui_integer(page.button_size, 0, 1) == "0""#));
+    assert!(expanded
+        .html
+        .contains(r#"ui_text(page.label, "nonblank", 1, 0)"#));
+    assert!(!expanded.html.contains("cui_"));
     assert_eq!(
         bindings(
             r#"<cui-page-header title="{{ page.title }}"/><cui-button label="Save" variant="{{ page.button_variant }}"/>"#
@@ -88,6 +104,58 @@ fn records_validated_select_crumb_and_page_item_fields_once() {
             1
         );
     }
+}
+
+#[test]
+fn progress_and_choice_bindings_use_only_generic_abi2_capabilities() {
+    let package = Package::from_assets(&package_assets()).unwrap();
+    let progress = expansion::expand(
+        r#"<cui-progress label="Load" state="determinate" value="{{ page.value }}" maximum="{{ page.maximum }}"/>"#,
+        &package,
+    )
+    .unwrap();
+    assert!(progress
+        .html
+        .contains(r#"ui_number(page.value, "0", page.maximum, false)"#));
+    assert!(progress
+        .html
+        .contains(r#"ui_number(page.maximum, "0", none, true)"#));
+    assert!(progress
+        .html
+        .contains("ui_compare(page.value, page.maximum) == 0"));
+    assert!(!progress.html.contains("cui_progress"));
+    let large_literal = expansion::expand(
+        r#"<cui-progress label="Load" state="determinate" value="18446744073709551615" maximum="18446744073709551615"/>"#,
+        &package,
+    )
+    .unwrap();
+    assert!(large_literal
+        .html
+        .contains(r#"ui_number("18446744073709551615", "0", "18446744073709551615", false)"#));
+    assert!(large_literal
+        .html
+        .contains(r#"ui_compare("18446744073709551615", "18446744073709551615") == 0"#));
+
+    let controls = expansion::expand(
+        r#"<cui-select-field id="state" name="state" label="State" selected="{{ page.selected }}"><cui-choice value="done" label="Done"/></cui-select-field><cui-breadcrumbs label="Path"><cui-crumb label="Home" href="/"/><cui-crumb label="Current" current="true"/></cui-breadcrumbs>"#,
+        &package,
+    )
+    .unwrap();
+    assert!(controls.html.contains(r#"data-ui-choice-set="true""#));
+    assert!(controls
+        .html
+        .contains(r#"data-ui-choice-value="{{ ui_text(page.selected, "plain", 0, 0) }}""#));
+    assert!(controls.html.contains(r#"data-ui-navigation="true""#));
+    assert!(controls
+        .html
+        .contains(r#"data-ui-navigation-minimum-items="2""#));
+    assert!(controls
+        .html
+        .contains(r#"data-ui-navigation-current-last="true""#));
+    assert!(controls
+        .html
+        .contains(r#"data-ui-navigation-ancestor-links="true""#));
+    assert!(!controls.html.contains("data-cui-navigation"));
 }
 
 #[test]

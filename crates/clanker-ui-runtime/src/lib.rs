@@ -210,39 +210,134 @@ fn template_error(error: impl std::fmt::Display) -> minijinja::Error {
     minijinja::Error::new(minijinja::ErrorKind::InvalidOperation, error.to_string())
 }
 
-/// Register only the canonical value helpers; hosts retain asset and rendering policy.
+fn generic_text(value: &Value, policy: &str, minimum: usize, maximum: usize) -> Result<String> {
+    let text = value.to_string();
+    ensure!(
+        minimum <= 1_000_000 && maximum <= 1_000_000,
+        "ui_text_invalid_bounds"
+    );
+    match policy {
+        "nonblank" => {
+            ensure!(!text.trim().is_empty(), "ui_text_requires_nonblank_text");
+            ensure!(
+                !text.chars().any(char::is_control),
+                "ui_text_control_character"
+            );
+        }
+        "plain" => ensure!(
+            !text.chars().any(char::is_control),
+            "ui_text_control_character"
+        ),
+        "multiline" => {
+            ensure!(!text.trim().is_empty(), "ui_text_requires_nonblank_text");
+            ensure!(
+                !text
+                    .chars()
+                    .any(|ch| ch.is_control() && !matches!(ch, '\t' | '\r' | '\n')),
+                "ui_text_control_character"
+            );
+        }
+        _ => anyhow::bail!("ui_text_invalid_policy"),
+    }
+    let graphemes = text.graphemes(true).count();
+    ensure!(
+        graphemes >= minimum && (maximum == 0 || graphemes <= maximum),
+        "ui_text_grapheme_limit"
+    );
+    Ok(text)
+}
+
+fn generic_integer(value: &Value, minimum: i64, maximum: i64) -> Result<String> {
+    ensure!(
+        minimum <= maximum && value.kind() == minijinja::value::ValueKind::Number,
+        "ui_integer_requires_bounded_number"
+    );
+    let text = value.to_string();
+    ensure!(
+        !text.contains('.') && !text.contains('e') && !text.contains('E'),
+        "ui_integer_requires_integral_number"
+    );
+    let number = text
+        .parse::<i128>()
+        .map_err(|_| anyhow::anyhow!("ui_integer_out_of_range"))?;
+    ensure!(
+        number >= minimum as i128 && number <= maximum as i128,
+        "ui_integer_out_of_range"
+    );
+    Ok(text)
+}
+
+fn generic_number(
+    value: &Value,
+    minimum: Option<&Value>,
+    maximum: Option<&Value>,
+    exclusive_minimum: bool,
+) -> Result<String> {
+    let number = Number::from_value(value)?;
+    if let Some(minimum) = minimum {
+        let order = number.compare(Number::from_value(minimum)?);
+        ensure!(
+            if exclusive_minimum {
+                order == Ordering::Greater
+            } else {
+                order != Ordering::Less
+            },
+            "ui_number_below_minimum"
+        );
+    }
+    if let Some(maximum) = maximum {
+        ensure!(
+            number.compare(Number::from_value(maximum)?) != Ordering::Greater,
+            "ui_number_above_maximum"
+        );
+    }
+    Ok(number.text())
+}
+
+/// Register only the protocol's closed provider-neutral value capabilities.
 pub fn install(environment: &mut minijinja::Environment<'_>) {
-    environment.add_function("cui_button_variant", |value: Value| {
-        button_variant(&value).map_err(template_error)
+    environment.add_function(
+        "ui_text",
+        |value: Value, policy: String, minimum: usize, maximum: usize| {
+            generic_text(&value, &policy, minimum, maximum).map_err(template_error)
+        },
+    );
+    environment.add_function("ui_key", |key: String| {
+        if key.is_empty()
+            || key.len() > 128
+            || !key
+                .bytes()
+                .all(|b| b.is_ascii_alphanumeric() || matches!(b, b'_' | b'-'))
+        {
+            return Err(template_error("ui_key_requires_bounded_ascii_key"));
+        }
+        Ok(key)
     });
-    environment.add_function("cui_button_size", |value: Value| {
-        button_size(&value).map_err(template_error)
+    environment.add_function("ui_integer", |value: Value, minimum: i64, maximum: i64| {
+        generic_integer(&value, minimum, maximum).map_err(template_error)
     });
-    environment.add_function("cui_token", |value: Value| {
-        token(&value.to_string()).map_err(template_error)
+    environment.add_function(
+        "ui_number",
+        |value: Value, minimum: Option<Value>, maximum: Option<Value>, exclusive_minimum: bool| {
+            generic_number(
+                &value,
+                minimum.as_ref(),
+                maximum.as_ref(),
+                exclusive_minimum,
+            )
+            .map_err(template_error)
+        },
+    );
+    environment.add_function("ui_compare", |left: Value, right: Value| {
+        let left = Number::from_value(&left).map_err(template_error)?;
+        let right = Number::from_value(&right).map_err(template_error)?;
+        Ok::<i32, minijinja::Error>(match left.compare(right) {
+            Ordering::Less => -1,
+            Ordering::Equal => 0,
+            Ordering::Greater => 1,
+        })
     });
-    environment.add_function("cui_text", |value: Value| {
-        text(&value.to_string()).map_err(template_error)
-    });
-    environment.add_function("cui_initials", |value: String| {
-        initials(&value).map_err(template_error)
-    });
-    environment.add_function("cui_plain", |value: String| {
-        plain(&value).map_err(template_error)
-    });
-    environment.add_function("cui_field_text", |value: String| {
-        field_text(&value).map_err(template_error)
-    });
-    environment.add_function("cui_progress_value", |value: Value, maximum: Value| {
-        progress_value(&value, &maximum).map_err(template_error)
-    });
-    environment.add_function("cui_progress_maximum", |value: Value, maximum: Value| {
-        progress_maximum(&value, &maximum).map_err(template_error)
-    });
-    environment.add_function("cui_progress_complete", |value: Value, maximum: Value| {
-        progress_complete(&value, &maximum).map_err(template_error)
-    });
-    environment.add_function("cui_image", |value: String| {
+    environment.add_function("ui_image", |value: String| {
         image(&value)
             .map(minijinja::Value::from_object)
             .map_err(template_error)
@@ -274,11 +369,11 @@ mod tests {
         assert_eq!(
             environment
                 .render_str(
-                    "row-{{ cui_token(key) }}",
-                    minijinja::context!(key => "acct:42")
+                    "row-{{ ui_key(key) }}",
+                    minijinja::context!(key => "account_42")
                 )
                 .unwrap(),
-            "row-acct:42"
+            "row-account_42"
         );
     }
 
@@ -330,17 +425,50 @@ mod tests {
     }
 
     #[test]
-    fn install_registers_canonical_helpers() {
+    fn install_registers_generic_protocol_helpers() {
         let mut environment = minijinja::Environment::empty();
         install(&mut environment);
         assert_eq!(
             environment
-                .render_str("{{ cui_progress_value(1, 2) }}", ())
+                .render_str(
+                    r#"{{ ui_text(value, "nonblank", 1, 3) }}"#,
+                    minijinja::context!(value => "OK")
+                )
+                .unwrap(),
+            "OK"
+        );
+        assert_eq!(
+            environment
+                .render_str("{{ ui_number(1, 0, 2, false) }}", ())
                 .unwrap(),
             "1"
         );
+        assert_eq!(
+            environment
+                .render_str("{{ ui_compare(1, 2) }}", ())
+                .unwrap(),
+            "-1"
+        );
         assert!(environment
-            .render_str("{{ cui_button_variant(4) }}", ())
+            .render_str("{{ ui_integer(4, 0, 3) }}", ())
+            .is_err());
+        assert_eq!(
+            environment
+                .render_str(r#"{% if ui_integer(2, 0, 3) == "0" %}primary{% elif ui_integer(2, 0, 3) == "1" %}secondary{% elif ui_integer(2, 0, 3) == "2" %}quiet{% else %}danger{% endif %}"#, ())
+                .unwrap(),
+            "quiet"
+        );
+        assert!(environment
+            .render_str(
+                r#"{% if ui_integer(4, 0, 3) == "0" %}primary{% else %}secondary{% endif %}"#,
+                ()
+            )
+            .is_err());
+        assert!(environment
+            .render_str(r#"{{ cui_text("legacy") }}"#, ())
+            .is_err());
+        assert!(environment
+            .render_str(r#"{{ ui_key("bad:key") }}"#, ())
             .is_err());
     }
 }

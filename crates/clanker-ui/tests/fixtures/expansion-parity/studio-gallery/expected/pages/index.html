@@ -42,17 +42,17 @@
 
           <section id="workspace-summary" data-live aria-label="Live workspace summary" class="workspace-summary">
             <div class="cui-cluster cui-cluster--gap-generous cui-cluster--align-start cui-cluster--justify-start cui-cluster--wrap" data-cui-component="cluster">
-              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Tasks</dt><dd class="cui-metric__value">{{ cui_text(workspace.total) }}</dd></dl></article>
+              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Tasks</dt><dd class="cui-metric__value">{{ ui_text(workspace.total, "nonblank", 1, 0) }}</dd></dl></article>
 
-              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Open</dt><dd class="cui-metric__value">{{ cui_text(workspace.active) }}</dd></dl></article>
+              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Open</dt><dd class="cui-metric__value">{{ ui_text(workspace.active, "nonblank", 1, 0) }}</dd></dl></article>
 
-              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Completed</dt><dd class="cui-metric__value">{{ cui_text(workspace.completed) }}</dd></dl></article>
+              <article class="cui-metric cui-metric--plain" data-cui-component="metric"><dl class="cui-metric__content"><dt class="cui-metric__label">Completed</dt><dd class="cui-metric__value">{{ ui_text(workspace.completed, "nonblank", 1, 0) }}</dd></dl></article>
 
               <span class="cui-status-indicator cui-status-indicator--info cui-status-indicator--small" data-cui-component="status-indicator"><span class="cui-status-indicator__dot" aria-hidden="true"></span><span class="cui-status-indicator__label">Live query data</span><span class="cui-status-indicator__detail">Updated by Native, not a component signal.</span></span>
 
             </div>
 
-            <div class="cui-progress cui-progress--info cui-progress--compact cui-progress--determinate{% if cui_progress_complete(workspace.completion, "100") %} cui-progress--complete{% endif %}" data-cui-component="progress" data-cui-tone="info" data-cui-size="compact" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Task completion</span></div><progress class="cui-progress__track" value="{{ cui_progress_value(workspace.completion, "100") }}" max="{{ cui_progress_maximum(workspace.completion, "100") }}" aria-label="Task completion"></progress></div>
+            <div class="cui-progress cui-progress--info cui-progress--compact cui-progress--determinate{% if ui_compare(workspace.completion, "100") == 0 %} cui-progress--complete{% endif %}" data-cui-component="progress" data-cui-tone="info" data-cui-size="compact" data-cui-state="determinate"><div class="cui-progress__header"><span class="cui-progress__label">Task completion</span></div><progress class="cui-progress__track" value="{{ ui_number(workspace.completion, "0", "100", false) }}" max="{{ ui_number("100", "0", none, true) }}" aria-label="Task completion"></progress></div>
 
           </section>
 

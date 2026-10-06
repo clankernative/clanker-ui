@@ -12,6 +12,28 @@ fn run(args: &[&str]) -> (bool, Value) {
 }
 
 #[test]
+fn assemble_errors_keep_the_protocol_envelope_and_cli_commands_are_explicit() {
+    let temp = tempfile::tempdir().unwrap();
+    let request = temp.path().join("invalid.json");
+    std::fs::write(&request, "{}").unwrap();
+    let request = request.to_str().unwrap();
+    let (ok, error) = run(&["assemble", "--request", request]);
+    assert!(!ok);
+    assert_eq!(error["schemaVersion"], 1);
+    assert_eq!(error["command"], "assemble");
+    assert_eq!(error["ok"], false);
+    assert_eq!(error["data"], Value::Null);
+    assert!(!error["diagnostics"].as_array().unwrap().is_empty());
+
+    let output = temp.path().join("local-pin.json");
+    let output_arg = output.to_str().unwrap();
+    let (ok, pin) = run(&["native-pin", "--output", output_arg]);
+    assert!(ok, "{pin}");
+    assert_eq!(pin["command"], "native-pin");
+    assert!(output.is_file());
+}
+
+#[test]
 fn an_agent_can_discover_and_verify_static_components() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/button-app");
     let lock = root.join("clanker-ui.lock.json");

@@ -19,6 +19,26 @@ jobs:
         run: cargo test --locked
       - name: Verify locked package
         run: cargo run --locked -- verify --lock examples/button-app/clanker-ui.lock.json
+      - name: Build release CLI
+        run: cargo build --locked --release --bin clanker-ui
+      - name: Prepare and verify relocatable Native bundle
+        run: |
+          ./target/release/clanker-ui native-bundle --package packages/vanilla --output target/native-bundle --source-revision "${GITHUB_SHA}"
+          ./target/release/clanker-ui verify-native-bundle --bundle target/native-bundle
+      - name: Archive bundle with reproducible metadata and executable permissions
+        run: |
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 --numeric-owner -cf - -C target/native-bundle . | gzip -n > target/clanker-ui-native-linux-x86_64.tar.gz
+          (cd target && sha256sum clanker-ui-native-linux-x86_64.tar.gz > clanker-ui-native-linux-x86_64.tar.gz.sha256 && sha256sum --check clanker-ui-native-linux-x86_64.tar.gz.sha256)
+          mkdir target/bundle-roundtrip
+          tar -xzf target/clanker-ui-native-linux-x86_64.tar.gz -C target/bundle-roundtrip
+          ./target/release/clanker-ui verify-native-bundle --bundle target/bundle-roundtrip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clanker-ui-native-linux-x86_64
+          path: |
+            target/clanker-ui-native-linux-x86_64.tar.gz
+            target/clanker-ui-native-linux-x86_64.tar.gz.sha256
+          if-no-files-found: error
       - uses: actions/setup-node@v4
         with:
           node-version: '24'

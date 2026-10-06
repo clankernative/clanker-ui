@@ -9,7 +9,7 @@
       <div class="cui-stack cui-stack--gap-generous cui-stack--align-stretch" data-cui-component="stack">
         <p class="back-link"><a href="{{ routes.workspace() }}">Back to workspace</a></p>
         <div id="task-heading" data-live>
-          <header class="cui-page-header" data-cui-component="page-header"><div class="cui-page-header__content"><h1 class="cui-page-header__title">{{ cui_text(task.task.title) }}</h1><p class="cui-page-header__description">{{ cui_text(task.project.name) }}</p></div></header>
+          <header class="cui-page-header" data-cui-component="page-header"><div class="cui-page-header__content"><h1 class="cui-page-header__title">{{ ui_text(task.task.title, "nonblank", 1, 0) }}</h1><p class="cui-page-header__description">{{ ui_text(task.project.name, "nonblank", 1, 0) }}</p></div></header>
 
         </div>
         <div class="cui-sidebar cui-sidebar--side-end cui-sidebar--width-wide cui-sidebar--gap-generous cui-sidebar--align-start cui-sidebar--collapse-standard" data-cui-component="sidebar"><div class="cui-sidebar__regions"><div class="cui-sidebar__main">
