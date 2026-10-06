@@ -25,7 +25,7 @@ cargo run --locked --offline -- list --lock examples/button-app/ui.lock.json
 cargo run --locked --offline -- graph badge --lock examples/button-app/ui.lock.json
 ```
 
-`lock --lock <file> --package <path>` pins a local package relative to the lock file; changing its declared bytes requires `--update`. The CLI emits versioned JSON and nonzero status on failure. Its `verify` checks manifest shape, declared inputs, token references, and self-authored fixtures; it is not a substitute for Native's independent admission. Word matching is literal, not embedding-based search. The old `build` and `compose` commands still produce isolated generated files for the earlier proof, but **do not use them to integrate an app**.
+`lock --lock <file> --package <path>` and `native-lock` author the same canonical Native JSON lock: `schemaVersion: 1`, `provider: "clanker-ui.native"`, and `package: {name, version, path, digest, inputs}`. All discovery, validation, expansion, and render commands consume this schema; legacy flat and Markdown locks are rejected. The package path is relative to the lock directory, with at most two leading parent segments. Inputs cover the complete declared package closure, including draft contracts and assets, sorted by path with byte counts and per-file SHA-256 digests. The package digest hashes each `path + NUL + decimal bytes + NUL + digest + LF` manifest record. Changing declared bytes requires explicit `--update` for either authoring command. The CLI emits versioned JSON and nonzero status on failure. Its `verify` checks manifest shape, declared inputs, token references, and self-authored fixtures; it is not a substitute for Native's independent admission. Word matching is literal, not embedding-based search. The old `build` and `compose` commands still produce isolated generated files for the earlier proof, but **do not use them to integrate an app**.
 
 ### Build-time expansion and script-free scenes
 
@@ -38,7 +38,7 @@ Standalone `expand` returns symbolic templates, typed binding metadata, a resour
 
 `render` expands the same locked package and evaluates a bounded fake scene: `{"page":"pages/example.html","data":{"title":"Sample"},"routes":{"index":"/"},"width":1280}`. Without `--fragment`, `page` selects the template. Includes stay inside the captured UI. Text is escaped, numeric/image guards run, and fonts are embedded from locked bytes. The result is an inert, script-free HTML document: forms cannot submit and app modules do not run. Fake route maps are illustrative links, not Roc route checking. Studio must set the iframe viewport to the returned width; this command proves static presentation only.
 
-`expand` is a read-only local proof. It emits ABI-2 expressions but uses the catalog lock digest, not the Native locked-input manifest receipt. App integration uses `assemble`, not `expand`.
+`expand` is a read-only local proof. It emits ABI-2 expressions and uses the same canonical Native locked-input manifest digest as the other commands; this does not establish host admission. App integration uses `assemble`, not `expand`.
 
 The earlier local adapter override uses `DAY2_UI_ADAPTER_PIN_JSON` and is separate from the provider-neutral executable pin. Portable CLI release pins are not published; never substitute a placeholder checksum or treat either local override as portable distribution.
 
