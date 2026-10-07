@@ -30,10 +30,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: clanker-ui-native-linux-x86_64
-          path: |
-            target/native-release/*.tar.gz
-            target/native-release/*.sha256
-            target/native-release/release.json
+          # The producer admits exactly archive/bootstrap/notices + their SHAs and target metadata.
+          path: target/native-release/*
           if-no-files-found: error
       - uses: actions/setup-node@v4
         with:

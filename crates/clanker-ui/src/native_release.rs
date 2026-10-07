@@ -264,6 +264,16 @@ pub fn prepare(bundle: &Path, output: &Path) -> Result<Value, String> {
         return Err("release output must be outside bundle".into());
     }
     let bytes = archive(bundle)?;
+    prepare_snapshot(&bytes, &identity, &parent, &target)
+}
+
+// Only captured bytes enter this boundary. Never re-open the original bundle for the bootstrap.
+fn prepare_snapshot(
+    bytes: &[u8],
+    identity: &Value,
+    parent: &Path,
+    target: &Path,
+) -> Result<Value, String> {
     // Check the snapshot encoded in the archive too; concurrent source changes cannot create an invalid release.
     let stage = tempfile::Builder::new()
         .prefix(".clanker-ui-release-")
@@ -271,31 +281,87 @@ pub fn prepare(bundle: &Path, output: &Path) -> Result<Value, String> {
         .map_err(|e| e.to_string())?;
     let validation = stage.path().join("validation");
     fs::create_dir(&validation).map_err(|e| e.to_string())?;
-    extract(&bytes, &validation)?;
-    if native_bundle::verify(&validation)? != identity {
+    extract(bytes, &validation)?;
+    if &native_bundle::verify(&validation)? != identity {
         return Err("bundle changed during release capture".into());
     }
+    let bootstrap =
+        native_bundle::checked_read(&validation.join("bin/clanker-ui"), MAX_EXECUTABLE)?;
+    let bootstrap_sha = hash(&bootstrap);
+    if identity["executableDigest"].as_str() != Some(&bootstrap_sha) {
+        return Err("validated snapshot executable digest mismatch".into());
+    }
+    let notices =
+        native_bundle::checked_read(&validation.join("legal/NOTICES.txt"), MAX_FILE as u64)?;
+    let notices_sha = hash(&notices);
+    if identity["legal"][1]["digest"].as_str() != Some(&notices_sha) {
+        return Err("validated snapshot notices digest mismatch".into());
+    }
     fs::remove_dir_all(validation).map_err(|e| e.to_string())?;
-    let name = format!(
-        "clanker-ui-native-{}-{}.tar.gz",
-        identity["toolVersion"].as_str().ok_or("missing version")?,
-        identity["target"].as_str().ok_or("missing target")?
-    );
-    let sha = hash(&bytes);
-    fs::write(stage.path().join(&name), bytes).map_err(|e| e.to_string())?;
-    fs::write(
-        stage.path().join(format!("{name}.sha256")),
-        format!("{}  {name}\n", &sha[7..]),
-    )
-    .map_err(|e| e.to_string())?;
-    let metadata = json!({"schemaVersion":1,"archive":name,"digest":sha,"bundle":identity,"provenance":"Unsigned claims; hashes do not authenticate a producer."});
-    fs::write(
-        stage.path().join("release.json"),
-        serde_json::to_vec_pretty(&metadata).map_err(|e| e.to_string())?,
-    )
-    .map_err(|e| e.to_string())?;
-    native_bundle::publish_noclobber(stage.path(), &target)?;
-    Ok(json!({"output":target,"release":metadata}))
+    let version = identity["toolVersion"].as_str().ok_or("missing version")?;
+    let host = identity["target"].as_str().ok_or("missing target")?;
+    let name = format!("clanker-ui-native-{version}-{host}.tar.gz");
+    let bootstrap_name = format!("clanker-ui-{version}-{host}");
+    let metadata_name = format!("clanker-ui-release-{version}-{host}.json");
+    let notices_name = format!("{bootstrap_name}.NOTICES.txt");
+    let sha = hash(bytes);
+    write_asset(stage.path(), &name, bytes, false)?;
+    write_asset(
+        stage.path(),
+        &format!("{name}.sha256"),
+        format!("{}  {name}\n", &sha[7..]).as_bytes(),
+        false,
+    )?;
+    write_asset(stage.path(), &bootstrap_name, &bootstrap, true)?;
+    write_asset(
+        stage.path(),
+        &format!("{bootstrap_name}.sha256"),
+        format!("{}  {bootstrap_name}\n", &bootstrap_sha[7..]).as_bytes(),
+        false,
+    )?;
+    write_asset(stage.path(), &notices_name, &notices, false)?;
+    write_asset(
+        stage.path(),
+        &format!("{notices_name}.sha256"),
+        format!("{}  {notices_name}\n", &notices_sha[7..]).as_bytes(),
+        false,
+    )?;
+    let metadata = json!({
+        "schemaVersion":1,"archive":name,"digest":sha,"bundle":identity,
+        "notices":{"asset":notices_name,"digest":notices_sha,"bytes":notices.len(),"archivePath":"legal/NOTICES.txt","redistribution":"Must accompany the standalone executable; includes project MIT and separate third-party terms."},
+        "bootstrap":{"asset":bootstrap_name,"digest":bootstrap_sha,"bytes":bootstrap.len(),"archivePath":"bin/clanker-ui"},
+        "support":{"target":host,"scope":if host == "macos-aarch64" {"Primary Native qualification candidate; separate native host/consumer proof required."} else {"CLI-only candidate subject to producer tests; not full Linux Native builder qualification."}},
+        "provenance":"Early-access candidate. Unsigned source revision/identity claims; hashes identify bytes, not producer provenance or execution approval. Publication and target qualification are separate."
+    });
+    write_asset(
+        stage.path(),
+        &metadata_name,
+        &serde_json::to_vec_pretty(&metadata).map_err(|e| e.to_string())?,
+        false,
+    )?;
+    native_bundle::publish_noclobber(stage.path(), target)?;
+    Ok(json!({"output":target,"metadata":metadata_name,"release":metadata}))
+}
+
+fn write_asset(root: &Path, name: &str, bytes: &[u8], executable: bool) -> Result<(), String> {
+    let path = root.join(name);
+    let mut file = fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&path)
+        .map_err(|e| e.to_string())?;
+    file.write_all(bytes).map_err(|e| e.to_string())?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        file.set_permissions(fs::Permissions::from_mode(if executable {
+            0o755
+        } else {
+            0o644
+        }))
+        .map_err(|e| e.to_string())?;
+    }
+    Ok(())
 }
 
 fn extract(bytes: &[u8], root: &Path) -> Result<(), String> {
@@ -601,6 +667,68 @@ mod tests {
         fs::write(out.join("keep"), b"keep").unwrap();
         assert!(install(&Bytes(bytes.clone()), &hash(&bytes), &out, None).is_err());
         assert_eq!(fs::read(out.join("keep")).unwrap(), b"keep");
+    }
+    #[test]
+    fn release_bootstrap_uses_only_captured_snapshot_and_rejects_changed_capture() {
+        let root = tempfile::tempdir().unwrap();
+        let bundle = root.path().join("bundle");
+        native_bundle::prepare(
+            &Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/vanilla"),
+            &bundle,
+            "0123456789abcdef0123456789abcdef01234567",
+        )
+        .unwrap();
+        let identity = native_bundle::verify(&bundle).unwrap();
+        let captured = archive(&bundle).unwrap();
+        let original = fs::read(bundle.join("bin/clanker-ui")).unwrap();
+        // Same-length tamper after initial verification: a new capture must fail validation.
+        let mut tampered = original.clone();
+        tampered[0] ^= 1;
+        fs::write(bundle.join("bin/clanker-ui"), &tampered).unwrap();
+        let changed = archive(&bundle).unwrap();
+        let out = root.path().join("changed");
+        assert!(prepare_snapshot(&changed, &identity, root.path(), &out).is_err());
+        assert!(!out.exists());
+        assert_eq!(fs::read_dir(root.path()).unwrap().count(), 1);
+
+        // Even a self-consistent but different source identity must be refused.
+        fs::write(bundle.join("bin/clanker-ui"), &original).unwrap();
+        let manifest_path = bundle.join("manifest.json");
+        let mut manifest: Value =
+            serde_json::from_slice(&fs::read(&manifest_path).unwrap()).unwrap();
+        manifest["sourceRevision"] = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa".into();
+        fs::write(&manifest_path, serde_json::to_vec(&manifest).unwrap()).unwrap();
+        native_bundle::verify(&bundle).unwrap();
+        assert!(
+            prepare_snapshot(&archive(&bundle).unwrap(), &identity, root.path(), &out)
+                .unwrap_err()
+                .contains("changed during release capture")
+        );
+        assert!(!out.exists());
+        fs::remove_dir_all(&bundle).unwrap();
+
+        // Deleting the source after capture cannot change the bootstrap or metadata.
+        let result = prepare_snapshot(&captured, &identity, root.path(), &out).unwrap();
+        let bootstrap = result["release"]["bootstrap"]["asset"].as_str().unwrap();
+        assert_eq!(fs::read(out.join(bootstrap)).unwrap(), original);
+        assert_eq!(result["release"]["bundle"], identity);
+        assert_eq!(fs::read_dir(&out).unwrap().count(), 7);
+        let notices = result["release"]["notices"]["asset"].as_str().unwrap();
+        assert_eq!(
+            fs::read(out.join(notices)).unwrap(),
+            include_bytes!("../../../NOTICES.txt")
+        );
+        assert_eq!(fs::read_dir(root.path()).unwrap().count(), 1);
+
+        // Simulate a destination appearing after preflight/capture; publication remains no-replace.
+        let race = root.path().join("race");
+        fs::create_dir(&race).unwrap();
+        fs::write(race.join("sentinel"), b"keep").unwrap();
+        assert!(prepare_snapshot(&captured, &identity, root.path(), &race)
+            .unwrap_err()
+            .contains("without clobbering"));
+        assert_eq!(fs::read(race.join("sentinel")).unwrap(), b"keep");
+        assert_eq!(fs::read_dir(root.path()).unwrap().count(), 2);
     }
     #[test]
     fn hosted_identity_is_explicit_and_has_no_latest_or_arbitrary_url() {

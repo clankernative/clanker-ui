@@ -18,6 +18,12 @@ pub(crate) const MAX_INPUTS: usize = 4096;
 pub(crate) const MAX_TOTAL: usize = 32 * 1024 * 1024;
 pub(crate) const MAX_FILE: usize = 1024 * 1024;
 
+// Closed, source-reviewed legal closure, outside the unchanged catalog inputs.
+const LEGAL: [(&str, &[u8]); 2] = [
+    ("legal/LICENSE", include_bytes!("../../../LICENSE")),
+    ("legal/NOTICES.txt", include_bytes!("../../../NOTICES.txt")),
+];
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 struct Entry {
@@ -38,6 +44,7 @@ struct BundleManifest {
     template_engine: String,
     executable: Entry,
     package: BundlePackage,
+    legal: Vec<Entry>,
     entries: Vec<Entry>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -264,7 +271,21 @@ pub fn prepare(
     let mut package = LocalPackage.load(&source)?;
     LocalPackage.complete_declared_inputs(&mut package)?;
     let inputs = expand::package_inputs(&package.assets)?;
-    if inputs.len() > MAX_INPUTS || package.assets.values().map(Vec::len).sum::<usize>() > MAX_TOTAL
+    let legal: Vec<_> = LEGAL
+        .iter()
+        .map(|(path, bytes)| Entry {
+            path: (*path).into(),
+            bytes: bytes.len(),
+            digest: digest(bytes),
+        })
+        .collect();
+    if LEGAL
+        .iter()
+        .any(|(_, bytes)| bytes.is_empty() || bytes.len() > MAX_FILE)
+        || inputs.len() + legal.len() > MAX_INPUTS
+        || package.assets.values().map(Vec::len).sum::<usize>()
+            + legal.iter().map(|entry| entry.bytes).sum::<usize>()
+            > MAX_TOTAL
     {
         return Err("package declared input closure exceeds bundle limits".into());
     }
@@ -295,6 +316,7 @@ pub fn prepare(
             version: package.catalog.package.version.clone(),
             digest: input_digest(&inputs),
         },
+        legal,
         entries: input_entries(&inputs),
     };
     let pin = Pin {
@@ -323,6 +345,10 @@ pub fn prepare(
         .map_err(|e| e.to_string())?;
     fs::create_dir(stage.path().join("bin")).map_err(|e| e.to_string())?;
     fs::create_dir(stage.path().join("package")).map_err(|e| e.to_string())?;
+    fs::create_dir(stage.path().join("legal")).map_err(|e| e.to_string())?;
+    for (path, bytes) in LEGAL {
+        fs::write(stage.path().join(path), bytes).map_err(|e| e.to_string())?;
+    }
     fs::write(stage.path().join("manifest.json"), manifest_bytes).map_err(|e| e.to_string())?;
     fs::write(stage.path().join("provider-pin.json"), pin_bytes).map_err(|e| e.to_string())?;
     let binary = stage.path().join("bin/clanker-ui");
@@ -472,8 +498,27 @@ pub fn verify(bundle: &Path) -> Result<serde_json::Value, String> {
         "provider-pin.json".to_string(),
         "bin/clanker-ui".to_string(),
     ]);
-    let mut locked = Vec::new();
+    if manifest.legal.len() != LEGAL.len()
+        || manifest.legal.iter().zip(LEGAL).any(|(entry, (path, _))| {
+            entry.path != path || entry.bytes == 0 || entry.bytes > MAX_FILE
+        })
+        || manifest.entries.len() + manifest.legal.len() > MAX_INPUTS
+    {
+        return Err(
+            "bundle requires exactly legal/LICENSE and legal/NOTICES.txt within existing budgets"
+                .into(),
+        );
+    }
     let mut total = 0usize;
+    for entry in &manifest.legal {
+        let bytes = checked_read(&bundle.join(&entry.path), MAX_FILE as u64)?;
+        if bytes.len() != entry.bytes || digest(&bytes) != entry.digest {
+            return Err(format!("legal input digest mismatch: {}", entry.path));
+        }
+        total += entry.bytes;
+        expected_files.insert(entry.path.clone());
+    }
+    let mut locked = Vec::new();
     let mut previous: Option<&str> = None;
     for entry in &manifest.entries {
         if !safe_rel(&entry.path)
@@ -511,7 +556,11 @@ pub fn verify(bundle: &Path) -> Result<serde_json::Value, String> {
     if actual_files != expected_files {
         return Err("bundle has missing or unexpected files".into());
     }
-    let mut expected_dirs = BTreeSet::from(["bin".to_string(), "package".to_string()]);
+    let mut expected_dirs = BTreeSet::from([
+        "bin".to_string(),
+        "package".to_string(),
+        "legal".to_string(),
+    ]);
     for name in &expected_files {
         if let Some(rest) = name.strip_prefix("package/") {
             let mut parent = Path::new(rest).parent();
@@ -544,7 +593,7 @@ pub fn verify(bundle: &Path) -> Result<serde_json::Value, String> {
         );
     }
     Ok(
-        serde_json::json!({"target":target,"toolVersion":manifest.tool_version,"sourceRevision":manifest.source_revision,"package":manifest.package,"entries":manifest.entries.len(),"executableDigest":manifest.executable.digest,"verified":true,"trust":"unsigned; operator approval required"}),
+        serde_json::json!({"target":target,"toolVersion":manifest.tool_version,"sourceRevision":manifest.source_revision,"package":manifest.package,"legal":manifest.legal,"entries":manifest.entries.len(),"executableDigest":manifest.executable.digest,"verified":true,"trust":"unsigned; operator approval required"}),
     )
 }
 

@@ -55,7 +55,7 @@ enum Command {
         #[arg(long)]
         bundle: PathBuf,
     },
-    /// Prepare deterministic versioned release assets locally; never publish them.
+    /// Prepare deterministic archive, standalone CLI, notices and target metadata locally; never publish.
     NativeRelease {
         #[arg(long)]
         bundle: PathBuf,
@@ -333,7 +333,7 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
                 "validation": ["verify", "doctor", "check-css"],
                 "theming": {"schemaVersion":1,"readOnly":true,"commands":["tokens","check-css"],"warningsFail":false,"unknownTokensFail":true,"componentDetailsField":"tokenDetails","analysis":"Static CSS and possible template structure; no JavaScript or computed cascade."},
                 "assembly": ["assemble", "expand", "render"],
-                "nativeBundle": {"commands":["native-bundle", "verify-native-bundle", "native-release", "install-native-bundle", "restore-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"candidateTargets":["linux-x86_64", "macos-aarch64"],"artifact":"Versioned operator-managed archives; no release has been published by this command.","acquisition":"Explicit operator install/restore only; local offline bundle/archive or replaceable GitHub exact-version adapter; expected SHA required for archives.","compilerExecution":false,"trust":"Hashes identify bytes, not provenance; operator approval required."},
+                "nativeBundle": {"commands":["native-bundle", "verify-native-bundle", "native-release", "install-native-bundle", "restore-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"candidateTargets":["linux-x86_64", "macos-aarch64"],"artifact":"Versioned operator-managed archives, standalone CLI and adjacent notices, with target-specific metadata; early-access candidates, never published by this command.","acquisition":"Explicit operator install/restore only; local offline bundle/archive or replaceable GitHub exact-version adapter; expected SHA required for archives.","compilerExecution":false,"trust":"Hashes identify bytes, not provenance; operator approval required."},
                 "nativeLock": {"path":"ui/ui.lock.json","schemaVersion":1,"provider":"clanker-ui.native","commands":["lock","native-lock"],"updates":"Explicit --update only; no legacy lock schema."},
                 "nativePin": "Explicit local unsigned override output only; operator verifies executable trust.",
                 "integration": {"componentStatusField":"component.status","nativeStatusField":"component.integration.native","portsField":"component.integration.ports","portTypesField":"component.assets.contracts","missingHostMetadata":"No advertised host support; admission is independent.","readyMeaning":"Component-complete, not backend-integrated."},

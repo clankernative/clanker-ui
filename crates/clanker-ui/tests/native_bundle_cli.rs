@@ -73,6 +73,38 @@ fn deterministic_relocatable_bundle_contains_complete_contracts_and_relative_pin
     assert_eq!(ma["assemblyProtocol"], 2);
     assert_eq!(ma["bindingAbi"], 2);
     assert_eq!(ma["templateEngine"], "minijinja-2.12.0");
+    let legal = ma["legal"].as_array().unwrap();
+    assert_eq!(legal.len(), 2);
+    for (entry, (path, expected)) in legal.iter().zip([
+        (
+            "legal/LICENSE",
+            include_bytes!("../../../LICENSE").as_slice(),
+        ),
+        (
+            "legal/NOTICES.txt",
+            include_bytes!("../../../NOTICES.txt").as_slice(),
+        ),
+    ]) {
+        assert_eq!(entry["path"], path);
+        let bytes = fs::read(a.join(path)).unwrap();
+        assert_eq!(bytes, expected);
+        assert_eq!(entry["bytes"], bytes.len());
+        assert_eq!(
+            entry["digest"],
+            format!("sha256:{:x}", sha2::Sha256::digest(&bytes))
+        );
+        assert_eq!(fs::read(b.join(path)).unwrap(), bytes);
+    }
+    let lock: Value = serde_json::from_slice(
+        &fs::read(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../examples/button-app/ui.lock.json"),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    assert_eq!(ma["package"]["digest"], lock["package"]["digest"]);
+    assert_eq!(ma["entries"], lock["package"]["inputs"]);
     let entries = ma["entries"].as_array().unwrap();
     assert!(entries
         .iter()
@@ -108,6 +140,13 @@ fn verifier_rejects_tampering_extra_missing_wrong_target_and_pin_mismatch() {
         ("missing", 6),
         ("extra", 7),
         ("symlink", 8),
+        ("legal-tamper", 9),
+        ("legal-missing", 10),
+        ("legal-legacy-shape", 11),
+        ("legal-extra", 12),
+        ("legal-path", 13),
+        ("legal-oversize", 14),
+        ("legal-reordered", 15),
     ] {
         let copy = temp.path().join(name);
         copy_tree(&base, &copy);
@@ -170,6 +209,26 @@ fn verifier_rejects_tampering_extra_missing_wrong_target_and_pin_mismatch() {
                 #[cfg(unix)]
                 std::os::unix::fs::symlink(copy.join("manifest.json"), copy.join("intruder"))
                     .unwrap();
+            }
+            9 => fs::write(copy.join("legal/NOTICES.txt"), b"tampered").unwrap(),
+            10 => fs::remove_file(copy.join("legal/LICENSE")).unwrap(),
+            11..=15 => {
+                let path = copy.join("manifest.json");
+                let mut v: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+                match mutation {
+                    11 => {
+                        v.as_object_mut().unwrap().remove("legal");
+                    }
+                    12 => {
+                        let extra = v["legal"][0].clone();
+                        v["legal"].as_array_mut().unwrap().push(extra);
+                    }
+                    13 => v["legal"][0]["path"] = "package/LICENSE".into(),
+                    14 => v["legal"][0]["bytes"] = (1024 * 1024 + 1).into(),
+                    15 => v["legal"].as_array_mut().unwrap().swap(0, 1),
+                    _ => unreachable!(),
+                }
+                fs::write(path, serde_json::to_vec(&v).unwrap()).unwrap();
             }
             _ => unreachable!(),
         }

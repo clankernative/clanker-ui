@@ -43,8 +43,89 @@ fn release(bundle: &Path, root: &Path, name: &str) -> (PathBuf, String, Value) {
         output.to_str().unwrap(),
     ]);
     assert!(ok, "{result}");
+    let metadata_name = result["data"]["metadata"].as_str().unwrap();
     let metadata: Value =
-        serde_json::from_slice(&fs::read(output.join("release.json")).unwrap()).unwrap();
+        serde_json::from_slice(&fs::read(output.join(metadata_name)).unwrap()).unwrap();
+    let version = metadata["bundle"]["toolVersion"].as_str().unwrap();
+    let target = metadata["bundle"]["target"].as_str().unwrap();
+    assert_eq!(
+        metadata_name,
+        format!("clanker-ui-release-{version}-{target}.json")
+    );
+    assert!(!output.join("release.json").exists());
+    // Generic bundle metadata must not advertise vanilla-specific inventory counts.
+    for key in ["componentComplete", "nativeSupported", "adapterRequired"] {
+        assert!(metadata["support"].get(key).is_none());
+    }
+    let bootstrap_name = metadata["bootstrap"]["asset"].as_str().unwrap();
+    assert_eq!(bootstrap_name, format!("clanker-ui-{version}-{target}"));
+    let bootstrap = fs::read(output.join(bootstrap_name)).unwrap();
+    assert!(bootstrap.len() <= 64 * 1024 * 1024);
+    assert_eq!(metadata["bootstrap"]["bytes"], bootstrap.len());
+    assert_eq!(metadata["bootstrap"]["digest"], hash(&bootstrap));
+    assert_eq!(
+        metadata["bootstrap"]["digest"],
+        metadata["bundle"]["executableDigest"]
+    );
+    assert_eq!(metadata["bootstrap"]["archivePath"], "bin/clanker-ui");
+    let manifest: Value =
+        serde_json::from_slice(&fs::read(bundle.join("manifest.json")).unwrap()).unwrap();
+    assert_eq!(
+        metadata["bootstrap"]["digest"],
+        manifest["executable"]["digest"]
+    );
+    assert_eq!(
+        metadata["bootstrap"]["bytes"],
+        manifest["executable"]["bytes"]
+    );
+    assert_eq!(
+        fs::read_to_string(output.join(format!("{bootstrap_name}.sha256"))).unwrap(),
+        format!("{}  {bootstrap_name}\n", &hash(&bootstrap)[7..])
+    );
+    let notices_name = metadata["notices"]["asset"].as_str().unwrap();
+    assert_eq!(notices_name, format!("{bootstrap_name}.NOTICES.txt"));
+    let notices = fs::read(output.join(notices_name)).unwrap();
+    assert_eq!(notices, include_bytes!("../../../NOTICES.txt"));
+    assert_eq!(metadata["notices"]["digest"], hash(&notices));
+    assert_eq!(metadata["notices"]["bytes"], notices.len());
+    assert_eq!(
+        metadata["notices"]["digest"],
+        manifest["legal"][1]["digest"]
+    );
+    assert_eq!(
+        fs::read_to_string(output.join(format!("{notices_name}.sha256"))).unwrap(),
+        format!("{}  {notices_name}\n", &hash(&notices)[7..])
+    );
+    let mut names = fs::read_dir(&output)
+        .unwrap()
+        .map(|entry| entry.unwrap().file_name().into_string().unwrap())
+        .collect::<Vec<_>>();
+    names.sort();
+    let mut expected = vec![
+        metadata_name.to_owned(),
+        bootstrap_name.to_owned(),
+        format!("{bootstrap_name}.sha256"),
+        metadata["archive"].as_str().unwrap().to_owned(),
+        format!("{}.sha256", metadata["archive"].as_str().unwrap()),
+        notices_name.to_owned(),
+        format!("{notices_name}.sha256"),
+    ];
+    expected.sort();
+    assert_eq!(names, expected);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        for name in &names {
+            assert_eq!(
+                fs::metadata(output.join(name))
+                    .unwrap()
+                    .permissions()
+                    .mode()
+                    & 0o777,
+                if name == bootstrap_name { 0o755 } else { 0o644 }
+            );
+        }
+    }
     let archive = output.join(metadata["archive"].as_str().unwrap());
     let sha = metadata["digest"].as_str().unwrap().to_owned();
     assert_eq!(hash(&fs::read(&archive).unwrap()), sha);
@@ -65,6 +146,17 @@ fn deterministic_release_install_restore_and_relocation_offline() {
     let (b, _, mb) = release(&bundle, root.path(), "b");
     assert_eq!(ma, mb);
     assert_eq!(fs::read(&a).unwrap(), fs::read(&b).unwrap());
+    for entry in fs::read_dir(a.parent().unwrap()).unwrap() {
+        let name = entry.unwrap().file_name();
+        assert_eq!(
+            fs::read(a.parent().unwrap().join(&name)).unwrap(),
+            fs::read(b.parent().unwrap().join(&name)).unwrap()
+        );
+    }
+    let bootstrap = a
+        .parent()
+        .unwrap()
+        .join(ma["bootstrap"]["asset"].as_str().unwrap());
     assert!(a
         .file_name()
         .unwrap()
@@ -83,17 +175,55 @@ fn deterministic_release_install_restore_and_relocation_offline() {
     assert!(!wrong_version.exists());
     for command in ["install-native-bundle", "restore-native-bundle"] {
         let output = root.path().join(command);
-        let (ok, result) = run(&[
-            command,
-            "--archive",
-            a.to_str().unwrap(),
-            "--expected-sha256",
-            &sha,
-            "--output",
-            output.to_str().unwrap(),
-        ]);
-        assert!(ok, "{result}");
+        // This is an explicit test approval to execute the captured bootstrap for first restore.
+        let result = Command::new(&bootstrap)
+            .args([
+                command,
+                "--archive",
+                a.to_str().unwrap(),
+                "--expected-sha256",
+                &sha,
+                "--output",
+                output.to_str().unwrap(),
+            ])
+            .output()
+            .unwrap();
+        assert!(
+            result.status.success(),
+            "{}",
+            String::from_utf8_lossy(&result.stderr)
+        );
+        let result: Value = serde_json::from_slice(&result.stdout).unwrap();
         assert_eq!(result["data"]["compilerExecuted"], false);
+        assert_eq!(
+            fs::read(&bootstrap).unwrap(),
+            fs::read(output.join("bin/clanker-ui")).unwrap()
+        );
+        assert_eq!(
+            fs::read(output.join("legal/LICENSE")).unwrap(),
+            include_bytes!("../../../LICENSE")
+        );
+        assert_eq!(
+            fs::read(output.join("legal/NOTICES.txt")).unwrap(),
+            fs::read(
+                a.parent()
+                    .unwrap()
+                    .join(ma["notices"]["asset"].as_str().unwrap())
+            )
+            .unwrap()
+        );
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            assert_eq!(
+                fs::metadata(output.join("bin/clanker-ui"))
+                    .unwrap()
+                    .permissions()
+                    .mode()
+                    & 0o777,
+                0o755
+            );
+        }
         assert_eq!(
             fs::read(bundle.join("manifest.json")).unwrap(),
             fs::read(output.join("manifest.json")).unwrap()
@@ -207,6 +337,87 @@ fn mismatch_malformed_archive_and_no_clobber_leave_no_partial_output() {
     ]);
     assert!(!ok);
     assert_eq!(fs::read(output.join("sentinel")).unwrap(), b"keep");
+}
+#[test]
+fn release_refuses_tamper_oversize_nested_and_existing_outputs_without_partial_assets() {
+    let root = tempfile::tempdir().unwrap();
+    let bundle = bundle(root.path());
+    let (archive, _, _) = release(&bundle, root.path(), "release");
+    let output = archive.parent().unwrap();
+    let original = fs::read(&archive).unwrap();
+    let (ok, _) = run(&[
+        "native-release",
+        "--bundle",
+        bundle.to_str().unwrap(),
+        "--output",
+        output.to_str().unwrap(),
+    ]);
+    assert!(!ok);
+    assert_eq!(fs::read(&archive).unwrap(), original);
+    assert_eq!(fs::read_dir(output).unwrap().count(), 7);
+    let nested = bundle.join("nested");
+    assert!(
+        !run(&[
+            "native-release",
+            "--bundle",
+            bundle.to_str().unwrap(),
+            "--output",
+            nested.to_str().unwrap()
+        ])
+        .0
+    );
+    assert!(!nested.exists());
+    #[cfg(unix)]
+    {
+        let link = root.path().join("dangling");
+        std::os::unix::fs::symlink("missing", &link).unwrap();
+        assert!(
+            !run(&[
+                "native-release",
+                "--bundle",
+                bundle.to_str().unwrap(),
+                "--output",
+                link.to_str().unwrap()
+            ])
+            .0
+        );
+        assert_eq!(fs::read_link(&link).unwrap(), Path::new("missing"));
+        fs::remove_file(link).unwrap();
+    }
+    let binary = bundle.join("bin/clanker-ui");
+    let mut bytes = fs::read(&binary).unwrap();
+    bytes[0] ^= 1;
+    fs::write(&binary, bytes).unwrap();
+    let bad = root.path().join("bad");
+    assert!(
+        !run(&[
+            "native-release",
+            "--bundle",
+            bundle.to_str().unwrap(),
+            "--output",
+            bad.to_str().unwrap()
+        ])
+        .0
+    );
+    assert!(!bad.exists());
+    fs::OpenOptions::new()
+        .write(true)
+        .open(binary)
+        .unwrap()
+        .set_len(64 * 1024 * 1024 + 1)
+        .unwrap();
+    assert!(
+        !run(&[
+            "native-release",
+            "--bundle",
+            bundle.to_str().unwrap(),
+            "--output",
+            bad.to_str().unwrap()
+        ])
+        .0
+    );
+    assert!(!bad.exists());
+    assert_eq!(fs::read_dir(root.path()).unwrap().count(), 2);
 }
 #[test]
 fn hosted_setup_requires_explicit_source_version_and_sha_without_network() {
