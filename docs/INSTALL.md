@@ -1,10 +1,11 @@
-# First install — early-access candidate
+# First install — early access
 
 CLI **0.1.0**, vanilla **0.7.0**, assembly protocol **2**, binding ABI **2**.
-These instructions describe the candidate asset layout, not hosted availability.
-Do not use them until the coordinator has completed licensing/public-surface
-review, target qualification, publication, and anonymous hosted-acquisition proof
-for `clankernative/clanker-ui`. No source clone or Cargo is required.
+Consult the [exact-version release page](https://github.com/clankernative/clanker-ui/releases/tag/v0.1.0)
+for available assets, actually qualified targets, reviewed expected hashes and
+producer/source provenance. These instructions alone do not establish hosted
+availability or target qualification: if the exact release/target or reviewed
+identities are absent, stop. No source clone or Cargo is required.
 
 ## 1. Review identity before downloading or executing
 
@@ -33,7 +34,9 @@ execution; successful download/hash verification is not execution authority.
 
 ## 2. Download and check the standalone bootstrap
 
-Use operator-installed `curl` and `shasum` (macOS) or `sha256sum` (Linux).
+Use operator-installed `curl` supporting streaming `--max-filesize` enforcement
+and `shasum` (macOS) or `sha256sum` (Linux). Do not use an older curl that limits
+only declared Content-Length; the first download must remain bounded.
 Run these commands individually from the existing parent directory of your app;
 keep downloads and the fresh install **project-adjacent, outside the app's
 served `ui/` directory**. Do not reuse an existing installation.
@@ -132,5 +135,8 @@ No arbitrary app networking or app build downloads are allowed. The catalog has
 host admission and browser/consumer proof remain independent gates. Retain old
 installs until an operator approves removal. Project MIT is approved; read
 `legal/LICENSE` and the separate third-party/font terms in `legal/NOTICES.txt`.
-Coordinator review of source rights, public surfaces and distributable notice
-completeness remains required; installation is not a legal/provenance trust grant.
+When redistributing generated package CSS/JS or catalog assets in an app, retain
+the project MIT notice and applicable third-party notices, including icon terms
+and OFL for fonts. Keep appropriate copies with the app distribution; app-owned
+code, content, theme and domain rights remain the app author's responsibility.
+Installation is not a legal/provenance trust grant.

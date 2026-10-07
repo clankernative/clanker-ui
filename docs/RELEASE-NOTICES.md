@@ -2,8 +2,8 @@
 
 Project MIT was explicitly approved: `LICENSE`, copyright (c) 2026 Clanker Native
 contributors. All three authored crates inherit workspace SPDX `MIT` metadata.
-This does not relicense third-party code, fonts, or any material whose rights
-still require coordinator review.
+Third-party/font terms remain separate; project MIT does not assert rights over
+material whose original provenance has not been established.
 
 ## Distributed closure
 
@@ -21,16 +21,22 @@ still require coordinator review.
   Metadata/checksum files identify it, not substitute for actual notices.
 - Existing unreleased manifests lacking the mandatory legal closure fail;
   there is no legacy layout compatibility or arbitrary-resource copier.
+- App authors redistributing generated package CSS/JS and catalog assets must
+  retain appropriate project MIT and applicable third-party notices, including
+  icon terms and font OFL. Keep notices with the app distribution. This does not
+  change app-owned licenses/domain rights or require a component-aware host port.
 
-## Inputs reviewed without network or installed tooling
+## Reviewed license inputs
 
 The static `NOTICES.txt` inventory covers 123 registry package/version pairs in
 the union of `cargo tree --locked --offline -p clanker-ui --edges normal,build`
 for `x86_64-unknown-linux-gnu` and `aarch64-apple-darwin`, including build/proc-macro
 dependencies conservatively. Declared license expressions and actual cached
-license/COPYRIGHT files were inspected. MIT alternatives are used where offered;
-ISC, Apache-2.0, MPL-2.0 and Unicode-3.0 texts/attributions are retained otherwise.
-`unicode-ident`'s additional Unicode terms are included, not reduced to MIT.
+license/COPYRIGHT files were inspected without new tools or worker networking.
+Cached MIT alternatives are used where offered; documented missing-file
+fallbacks use the declared Apache option. ISC, Apache-2.0, MPL-2.0 and Unicode-3.0
+texts/attributions are retained otherwise. `unicode-ident`'s additional Unicode
+terms are included, not reduced to MIT.
 
 Four cached packages lack standalone license files: `fxhash`, `mac`,
 `match_token`, and `selectors`. Their upstream Cargo license declarations and
@@ -38,39 +44,42 @@ source attribution are recorded. The first three use their Apache-2.0 option
 with full cached Apache text; `selectors` retains its MPL source header and full
 cached MPL-2.0 text. No copyright dates or rights holders were invented.
 
-The MPL-covered packages (`cssparser`, `cssparser-macros`, `dtoa-short`,
-`selectors`) are unmodified registry sources. Exact-version source archive URLs
-and source-form rights are provided in notices. Before distribution, the
-coordinator must confirm continued availability of those sources and any
-additional required upstream notices; this review made no hosted requests.
+The MPL-covered packages (`cssparser` 0.35.0, `cssparser-macros` 0.6.1,
+`dtoa-short` 0.3.5, `selectors` 0.31.0) are unmodified registry sources.
+Exact-version source archive URLs and source-form rights are provided in
+notices. Coordinator qualification reported HTTPS HEAD 200 for all four source
+archives. Distributors must preserve source availability and notices; this is
+not a permanent guarantee of an upstream service.
 
 The installed Rust 1.98.1 `COPYRIGHT-library.html` was also inspected. Its
 file/dependency attributions and full license texts are retained in text form;
 identical repeated license blocks are referenced and reproduced once. This is
 conservative standard-library coverage, not a claim that every listed library
 is linked. Each target producer must use this reviewed toolchain inventory or
-refresh/review notices for its actual toolchain before publication.
+refresh/review notices for its actual toolchain before distribution.
 
 Geist Sans/Mono remain under SIL OFL-1.1, with the existing Vercel/basement.studio
 copyright and full font license retained both in the unchanged declared package
 closure and notices. Project MIT does not replace OFL terms.
 
-## Coordinator gates still open
+## Icon provenance and review boundary
 
-MIT approval resolves project-license selection, not all source rights.
-Coordinator-owned source/history/privacy and public-surface review, including
-catalog icon geometry and Toolframe-derived design/source lineage, must confirm
-redistribution rights and any attribution not established by this bounded
-packaging review. In particular, original commit
-`56c583e50c8ee272b46fcc5bf60a7d61240dde21` added `icons.json` with a one-time
-`import-toolframe-icons.rs` importer for Toolframe's `icon/template.html`.
-That establishes imported geometry, not independent authorship. The commit's
-docs contain no Feather/Lucide attribution, and the original Toolframe source
-is unavailable in this worker environment. Resolve its upstream license and
-retain the appropriate actual notice before distribution; do not infer one
-from geometric similarity or relicense icons as project MIT. No rights were
-inferred from an absent license. Dependency,
-toolchain or legal-input updates require fresh explicit review, rebuild and new
-reviewed asset hashes; they must not silently modify catalog locks or replace
-published assets. Target qualification, hosted acquisition and publication are
-also separate gates. This repository work only prepares local candidates.
+Original commit `56c583e50c8ee272b46fcc5bf60a7d61240dde21` added `icons.json`
+with a one-time `import-toolframe-icons.rs` importer for Toolframe's
+`icon/template.html`. That establishes imported geometry, not independent
+Clanker authorship. The original Toolframe checkout is unavailable here;
+coordinator comparison identified compatible Feather `external-link` geometry.
+
+Full Feather MIT and Lucide ISC license texts (including Lucide's Feather MIT
+section) were supplied by the coordinator from official GitHub license APIs and
+retained exactly in notices. Both are conservative compatible/derived-geometry
+attributions, not an assertion that all 100 shape origins have been established.
+No SVG or catalog bytes were changed or relicensed under project MIT.
+
+MIT approval and retained notices do not certify all source rights. A bounded
+source/history/privacy and public-surface review is not a certified secret-free
+or exhaustive legal audit. Target qualification, hosted acquisition and
+publication remain separate evidence gates; consult the exact release page for
+actual qualified assets. Dependency, toolchain or legal-input changes require
+fresh explicit review, rebuild and reviewed asset hashes. Never silently change
+catalog locks or replace already published assets.
