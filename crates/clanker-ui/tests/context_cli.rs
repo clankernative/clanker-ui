@@ -46,7 +46,8 @@ fn experimental_chart_is_explicit_without_promoting_the_ready_catalog() {
     assert_eq!(charts["nativeStatus"], "adapter-required");
     assert_eq!(charts["presentationAbi"], 1);
     assert_eq!(charts["renderer"], "echarts_chart_v1");
-    assert_eq!(charts["bundledWorker"], false);
+    assert_eq!(charts["bundledWorker"], true);
+    assert_eq!(charts["workerArchivePath"], "bin/clanker-chart-worker");
     assert!(root
         .join(charts["documentation"].as_str().unwrap())
         .is_file());

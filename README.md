@@ -1,22 +1,22 @@
 # Clanker Native UI
 
-**Status:** early access: CLI 0.1.0 / vanilla 0.7.0, with fifty-four component-complete contracts, forty-five Native-supported within the documented scope and nine adapter-required. Consult the [exact-version release page](https://github.com/clankernative/clanker-ui/releases/tag/v0.1.0) for available assets, qualified targets and reviewed hashes/provenance; source documentation alone does not establish hosted availability. First-install guidance: [`docs/INSTALL.md`](docs/INSTALL.md). The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready. The standalone local gallery has passed separate Native host admission and desktop/mobile browser checks for all fourteen layouts; CLI fixture verification alone does not prove host integration.
+**Version:** CLI 0.1.1 / vanilla 0.7.1, with fifty-four component-complete contracts, forty-five Native-supported within the documented scope and nine adapter-required. Consult the [exact-version release page](https://github.com/clankernative/clanker-ui/releases/tag/v0.1.1) for available assets, qualified targets and reviewed hashes/provenance; source documentation alone does not establish hosted availability. First-install guidance: [`docs/INSTALL.md`](docs/INSTALL.md). The old per-instance `compose` output is deprecated. Local package paths are not yet a portable CI dependency; this is not production-ready. The standalone local gallery has passed separate Native host admission and desktop/mobile browser checks for all fourteen layouts; CLI fixture verification alone does not prove host integration.
 
 Clanker Native UI is an optional, agent-first component discovery and assembly system. It helps an app-building agent find a component that fits a user's intent, read its contract, compose it for the app's target, and verify the result. The vanilla package provides Button, Icon, Badge, Divider, Status Indicator, Tag, Alert, Progress, Form Field, Avatar, Empty State, Metric, Skeleton, Page Header, Card, Cluster, Container, Grid, Split, Stack, Cover, Layer, Pane, Reel, Sidebar, and Switch with target-specific HTML and CSS. Native controls integrate with the host's existing Datastar form and patch transport. Four ready components have bounded browser-local enhancements for literal static pages; they do not own Datastar signals or app transport. Other authors could publish their own packages and target adapters, including React catalogs, without making React a dependency of Clanker Native.
 
 Clanker Native remains usable without Clanker Native UI. Apps keep ownership of their domain models, queries, commands, routes, presentation, and design flavor. Clanker Native UI describes and supplies UI components; it does not become a second app-operation catalog or an arbitrary callback SDK.
 
-## Experimental request-time charts
+## Request-time charts
 
 An opt-in `<cui-chart>` line/bar contract and separate ECharts 6.0.0 worker
 transform current authorized query data into checked SVG and exact values.
 Optional inspection/range events leave domain state and requests with the app.
 
-This **experimental v1** contract remains `draft` / `adapter-required`,
+This v1 contract remains `draft` / `adapter-required`,
 additional to the fifty-four complete contracts and excluded from ready
 discovery. `capabilities` identifies its manifest. Native presentation ABI 1
-and independent worker approval are required; existing UI releases do not
-provision that worker. See [setup, bounds and test boundaries](docs/runtime-chart-renderer.md).
+and independent worker approval are required. Version 0.1.1 archives install
+the chart worker alongside the compiler; installation does not approve execution. See [setup, bounds and test boundaries](docs/runtime-chart-renderer.md).
 
 ## Try the local proof
 
@@ -58,16 +58,17 @@ Local Platform execution uses the provider-neutral `DAY2_UI_PROVIDER_PIN_JSON` o
 
 Assembly protocol 2 uses MiniJinja 2.12.0 and binding ABI 2. Native captures private package/UI inputs, invokes `assemble --request FILE`, and independently admits the resulting bundle. The provider does not run while serving pages. ABI-1 bundles and component-specific `cui_*` callbacks are not accepted by this protocol.
 
-`native-bundle` prepares a relocatable directory containing the exact current executable, the complete declared package input closure, mandatory `legal/LICENSE` and `legal/NOTICES.txt`, `manifest.json`, and a relative `provider-pin.json`. Legal bytes are embedded from reviewed source, independently hash/size-identified in a closed manifest shape and verified on restore; they do not alter vanilla 0.7.0 catalog inputs or app locks. Project code is MIT; dependency/font terms remain separate. See [`docs/RELEASE-NOTICES.md`](docs/RELEASE-NOTICES.md). App authors redistributing generated package CSS/JS or catalog assets must retain project MIT and applicable third-party notices (including icon terms and font OFL), without changing app-owned licenses or domain rights. It does not include generated app HTML or CSS. Prepare from a clean checkout of the exact source revision and use a fresh output path; offline mode requires the pinned Rust dependencies to be cached. The revision argument is an unsigned provenance claim, not a check that the executable was built from that commit:
+`native-bundle --chart-worker PATH` prepares a relocatable directory containing the exact current compiler and the explicitly reviewed chart worker, the complete declared package input closure, mandatory `legal/LICENSE` and `legal/NOTICES.txt`, `manifest.json`, and a relative `provider-pin.json`. Legal bytes are embedded from reviewed source, independently hash/size-identified in a closed manifest shape and verified on restore; they do not alter vanilla 0.7.1 catalog inputs or app locks. Project code is MIT; dependency/font terms remain separate. See [`docs/RELEASE-NOTICES.md`](docs/RELEASE-NOTICES.md). App authors redistributing generated package CSS/JS or catalog assets must retain project MIT and applicable third-party notices (including icon terms and font OFL), without changing app-owned licenses or domain rights. It does not include generated app HTML or CSS. Prepare from a clean checkout of the exact source revision and use a fresh output path; offline mode requires the pinned Rust dependencies to be cached. The revision argument is an unsigned provenance claim, not a check that the executable was built from that commit:
 
 ```sh
-cargo build --locked --offline --release --bin clanker-ui
+cargo build --locked --offline --release --bin clanker-ui --bin clanker-chart-worker
 ./target/release/clanker-ui native-bundle --package packages/vanilla \\
+  --chart-worker target/release/clanker-chart-worker \\
   --output /tmp/clanker-ui-native-bundle --source-revision "$(git rev-parse HEAD)"
 ./target/release/clanker-ui verify-native-bundle --bundle /tmp/clanker-ui-native-bundle
 ```
 
-Verification is local and never invokes the bundled executable. The unsigned manifest and pin identify bytes; they do not authenticate a producer or grant trust. An operator must approve the source revision, executable, and package tree **separately from installation and before compiler execution**. The 64 MiB executable guard remains unchanged; dev/test profiles omit debug information so default CLI tests fit the same guard.
+Verification is local and never invokes the bundled executable. The unsigned manifest and pin identify bytes; they do not authenticate a producer or grant trust. An operator must approve the source revision, executable, and package tree **separately from installation and before compiler execution**. The executable closure shares the unchanged 64 MiB guard; dev/test profiles omit debug information so default CLI tests fit the same guard.
 
 #### Versioned release assets and explicit install/restore
 
@@ -78,9 +79,9 @@ Verification is local and never invokes the bundled executable. The unsigned man
 # Existing directory bundles remain usable offline:
 ./target/release/clanker-ui install-native-bundle --bundle /tmp/clanker-ui-native-bundle --output /operator/providers/local-reviewed
 # EXPECTED_SHA256 must be an explicitly reviewed sha256:<64 lowercase hex digits> value:
-./target/release/clanker-ui install-native-bundle --archive /reviewed/clanker-ui-native-0.1.0-linux-x86_64.tar.gz --expected-sha256 "$EXPECTED_SHA256" --output /operator/providers/0.1.0
+./target/release/clanker-ui install-native-bundle --archive /reviewed/clanker-ui-native-0.1.1-linux-x86_64.tar.gz --expected-sha256 "$EXPECTED_SHA256" --output /operator/providers/0.1.1
 # Hosted acquisition is an explicit operator action, never an app build/server action:
-./target/release/clanker-ui restore-native-bundle --github-repository clankernative/clanker-ui --version 0.1.0 --expected-sha256 "$EXPECTED_SHA256" --output /operator/providers/restored-0.1.0
+./target/release/clanker-ui restore-native-bundle --github-repository clankernative/clanker-ui --version 0.1.1 --expected-sha256 "$EXPECTED_SHA256" --output /operator/providers/restored-0.1.1
 ```
 
 The GitHub release-asset URL convention is an initial, replaceable acquisition adapter, not a registry. It requires an explicit repository and exact tool version (`v<version>` tag); there is no `latest`, arbitrary URL, downloaded install script, or automatic app networking. Hosted setup requires operator-installed `curl`; its configuration file is disabled, HTTPS redirects are bounded/HTTPS-only, and transfer size and time are bounded. Local directory/archive installation needs no network. Consult the exact release page for actually available/qualified assets; these producer commands do not establish hosted availability. Do not fetch a checksum alongside an untrusted archive and treat that as producer authentication: the expected SHA must come from the operator's reviewed identity decision. Hashes alone do not authenticate provenance; revision and manifest identity remain unsigned claims.
@@ -273,7 +274,7 @@ The 0.6.0 package adds the remaining six Toolframe layout-category components. T
 
 ## Read-only result and form components
 
-The 0.7.0 package adds five presentation contracts: Select Field, Filter Bar, Data Table, Breadcrumbs, and Pagination. All 54 Toolframe contracts are component-complete. Native supports the previous 45 within their documented scope. Modal, Drawer, Popover, Command Menu, Confirm Dialog, Date Calendar, Date Picker, File Upload, and Data Viewport retain `integration.native.status: adapter-required`; they are not silently admitted to Native templates.
+The 0.7.1 package adds five presentation contracts: Select Field, Filter Bar, Data Table, Breadcrumbs, and Pagination. All 54 Toolframe contracts are component-complete. Native supports the previous 45 within their documented scope. Modal, Drawer, Popover, Command Menu, Confirm Dialog, Date Calendar, Date Picker, File Upload, and Data Viewport retain `integration.native.status: adapter-required`; they are not silently admitted to Native templates.
 
 The nine have closed Rust validation, locked variant goldens, browser lifecycle/keyboard coverage, and desktop/mobile/no-JavaScript conformance tests. Confirm Dialog, File Upload, and Data Viewport expose explicit app-owned adapter ports; date components emit typed browser-draft events. Their `.d.ts` contracts are locked inputs, not transport implementations. Test adapters exercise rejection, cancellation, and recovery without uploading bytes, querying a backend, or claiming command success. `../clanker-ui-gallery/` owns visual usage examples; the package repository keeps reusable fixtures and conformance tests.
 

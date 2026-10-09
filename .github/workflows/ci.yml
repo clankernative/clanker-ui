@@ -19,11 +19,11 @@ jobs:
         run: cargo test --locked
       - name: Verify locked package
         run: cargo run --locked -- verify --lock examples/button-app/ui.lock.json
-      - name: Build release CLI
-        run: cargo build --locked --release --bin clanker-ui
+      - name: Build release tools
+        run: cargo build --locked --release --bin clanker-ui --bin clanker-chart-worker
       - name: Prepare and verify relocatable Native bundle
         run: |
-          ./target/release/clanker-ui native-bundle --package packages/vanilla --output target/native-bundle --source-revision "${GITHUB_SHA}"
+          ./target/release/clanker-ui native-bundle --package packages/vanilla --chart-worker target/release/clanker-chart-worker --output target/native-bundle --source-revision "${GITHUB_SHA}"
           ./target/release/clanker-ui verify-native-bundle --bundle target/native-bundle
       - name: Prepare deterministic versioned assets and verify safe extraction
         run: ./target/release/clanker-ui native-release --bundle target/native-bundle --output target/native-release

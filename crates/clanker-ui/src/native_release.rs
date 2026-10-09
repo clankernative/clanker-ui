@@ -179,10 +179,12 @@ fn collect(
 struct ByteBudget {
     total: u64,
     package: u64,
+    executables: u64,
 }
 impl ByteBudget {
     fn admit(&mut self, path: &str, size: u64) -> Result<(), String> {
-        let limit = if path == "bin/clanker-ui" {
+        let executable = native_bundle::is_executable(path);
+        let limit = if executable {
             MAX_EXECUTABLE
         } else {
             MAX_FILE as u64
@@ -191,16 +193,19 @@ impl ByteBudget {
             .total
             .checked_add(size)
             .ok_or("archive byte overflow")?;
-        if !matches!(
-            path,
-            "bin/clanker-ui" | "manifest.json" | "provider-pin.json"
-        ) {
+        if executable {
+            self.executables = self
+                .executables
+                .checked_add(size)
+                .ok_or("executable byte overflow")?;
+        } else if !matches!(path, "manifest.json" | "provider-pin.json") {
             self.package = self
                 .package
                 .checked_add(size)
                 .ok_or("package byte overflow")?;
         }
         if size > limit
+            || self.executables > MAX_EXECUTABLE
             || self.package > MAX_TOTAL as u64
             || self.total > MAX_EXECUTABLE + MAX_TOTAL as u64 + 2 * MAX_FILE as u64
         {
@@ -220,7 +225,7 @@ fn archive(bundle: &Path) -> Result<Vec<u8>, String> {
     files.sort();
     let mut budget = ByteBudget::default();
     for path in files {
-        let limit = if path == "bin/clanker-ui" {
+        let limit = if native_bundle::is_executable(&path) {
             MAX_EXECUTABLE
         } else {
             MAX_FILE as u64
@@ -229,7 +234,7 @@ fn archive(bundle: &Path) -> Result<Vec<u8>, String> {
         budget.admit(&path, bytes.len() as u64)?;
         let mut header = tar::Header::new_gnu();
         header.set_size(bytes.len() as u64);
-        header.set_mode(if path == "bin/clanker-ui" {
+        header.set_mode(if native_bundle::is_executable(&path) {
             0o755
         } else {
             0o644
@@ -330,8 +335,9 @@ fn prepare_snapshot(
         "schemaVersion":1,"archive":name,"digest":sha,"bundle":identity,
         "notices":{"asset":notices_name,"digest":notices_sha,"bytes":notices.len(),"archivePath":"legal/NOTICES.txt","redistribution":"Must accompany the standalone executable; includes project MIT and separate third-party terms."},
         "bootstrap":{"asset":bootstrap_name,"digest":bootstrap_sha,"bytes":bootstrap.len(),"archivePath":"bin/clanker-ui"},
-        "support":{"target":host,"scope":if host == "macos-aarch64" {"Primary Native qualification candidate; separate native host/consumer proof required."} else {"CLI-only candidate subject to producer tests; not full Linux Native builder qualification."}},
-        "provenance":"Early-access candidate. Unsigned source revision/identity claims; hashes identify bytes, not producer provenance or execution approval. Publication and target qualification are separate."
+        "presentationWorker":identity["presentationWorker"],
+        "support":{"target":host,"scope":if host == "macos-aarch64" {"Native assembly CLI and request-time chart worker; requires matching host support and independent execution approval."} else {"CLI and chart worker; not full Linux Native builder qualification."}},
+        "provenance":"Source revision and SHA-256 identify reviewed release bytes; hashes alone do not authenticate producer provenance or authorize execution."
     });
     write_asset(
         stage.path(),
@@ -442,7 +448,7 @@ fn extract(bytes: &[u8], root: &Path) -> Result<(), String> {
                 use std::os::unix::fs::PermissionsExt;
                 fs::set_permissions(
                     dest,
-                    fs::Permissions::from_mode(if path == "bin/clanker-ui" {
+                    fs::Permissions::from_mode(if native_bundle::is_executable(&path) {
                         0o755
                     } else {
                         0o644
@@ -513,7 +519,7 @@ fn install_bytes(
     }
     native_bundle::publish_noclobber(stage.path(), &target)?;
     Ok(
-        json!({"output":target,"archiveDigest":sha,"bundle":verified,"compilerExecuted":false,"approval":"Installation verifies bytes only; operator/compiler execution approval is separate."}),
+        json!({"output":target,"archiveDigest":sha,"bundle":verified,"compilerExecuted":false,"presentationWorkerExecuted":false,"approval":"Installation verifies bytes only; operator/compiler execution approval is separate."}),
     )
 }
 
@@ -592,12 +598,19 @@ mod tests {
             budget.admit("package/file", MAX_FILE as u64).unwrap();
         }
         assert!(budget.admit("package/extra", 1).is_err());
+        let mut shared = ByteBudget::default();
+        shared.admit("bin/clanker-ui", MAX_EXECUTABLE).unwrap();
+        assert!(shared.admit("bin/clanker-chart-worker", 1).is_err());
+        assert!(ByteBudget::default()
+            .admit("bin/clanker-chart-worker", MAX_EXECUTABLE + 1)
+            .is_err());
         assert!(ByteBudget::default()
             .admit("bin/clanker-ui", MAX_EXECUTABLE + 1)
             .is_err());
         assert!(ByteBudget {
             total: u64::MAX,
-            package: 0
+            package: 0,
+            executables: 0,
         }
         .admit("manifest.json", 1)
         .is_err());

@@ -1,4 +1,4 @@
-# Experimental request-time charts (ABI 1)
+# Request-time charts (ABI 1)
 
 Current authorized query data → independently approved ECharts worker → checked
 scene → ordinary Native SVG/table response. No Node service, browser chart
@@ -15,19 +15,17 @@ optional events. Platform owns authorization, queries, typed admission,
 independent execution approval, confinement, supervision and HTTP/live updates.
 The app owns data, sampling, domains, routes, accepted ranges, commands and dialogs.
 
-1. Use matching UI/Platform source with generic presentation ABI 1. Older hosts
-   do not admit `ui_scene`; no published compatibility is implied.
-2. Restore locked dependencies during explicit setup, then build reviewed tools:
-
-   ```sh
-   cargo build --locked --offline --bin clanker-ui --bin clanker-chart-worker
-   ./target/debug/clanker-chart-worker --contracts
-   ./target/debug/clanker-chart-worker --licenses
-   ```
-
-   Worker contracts must match `components/chart/renderer-contract.json`.
-   Review executable bytes, the embedded engine hash and upstream notices before
-   execution approval. Native compilation never downloads dependencies.
+1. Use a Platform host supporting generic presentation ABI 1. Older hosts
+   do not admit `ui_scene`; updating the UI dependency does not update the host.
+2. Install the exact reviewed UI release through [`INSTALL.md`](INSTALL.md).
+   Version 0.1.1 archives include `bin/clanker-ui`, `bin/clanker-chart-worker`,
+   the locked package and complete engine/dependency notices. The install and
+   verifier never execute the worker. `manifest.json` and release metadata
+   identify its ABI, bytes and contracts, not execution authority.
+   After independent approval, inspect the installed worker's `--contracts`
+   and `--licenses`. Contracts must match the installed package's
+   `components/chart/renderer-contract.json`. Native compilation never restores
+   dependencies or downloads executables.
 3. Provision the package outside app `ui/` and explicitly author/update the
    canonical `ui/ui.lock.json`. Declare a checked query record:
 
@@ -48,8 +46,9 @@ The app owns data, sampling, domains, routes, accepted ranges, commands and dial
    declarations do not approve code.
 5. Build/run normally. Assembly stages locked, non-browser
    `ui/presentation.json` metadata; startup privately captures the approved
-   worker. Existing Native bundles/releases do **not** provision this worker.
-   A local source override is not qualified cold provisioning.
+   worker from the installed release. No sibling UI source checkout or manual
+   package/worker copying is needed. Installing the archive does not approve
+   either executable automatically.
 
 Set `enhance="true"` for inspection/range controls and explicitly import the
 staged `./clanker-ui.js` from the app module. Keep ordinary GET links/forms and
