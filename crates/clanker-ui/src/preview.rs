@@ -265,6 +265,16 @@ pub fn render(
     };
     template_path(&selected)?;
     let bundle = crate::expand::expand(lock, ui, None)?;
+    let expanded_template = bundle
+        .templates
+        .get(&selected)
+        .ok_or("selected preview template is missing")?;
+    if expanded_template.contains("ui_scene('echarts_chart_v1'") {
+        return Err(
+            "standalone render cannot preview live worker-backed charts; use the qualified Native runtime"
+                .into(),
+        );
+    }
     let package = Application {
         source: LocalPackage,
         output: DirectorySink,

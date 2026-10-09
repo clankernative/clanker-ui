@@ -4,6 +4,7 @@ Clanker Native UI is a provisional **agent-first component catalog and build-tim
 
 ## Where things live
 
+- `crates/clanker-chart-worker/`: independently approved experimental request-time ECharts worker. This is separate from build assembly; see `docs/runtime-chart-renderer.md`. Its draft chart contract is additional to the fifty-four complete contracts and is not in ready-only discovery. Existing Native bundles do not provision the worker.
 - `crates/catalog-core/`: package and component metadata, lock validation, discovery, dependency resolution, and typed component contracts. Keep this independent of app I/O.
 - `crates/clanker-ui/`: discovery CLI plus `expand` (symbolic templates, bindings and locked resources) and script-free fake-scene `render`. The old `build`/`compose` commands are **not** the app integration path.
 - `crates/catalog-core/src/expansion/`: pure declaration expansion and composition. `crates/clanker-ui-runtime/` implements preview-side generic binding ABI 2; Platform implements that ABI independently. Both must pass the identical vectors in `tests/protocol/ui-binding-abi-v2.json`; Platform never vendors or imports the component runtime. See `docs/ui-binding-abi-v2.md`.
@@ -41,6 +42,7 @@ Clanker Native UI is a provisional **agent-first component catalog and build-tim
 
 ## Local checks and cautions
 
+- For experimental charts also run `node --test tests/browser/chart-interaction.test.mjs`. A simulation pass is not browser/no-JS/lifecycle acceptance; retain draft/adapter-required until those gates pass.
 - In this repo: `cargo fmt --all --check`, `cargo test --locked --offline`, and `cargo run --locked --offline -- verify --lock examples/button-app/ui.lock.json` (refresh the example lock after declared package changes). `.github/workflows/ci.yml` runs the corresponding portable checks on PRs.
 - In a Platform checkout: run scoped `cargo test --locked -p xtask ui_assembly`, `cargo run --locked -p xtask -- verify-fast`, and supported native app builds. Run the frozen-source full `xtask verify` before claiming complete Platform verification. A Linux Rust suite is not macOS isolated-builder or Studio GUI qualification.
 - For GoLinks: refresh its lock only when declared package bytes change. Rebuild through Platform with a reviewed compiler pin; inspect admitted forms, drafts, stable live regions, authorization, cursor paging, responsive/accessibility and no-JS behavior. Static rendering does not prove these host/browser gates.

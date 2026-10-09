@@ -120,38 +120,38 @@ fn draft_component_assets_remain_in_the_canonical_declared_closure() {
 fn rejects_legacy_and_noncanonical_schema_and_manifests() {
     let (_temp, _ui, path, lock) = fixture();
     let canonical = serde_json::to_value(&lock).unwrap();
-    let edits: Vec<Box<dyn Fn(&mut Value)>> = vec![
-        Box::new(|v| v["schemaVersion"] = json!(2)),
-        Box::new(|v| v["provider"] = json!("other")),
-        Box::new(|v| {
+    let edits: [fn(&mut Value); 19] = [
+        |v| v["schemaVersion"] = json!(2),
+        |v| v["provider"] = json!("other"),
+        |v| {
             v.as_object_mut().unwrap().remove("provider");
-        }),
-        Box::new(|v| v["extra"] = json!(true)),
-        Box::new(|v| v["package"]["extra"] = json!(true)),
-        Box::new(|v| v["package"]["inputs"][0]["extra"] = json!(true)),
-        Box::new(|v| v["package"]["path"] = json!("/package")),
-        Box::new(|v| v["package"]["path"] = json!("../package/../package")),
-        Box::new(|v| v["package"]["path"] = json!("..\\package")),
-        Box::new(|v| v["package"]["digest"] = json!("sha256:tampered")),
-        Box::new(|v| v["package"]["inputs"][0]["bytes"] = json!(1)),
-        Box::new(|v| v["package"]["inputs"][0]["bytes"] = json!(-1)),
-        Box::new(|v| v["package"]["inputs"][0]["bytes"] = json!(1_048_577)),
-        Box::new(|v| v["package"]["inputs"][0]["digest"] = json!("sha256:ABCDEF")),
-        Box::new(|v| {
+        },
+        |v| v["extra"] = json!(true),
+        |v| v["package"]["extra"] = json!(true),
+        |v| v["package"]["inputs"][0]["extra"] = json!(true),
+        |v| v["package"]["path"] = json!("/package"),
+        |v| v["package"]["path"] = json!("../package/../package"),
+        |v| v["package"]["path"] = json!("..\\package"),
+        |v| v["package"]["digest"] = json!("sha256:tampered"),
+        |v| v["package"]["inputs"][0]["bytes"] = json!(1),
+        |v| v["package"]["inputs"][0]["bytes"] = json!(-1),
+        |v| v["package"]["inputs"][0]["bytes"] = json!(1_048_577),
+        |v| v["package"]["inputs"][0]["digest"] = json!("sha256:ABCDEF"),
+        |v| {
             v["package"].as_object_mut().unwrap().remove("inputs");
-        }),
-        Box::new(|v| v["package"]["inputs"][0]["path"] = json!("../escape")),
-        Box::new(|v| {
+        },
+        |v| v["package"]["inputs"][0]["path"] = json!("../escape"),
+        |v| {
             v["package"]["inputs"].as_array_mut().unwrap().reverse();
-        }),
-        Box::new(|v| {
+        },
+        |v| {
             let first = v["package"]["inputs"][0].clone();
             v["package"]["inputs"]
                 .as_array_mut()
                 .unwrap()
                 .insert(0, first);
-        }),
-        Box::new(|v| v["package"]["inputs"] = json!([])),
+        },
+        |v| v["package"]["inputs"] = json!([]),
     ];
     for edit in edits {
         let mut value = canonical.clone();

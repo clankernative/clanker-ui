@@ -2,7 +2,7 @@ use super::*;
 use anyhow::Context;
 
 const MAX_TOTAL: usize = 32 * 1024 * 1024;
-const STATIC: [&str; 43] = [
+const STATIC: [&str; 44] = [
     "badge",
     "divider",
     "status-indicator",
@@ -46,6 +46,7 @@ const STATIC: [&str; 43] = [
     "theme-switcher",
     "tooltip",
     "toast",
+    "chart",
 ];
 
 #[derive(Deserialize, Serialize)]
@@ -291,6 +292,10 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
         ("theme-switcher", "group"),
         ("tooltip", "tooltip"),
         ("toast", "region"),
+        (
+            "chart",
+            "accessible request-time chart with exact values table",
+        ),
     ]
     .into_iter()
     .collect::<BTreeMap<_, _>>();
@@ -301,19 +306,33 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
         };
         let c: crate::Component = serde_json::from_slice(bytes).map_err(anyhow::Error::msg)?;
         ensure!(c.schema_version == 1, "invalid component metadata: {name}");
-        if c.status != crate::Status::Ready {
+        if c.status != crate::Status::Ready && name != "chart" {
             continue;
         }
+        if name == "chart" {
+            ensure!(
+                c.status == crate::Status::Draft
+                    && c.integration.as_ref().is_some_and(|integration| {
+                        integration.native.status
+                            == crate::integration::IntegrationStatus::AdapterRequired
+                    })
+                    && c.assets.contracts.len() == 1
+                    && c.assets.contracts[0] == "components/chart/renderer-contract.json",
+                "chart must remain explicitly draft and adapter-required with a locked renderer contract"
+            );
+        }
         let expected_scripts = component_browser_scripts(name);
+        let scripts_match = c
+            .assets
+            .scripts
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<_>>();
         ensure!(
             c.name == name
                 && c.target == "native-html"
-                && c.assets
-                    .scripts
-                    .iter()
-                    .map(String::as_str)
-                    .collect::<Vec<_>>()
-                    == expected_scripts
+                && (scripts_match == expected_scripts
+                    || (name == "chart" && scripts_match.is_empty()))
                 && c.assets.styles == format!("components/{name}/styles.css"),
             "locked package {name} metadata is incompatible"
         );
@@ -405,6 +424,14 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
             "activity-feed" => &["[[attributes]]", "[[label]]", "[[entries]]"],
             "definition-list" => &["[[attributes]]", "[[items]]"],
             "disclosure" => &["[[attributes]]", "[[summary]]", "[[body]]"],
+            "chart" => &[
+                "[[attributes]]",
+                "[[caption_attributes]]",
+                "[[label]]",
+                "[[svg]]",
+                "[[table]]",
+                "[[mapping]]",
+            ],
             "button-group" => &["[[attributes]]", "[[buttons]]"],
             "checkbox-group" | "radio-group" => &[
                 "[[attributes]]",
@@ -459,6 +486,14 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
             Ok(serde_json::to_value(catalog)?)
         })
         .transpose()?;
+    let presentation_contracts = if assets.contains_key("components/chart/component.json") {
+        let source = assets
+            .get("components/chart/renderer-contract.json")
+            .context("draft chart must lock its typed renderer contract")?;
+        parse_presentation_contracts(source)?
+    } else {
+        BTreeMap::new()
+    };
     Ok(Package {
         identity: manifest.name,
         property_catalog,
@@ -468,6 +503,7 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
         icon_fragment,
         static_fragments,
         icons,
+        presentation_contracts,
     })
 }
 
@@ -478,4 +514,56 @@ fn component(assets: &BTreeMap<String, Vec<u8>>, name: &str) -> Result<crate::Co
             .with_context(|| format!("locked package must include {name} metadata"))?,
     )
     .map_err(anyhow::Error::msg)
+}
+
+fn parse_presentation_contracts(bytes: &[u8]) -> Result<BTreeMap<String, PresentationContract>> {
+    use serde_json::json;
+    let input = json!({"record": {
+        "width": "integer", "height": "integer", "start": "integer", "end": "integer",
+        "y_min": "integer", "y_max": "integer", "title": "string", "kind": "string",
+        "samples": {"list": {"record": {
+            "time": "integer", "value": "integer", "missing": "boolean", "key": "string"
+        }}}
+    }});
+    let output = json!({"record": {
+        "paths": {"list": {"record": {
+            "d": "string", "transform": "string", "role": "integer", "clipped": "boolean",
+            "stroke_width": "string", "linecap": "string", "linejoin": "string"
+        }}},
+        "labels": {"list": {"record": {
+            "text": "string", "x": "string", "y": "string", "transform": "string",
+            "anchor": "string", "baseline": "string", "font_size": "string",
+            "font_weight": "string"
+        }}},
+        "plot": {"record": {"x": "string", "y": "string", "width": "string", "height": "string"}},
+        "points": {"list": {"record": {
+            "key": "string", "time": "integer", "value": "integer", "missing": "boolean",
+            "x": "string", "y": "string"
+        }}}
+    }});
+    let manifest: serde_json::Value =
+        serde_json::from_slice(bytes).context("parse locked chart renderer contract")?;
+    let renderer = manifest
+        .get("renderers")
+        .and_then(serde_json::Value::as_object)
+        .context("renderer contract requires a renderer record")?;
+    ensure!(
+        manifest.get("schemaVersion") == Some(&json!(1))
+            && renderer.len() == 1
+            && renderer.get("echarts_chart_v1").is_some(),
+        "chart renderer contract must declare exactly echarts_chart_v1 ABI 1"
+    );
+    let declaration = &renderer["echarts_chart_v1"];
+    ensure!(
+        declaration
+            .as_object()
+            .is_some_and(|record| record.len() == 2)
+            && declaration.get("input") == Some(&input)
+            && declaration.get("output") == Some(&output),
+        "chart renderer input/output shapes differ from the reviewed ABI"
+    );
+    Ok(BTreeMap::from([(
+        "echarts_chart_v1".into(),
+        PresentationContract { input, output },
+    )]))
 }

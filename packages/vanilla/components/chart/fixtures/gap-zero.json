@@ -1,0 +1,22 @@
+{
+  "declaration": "<cui-chart id=\"daily-samples\" data=\"{{ report.chart }}\" label=\"Daily samples\" enhance=\"false\" />",
+  "renderer": "echarts_chart_v1",
+  "input": {
+    "width": 640,
+    "height": 240,
+    "start": 1735689600000,
+    "end": 1735776000000,
+    "y_min": 0,
+    "y_max": 100,
+    "title": "Daily samples",
+    "kind": "line",
+    "samples": [
+      { "time": 1735689600000, "value": 0, "missing": false, "key": "sample-zero" },
+      { "time": 1735775999999, "value": 0, "missing": true, "key": "sample-gap" }
+    ]
+  },
+  "expectations": [
+    "The exact-values table shows measured zero as 0 and explicit missing as Missing.",
+    "The chart declaration contains no app routes, signals, commands, or renderer callbacks."
+  ]
+}

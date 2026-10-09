@@ -117,6 +117,16 @@ use `data-ui-navigation="true"` with literal
 `data-ui-navigation-ancestor-links` constraints. Producer-specific component markers have no host
 semantics. Command/form authority remains independently checked by Native.
 
+## Optional request-time presentation metadata
+
+Experimental charts select the locked `components/chart/renderer-contract.json`
+as an ordinary non-browser `metadata` resource at `ui/presentation.json`. There
+is no assembly wire-field or binding ABI change. Native captures these typed
+contracts for `ui_scene` admission; it does not execute ECharts during assembly.
+An independently approved runtime worker consumes current authorized data later.
+Its presentation ABI 1 and `DAY2_PRESENTATION_PIN_JSON` approval are separate from
+the assembly provider and its pin. See [runtime chart setup](runtime-chart-renderer.md).
+
 ## Evidence
 
 A simulator implements the assembly port, not component expansion. Protocol

@@ -1,0 +1,40 @@
+.cui-chart {
+  display: grid;
+  gap: var(--cui-space-3, .75rem);
+  min-inline-size: 0;
+  color: var(--cui-chart-text, var(--cui-text, #18203b));
+}
+.cui-chart__scene {
+  display: block;
+  inline-size: min(100%, 40rem);
+  block-size: auto;
+  overflow: visible;
+  border: 1px solid var(--cui-chart-axis, var(--cui-border, #66738f));
+  border-radius: var(--cui-radius-surface, .75rem);
+  background: var(--cui-chart-surface, var(--cui-surface, #fff));
+}
+.cui-chart__path { fill: none; }
+.cui-chart__path--0 { stroke: var(--cui-chart-ink, var(--cui-text, #18203b)); }
+.cui-chart__path--1 { stroke: var(--cui-chart-grid, #d7dcdf); }
+.cui-chart__path--2 { stroke: var(--cui-chart-orange, var(--cui-accent, #a84716)); }
+.cui-chart__path--3 { fill: var(--cui-chart-orange, var(--cui-accent, #a84716)); stroke: none; }
+.cui-chart__path--4 { fill: var(--cui-chart-surface, var(--cui-surface, #fff)); stroke: var(--cui-chart-orange, var(--cui-accent, #a84716)); }
+.cui-chart__labels { fill: var(--cui-chart-text, var(--cui-text, #18203b)); font-family: Arial, sans-serif; white-space: pre; }
+.cui-chart__data { inline-size: min(100%, 40rem); border-collapse: collapse; color: var(--cui-chart-text, var(--cui-text, #18203b)); }
+.cui-chart__data caption { padding-block: var(--cui-space-2, .5rem); color: var(--cui-text-secondary, #45516e); text-align: start; }
+.cui-chart__data th, .cui-chart__data td { padding: var(--cui-space-2, .5rem) var(--cui-space-3, .75rem); border-block-end: 1px solid var(--cui-border, #66738f); text-align: start; }
+.cui-chart__data th { font-weight: 650; }
+[data-cui-chart-enhance="true"] .cui-chart__scene { touch-action: pan-y pinch-zoom; cursor: crosshair; }
+[data-cui-chart-enhance="true"] .cui-chart__scene,
+[data-cui-chart-enhance="true"] .cui-chart__scene * { -webkit-user-select: none; user-select: none; }
+.cui-chart__scene:focus-visible { outline: 3px solid var(--cui-chart-orange, var(--cui-accent, #a84716)); outline-offset: 4px; }
+.cui-chart__enhancement { pointer-events: none; }
+.cui-chart__selection { fill: var(--cui-chart-orange, var(--cui-accent, #a84716)); fill-opacity: .12; stroke: var(--cui-chart-orange, var(--cui-accent, #a84716)); stroke-width: 1; }
+.cui-chart__crosshair { stroke: var(--cui-chart-ink, var(--cui-text, #17191b)); stroke-width: 1; stroke-dasharray: 3 3; }
+.cui-chart__marker { fill: var(--cui-chart-surface, var(--cui-surface, #fff)); stroke: var(--cui-chart-orange, var(--cui-accent, #a84716)); stroke-width: 2; }
+.cui-chart__controls { display: flex; flex-wrap: wrap; gap: var(--cui-space-2, .5rem); align-items: center; }
+.cui-chart__controls button { font: inherit; min-block-size: 44px; padding: .5rem .75rem; border: 1px solid var(--cui-chart-orange, var(--cui-accent, #a84716)); background: var(--cui-chart-surface, var(--cui-surface, #fff)); color: var(--cui-chart-orange, var(--cui-accent, #a84716)); cursor: pointer; }
+.cui-chart__controls button:focus-visible { outline: 3px solid var(--cui-chart-orange, var(--cui-accent, #a84716)); outline-offset: 3px; }
+.cui-chart__controls button:disabled { opacity: .6; cursor: default; }
+.cui-chart__status { flex-basis: 100%; color: var(--cui-chart-text, var(--cui-text, #17191b)); }
+@media (prefers-reduced-motion: reduce) { .cui-chart *, .cui-chart *::before, .cui-chart *::after { animation: none !important; transition: none !important; } }

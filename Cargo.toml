@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/catalog-core", "crates/clanker-ui", "crates/clanker-ui-runtime"]
+members = ["crates/catalog-core", "crates/clanker-ui", "crates/clanker-ui-runtime", "crates/clanker-chart-worker"]
 resolver = "2"
 
 [workspace.package]

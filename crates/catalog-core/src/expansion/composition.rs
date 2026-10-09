@@ -3,7 +3,7 @@
 use super::*;
 
 const MAX_DEPTH: usize = 16;
-pub(super) const NAMES: [&str; 45] = [
+pub(super) const NAMES: [&str; 46] = [
     "button",
     "icon",
     "badge",
@@ -49,6 +49,7 @@ pub(super) const NAMES: [&str; 45] = [
     "theme-switcher",
     "tooltip",
     "toast",
+    "chart",
 ];
 const VOID: &[&str] = &["area", "br", "col", "hr", "img", "input", "wbr"];
 
@@ -64,6 +65,7 @@ pub(super) fn expand<const N: usize>(
     package: Option<&Package>,
     counts: &mut [usize; N],
     bindings: &mut Vec<Binding>,
+    browser_scripts: &mut BTreeSet<String>,
 ) -> Result<String> {
     if !input.to_ascii_lowercase().contains("<cui-")
         && !input.to_ascii_lowercase().contains("</cui-")
@@ -80,6 +82,7 @@ pub(super) fn expand<const N: usize>(
         package,
         counts,
         bindings,
+        browser_scripts,
     )?;
     ensure!(
         result.slots.is_empty(),
@@ -115,6 +118,7 @@ fn region<const N: usize>(
     package: Option<&Package>,
     counts: &mut [usize; N],
     bindings: &mut Vec<Binding>,
+    browser_scripts: &mut BTreeSet<String>,
 ) -> Result<Children> {
     ensure!(
         depth <= MAX_DEPTH,
@@ -205,6 +209,7 @@ fn region<const N: usize>(
                     package,
                     counts,
                     bindings,
+                    browser_scripts,
                 )?;
                 ensure!(
                     child.slots.is_empty()
@@ -257,6 +262,7 @@ fn region<const N: usize>(
                     Some(package),
                     counts,
                     bindings,
+                    browser_scripts,
                 )?;
                 ensure!(
                     child.slots.is_empty(),
@@ -286,6 +292,9 @@ fn region<const N: usize>(
             };
             ensure!(counts[index] <= max, "Native UI {name} count exceeds {max}");
             for (attribute, value) in &declaration.attrs {
+                if component == "chart" && attribute == "data" {
+                    continue;
+                }
                 if let Some(field_path) = interpolation(value) {
                     let expected_kind = binding_kind(component, attribute)
                         .context("binding is not supported for this component attribute")?;
@@ -303,7 +312,7 @@ fn region<const N: usize>(
             let composite = index == 13 || index >= 14;
 
             ensure!(
-                self_closing || composite,
+                (self_closing || composite) && (component != "chart" || self_closing),
                 "cui-{component} must be self-closing"
             );
             if ports_component {
@@ -334,13 +343,26 @@ fn region<const N: usize>(
                     Some(package),
                     counts,
                     bindings,
+                    browser_scripts,
                 )?
             };
             ensure!(
                 index == 32 || children.definitions.is_empty(),
                 "cui-definition is supported only inside cui-definition-list"
             );
-            let rendered = if native_control {
+            let rendered = if component == "chart" {
+                ensure!(
+                    children.body.trim().is_empty()
+                        && children.slots.is_empty()
+                        && children.definitions.is_empty(),
+                    "cui-chart accepts no child markup"
+                );
+                let (html, enhanced) = chart::render(&declaration, package)?;
+                if enhanced {
+                    browser_scripts.insert(chart::script_path().into());
+                }
+                html
+            } else if native_control {
                 native_controls::render(component, &declaration, package, bindings)?
             } else if matches!(
                 component,

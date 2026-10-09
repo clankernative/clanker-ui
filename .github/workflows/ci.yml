@@ -36,5 +36,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Test isolated component interactions
-        run: node --test tests/components/*.test.mjs
+      - name: Test isolated component and chart interactions
+        run: node --test tests/components/*.test.mjs tests/browser/chart-interaction.test.mjs
