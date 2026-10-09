@@ -12,6 +12,7 @@ const MAX_STATIC: usize = 256;
 
 mod assets;
 mod bindings;
+mod chart;
 mod composition;
 mod enhancements;
 mod enterprise;
@@ -37,6 +38,7 @@ pub fn component_browser_scripts(name: &str) -> &'static [&'static str] {
         "date-picker" => &["components/date-picker/interaction.js"],
         "file-upload" => &["components/file-upload/interaction.js"],
         "data-viewport" => &["components/data-viewport/interaction.js"],
+        "chart" => &["components/chart/interaction.js"],
         _ => &[],
     }
 }
@@ -50,6 +52,7 @@ pub struct Package {
     icon_fragment: Option<String>,
     static_fragments: BTreeMap<String, String>,
     icons: BTreeMap<String, String>,
+    presentation_contracts: BTreeMap<String, PresentationContract>,
 }
 
 #[derive(Default, Clone)]
@@ -1755,7 +1758,18 @@ fn transform_html_with_bindings<const N: usize>(
     counts: &mut [usize; N],
     bindings: &mut Vec<Binding>,
 ) -> Result<String> {
-    composition::expand(input, package, counts, bindings)
+    let mut browser_scripts = BTreeSet::new();
+    transform_html_with_selected_scripts(input, package, counts, bindings, &mut browser_scripts)
+}
+
+fn transform_html_with_selected_scripts<const N: usize>(
+    input: &str,
+    package: Option<&Package>,
+    counts: &mut [usize; N],
+    bindings: &mut Vec<Binding>,
+    browser_scripts: &mut BTreeSet<String>,
+) -> Result<String> {
+    composition::expand(input, package, counts, bindings, browser_scripts)
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -1769,10 +1783,19 @@ pub struct Binding {
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+pub struct PresentationContract {
+    pub input: serde_json::Value,
+    pub output: serde_json::Value,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Expansion {
     pub html: String,
     pub used_components: BTreeSet<String>,
     pub bindings: Vec<Binding>,
+    #[serde(default, skip_serializing_if = "BTreeSet::is_empty")]
+    pub browser_scripts: BTreeSet<String>,
 }
 
 impl Package {
@@ -1796,13 +1819,23 @@ impl Package {
     pub fn identity(&self) -> &str {
         &self.identity
     }
+    pub fn presentation_contracts(&self) -> &BTreeMap<String, PresentationContract> {
+        &self.presentation_contracts
+    }
 }
 
 /// Expand supported declarations in a captured HTML source string.
 pub fn expand(input: &str, package: &Package) -> Result<Expansion> {
     let mut counts = [0usize; composition::NAMES.len()];
     let mut bindings = Vec::new();
-    let html = transform_html_with_bindings(input, Some(package), &mut counts, &mut bindings)?;
+    let mut browser_scripts = BTreeSet::new();
+    let html = transform_html_with_selected_scripts(
+        input,
+        Some(package),
+        &mut counts,
+        &mut bindings,
+        &mut browser_scripts,
+    )?;
     let used_components = composition::NAMES
         .iter()
         .zip(counts)
@@ -1813,6 +1846,7 @@ pub fn expand(input: &str, package: &Package) -> Result<Expansion> {
         html,
         used_components,
         bindings,
+        browser_scripts,
     })
 }
 

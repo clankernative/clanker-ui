@@ -61,6 +61,25 @@ fn renders_expansion_includes_guarded_values_routes_and_embedded_fonts_without_s
     );
 }
 #[test]
+fn standalone_preview_rejects_live_worker_backed_charts() {
+    let (_tmp, ui, scene) = fixture();
+    fs::write(
+        ui.join("pages/index.html"),
+        r#"<cui-chart id="latency" data="{{ chart.chart }}" label="Latency" />"#,
+    )
+    .unwrap();
+    fs::write(
+        &scene,
+        r#"{"page":"pages/index.html","data":{"chart":{"chart":{}}}}"#,
+    )
+    .unwrap();
+    let output = request(&ui, &scene, None);
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stdout)
+        .contains("cannot preview live worker-backed charts"));
+}
+
+#[test]
 fn fragment_uses_the_same_capture_and_scene_but_no_page_wrapper() {
     let (_tmp, ui, scene) = fixture();
     let output = request(&ui, &scene, Some("ui/components/message.html"));

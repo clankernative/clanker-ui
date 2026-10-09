@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "name": "chart",
+  "status": "draft",
+  "target": "native-html",
+  "category": "data",
+  "summary": "Experimental request-time SVG chart from a closed typed renderer contract.",
+  "keywords": ["chart", "time series", "svg", "visualization", "request time"],
+  "agent": {
+    "useWhen": "A bounded, persisted time series needs a server-rendered line or bar visualization with an accessible values table.",
+    "avoidWhen": "A client-owned dashboard, arbitrary chart callbacks, unbounded datasets, or a host without approved runtime presentation support is required.",
+    "composeWith": ["card", "filter-bar", "data-table"]
+  },
+  "contract": {
+    "role": "accessible request-time chart with exact values table",
+    "variants": ["line", "bar"],
+    "requiredFields": ["id", "data", "label"],
+    "invariants": [
+      "This is an experimental draft component; Native runtime presentation remains adapter-required and this metadata makes no readiness claim.",
+      "Only id, data, label and enhance are accepted. id and label are stable, literal, nonblank values; enhance is the literal true or false and defaults false.",
+      "data is exactly one whole dotted identifier record path. Calls, indexing, operators, mixed interpolation and raw JSON are rejected; normal Native admission checks ui_scene input/output against the locked renderer contract.",
+      "The renderer receives only current typed query data. No engine is executed during package expansion, static preview, or app build.",
+      "The SVG uses a stable root id, derived caption and clip ids, one plot-derived clip rectangle, ordered renderer paths, escaped labels, and only closed paint roles 0 through 4.",
+      "An accessible exact-values table distinguishes explicit missing samples from measured numeric zero and contains every input sample.",
+      "The hidden point mapping is bounded by the renderer contract and contains only key, time, value, missing, x and y data attributes.",
+      "No-JavaScript SVG and table output are complete. The root figure is the enhancement boundary and carries bounded range values; bounded hidden point spans expose only renderer key, time, value, missing, x and y fields.",
+      "When enabled, the separate admitted installer owns Previous, Next, Inspect, Start selection, Apply and Cancel controls plus preview SVG layers; the declarative fragment adds no toolbar. Its bubbled application events are cui-chart:range-committed {start,end}, cui-chart:range-cancelled {}, and cui-chart:point-activated {key,time,value,missing}; teardown also dispatches a document-scoped cui-chart:unmounted lifecycle notification. App code owns navigation and dialogs.",
+      "The renderer contract is the locked input/output schema for echarts_chart_v1 ABI 1. It is metadata, not executable approval or runtime authorization."
+    ]
+  },
+  "tokens": [
+    "--cui-accent",
+    "--cui-border",
+    "--cui-chart-axis",
+    "--cui-chart-grid",
+    "--cui-chart-ink",
+    "--cui-chart-orange",
+    "--cui-chart-surface",
+    "--cui-chart-text",
+    "--cui-radius-surface",
+    "--cui-space-2",
+    "--cui-space-3",
+    "--cui-space-4",
+    "--cui-surface",
+    "--cui-text",
+    "--cui-text-secondary"
+  ],
+  "tokenDescriptions": [
+    {
+      "name": "--cui-chart-axis",
+      "role": "border",
+      "purpose": "Colors the SVG scene frame; axis strokes use the separate ink token."
+    },
+    {
+      "name": "--cui-chart-grid",
+      "role": "color",
+      "purpose": "Colors renderer grid strokes without changing measured series geometry."
+    },
+    {
+      "name": "--cui-chart-ink",
+      "role": "color",
+      "purpose": "Colors axis strokes and the optional inspection crosshair."
+    },
+    {
+      "name": "--cui-chart-orange",
+      "role": "color",
+      "purpose": "Colors measured series, selection previews, inspection markers, controls and focus outlines.",
+      "semantic": "accent"
+    },
+    {
+      "name": "--cui-chart-surface",
+      "role": "background",
+      "purpose": "Colors the SVG background, outlined point interiors and optional controls.",
+      "semantic": "surface"
+    },
+    {
+      "name": "--cui-chart-text",
+      "role": "text",
+      "purpose": "Colors figure text, SVG labels, the exact-values table and inspection status."
+    }
+  ],
+  "dependencies": [],
+  "assets": {
+    "template": "components/chart/fragment.html",
+    "styles": "components/chart/styles.css",
+    "scripts": ["components/chart/interaction.js"],
+    "contracts": ["components/chart/renderer-contract.json"]
+  },
+  "fixtures": [
+    "components/chart/fixtures/line.json",
+    "components/chart/fixtures/gap-zero.json"
+  ],
+  "integration": {
+    "native": {
+      "status": "adapter-required",
+      "scope": "Experimental expansion requires independently approved Native presentation ABI 1 and echarts_chart_v1 schemas. Query-backed SVG and exact-values rendering is implemented; optional interaction still requires complete browser/lifecycle qualification. Worker provisioning is separate from Native UI bundles. Not a ready or released component."
+    }
+  }
+}

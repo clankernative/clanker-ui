@@ -1,0 +1,19 @@
+{
+  "declaration": "<cui-chart id=\"latency-week\" data=\"{{ chart.data }}\" label=\"Latency by hour\" />",
+  "enhance": false,
+  "renderer": "echarts_chart_v1",
+  "input": {
+    "width": 640,
+    "height": 240,
+    "start": 1735689600000,
+    "end": 1735776000000,
+    "y_min": 0,
+    "y_max": 100,
+    "title": "Latency by hour",
+    "kind": "line",
+    "samples": [
+      { "time": 1735689600000, "value": 0, "missing": false, "key": "sample-a" },
+      { "time": 1735775999999, "value": 42, "missing": false, "key": "sample-b" }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+[package]
+name = "clanker-chart-worker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+rquickjs = { version = "=0.14.0", default-features = false, features = ["std"] }
+roxmltree = "=0.21.1"
+
+[[bin]]
+name = "clanker-chart-worker"
+path = "src/main.rs"

@@ -82,6 +82,52 @@ fn static_templates_do_not_pull_any_unused_browser_modules() {
 }
 
 #[test]
+fn chart_expansion_stages_locked_presentation_metadata_only_when_used() {
+    let (_temp, lock, ui) = fixture();
+    fs::write(
+        ui.join("pages/index.html"),
+        r#"<cui-chart id="latency-week" data="{{ chart.chart }}" label="Latency" />"#,
+    )
+    .unwrap();
+    let bundle = expand::expand(&lock, &ui, None).unwrap();
+    let metadata = bundle
+        .resources
+        .iter()
+        .find(|resource| resource.path == "ui/presentation.json")
+        .unwrap();
+    assert_eq!(metadata.kind, "metadata");
+    assert_eq!(
+        metadata.source.as_deref(),
+        Some("components/chart/renderer-contract.json")
+    );
+    assert!(metadata.content.is_none());
+    assert!(bundle.resources.iter().any(|resource| {
+        resource.path == "ui/app.css" && resource.content.as_deref().unwrap().contains(".cui-chart")
+    }));
+    let serialized = serde_json::to_value(&bundle).unwrap();
+    assert!(serialized.get("presentations").is_none());
+    assert!(!bundle
+        .resources
+        .iter()
+        .any(|resource| resource.kind == "module"));
+
+    fs::write(
+        ui.join("pages/index.html"),
+        r#"<cui-chart id="latency-week" data="{{ chart.chart }}" label="Latency" enhance="true" />"#,
+    )
+    .unwrap();
+    let enhanced = expand::expand(&lock, &ui, None).unwrap();
+    assert!(enhanced.resources.iter().any(|resource| {
+        resource.path == "ui/clanker-ui/components/chart/interaction.js"
+            && resource.kind == "module"
+            && resource.source.as_deref() == Some("components/chart/interaction.js")
+    }));
+    assert!(enhanced.resources.iter().any(|resource| {
+        resource.path == "ui/clanker-ui/browser/lifecycle.js" && resource.kind == "module"
+    }));
+}
+
+#[test]
 fn malformed_template_paths_and_generated_resource_collisions_fail_closed() {
     let (_temp, lock, ui) = fixture();
     fs::write(ui.join("pages/bad name.html"), "plain template").unwrap();

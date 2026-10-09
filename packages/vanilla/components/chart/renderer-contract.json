@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "renderers": {
+    "echarts_chart_v1": {
+      "input": {
+        "record": {
+          "end": "integer",
+          "height": "integer",
+          "kind": "string",
+          "samples": {
+            "list": {
+              "record": {
+                "key": "string",
+                "missing": "boolean",
+                "time": "integer",
+                "value": "integer"
+              }
+            }
+          },
+          "start": "integer",
+          "title": "string",
+          "width": "integer",
+          "y_max": "integer",
+          "y_min": "integer"
+        }
+      },
+      "output": {
+        "record": {
+          "labels": {
+            "list": {
+              "record": {
+                "anchor": "string",
+                "baseline": "string",
+                "font_size": "string",
+                "font_weight": "string",
+                "text": "string",
+                "transform": "string",
+                "x": "string",
+                "y": "string"
+              }
+            }
+          },
+          "paths": {
+            "list": {
+              "record": {
+                "clipped": "boolean",
+                "d": "string",
+                "linecap": "string",
+                "linejoin": "string",
+                "role": "integer",
+                "stroke_width": "string",
+                "transform": "string"
+              }
+            }
+          },
+          "plot": {
+            "record": {
+              "height": "string",
+              "width": "string",
+              "x": "string",
+              "y": "string"
+            }
+          },
+          "points": {
+            "list": {
+              "record": {
+                "key": "string",
+                "missing": "boolean",
+                "time": "integer",
+                "value": "integer",
+                "x": "string",
+                "y": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

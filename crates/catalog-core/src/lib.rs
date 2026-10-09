@@ -253,8 +253,10 @@ impl Component {
         }
         if !unique(&component.assets.contracts)
             || component.assets.contracts.iter().any(|path| {
+                let chart_renderer_contract =
+                    component.name == "chart" && path == "components/chart/renderer-contract.json";
                 !safe_path(path)
-                    || !path.ends_with(".d.ts")
+                    || (!path.ends_with(".d.ts") && !chart_renderer_contract)
                     || !path.starts_with(&format!("components/{}/", component.name))
             })
         {
@@ -498,5 +500,17 @@ mod tests {
             .unwrap()
             .replace("components/button/template.html", "../secrets");
         assert!(Component::parse(invalid.as_bytes()).is_err());
+    }
+
+    #[test]
+    fn only_chart_can_declare_the_exact_renderer_contract_json() {
+        let mut chart = component("chart", Status::Draft, &[]);
+        chart.assets.contracts = vec!["components/chart/renderer-contract.json".into()];
+        assert!(Component::parse(&serde_json::to_vec(&chart).unwrap()).is_ok());
+        chart.assets.contracts = vec!["components/chart/other.json".into()];
+        assert!(Component::parse(&serde_json::to_vec(&chart).unwrap()).is_err());
+        let mut metric = component("metric", Status::Ready, &[]);
+        metric.assets.contracts = vec!["components/metric/renderer-contract.json".into()];
+        assert!(Component::parse(&serde_json::to_vec(&metric).unwrap()).is_err());
     }
 }

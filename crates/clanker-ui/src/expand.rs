@@ -560,10 +560,12 @@ fn expand_package(
     let mut templates = BTreeMap::new();
     let mut bindings = Vec::new();
     let mut used = BTreeSet::new();
+    let mut selected_scripts = BTreeSet::new();
     for (path, bytes) in &html_inputs {
         let input = std::str::from_utf8(bytes).map_err(|e| format!("{path}: {e}"))?;
         let result = expansion::expand(input, &core).map_err(|e| format!("{path}: {e:#}"))?;
         used.extend(result.used_components);
+        selected_scripts.extend(result.browser_scripts);
         bindings.extend(
             result
                 .bindings
@@ -644,18 +646,29 @@ fn expand_package(
     .map(|(n, p)| (n.into(), p.into()))
     .collect();
     let mut entries = BTreeSet::new();
-    for name in used {
-        let Some(component) = package.catalog.components().find(|c| c.name == name) else {
+    for name in &used {
+        let Some(component) = package.catalog.components().find(|c| c.name == *name) else {
             continue;
         };
         for script in &component.assets.scripts {
-            if names.get(&name) != Some(script) {
+            if names.get(name) != Some(script) {
                 return Err(format!(
                     "unsupported compiler-owned script for {name}: {script}"
                 ));
             }
             entries.insert(script.clone());
         }
+    }
+    for script in selected_scripts {
+        if script != "components/chart/interaction.js" || !used.contains("chart") {
+            return Err(format!("unsupported selected component script: {script}"));
+        }
+        if !package.assets.contains_key(&script) {
+            return Err(format!(
+                "missing selected locked component script: {script}"
+            ));
+        }
+        entries.insert(script);
     }
     let mut module_paths = BTreeSet::new();
     if !entries.is_empty() {
@@ -700,6 +713,20 @@ fn expand_package(
             Some(bootstrap.to_vec()),
             "module",
             bootstrap,
+        )?);
+    }
+    if used.contains("chart") {
+        let source = "components/chart/renderer-contract.json";
+        let bytes = package
+            .assets
+            .get(source)
+            .ok_or_else(|| format!("missing locked chart renderer contract: {source}"))?;
+        resources.push(resource(
+            "ui/presentation.json",
+            Some(source),
+            None,
+            "metadata",
+            bytes,
         )?);
     }
     for (source, target) in [

@@ -5,7 +5,7 @@
     "name": "@clanker/vanilla",
     "version": "0.7.0",
     "path": "../../packages/vanilla",
-    "digest": "sha256:9185573e72c1a2faffec1b038859b052b15954fa984305d5446d905537d31358",
+    "digest": "sha256:97cc09576294cd8f78beda4021072072f31b676749a5cc2e76a16aa50867ba2e",
     "inputs": [
       {
         "path": "browser/lifecycle.js",
@@ -391,6 +391,41 @@
         "path": "components/card/styles.css",
         "digest": "sha256:36da2e59732cae6f413382c8d0d6aea3b7d31d949ef9edf41db21e308f2ca1f6",
         "bytes": 1499
+      },
+      {
+        "path": "components/chart/component.json",
+        "digest": "sha256:3a1b3ebc45bf9616646de6af2d24f3700eb212baa45b782679d4021e3652c699",
+        "bytes": 5101
+      },
+      {
+        "path": "components/chart/fixtures/gap-zero.json",
+        "digest": "sha256:b89deb7b0062cb9a7d53503c4a8ba295758c10f1622714e1d00729d91c860d28",
+        "bytes": 752
+      },
+      {
+        "path": "components/chart/fixtures/line.json",
+        "digest": "sha256:d656c7652f268666294674e38b3647b067199a3133dd83807af57a014f4b5a1a",
+        "bytes": 545
+      },
+      {
+        "path": "components/chart/fragment.html",
+        "digest": "sha256:58e0369aaf04898af3751c9b3585abeb09770e02689015d3c57ca151b9c349f7",
+        "bytes": 117
+      },
+      {
+        "path": "components/chart/interaction.js",
+        "digest": "sha256:8a8753296498672d44ea25b4544827802a0c9b38c433929e2d15da5a9ce53b36",
+        "bytes": 13748
+      },
+      {
+        "path": "components/chart/renderer-contract.json",
+        "digest": "sha256:c206e55f1ab4c8d290b53a81298638a7f3927e55bb600eda5dd9cebbb761e514",
+        "bytes": 1963
+      },
+      {
+        "path": "components/chart/styles.css",
+        "digest": "sha256:2b321da819bb0f6e70f6a94fe0898349a0f507b252796bfe28d79e2f6618a0e4",
+        "bytes": 3355
       },
       {
         "path": "components/checkbox-group/component.json",

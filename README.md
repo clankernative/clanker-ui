@@ -6,6 +6,18 @@ Clanker Native UI is an optional, agent-first component discovery and assembly s
 
 Clanker Native remains usable without Clanker Native UI. Apps keep ownership of their domain models, queries, commands, routes, presentation, and design flavor. Clanker Native UI describes and supplies UI components; it does not become a second app-operation catalog or an arbitrary callback SDK.
 
+## Experimental request-time charts
+
+An opt-in `<cui-chart>` line/bar contract and separate ECharts 6.0.0 worker
+transform current authorized query data into checked SVG and exact values.
+Optional inspection/range events leave domain state and requests with the app.
+
+This **experimental v1** contract remains `draft` / `adapter-required`,
+additional to the fifty-four complete contracts and excluded from ready
+discovery. `capabilities` identifies its manifest. Native presentation ABI 1
+and independent worker approval are required; existing UI releases do not
+provision that worker. See [setup, bounds and test boundaries](docs/runtime-chart-renderer.md).
+
 ## Try the local proof
 
 The Rust workspace has a pure `catalog-core` crate, a `clanker-ui` discovery/assembly CLI, and private `clanker-ui-runtime` preview guards. Native does not link that crate. Clanker UI owns expansion; the Native build invokes the pinned CLI and independently admits its output in a private snapshot. The forty-five Native-supported vanilla components are `button`, `icon`, `badge`, `divider`, `status-indicator`, `tag`, `alert`, `progress`, `form-field`, `avatar`, `empty-state`, `metric`, `skeleton`, `page-header`, `card`, `cluster`, `container`, `grid`, `split`, `stack`, `cover`, `layer`, `pane`, `reel`, `sidebar`, `switch`, `select-field`, `filter-bar`, `data-table`, `breadcrumbs`, `pagination`, `activity-feed`, `button-group`, `definition-list`, `disclosure`, `progress-steps`, `segmented-control`, `tabs`, `checkbox-group`, `radio-group`, `toggle`, `copy-field`, `theme-switcher`, `tooltip`, and `toast`. A component directory without `component.json` is ignored; malformed declared metadata fails. The lock at `examples/button-app/ui.lock.json` pins declared package inputs, not every file in the checkout. The app owns `examples/button-app/theme.css`; it does not edit package defaults.
