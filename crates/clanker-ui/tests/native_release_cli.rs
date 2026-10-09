@@ -162,7 +162,7 @@ fn deterministic_release_install_restore_and_relocation_offline() {
         .unwrap()
         .to_str()
         .unwrap()
-        .starts_with("clanker-ui-native-0.1.0-"));
+        .starts_with(&format!("clanker-ui-native-{}-", env!("CARGO_PKG_VERSION"))));
     let wrong_version = root.path().join("wrong-version");
     let error = clanker_ui::native_release::install(
         &clanker_ui::native_release::LocalArchive(&a),

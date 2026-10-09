@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "@clanker/vanilla",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "summary": "Semantic HTML controls for Clanker Native",
   "theme": "theme/default.css",
   "tokenMetadata": "theme/token-metadata.json",

@@ -1,7 +1,7 @@
 # Release legal inputs — bounded review
 
 Project MIT was explicitly approved: `LICENSE`, copyright (c) 2026 Clanker Native
-contributors. All three authored crates inherit workspace SPDX `MIT` metadata.
+contributors. All four authored crates inherit workspace SPDX `MIT` metadata.
 Third-party/font terms remain separate; project MIT does not assert rights over
 material whose original provenance has not been established.
 
@@ -55,7 +55,12 @@ The installed Rust 1.98.1 `COPYRIGHT-library.html` was also inspected. Its
 file/dependency attributions and full license texts are retained in text form;
 identical repeated license blocks are referenced and reproduced once. This is
 conservative standard-library coverage, not a claim that every listed library
-is linked. Each target producer must use this reviewed toolchain inventory or
+is linked. Release 0.1.1 also includes complete cached license texts for the
+worker's locked Linux/macOS normal/build closure, rquickjs 0.14.0's family MIT
+notice, its exact embedded QuickJS-NG MIT notice, Apache ECharts 6.0.0 NOTICE
+and LICENSE, and embedded d3/zrender BSD notices. The worker inventory alone
+was not sufficient for binary redistribution; these full terms are retained
+in the same closed `legal/NOTICES.txt` and adjacent release notices. Each target producer must use this reviewed toolchain inventory or
 refresh/review notices for its actual toolchain before distribution.
 
 Geist Sans/Mono remain under SIL OFL-1.1, with the existing Vercel/basement.studio

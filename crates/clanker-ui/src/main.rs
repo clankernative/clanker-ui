@@ -43,6 +43,9 @@ enum Command {
     },
     /// Prepare a relocatable, unsigned Native tool and package bundle.
     NativeBundle {
+        /// Include reviewed request-time chart worker bytes; never executed by packaging.
+        #[arg(long)]
+        chart_worker: Option<PathBuf>,
         #[arg(long)]
         package: PathBuf,
         #[arg(long)]
@@ -266,12 +269,18 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
             Ok(("native-pin", clanker_ui::expand::native_pin(&output)?))
         }
         Command::NativeBundle {
+            chart_worker,
             package,
             output,
             source_revision,
         } => Ok((
             "native-bundle",
-            clanker_ui::native_bundle::prepare(&package, &output, &source_revision)?,
+            clanker_ui::native_bundle::prepare_with_worker(
+                &package,
+                &output,
+                &source_revision,
+                chart_worker.as_deref(),
+            )?,
         )),
         Command::VerifyNativeBundle { bundle } => Ok((
             "verify-native-bundle",
@@ -333,8 +342,8 @@ fn run(cli: Cli) -> Result<CommandResult, String> {
                 "validation": ["verify", "doctor", "check-css"],
                 "theming": {"schemaVersion":1,"readOnly":true,"commands":["tokens","check-css"],"warningsFail":false,"unknownTokensFail":true,"componentDetailsField":"tokenDetails","analysis":"Static CSS and possible template structure; no JavaScript or computed cascade."},
                 "assembly": ["assemble", "expand", "render"],
-                "experimental": {"charts":{"component":"chart","componentStatus":"draft","nativeStatus":"adapter-required","presentationAbi":1,"renderer":"echarts_chart_v1","worker":"clanker-chart-worker","contractPath":"components/chart/renderer-contract.json","documentation":"docs/runtime-chart-renderer.md","executionApproval":"Independent operator DAY2_PRESENTATION_PIN_JSON; package locks do not approve code.","bundledWorker":false}},
-                "nativeBundle": {"commands":["native-bundle", "verify-native-bundle", "native-release", "install-native-bundle", "restore-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"candidateTargets":["linux-x86_64", "macos-aarch64"],"artifact":"Versioned operator-managed archives, standalone CLI and adjacent notices, with target-specific metadata; early-access candidates, never published by this command.","acquisition":"Explicit operator install/restore only; local offline bundle/archive or replaceable GitHub exact-version adapter; expected SHA required for archives.","compilerExecution":false,"trust":"Hashes identify bytes, not provenance; operator approval required."},
+                "experimental": {"charts":{"component":"chart","componentStatus":"draft","nativeStatus":"adapter-required","presentationAbi":1,"renderer":"echarts_chart_v1","worker":"clanker-chart-worker","contractPath":"components/chart/renderer-contract.json","documentation":"docs/runtime-chart-renderer.md","executionApproval":"Independent operator DAY2_PRESENTATION_PIN_JSON; package locks do not approve code.","bundledWorker":true,"workerArchivePath":"bin/clanker-chart-worker"}},
+                "nativeBundle": {"commands":["native-bundle", "verify-native-bundle", "native-release", "install-native-bundle", "restore-native-bundle"],"schemaVersion":1,"ciArtifactTargets":["linux-x86_64"],"candidateTargets":["linux-x86_64", "macos-aarch64"],"artifact":"Versioned operator-managed archives, standalone CLI and adjacent notices, with target-specific compiler/worker metadata; never published by this command.","acquisition":"Explicit operator install/restore only; local offline bundle/archive or replaceable GitHub exact-version adapter; expected SHA required for archives.","compilerExecution":false,"trust":"Hashes identify bytes, not provenance; operator approval required."},
                 "nativeLock": {"path":"ui/ui.lock.json","schemaVersion":1,"provider":"clanker-ui.native","commands":["lock","native-lock"],"updates":"Explicit --update only; no legacy lock schema."},
                 "nativePin": "Explicit local unsigned override output only; operator verifies executable trust.",
                 "integration": {"componentStatusField":"component.status","nativeStatusField":"component.integration.native","portsField":"component.integration.ports","portTypesField":"component.assets.contracts","missingHostMetadata":"No advertised host support; admission is independent.","readyMeaning":"Component-complete, not backend-integrated."},

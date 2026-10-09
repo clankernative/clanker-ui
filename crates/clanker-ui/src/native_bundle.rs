@@ -43,6 +43,8 @@ struct BundleManifest {
     binding_abi: u32,
     template_engine: String,
     executable: Entry,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    presentation_worker: Option<PresentationWorker>,
     package: BundlePackage,
     legal: Vec<Entry>,
     entries: Vec<Entry>,
@@ -53,6 +55,30 @@ struct BundlePackage {
     name: String,
     version: String,
     digest: String,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct PresentationWorker {
+    abi: u32,
+    executable: Entry,
+    contracts: serde_json::Value,
+}
+
+pub(crate) fn is_executable(path: &str) -> bool {
+    matches!(path, "bin/clanker-ui" | "bin/clanker-chart-worker")
+}
+
+fn chart_contract(bytes: &[u8]) -> Result<serde_json::Value, String> {
+    let value: serde_json::Value = serde_json::from_slice(bytes).map_err(|e| e.to_string())?;
+    if value["schemaVersion"] != 1
+        || value.as_object().is_none_or(|v| v.len() != 2)
+        || value["renderers"]
+            .as_object()
+            .is_none_or(|v| v.len() != 1 || !v.contains_key("echarts_chart_v1"))
+    {
+        return Err("invalid locked chart renderer contract".into());
+    }
+    Ok(value["renderers"].clone())
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -257,6 +283,16 @@ pub fn prepare(
     output: &Path,
     source_revision: &str,
 ) -> Result<serde_json::Value, String> {
+    prepare_with_worker(package_path, output, source_revision, None)
+}
+
+/// Capture an explicitly reviewed worker without executing it. Installation is not execution approval.
+pub fn prepare_with_worker(
+    package_path: &Path,
+    output: &Path,
+    source_revision: &str,
+    chart_worker: Option<&Path>,
+) -> Result<serde_json::Value, String> {
     if !valid_revision(source_revision) {
         return Err("source revision must be exactly 40 hexadecimal characters".into());
     }
@@ -296,6 +332,35 @@ pub fn prepare(
     let executable_path = fs::canonicalize(std::env::current_exe().map_err(|e| e.to_string())?)
         .map_err(|e| e.to_string())?;
     let executable = checked_read(&executable_path, MAX_EXECUTABLE)?;
+    let worker_bytes = chart_worker
+        .map(|path| checked_read(path, MAX_EXECUTABLE))
+        .transpose()?;
+    if executable.is_empty()
+        || worker_bytes.as_ref().is_some_and(Vec::is_empty)
+        || executable.len() as u64 + worker_bytes.as_ref().map_or(0, |v| v.len() as u64)
+            > MAX_EXECUTABLE
+        || inputs.len() + legal.len() + usize::from(worker_bytes.is_some()) > MAX_INPUTS
+    {
+        return Err("bundle executable closure exceeds existing limits".into());
+    }
+    let presentation_worker = worker_bytes
+        .as_ref()
+        .map(|bytes| {
+            let contract = package
+                .assets
+                .get("components/chart/renderer-contract.json")
+                .ok_or("chart worker requires the locked chart contract")?;
+            Ok::<_, String>(PresentationWorker {
+                abi: 1,
+                executable: Entry {
+                    path: "bin/clanker-chart-worker".into(),
+                    bytes: bytes.len(),
+                    digest: digest(bytes),
+                },
+                contracts: chart_contract(contract)?,
+            })
+        })
+        .transpose()?;
     let target_name = expand::current_host_target()?;
     let manifest = BundleManifest {
         schema_version: 1,
@@ -311,6 +376,7 @@ pub fn prepare(
             bytes: executable.len(),
             digest: digest(&executable),
         },
+        presentation_worker,
         package: BundlePackage {
             name: package.catalog.package.name.clone(),
             version: package.catalog.package.version.clone(),
@@ -359,6 +425,16 @@ pub fn prepare(
         fs::set_permissions(&binary, fs::Permissions::from_mode(0o755))
             .map_err(|e| e.to_string())?;
     }
+    if let Some(bytes) = &worker_bytes {
+        let binary = stage.path().join("bin/clanker-chart-worker");
+        fs::write(&binary, bytes).map_err(|e| e.to_string())?;
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            fs::set_permissions(&binary, fs::Permissions::from_mode(0o755))
+                .map_err(|e| e.to_string())?;
+        }
+    }
     for (relative, bytes) in &package.assets {
         if !safe_rel(relative) || bytes.len() > MAX_FILE {
             return Err(format!("unsafe or oversized package input: {relative}"));
@@ -376,7 +452,7 @@ pub fn prepare(
     }
     publish_noclobber(stage.path(), &target)?;
     Ok(
-        serde_json::json!({"target": target_name, "output": target, "package": manifest.package, "entries": manifest.entries.len(), "executableDigest": manifest.executable.digest, "unsigned": true}),
+        serde_json::json!({"target": target_name, "output": target, "package": manifest.package, "entries": manifest.entries.len(), "executableDigest": manifest.executable.digest, "presentationWorker":manifest.presentation_worker, "unsigned": true}),
     )
 }
 
@@ -509,6 +585,43 @@ pub fn verify(bundle: &Path) -> Result<serde_json::Value, String> {
                 .into(),
         );
     }
+    if let Some(worker) = &manifest.presentation_worker {
+        if worker.abi != 1
+            || worker.executable.path != "bin/clanker-chart-worker"
+            || worker.executable.bytes == 0
+            || worker.executable.bytes as u64 > MAX_EXECUTABLE
+            || manifest.executable.bytes as u64 + worker.executable.bytes as u64 > MAX_EXECUTABLE
+            || manifest.entries.len() + manifest.legal.len() + 1 > MAX_INPUTS
+        {
+            return Err("invalid presentation worker declaration or executable budget".into());
+        }
+        let path = bundle.join(&worker.executable.path);
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            if fs::metadata(&path)
+                .map_err(|e| e.to_string())?
+                .permissions()
+                .mode()
+                & 0o111
+                == 0
+            {
+                return Err("bundled presentation worker is not executable".into());
+            }
+        }
+        let bytes = checked_read(&path, MAX_EXECUTABLE)?;
+        if bytes.len() != worker.executable.bytes || digest(&bytes) != worker.executable.digest {
+            return Err("presentation worker bytes or digest mismatch".into());
+        }
+        let contract = checked_read(
+            &bundle.join("package/components/chart/renderer-contract.json"),
+            MAX_FILE as u64,
+        )?;
+        if chart_contract(&contract)? != worker.contracts {
+            return Err("presentation worker contract differs from locked package".into());
+        }
+        expected_files.insert(worker.executable.path.clone());
+    }
     let mut total = 0usize;
     for entry in &manifest.legal {
         let bytes = checked_read(&bundle.join(&entry.path), MAX_FILE as u64)?;
@@ -593,7 +706,7 @@ pub fn verify(bundle: &Path) -> Result<serde_json::Value, String> {
         );
     }
     Ok(
-        serde_json::json!({"target":target,"toolVersion":manifest.tool_version,"sourceRevision":manifest.source_revision,"package":manifest.package,"legal":manifest.legal,"entries":manifest.entries.len(),"executableDigest":manifest.executable.digest,"verified":true,"trust":"unsigned; operator approval required"}),
+        serde_json::json!({"target":target,"toolVersion":manifest.tool_version,"sourceRevision":manifest.source_revision,"package":manifest.package,"legal":manifest.legal,"entries":manifest.entries.len(),"executableDigest":manifest.executable.digest,"presentationWorker":manifest.presentation_worker,"verified":true,"trust":"unsigned; operator approval required"}),
     )
 }
 
