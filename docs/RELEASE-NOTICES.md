@@ -55,12 +55,16 @@ The installed Rust 1.98.1 `COPYRIGHT-library.html` was also inspected. Its
 file/dependency attributions and full license texts are retained in text form;
 identical repeated license blocks are referenced and reproduced once. This is
 conservative standard-library coverage, not a claim that every listed library
-is linked. Release 0.1.1 also includes complete cached license texts for the
+is linked. Releases since 0.1.1 also include complete cached license texts for the
 worker's locked Linux/macOS normal/build closure, rquickjs 0.14.0's family MIT
 notice, its exact embedded QuickJS-NG MIT notice, Apache ECharts 6.0.0 NOTICE
 and LICENSE, and embedded d3/zrender BSD notices. The worker inventory alone
 was not sufficient for binary redistribution; these full terms are retained
-in the same closed `legal/NOTICES.txt` and adjacent release notices. Each target producer must use this reviewed toolchain inventory or
+in the same closed `legal/NOTICES.txt` and adjacent release notices. Release 0.2.0
+adds no third-party Rust, JavaScript or font dependency: the `number` contract,
+its installer and the Metric/Form Field changes are project-authored MIT code,
+and the locked dependency graph and Rust 1.98.1 producer toolchain are
+unchanged from 0.1.1, so the reviewed `NOTICES.txt` is carried forward. Each target producer must use this reviewed toolchain inventory or
 refresh/review notices for its actual toolchain before distribution.
 
 Geist Sans/Mono remain under SIL OFL-1.1, with the existing Vercel/basement.studio

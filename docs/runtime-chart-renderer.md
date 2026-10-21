@@ -6,7 +6,7 @@ engine, request-time assembly compiler or build-time snapshot is involved.
 
 `chart` remains `draft` / `adapter-required`. Ready-only discovery excludes it;
 `clanker-ui capabilities` identifies its manifest and this guide. This feature
-is additional to the fifty-four complete contracts, not a readiness promotion.
+is additional to the fifty-five complete contracts, not a readiness promotion.
 
 ## Ownership and adoption
 
@@ -18,7 +18,7 @@ The app owns data, sampling, domains, routes, accepted ranges, commands and dial
 1. Use a Platform host supporting generic presentation ABI 1. Older hosts
    do not admit `ui_scene`; updating the UI dependency does not update the host.
 2. Install the exact reviewed UI release through [`INSTALL.md`](INSTALL.md).
-   Version 0.1.1 archives include `bin/clanker-ui`, `bin/clanker-chart-worker`,
+   Release archives since 0.1.1 include `bin/clanker-ui`, `bin/clanker-chart-worker`,
    the locked package and complete engine/dependency notices. The install and
    verifier never execute the worker. `manifest.json` and release metadata
    identify its ABI, bytes and contracts, not execution authority.
@@ -38,7 +38,8 @@ The app owns data, sampling, domains, routes, accepted ranges, commands and dial
    `title,kind`; `samples : CollectionPage(Sample)` holds integer
    `time,value`, boolean `missing` and string `key`. Expansion projects
    only checked scalars and `samples.items`, never cursors or unrelated fields.
-4. Independently approve the build CLI via `DAY2_UI_PROVIDER_PIN_JSON` and
+4. Approve the build CLI through the host's managed dependency (current
+   Platform: its reviewed `build-dependencies/clanker-ui.json` catalog) and the
    runtime worker via `DAY2_PRESENTATION_PIN_JSON`. The latter is the JSON value,
    not a filename: schema version 1, ABI 1, canonical executable path, exact
    `sha256:` digest and matching `renderers` catalog. Native's
