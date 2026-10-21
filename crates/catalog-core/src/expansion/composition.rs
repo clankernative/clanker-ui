@@ -3,7 +3,7 @@
 use super::*;
 
 const MAX_DEPTH: usize = 16;
-pub(super) const NAMES: [&str; 46] = [
+pub(super) const NAMES: [&str; 47] = [
     "button",
     "icon",
     "badge",
@@ -50,6 +50,7 @@ pub(super) const NAMES: [&str; 46] = [
     "tooltip",
     "toast",
     "chart",
+    "number",
 ];
 const VOID: &[&str] = &["area", "br", "col", "hr", "img", "input", "wbr"];
 
@@ -312,7 +313,8 @@ fn region<const N: usize>(
             let composite = index == 13 || index >= 14;
 
             ensure!(
-                (self_closing || composite) && (component != "chart" || self_closing),
+                (self_closing || composite)
+                    && (!["chart", "number"].contains(&component) || self_closing),
                 "cui-{component} must be self-closing"
             );
             if ports_component {
@@ -362,6 +364,20 @@ fn region<const N: usize>(
                     browser_scripts.insert(chart::script_path().into());
                 }
                 html
+            } else if component == "number" || component == "metric" {
+                let motion = if component == "number" {
+                    "motion"
+                } else {
+                    "value-motion"
+                };
+                if declaration.attrs.get(motion).is_some_and(|v| v == "roll") {
+                    browser_scripts.insert("components/number/interaction.js".into());
+                }
+                if component == "number" {
+                    render_number(&declaration, package)?
+                } else {
+                    render_metric(&declaration, package)?
+                }
             } else if native_control {
                 native_controls::render(component, &declaration, package, bindings)?
             } else if matches!(

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "name": "number",
+  "status": "ready",
+  "target": "native-html",
+  "category": "data",
+  "summary": "Displays app-formatted number text with an optional decorative digit roll.",
+  "keywords": ["number", "formatted value", "animated digits"],
+  "agent": {
+    "useWhen": "A text value should optionally roll changed digits after an app-owned update.",
+    "avoidWhen": "The value needs parsing, localization, financial calculation, inferred trend, or numeric interpolation.",
+    "composeWith": []
+  },
+  "integration": {"native": {"status": "adapter-required", "scope": "The locked declaration and browser installer require a real Native host build and browser lifecycle qualification."}},
+  "contract": {
+    "role": "formatted number text",
+    "variants": ["none", "roll"],
+    "requiredFields": ["value"],
+    "invariants": [
+      "Value is app-formatted, nonblank escaped text with no control characters; unknown properties are rejected.",
+      "Optional stable id uses a typed safe token (ASCII letters, digits, hyphen, underscore, colon; at most 128 bytes; no leading underscore); unknown properties are rejected.",
+      "Motion defaults to none; direction defaults to up; durationMs defaults to 320 and is bounded from 0 through 1000, with zero snapping immediately.",
+      "The first paint is canonical static text and never animates on mount. Explicit roll motion animates clipped old/new pairs only for changed ASCII digits of matching textual shape. Recognized digit-count/grouping shape changes and ASCII suffix changes use a bounded whole-label transition; sign changes, other separator edits, RTL values, and unsupported/long text settle without animation.",
+      "The app updates only data-cui-number-value with its already-formatted label. A stable id permits the trusted host patch bridge to retain the owned DOM node; the installer admits only the Number value, motion, duration, direction, and presentation class from a matching incoming Number root. The canonical label updates after the synchronous patch; decorative motion is aria-hidden, never a live region, and respects reduced motion.",
+      "Matching-shape ASCII digit edits roll in the configured direction; bounded printable shape/suffix changes use a whole-label transition. Incompatible, overlong, RTL, or unsupported labels settle to canonical text.",
+      "The component owns no domain state, parsing, localization, transport, financial operation, or command callback."
+    ]
+  },
+  "tokens": [],
+  "dependencies": [],
+  "assets": {"template": "components/number/fragment.html", "styles": "components/number/styles.css", "scripts": ["components/number/interaction.js"]},
+  "fixtures": ["components/number/fixtures/static.json", "components/number/fixtures/roll.json"]
+}

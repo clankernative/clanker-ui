@@ -40,6 +40,14 @@ pub(super) fn render_with_dependencies(
     let json = serde_json::to_string(&options).map_err(|e| e.to_string())?;
     let children = value.get("children");
     let (html, variants) = match name {
+        "number" => {
+            let instance: catalog_core::number::NumberInstance =
+                serde_json::from_str(&json).map_err(|error| error.to_string())?;
+            (
+                catalog_core::number::render(&instance, template)?,
+                vec![instance.motion.as_str().to_owned()],
+            )
+        }
         "activity-feed" => {
             let i = activity_feed::ActivityFeedInstance::parse(&json)?;
             let v = i

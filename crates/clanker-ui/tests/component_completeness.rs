@@ -5,7 +5,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-const COMPLETE_WITHOUT_NATIVE: [&str; 9] = [
+const COMPLETE_WITHOUT_NATIVE: [&str; 10] = [
     "modal",
     "drawer",
     "popover",
@@ -15,6 +15,7 @@ const COMPLETE_WITHOUT_NATIVE: [&str; 9] = [
     "date-picker",
     "file-upload",
     "data-viewport",
+    "number",
 ];
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/vanilla")
@@ -35,7 +36,7 @@ fn copy_tree(from: &Path, to: &Path) {
 #[test]
 fn all_contracts_are_discoverable_without_claiming_native_support() {
     let package = LocalPackage.load(&root()).unwrap();
-    assert_eq!(package.catalog.components().count(), 54);
+    assert_eq!(package.catalog.components().count(), 55);
     for name in COMPLETE_WITHOUT_NATIVE {
         let component = package.catalog.get(name).unwrap();
         assert_eq!(component.status, Status::Ready);
@@ -47,6 +48,7 @@ fn all_contracts_are_discoverable_without_claiming_native_support() {
             .fixtures
             .iter()
             .find(|path| path.contains("golden"))
+            .or_else(|| component.fixtures.first())
             .unwrap();
         let html = NativeAdapter::fixture_html(&LocalPackage, &package, name, fixture).unwrap();
         assert!(!html.is_empty(), "{name}");

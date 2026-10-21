@@ -49,6 +49,34 @@ impl InputType {
     }
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, Eq, PartialEq)]
+#[serde(rename_all = "kebab-case")]
+pub enum InputMode {
+    None,
+    Text,
+    Decimal,
+    Numeric,
+    Tel,
+    Search,
+    Email,
+    Url,
+}
+
+impl InputMode {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::None => "none",
+            Self::Text => "text",
+            Self::Decimal => "decimal",
+            Self::Numeric => "numeric",
+            Self::Tel => "tel",
+            Self::Search => "search",
+            Self::Email => "email",
+            Self::Url => "url",
+        }
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FormFieldInstance {
@@ -59,6 +87,8 @@ pub struct FormFieldInstance {
     pub kind: FieldKind,
     #[serde(default)]
     pub input_type: Option<InputType>,
+    #[serde(default)]
+    pub input_mode: Option<InputMode>,
     #[serde(default)]
     pub rows: Option<u8>,
     #[serde(default)]
@@ -166,6 +196,9 @@ impl FormFieldInstance {
             FieldKind::Textarea if self.input_type.is_some() => {
                 return Err("inputType is only valid for input fields".into());
             }
+            FieldKind::Textarea if self.input_mode.is_some() => {
+                return Err("inputMode is only valid for input fields".into());
+            }
             FieldKind::Textarea if self.rows.is_some_and(|rows| !(2..=40).contains(&rows)) => {
                 return Err("textarea rows must be between 2 and 40".into());
             }
@@ -257,6 +290,10 @@ pub fn render(instance: &FormFieldInstance, fragment: &str) -> Result<String, St
         .as_deref()
         .map(|text| format!(" placeholder=\"{}\"", escape_html(text)))
         .unwrap_or_default();
+    let input_mode = instance
+        .input_mode
+        .map(|mode| format!(" inputmode=\"{}\"", mode.as_str()))
+        .unwrap_or_default();
     let autocomplete = instance
         .autocomplete
         .as_deref()
@@ -264,12 +301,13 @@ pub fn render(instance: &FormFieldInstance, fragment: &str) -> Result<String, St
         .unwrap_or_default();
     let control = match instance.kind {
         FieldKind::Input => format!(
-            "<input class=\"cui-form-field__control\" id=\"{}\" name=\"{}\" type=\"{}\" value=\"{}\"{}{}{}{}{}{}{}{}>",
+            "<input class=\"cui-form-field__control\" id=\"{}\" name=\"{}\" type=\"{}\" value=\"{}\"{}{}{}{}{}{}{}{}{}>",
             escape_html(&instance.id),
             escape_html(&instance.name),
             instance.input_type.unwrap_or_default().as_str(),
             escape_html(&instance.value),
             placeholder,
+            input_mode,
             autocomplete,
             max_length,
             described_by,
@@ -330,6 +368,7 @@ mod tests {
             label: "Email".into(),
             kind: FieldKind::Input,
             input_type: Some(InputType::Email),
+            input_mode: None,
             rows: None,
             value: String::new(),
             placeholder: None,
@@ -341,6 +380,25 @@ mod tests {
             readonly: false,
             disabled: false,
         }
+    }
+
+    #[test]
+    fn emits_native_inputmode_without_changing_defaults_and_rejects_textarea_mode() {
+        let mut field = instance();
+        field.input_mode = Some(InputMode::Decimal);
+        assert!(render(&field, FRAGMENT)
+            .unwrap()
+            .contains("inputmode=\"decimal\""));
+        field.input_mode = Some(InputMode::Numeric);
+        assert!(render(&field, FRAGMENT)
+            .unwrap()
+            .contains("inputmode=\"numeric\""));
+        field.kind = FieldKind::Textarea;
+        field.input_type = None;
+        assert!(field.validate().is_err());
+        assert!(!render(&instance(), FRAGMENT)
+            .unwrap()
+            .contains("inputmode="));
     }
 
     #[test]

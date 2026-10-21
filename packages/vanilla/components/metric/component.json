@@ -43,7 +43,7 @@
       "All supplied text is nonblank and contains no control characters; all text is HTML-escaped and unknown properties are rejected.",
       "Optional icon names must exist in the package's closed icons.json catalog. Trend glyphs use the catalog arrow-up, arrow-down, and minus icons.",
       "The fragment has exactly one [[metric]] slot; inserted user text is never interpreted as template syntax.",
-      "The metric is static and noninteractive, with no browser-local state, events, scripts, or numeric conversion. The app owns domain state and rerender timing."
+      "The default metric is static and script-free. Explicit valueMotion=roll delegates only its formatted value to the number installer; the app owns domain state and rerender timing. Optional valueId (a safe Number id token, roll only) gives the inner Number a stable id so a trusted host cui:before-patch bridge can retain it across result-region replacement. This mode is not Native-host qualified."
     ]
   },
   "tokens": [
@@ -174,12 +174,15 @@
     }
   ],
   "dependencies": [
-    "icon"
+    "icon",
+    "number"
   ],
   "assets": {
     "template": "components/metric/fragment.html",
     "styles": "components/metric/styles.css",
-    "scripts": []
+    "scripts": [
+      "components/number/interaction.js"
+    ]
   },
   "fixtures": [
     "components/metric/fixtures/plain.json",

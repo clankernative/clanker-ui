@@ -107,6 +107,19 @@ fn records_validated_select_crumb_and_page_item_fields_once() {
 }
 
 #[test]
+fn form_field_exposes_only_closed_native_inputmode_values() {
+    let package = Package::from_assets(&package_assets()).unwrap();
+    let html = expansion::expand(r#"<cui-form-field id="amount" name="amount" label="Amount" input-type="text" inputmode="decimal"/>"#, &package).unwrap().html;
+    assert!(html.contains("inputmode=\"decimal\""));
+    for source in [
+        r#"<cui-form-field id="amount" name="amount" label="Amount" inputmode="javascript:"/>"#,
+        r#"<cui-form-field id="amount" name="amount" label="Amount" kind="textarea" inputmode="numeric"/>"#,
+    ] {
+        assert!(expansion::expand(source, &package).is_err());
+    }
+}
+
+#[test]
 fn progress_and_choice_bindings_use_only_generic_abi2_capabilities() {
     let package = Package::from_assets(&package_assets()).unwrap();
     let progress = expansion::expand(
@@ -159,9 +172,79 @@ fn progress_and_choice_bindings_use_only_generic_abi2_capabilities() {
 }
 
 #[test]
+fn number_and_metric_select_motion_conditionally_and_keep_bindings_on_generic_text_abi() {
+    let package = Package::from_assets(&package_assets()).unwrap();
+    let static_number = expansion::expand(r#"<cui-number value="1,234"/>"#, &package).unwrap();
+    assert!(static_number
+        .html
+        .contains("data-cui-number-motion=\"none\""));
+    assert!(static_number.browser_scripts.is_empty());
+    let rolling = expansion::expand(
+        r#"<cui-number id="stable-total" value="{{ page.formatted_value }}" motion="roll" direction="down" duration-ms="320"/>"#,
+        &package,
+    )
+    .unwrap();
+    assert!(rolling.html.contains("id=\"stable-total\""));
+    assert!(rolling.html.contains("data-cui-number-direction=\"down\""));
+    assert!(rolling
+        .html
+        .contains(r#"ui_text(page.formatted_value, "nonblank", 1, 0)"#));
+    assert_eq!(
+        rolling.bindings,
+        vec![binding("page.formatted_value", "string", "number", "value")]
+    );
+    assert_eq!(
+        rolling.browser_scripts,
+        ["components/number/interaction.js"]
+            .into_iter()
+            .map(str::to_owned)
+            .collect()
+    );
+    let metric =
+        expansion::expand(r#"<cui-metric label="Total" value="12.3K"/>"#, &package).unwrap();
+    assert!(!metric.html.contains("data-cui-number-motion"));
+    assert!(metric.browser_scripts.is_empty());
+    let animated_metric = expansion::expand(
+        r#"<cui-metric label="Total" value="{{ page.amount }}" value-motion="roll"/>"#,
+        &package,
+    )
+    .unwrap();
+    assert!(animated_metric
+        .html
+        .contains("data-cui-number-motion=\"roll\""));
+    assert_eq!(
+        animated_metric.bindings,
+        vec![binding("page.amount", "string", "metric", "value")]
+    );
+    assert_eq!(animated_metric.browser_scripts, rolling.browser_scripts);
+    assert!(!animated_metric.html.contains(" id="));
+    let retained_metric = expansion::expand(
+        r#"<cui-metric label="Total" value="{{ page.amount }}" value-motion="roll" value-id="metric-total"/>"#,
+        &package,
+    )
+    .unwrap();
+    assert!(retained_metric.html.contains(
+        r#"data-cui-component="number" id="metric-total" data-cui-number-motion="roll""#
+    ));
+    for source in [
+        r#"<cui-metric label="Total" value="1" value-id="metric-total"/>"#,
+        r#"<cui-metric label="Total" value="1" value-motion="roll" value-id="_private"/>"#,
+        r#"<cui-metric label="Total" value="1" value-motion="roll" value-id="{{ page.id }}"/>"#,
+    ] {
+        assert!(expansion::expand(source, &package).is_err(), "{source}");
+    }
+}
+
+#[test]
 fn malformed_or_unknown_attributes_with_bindings_are_rejected() {
     let package = Package::from_assets(&package_assets()).unwrap();
     for input in [
+        r#"<cui-number value="12"><button>Ignored child</button></cui-number>"#,
+        r#"<cui-number value="{{ page.amount }}" motion="spring"/>"#,
+        r#"<cui-number value="12" duration-ms="1001"/>"#,
+        r#"<cui-number value="12" duration-ms="-1"/>"#,
+        r#"<cui-number value="12" duration-ms="1.5"/>"#,
+        r#"<cui-number value="12" unknown="{{ page.amount }}"/>"#,
         r#"<cui-button label="Save" unknown="{{ page.value }}"/>"#,
         r#"<cui-button label="{{ page.title }"/>"#,
         r#"<cui-page-header title="prefix {{ page.title }}"/>"#,

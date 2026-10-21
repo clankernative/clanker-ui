@@ -1189,6 +1189,20 @@ pub fn describe_properties(name: &str) -> Result<ComponentProperties, String> {
                     ],
                     "Only applies to input fields.",
                 ),
+                {
+                    let mut input_mode = p(
+                        "inputMode",
+                        PropertyKind::Enum,
+                        false,
+                        Value::Null,
+                        &[
+                            "none", "text", "decimal", "numeric", "tel", "search", "email", "url",
+                        ],
+                        "Optional native virtual-keyboard hint for input fields.",
+                    );
+                    input_mode.attribute = "inputmode".into();
+                    input_mode
+                },
                 p("rows", N, false, Value::Null, &[], "Textarea row count."),
                 p("value", M, false, json!(""), &[], "Browser draft value."),
                 opttext("placeholder"),
@@ -1434,6 +1448,17 @@ pub fn describe_properties(name: &str) -> Result<ComponentProperties, String> {
             ],
             vec![],
         ),
+        "number" => component(
+            name,
+            vec![
+                text("value", true),
+                opttext("id"),
+                en("motion", "none", &["none", "roll"]),
+                en("direction", "up", &["up", "down"]),
+                number("durationMs", false, json!(320), 0.0, 1000.0),
+            ],
+            vec![],
+        ),
         "metric" => component(
             name,
             vec![
@@ -1460,6 +1485,9 @@ pub fn describe_properties(name: &str) -> Result<ComponentProperties, String> {
                 opttext("trendAnnouncement"),
                 opttext("icon"),
                 en("appearance", "plain", &["plain", "contained"]),
+                en("valueMotion", "none", &["none", "roll"]),
+                number("valueDurationMs", false, json!(320), 0.0, 1000.0),
+                opttext("valueId"),
             ],
             vec![],
         ),
@@ -2143,6 +2171,7 @@ fn example_properties_context(
         "form-field" => json!({"name":"search","label":"Search"}),
         "icon" => json!({"name":"check"}),
         "metric" => json!({"label":"Active users","value":"42"}),
+        "number" => json!({"id":"summary-total","value":"42"}),
         "page-header" => json!({"title":"Overview"}),
         "pagination" => json!({"items":[{"kind":"current","label":"1"}]}),
         "progress" => json!({"label":"Upload","state":"determinate","value":1,"maximum":2}),
@@ -2399,7 +2428,18 @@ fn validate_properties_context(
             |v: &c::filter_bar::FilterBarInstance| v.validate()
         ),
         "form-field" => check!(c::form_field::FormFieldInstance),
-        "metric" => check!(c::metric::MetricInstance),
+        "metric" => check!(
+            c::metric::MetricInstance,
+            |v: &c::metric::MetricInstance| {
+                let mut without_icon = v.clone();
+                without_icon.icon = None;
+                without_icon.validate(&std::collections::BTreeMap::new())
+            }
+        ),
+        "number" => check!(
+            c::number::NumberInstance,
+            |v: &c::number::NumberInstance| v.validate()
+        ),
         "page-header" => check!(
             c::page_header::PageHeaderInstance,
             |v: &c::page_header::PageHeaderInstance| v.validate()
@@ -2474,6 +2514,7 @@ mod tests {
         "icon",
         "layer",
         "metric",
+        "number",
         "modal",
         "drawer",
         "popover",
@@ -2543,7 +2584,9 @@ mod tests {
                 .as_object()
                 .unwrap()
                 .keys()
-                .filter(|key| key.as_str() != "id" && key.as_str() != "component")
+                .filter(|key| {
+                    (key.as_str() != "id" || *name == "number") && key.as_str() != "component"
+                })
                 .cloned()
                 .collect();
             assert_eq!(
@@ -2583,6 +2626,17 @@ mod tests {
     }
     #[test]
     fn descriptor_enum_choices_and_attributes_follow_contracts() {
+        let input_mode = describe_properties("form-field")
+            .unwrap()
+            .fields
+            .into_iter()
+            .find(|field| field.name == "inputMode")
+            .unwrap();
+        assert_eq!(input_mode.attribute, "inputmode");
+        assert_eq!(
+            input_mode.choices,
+            ["none", "text", "decimal", "numeric", "tel", "search", "email", "url"]
+        );
         let button = describe_properties("button").unwrap();
         let label = button.fields.iter().find(|f| f.name == "label").unwrap();
         assert_eq!(label.kind, PropertyKind::Object);

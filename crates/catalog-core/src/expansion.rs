@@ -39,6 +39,7 @@ pub fn component_browser_scripts(name: &str) -> &'static [&'static str] {
         "file-upload" => &["components/file-upload/interaction.js"],
         "data-viewport" => &["components/data-viewport/interaction.js"],
         "chart" => &["components/chart/interaction.js"],
+        "number" | "metric" => &["components/number/interaction.js"],
         _ => &[],
     }
 }
@@ -742,6 +743,7 @@ fn render_form_field(field: &Button, package: &Package) -> Result<String> {
         "label",
         "kind",
         "input-type",
+        "inputmode",
         "rows",
         "value",
         "placeholder",
@@ -781,6 +783,13 @@ fn render_form_field(field: &Button, package: &Package) -> Result<String> {
             "invalid form-field input-type"
         );
     }
+    let inputmode = attrs.get("inputmode").map(String::as_str);
+    if let Some(mode) = inputmode {
+        ensure!(
+            ["none", "text", "decimal", "numeric", "tel", "search", "email", "url"].contains(&mode),
+            "invalid form-field inputmode"
+        );
+    }
     let rows = attrs
         .get("rows")
         .map(|value| {
@@ -799,6 +808,10 @@ fn render_form_field(field: &Button, package: &Package) -> Result<String> {
         ensure!(
             input_type.is_none(),
             "input-type is only valid for input fields"
+        );
+        ensure!(
+            inputmode.is_none(),
+            "inputmode is only valid for input fields"
         );
         ensure!(
             rows.is_none_or(|value| (2..=40).contains(&value)),
@@ -930,12 +943,13 @@ fn render_form_field(field: &Button, package: &Package) -> Result<String> {
         .unwrap_or_default();
     let control = if kind == "input" {
         format!(
-            "<input class=\"cui-form-field__control\" id=\"{}\" name=\"{}\" type=\"{}\" value=\"{}\"{}{}{}{}{}{}{}{}>",
+            "<input class=\"cui-form-field__control\" id=\"{}\" name=\"{}\" type=\"{}\" value=\"{}\"{}{}{}{}{}{}{}{}{}>",
             escape(id),
             escape(name),
             input_type.unwrap_or("text"),
             value_html,
             placeholder_attr,
+            inputmode.map(|mode| format!(" inputmode=\"{mode}\"")).unwrap_or_default(),
             autocomplete
                 .map(|text| format!(" autocomplete=\"{}\"", escape(text)))
                 .unwrap_or_default(),
@@ -1504,6 +1518,68 @@ fn render_empty_state(state: &Button, package: &Package) -> Result<String> {
     )
 }
 
+fn render_number(number: &Button, package: &Package) -> Result<String> {
+    checked_attributes(
+        number,
+        &["id", "value", "motion", "direction", "duration-ms"],
+        "number",
+    )?;
+    let value = checked_template_text(
+        number
+            .attrs
+            .get("value")
+            .context("cui-number requires value")?,
+        "number value",
+    )?;
+    let motion = number
+        .attrs
+        .get("motion")
+        .map(String::as_str)
+        .unwrap_or("none");
+    ensure!(["none", "roll"].contains(&motion), "invalid number motion");
+    let direction = match number.attrs.get("direction").map(String::as_str) {
+        None | Some("up") => crate::number::Direction::Up,
+        Some("down") => crate::number::Direction::Down,
+        Some(_) => anyhow::bail!("invalid number direction"),
+    };
+    let duration = number
+        .attrs
+        .get("duration-ms")
+        .map(String::as_str)
+        .unwrap_or("320");
+    let duration: u16 = duration
+        .parse()
+        .context("number duration-ms must be an integer from 0 to 1000")?;
+    ensure!(
+        duration <= 1000,
+        "number duration-ms must be between 0 and 1000"
+    );
+    let id = number
+        .attrs
+        .get("id")
+        .map(|id| crate::number::NumberId::parse(id.clone()))
+        .transpose()
+        .map_err(anyhow::Error::msg)?;
+    fill_static(
+        static_fragment(package, "number")?,
+        &[(
+            "[[number]]",
+            &crate::number::markup(
+                &value,
+                if motion == "roll" {
+                    crate::number::Motion::Roll
+                } else {
+                    crate::number::Motion::None
+                },
+                duration,
+                Some(&value),
+                id.as_ref(),
+                Some(direction),
+            ),
+        )],
+    )
+}
+
 fn render_metric(metric: &Button, package: &Package) -> Result<String> {
     checked_attributes(
         metric,
@@ -1517,6 +1593,9 @@ fn render_metric(metric: &Button, package: &Package) -> Result<String> {
             "trend-tone",
             "trend-label",
             "trend-announcement",
+            "value-motion",
+            "value-duration-ms",
+            "value-id",
         ],
         "metric",
     )?;
@@ -1582,8 +1661,50 @@ fn render_metric(metric: &Button, package: &Package) -> Result<String> {
             "<span class=\"cui-metric__icon\" aria-hidden=\"true\">{icon}</span>"
         ));
     }
+    let value_motion = metric
+        .attrs
+        .get("value-motion")
+        .map(String::as_str)
+        .unwrap_or("none");
+    ensure!(
+        ["none", "roll"].contains(&value_motion),
+        "invalid metric value-motion"
+    );
+    let duration: u16 = metric
+        .attrs
+        .get("value-duration-ms")
+        .map(String::as_str)
+        .unwrap_or("320")
+        .parse()
+        .context("metric value-duration-ms must be an integer from 0 to 1000")?;
+    ensure!(
+        duration <= 1000,
+        "metric value-duration-ms must be between 0 and 1000"
+    );
+    let value_id = metric
+        .attrs
+        .get("value-id")
+        .map(|id| crate::number::NumberId::parse(id.clone()))
+        .transpose()
+        .map_err(|_| anyhow::anyhow!("metric value-id must be a safe non-reserved token"))?;
+    ensure!(
+        value_id.is_none() || value_motion == "roll",
+        "metric value-id requires value-motion=\"roll\""
+    );
+    let rendered_value = if value_motion == "roll" {
+        crate::number::markup(
+            &value,
+            crate::number::Motion::Roll,
+            duration,
+            Some(&value),
+            value_id.as_ref(),
+            None,
+        )
+    } else {
+        value.clone()
+    };
     content.push_str(&format!(
-        "<dl class=\"cui-metric__content\"><dt class=\"cui-metric__label\">{label}</dt><dd class=\"cui-metric__value\">{value}</dd></dl>"
+        "<dl class=\"cui-metric__content\"><dt class=\"cui-metric__label\">{label}</dt><dd class=\"cui-metric__value\">{rendered_value}</dd></dl>"
     ));
     let mut footer = String::new();
     if let (Some(direction), Some(tone), Some(label)) = (trend, trend_tone, trend_label.as_deref())
