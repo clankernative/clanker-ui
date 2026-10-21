@@ -1,0 +1,30 @@
+.cui-number {
+  display: inline-grid;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.cui-number__canonical,
+.cui-number__roll {
+  grid-area: 1 / 1;
+}
+
+.cui-number__roll {
+  pointer-events: none;
+  user-select: none;
+}
+
+.cui-number__column {
+  display: inline-grid;
+  overflow: hidden;
+  vertical-align: baseline;
+}
+
+.cui-number__column > span {
+  grid-area: 1 / 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cui-number__roll { display: none; }
+  .cui-number__canonical { opacity: 1 !important; }
+}

@@ -2,7 +2,7 @@ use super::*;
 use anyhow::Context;
 
 const MAX_TOTAL: usize = 32 * 1024 * 1024;
-const STATIC: [&str; 44] = [
+const STATIC: [&str; 45] = [
     "badge",
     "divider",
     "status-indicator",
@@ -47,6 +47,7 @@ const STATIC: [&str; 44] = [
     "tooltip",
     "toast",
     "chart",
+    "number",
 ];
 
 #[derive(Deserialize, Serialize)]
@@ -250,6 +251,7 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
         ("form-field", "native form control"),
         ("avatar", "identity"),
         ("metric", "metric"),
+        ("number", "formatted number text"),
         ("skeleton", "presentation"),
         ("page-header", "page-heading"),
         ("container", "neutral-width-container"),
@@ -332,6 +334,9 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
             c.name == name
                 && c.target == "native-html"
                 && (scripts_match == expected_scripts
+                    || (name == "metric"
+                        && (scripts_match.is_empty()
+                            || scripts_match == ["components/number/interaction.js"]))
                     || (name == "chart" && scripts_match.is_empty()))
                 && c.assets.styles == format!("components/{name}/styles.css"),
             "locked package {name} metadata is incompatible"
@@ -398,6 +403,7 @@ pub(super) fn from_assets(assets: &BTreeMap<String, Vec<u8>>) -> Result<Package>
             "avatar" => &["[[avatar]]"],
             "empty-state" => &["[[empty-state]]"],
             "metric" => &["[[metric]]"],
+            "number" => &["[[number]]"],
             "skeleton" => &["[[skeleton]]"],
             "page-header" => &["[[page-header]]"],
             "container" | "stack" | "cluster" | "grid" => &["[[class]]", "[[body]]"],

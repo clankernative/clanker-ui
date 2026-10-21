@@ -82,6 +82,31 @@ fn static_templates_do_not_pull_any_unused_browser_modules() {
 }
 
 #[test]
+fn number_installer_is_staged_only_for_explicit_roll_motion() {
+    let (_temp, lock, ui) = fixture();
+    fs::write(
+        ui.join("pages/index.html"),
+        r#"<cui-number value="1,204"/><cui-metric label="Total" value="1,204"/>"#,
+    )
+    .unwrap();
+    let static_bundle = expand::expand(&lock, &ui, None).unwrap();
+    assert!(!static_bundle
+        .resources
+        .iter()
+        .any(|resource| resource.path.contains("components/number/interaction.js")));
+    fs::write(ui.join("pages/index.html"), r#"<cui-number value="1,205" motion="roll"/><cui-metric label="Total" value="1,205" value-motion="roll"/>"#).unwrap();
+    let rolling = expand::expand(&lock, &ui, None).unwrap();
+    assert_eq!(
+        rolling
+            .resources
+            .iter()
+            .filter(|resource| resource.path == "ui/clanker-ui/components/number/interaction.js")
+            .count(),
+        1
+    );
+}
+
+#[test]
 fn chart_expansion_stages_locked_presentation_metadata_only_when_used() {
     let (_temp, lock, ui) = fixture();
     fs::write(

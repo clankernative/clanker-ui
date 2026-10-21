@@ -29,6 +29,7 @@ const READY: &[&str] = &[
     "icon",
     "layer",
     "metric",
+    "number",
     "page-header",
     "pagination",
     "pane",
@@ -143,7 +144,7 @@ fn enhancement_verification_accepts_only_closed_declared_browser_entrypoints() {
 }
 
 #[test]
-fn native_verify_accepts_the_exact_38_component_ready_set() {
+fn native_verify_accepts_the_exact_39_component_ready_set() {
     let (_temp, package_path) = package_copy();
     write_fresh_property_catalog(&package_path);
     let source = LocalPackage;

@@ -35,6 +35,7 @@ pub mod integration;
 pub mod layout;
 pub mod metric;
 pub mod modal;
+pub mod number;
 pub mod page_header;
 pub mod pagination;
 pub mod popover;

@@ -641,6 +641,7 @@ fn expand_package(
         ("date-picker", "components/date-picker/interaction.js"),
         ("command-menu", "components/command-menu/interaction.js"),
         ("confirm-dialog", "components/confirm-dialog/interaction.js"),
+        ("number", "components/number/interaction.js"),
     ]
     .into_iter()
     .map(|(n, p)| (n.into(), p.into()))
@@ -651,7 +652,12 @@ fn expand_package(
             continue;
         };
         for script in &component.assets.scripts {
-            if names.get(name) != Some(script) {
+            let conditional_number_script = script == "components/number/interaction.js"
+                && (*name == "metric" || *name == "number");
+            if conditional_number_script && !selected_scripts.contains(script) {
+                continue;
+            }
+            if names.get(name) != Some(script) && !conditional_number_script {
                 return Err(format!(
                     "unsupported compiler-owned script for {name}: {script}"
                 ));
@@ -660,7 +666,10 @@ fn expand_package(
         }
     }
     for script in selected_scripts {
-        if script != "components/chart/interaction.js" || !used.contains("chart") {
+        if (script != "components/chart/interaction.js" || !used.contains("chart"))
+            && (script != "components/number/interaction.js"
+                || !(used.contains("number") || used.contains("metric")))
+        {
             return Err(format!("unsupported selected component script: {script}"));
         }
         if !package.assets.contains_key(&script) {

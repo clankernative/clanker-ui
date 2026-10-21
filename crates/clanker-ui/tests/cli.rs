@@ -137,6 +137,10 @@ fn an_agent_can_discover_and_verify_static_components() {
     );
     assert_eq!(
         metric_graph["data"]["components"][1],
+        "@clanker/vanilla/number"
+    );
+    assert_eq!(
+        metric_graph["data"]["components"][2],
         "@clanker/vanilla/metric"
     );
     let (ok, verified) = run(&["verify", "--lock", lock]);

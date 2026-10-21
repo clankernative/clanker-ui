@@ -102,6 +102,17 @@ pub struct MetricInstance {
     pub icon: Option<String>,
     #[serde(default)]
     pub appearance: Appearance,
+    #[serde(default)]
+    pub value_motion: crate::number::Motion,
+    #[serde(default = "default_value_duration")]
+    pub value_duration_ms: u16,
+    /// Stable Number id for host patch retention; requires `valueMotion=roll`.
+    #[serde(default)]
+    pub value_id: Option<crate::number::NumberId>,
+}
+
+fn default_value_duration() -> u16 {
+    320
 }
 
 impl MetricInstance {
@@ -134,6 +145,16 @@ impl MetricInstance {
         }
         if self.trend_announcement.is_some() && self.trend.is_none() {
             return Err("metric trendAnnouncement requires a trend".into());
+        }
+        if self.value_duration_ms > 1000 {
+            return Err("metric valueDurationMs must be between 0 and 1000".into());
+        }
+        if let Some(id) = &self.value_id {
+            if self.value_motion != crate::number::Motion::Roll {
+                return Err("metric valueId requires valueMotion roll".into());
+            }
+            id.validate()
+                .map_err(|_| "metric valueId must be a safe non-reserved token".to_string())?;
         }
         if let Some(name) = &self.icon {
             IconInstance {
@@ -183,10 +204,22 @@ pub fn render(
             "<span class=\"cui-metric__icon\" aria-hidden=\"true\">{icon}</span>"
         ));
     }
+    let escaped_value = escape_html(&instance.value);
+    let value_markup = if instance.value_motion == crate::number::Motion::Roll {
+        crate::number::markup(
+            &escaped_value,
+            instance.value_motion,
+            instance.value_duration_ms,
+            Some(&escaped_value),
+            instance.value_id.as_ref(),
+            None,
+        )
+    } else {
+        escaped_value
+    };
     content.push_str(&format!(
-        "<dl class=\"cui-metric__content\"><dt class=\"cui-metric__label\">{}</dt><dd class=\"cui-metric__value\">{}</dd></dl>",
-        escape_html(&instance.label),
-        escape_html(&instance.value)
+        "<dl class=\"cui-metric__content\"><dt class=\"cui-metric__label\">{}</dt><dd class=\"cui-metric__value\">{value_markup}</dd></dl>",
+        escape_html(&instance.label)
     ));
 
     let mut footer = String::new();
@@ -254,6 +287,9 @@ mod tests {
             trend_announcement: None,
             icon: None,
             appearance: Appearance::Plain,
+            value_motion: crate::number::Motion::None,
+            value_duration_ms: 320,
+            value_id: None,
         }
     }
 
@@ -288,6 +324,9 @@ mod tests {
             trend_announcement: Some("Fell <unexpectedly>".into()),
             icon: Some("server".into()),
             appearance: Appearance::Contained,
+            value_motion: crate::number::Motion::None,
+            value_duration_ms: 320,
+            value_id: None,
         };
         let html = render(&instance, FRAGMENT, &icons()).unwrap();
         assert!(html.contains("Revenue &lt;net&gt; &amp; [[metric]]"));
@@ -301,6 +340,40 @@ mod tests {
     }
 
     #[test]
+    fn explicit_value_motion_wraps_formatted_text_but_default_markup_is_static() {
+        let static_html = render(&metric(), FRAGMENT, &icons()).unwrap();
+        assert!(static_html.contains("<dd class=\"cui-metric__value\">2,420</dd>"));
+        assert!(!static_html.contains("data-cui-number-motion"));
+        let animated = MetricInstance {
+            value_motion: crate::number::Motion::Roll,
+            ..metric()
+        };
+        let html = render(&animated, FRAGMENT, &icons()).unwrap();
+        assert!(html.contains("data-cui-number-motion=\"roll\""));
+        assert!(html.contains("data-cui-number-value=\"2,420\""));
+        assert!(!html.contains(" id="));
+        let retained = MetricInstance {
+            value_motion: crate::number::Motion::Roll,
+            value_id: Some(serde_json::from_str("\"active-users\"").unwrap()),
+            ..metric()
+        };
+        let html = render(&retained, FRAGMENT, &icons()).unwrap();
+        assert!(html.contains(
+            "data-cui-component=\"number\" id=\"active-users\" data-cui-number-motion=\"roll\""
+        ));
+        let static_with_id = MetricInstance {
+            value_motion: crate::number::Motion::None,
+            ..retained.clone()
+        };
+        assert!(static_with_id.validate(&icons()).is_err());
+        let unsafe_id = MetricInstance {
+            value_id: Some(serde_json::from_str("\"_private\"").unwrap()),
+            ..retained
+        };
+        assert!(unsafe_id.validate(&icons()).is_err());
+    }
+
+    #[test]
     fn rejects_unknown_props_bad_text_incomplete_trends_and_unknown_icons() {
         assert!(serde_json::from_str::<MetricInstance>(
             r#"{"label":"x","value":"1","unknown":true}"#
@@ -310,6 +383,11 @@ mod tests {
             r#"{"label":"x","value":"1","appearance":"compact"}"#
         )
         .is_err());
+        let too_long_motion = MetricInstance {
+            value_duration_ms: 1001,
+            ..metric()
+        };
+        assert!(too_long_motion.validate(&icons()).is_err());
         assert!(serde_json::from_str::<MetricInstance>(
             r#"{"label":"x","value":"1","trend":"sideways"}"#
         )

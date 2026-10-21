@@ -8,6 +8,7 @@ use catalog_core::form_field::{self, FieldKind, FormFieldInstance};
 use catalog_core::icon::{self, IconCatalog, IconInstance, IconSize};
 use catalog_core::layout::{self, AdmittedChildren};
 use catalog_core::metric::{self, MetricInstance};
+use catalog_core::number::{self, NumberInstance};
 use catalog_core::page_header::{self, PageHeaderInstance};
 use catalog_core::progress::{self, ProgressInstance};
 use catalog_core::skeleton::{self, SkeletonInstance};
@@ -633,7 +634,7 @@ impl NativeAdapter {
                     }
                     continue;
                 }
-                if ["avatar", "empty-state", "metric", "skeleton"]
+                if ["avatar", "empty-state", "metric", "skeleton", "number"]
                     .contains(&component.name.as_str())
                 {
                     let bytes = source.asset(package, fixture_path)?;
@@ -686,6 +687,16 @@ impl NativeAdapter {
                                 metric::render(&fixture.instance, &template, &icons)?,
                                 fixture.expected_html,
                                 variants,
+                            )
+                        }
+                        "number" if component.contract.role == "formatted number text" => {
+                            let fixture: StaticFixture<NumberInstance> =
+                                serde_json::from_slice(&bytes)
+                                    .map_err(|error| format!("{fixture_path}: {error}"))?;
+                            (
+                                number::render(&fixture.instance, &template)?,
+                                fixture.expected_html,
+                                vec![fixture.instance.motion.as_str()],
                             )
                         }
                         "skeleton" if component.contract.role == "presentation" => {
