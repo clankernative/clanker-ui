@@ -3,9 +3,9 @@
   "provider": "clanker-ui.native",
   "package": {
     "name": "@clanker/vanilla",
-    "version": "0.7.1",
+    "version": "0.8.0",
     "path": "../../packages/vanilla",
-    "digest": "sha256:0675f1359201f8d68487b1bc42b5f18de0531e21c21f7e9b7454addfdbb9c591",
+    "digest": "sha256:a8e188b6bbd9e5f1cbb3fb1c93f010847934f296be85d752e986b090a795bcde",
     "inputs": [
       {
         "path": "browser/lifecycle.js",
@@ -2309,7 +2309,7 @@
       },
       {
         "path": "ui-package.json",
-        "digest": "sha256:b9d8d54b6c887356da276464bc5454151916cca79dcdad1b70033af545e38750",
+        "digest": "sha256:8c69d207e701a19e72a3af6396ca9a786d367b790980f470abc70de32ccdd25d",
         "bytes": 1557
       }
     ]

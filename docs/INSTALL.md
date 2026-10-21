@@ -1,7 +1,7 @@
 # Install Clanker UI
 
-CLI **0.1.1**, vanilla **0.7.1**, assembly protocol **2**, binding ABI **2**.
-Consult the [exact-version release page](https://github.com/clankernative/clanker-ui/releases/tag/v0.1.1)
+CLI **0.2.0**, vanilla **0.8.0**, assembly protocol **2**, binding ABI **2**.
+Consult the [exact-version release page](https://github.com/clankernative/clanker-ui/releases/tag/v0.2.0)
 for available assets, actually qualified targets, reviewed expected hashes and
 producer/source provenance. These instructions alone do not establish hosted
 availability or target qualification: if the exact release/target or reviewed
@@ -14,13 +14,13 @@ qualification target) and **`linux-x86_64`** (CLI only, subject to producer test
 A Linux CLI test does **not** establish full Linux Native builder support.
 macOS host/consumer qualification is separate; Windows is unsupported.
 
-For exact tag `v0.1.1`, review the producer/source revision and the target-specific
-`clanker-ui-release-0.1.1-<target>.json`. It connects:
+For exact tag `v0.2.0`, review the producer/source revision and the target-specific
+`clanker-ui-release-0.2.0-<target>.json`. It connects:
 
-- `clanker-ui-native-0.1.1-<target>.tar.gz` and its `.sha256`;
-- standalone `clanker-ui-0.1.1-<target>` and its `.sha256`, identical to the
+- `clanker-ui-native-0.2.0-<target>.tar.gz` and its `.sha256`;
+- standalone `clanker-ui-0.2.0-<target>` and its `.sha256`, identical to the
   archive's `bin/clanker-ui`;
-- adjacent `clanker-ui-0.1.1-<target>.NOTICES.txt` and its `.sha256`, identical
+- adjacent `clanker-ui-0.2.0-<target>.NOTICES.txt` and its `.sha256`, identical
   to the archive's `legal/NOTICES.txt` and containing project MIT plus third-party
   terms; redistribute it with the standalone binary;
 - tool/catalog identities and package digest, source revision, legal input
@@ -45,7 +45,7 @@ served `ui/` directory**. Do not reuse an existing installation.
 
 ```sh
 umask 077
-VERSION=0.1.1
+VERSION=0.2.0
 TARGET=macos-aarch64
 # On qualified Linux CLI hosts only, use TARGET=linux-x86_64 instead.
 BOOTSTRAP="clanker-ui-$VERSION-$TARGET"
@@ -125,7 +125,8 @@ unreleased bundles without legal entries are not a supported layout.
 
 Installation is not host activation. Review/approve the installed executable
 and select its relocatable `provider-pin.json` through the host's separately
-approved configuration (local Platform override: `DAY2_UI_PROVIDER_PIN_JSON`).
+approved configuration (current Platform pins and installs a reviewed release
+through its managed `build-dependencies/clanker-ui.json` catalog instead).
 The app's canonical `ui/ui.lock.json` is **not** executable authority. Point the
 host at the installed package; the Native builder privately stages it at
 `../../packages/clanker-vanilla` relative to the staged app lock. Use existing
@@ -140,7 +141,7 @@ canonically and review the complete notices before approving execution. See
 [`runtime-chart-renderer.md`](runtime-chart-renderer.md).
 
 No arbitrary app networking or app build downloads are allowed. The catalog has
-**54 component-complete contracts / 45 Native-supported / 9 adapter-required**;
+**55 component-complete contracts / 45 Native-supported / 10 adapter-required**;
 host admission and browser/consumer proof remain independent gates. Retain old
 installs until an operator approves removal. Project MIT is approved; read
 `legal/LICENSE` and the separate third-party/font terms in `legal/NOTICES.txt`.
