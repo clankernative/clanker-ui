@@ -5334,7 +5334,7 @@
             "down"
           ],
           "default": "up",
-          "help": "Choose a value supported by the typed component contract.",
+          "help": "Selects strip orientation: up stacks 0–9; down stacks 9–0.",
           "integer": false,
           "kind": "enum",
           "label": "direction",

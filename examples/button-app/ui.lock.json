@@ -5,7 +5,7 @@
     "name": "@clanker/vanilla",
     "version": "0.8.0",
     "path": "../../packages/vanilla",
-    "digest": "sha256:a8e188b6bbd9e5f1cbb3fb1c93f010847934f296be85d752e986b090a795bcde",
+    "digest": "sha256:7aa61dabb2ebf184847338cd8582e22b2a4388f0db432df6509cef84a6080f64",
     "inputs": [
       {
         "path": "browser/lifecycle.js",
@@ -1344,8 +1344,8 @@
       },
       {
         "path": "components/number/component.json",
-        "digest": "sha256:7d11d611487c2258a1ed93e83dc7f94e6dd45113284baae23843353d6874ca78",
-        "bytes": 2788
+        "digest": "sha256:392855928cc8f7b7456066aee93ec5d6c67a044d3a9a45327cd78e6d252dd9d8",
+        "bytes": 3659
       },
       {
         "path": "components/number/fixtures/roll.json",
@@ -1364,13 +1364,13 @@
       },
       {
         "path": "components/number/interaction.js",
-        "digest": "sha256:2629deac2a3364cf2aca3539f52e8d97d897a3fac53ce335f16f829d7cdd6949",
-        "bytes": 9026
+        "digest": "sha256:ae5db036ca8fc51301d783bae25327450879d28d3ae14d4f93a4978177321ce1",
+        "bytes": 13250
       },
       {
         "path": "components/number/styles.css",
-        "digest": "sha256:5b725424af5bb1626a0b49a6b80a023cc92b1d441587797bcaf401bcc81870bc",
-        "bytes": 521
+        "digest": "sha256:8dc5eab58971bf3ba41f8d60de90a6d45cd0a8dce115593ac246604e6a22fd6e",
+        "bytes": 1330
       },
       {
         "path": "components/page-header/component.json",
@@ -2284,8 +2284,8 @@
       },
       {
         "path": "property-catalog.json",
-        "digest": "sha256:225548d9f47190ebba471ee9a59a2165bfd6e09a62ebf4133c3c6664b58c4be0",
-        "bytes": 237772
+        "digest": "sha256:baecee8144a045c9191c07708823b05a8bbaf784e7c0f88ef4bd901be6bd2e9d",
+        "bytes": 237777
       },
       {
         "path": "theme/default.css",
