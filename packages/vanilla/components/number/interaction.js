@@ -175,12 +175,17 @@ export function install(root = document) {
     const oldDigitCount = before.digitCount;
     const nextGlyphs = new Map();
     const ordered = [];
+    const reusedStrips = [];
     for (const record of records) {
       const previous = state.glyphs.get(record.key);
       const reusable = previous && previous.record.kind === record.kind &&
         (record.kind === 'digit' || previous.record.char === record.char);
       const entering = !reusable && record.kind === 'digit' && Number(record.key.slice(6)) >= oldDigitCount;
       const node = reusable ? previous.node : makeGlyph(record, direction, entering);
+      if (reusable && record.kind === 'digit') {
+        const strip = node.querySelector('.cui-number__strip');
+        if (strip) reusedStrips.push(strip);
+      }
       ordered.push({ node, record });
       nextGlyphs.set(record.key, { node, record });
     }
@@ -205,13 +210,40 @@ export function install(root = document) {
       }
     }
     state.glyphs = nextGlyphs;
+    return reusedStrips;
   }
 
-  function update(el) {
+  function invalidateHandoff(state) {
+    state.pendingHandoff = null;
+  }
+
+  function snapshotStrips(el) {
     const state = states.get(el);
-    if (!state || leases.get(el) !== owner) return;
+    if (!state?.odometer || typeof view?.getComputedStyle !== 'function') return null;
+    const entries = [];
+    try {
+      for (const { node, record } of state.glyphs.values()) {
+        if (record.kind !== 'digit') continue;
+        const strip = node.querySelector('.cui-number__strip');
+        if (!strip || !state.odometer.contains(strip)) return null;
+        const transform = view.getComputedStyle(strip)?.transform;
+        if (typeof transform !== 'string' || transform.length === 0) return null;
+        entries.push({ strip, transform });
+      }
+    } catch {
+      return null;
+    }
+    return entries.length ? { odometer: state.odometer, entries } : null;
+  }
+
+  function update(el, captured = null) {
+    const state = states.get(el);
+    if (!state || leases.get(el) !== owner) return null;
     const label = el.getAttribute('data-cui-number-value');
-    if (label == null) return;
+    if (label == null) {
+      invalidateHandoff(state);
+      return null;
+    }
 
     const oldLabel = state.label;
     const oldMotion = state.motion;
@@ -219,24 +251,29 @@ export function install(root = document) {
     const motion = el.getAttribute('data-cui-number-motion');
     const direction = directionOf(el);
     const duration = durationOf(el);
+    if (oldLabel === label && oldMotion === motion && oldDirection === direction && state.duration === duration) {
+      return null;
+    }
+    invalidateHandoff(state);
     const canonical = state.canonical;
     canonical.textContent = label;
     state.label = label;
     state.motion = motion;
     state.direction = direction;
+    state.duration = duration;
 
     if (motion !== 'roll') {
       removeOdometer(state);
-      return;
+      return null;
     }
 
     if (!state.odometer) {
       rebuild(el, state, label, direction, duration);
-      return;
+      return null;
     }
     if (oldLabel === label && oldMotion === motion && oldDirection === direction) {
       configure(state.odometer, direction, duration);
-      return;
+      return null;
     }
 
     const before = parsedLabel(oldLabel ?? '');
@@ -249,14 +286,90 @@ export function install(root = document) {
       !reduced?.matches && !doc.hidden && el.isConnected !== false && leftToRight &&
       asciiAndBounded && compatibleShapes(before, after);
 
-    if (canRetarget) updateCompatible(state, label, before, after, direction, duration);
-    else rebuild(el, state, label, direction, duration);
+    if (canRetarget) {
+      const reusedStrips = updateCompatible(state, label, before, after, direction, duration);
+      const snapshots = new Map((captured?.entries ?? []).map(entry => [entry.strip, entry]));
+      const entries = reusedStrips.map(strip => snapshots.get(strip));
+      if (captured?.odometer === state.odometer && entries.length > 0 && entries.every(Boolean)) {
+        return { odometer: state.odometer, direction, entries };
+      }
+      return null;
+    }
+    rebuild(el, state, label, direction, duration);
+    return null;
+  }
+
+  function visible(el) {
+    if (doc.hidden || typeof view?.getComputedStyle !== 'function') return false;
+    try {
+      for (let node = el; node?.nodeType === 1; node = node.parentElement) {
+        const style = view.getComputedStyle(node);
+        if (!style || style.display === 'none' || style.visibility === 'hidden' ||
+            style.visibility === 'collapse' || style.contentVisibility === 'hidden' || style.opacity === '0') return false;
+      }
+      if (typeof el.getClientRects === 'function' && el.getClientRects().length === 0) return false;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function resumeAfterPatch(el, state, outcome) {
+    const handoff = { ...outcome, state };
+    state.pendingHandoff = handoff;
+    const resume = () => {
+      if (state.pendingHandoff !== handoff) return;
+      const current = states.get(el) === state && leases.get(el) === owner && !stopped &&
+        contains(el) && el.isConnected !== false && state.odometer === handoff.odometer &&
+        state.motion === 'roll' && el.getAttribute('data-cui-number-motion') === 'roll' &&
+        el.getAttribute('data-cui-number-value') === state.label && state.direction === handoff.direction &&
+        directionOf(el) === handoff.direction && durationOf(el) === state.duration && state.duration > 0 &&
+        !reduced?.matches && visible(el) && el.contains(handoff.odometer) &&
+        handoff.entries.every(entry => handoff.odometer.contains(entry.strip));
+      state.pendingHandoff = null;
+      if (!current || !handoff.entries.length) return;
+
+      const getStyle = view?.getComputedStyle;
+      if (typeof getStyle !== 'function' || handoff.entries.some(({ strip }) =>
+        !strip.style || typeof strip.style.getPropertyValue !== 'function' ||
+        typeof strip.style.setProperty !== 'function' || typeof strip.style.removeProperty !== 'function')) return;
+      const saved = handoff.entries.map(({ strip }) => ({
+        strip,
+        transform: strip.style.getPropertyValue('transform'),
+        transformPriority: strip.style.getPropertyPriority?.('transform') ?? '',
+        transition: strip.style.getPropertyValue('transition'),
+        transitionPriority: strip.style.getPropertyPriority?.('transition') ?? '',
+      }));
+      if (saved.some(item => typeof item.strip.style.setProperty !== 'function' ||
+          typeof item.strip.style.removeProperty !== 'function' ||
+          typeof item.strip.style.getPropertyValue !== 'function')) return;
+      try {
+        for (const entry of handoff.entries) {
+          entry.strip.style.setProperty('transition', 'none', 'important');
+          entry.strip.style.setProperty('transform', entry.transform, 'important');
+        }
+        // One computed-style read flushes all captured starting transforms while connected.
+        getStyle.call(view, handoff.entries[0].strip)?.transform;
+      } catch {
+        // The finally block restores every installer-owned strip even if a style API fails.
+      } finally {
+        for (const item of saved) {
+          if (item.transform) item.strip.style.setProperty('transform', item.transform, item.transformPriority);
+          else item.strip.style.removeProperty('transform');
+          if (item.transition) item.strip.style.setProperty('transition', item.transition, item.transitionPriority);
+          else item.strip.style.removeProperty('transition');
+        }
+      }
+    };
+    if (typeof view?.queueMicrotask === 'function') view.queueMicrotask(resume);
+    else Promise.resolve().then(resume);
   }
 
   function release(el) {
     if (leases.get(el) !== owner) return;
     const state = states.get(el);
     if (state) {
+      invalidateHandoff(state);
       removeOdometer(state);
       states.delete(el);
     }
@@ -277,8 +390,10 @@ export function install(root = document) {
         label,
         motion: el.getAttribute('data-cui-number-motion'),
         direction: directionOf(el),
+        duration: durationOf(el),
         odometer: null,
         glyphs: new Map(),
+        pendingHandoff: null,
       };
       states.set(el, state);
       canonical.textContent = label;
@@ -290,6 +405,7 @@ export function install(root = document) {
     for (const el of owned) {
       const state = states.get(el);
       if (!state) continue;
+      invalidateHandoff(state);
       if (state.motion === 'roll') rebuild(el, state, state.label, state.direction, durationOf(el));
       else removeOdometer(state);
     }
@@ -303,12 +419,15 @@ export function install(root = document) {
       if (!current.contains(old) || !old.id) continue;
       const fresh = candidates.get(old.id);
       if (!fresh || fresh.getAttribute('data-cui-component') !== 'number') continue;
+      const captured = snapshotStrips(old);
       for (const name of ['data-cui-number-value', 'data-cui-number-motion', 'data-cui-number-duration', 'data-cui-number-direction', 'class']) {
         const value = fresh.getAttribute(name);
         if (value == null) old.removeAttribute(name); else old.setAttribute(name, value);
       }
-      update(old);
+      const outcome = update(old, captured);
       fresh.replaceWith(old);
+      const state = states.get(old);
+      if (outcome && state) resumeAfterPatch(old, state, outcome);
     }
   }
 

@@ -4,7 +4,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-version = "0.2.1"
+version = "0.2.2"
 license = "MIT"
 
 # Keep the debug CLI and test-built executable below Native's 64 MiB admission guard.

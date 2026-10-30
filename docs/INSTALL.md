@@ -1,11 +1,13 @@
 # Install Clanker UI
 
-CLI **0.2.1**, vanilla **0.8.1**, assembly protocol **2**, binding ABI **2**.
-Consult the [exact-version release page](https://github.com/clankernative/clanker-ui/releases/tag/v0.2.1)
+CLI candidate **0.2.2**, vanilla **0.8.2**, assembly protocol **2**, binding ABI **2**.
+Consult the [exact-version release page](https://github.com/clankernative/clanker-ui/releases/tag/v0.2.2)
 for available assets, actually qualified targets, reviewed expected hashes and
 producer/source provenance. These instructions alone do not establish hosted
 availability or target qualification: if the exact release/target or reviewed
-identities are absent, stop. No source clone or Cargo is required.
+identities are absent, stop. This source branch prepares a follow-up candidate;
+it does not publish v0.2.2 or establish hosted availability. No source clone or
+Cargo is required once the reviewed release is actually published.
 
 ## 1. Review identity before downloading or executing
 
@@ -14,13 +16,13 @@ qualification target) and **`linux-x86_64`** (CLI only, subject to producer test
 A Linux CLI test does **not** establish full Linux Native builder support.
 macOS host/consumer qualification is separate; Windows is unsupported.
 
-For exact tag `v0.2.1`, review the producer/source revision and the target-specific
-`clanker-ui-release-0.2.1-<target>.json`. It connects:
+For exact tag `v0.2.2`, review the producer/source revision and the target-specific
+`clanker-ui-release-0.2.2-<target>.json`. It connects:
 
-- `clanker-ui-native-0.2.1-<target>.tar.gz` and its `.sha256`;
-- standalone `clanker-ui-0.2.1-<target>` and its `.sha256`, identical to the
+- `clanker-ui-native-0.2.2-<target>.tar.gz` and its `.sha256`;
+- standalone `clanker-ui-0.2.2-<target>` and its `.sha256`, identical to the
   archive's `bin/clanker-ui`;
-- adjacent `clanker-ui-0.2.1-<target>.NOTICES.txt` and its `.sha256`, identical
+- adjacent `clanker-ui-0.2.2-<target>.NOTICES.txt` and its `.sha256`, identical
   to the archive's `legal/NOTICES.txt` and containing project MIT plus third-party
   terms; redistribute it with the standalone binary;
 - tool/catalog identities and package digest, source revision, legal input
@@ -45,7 +47,7 @@ served `ui/` directory**. Do not reuse an existing installation.
 
 ```sh
 umask 077
-VERSION=0.2.1
+VERSION=0.2.2
 TARGET=macos-aarch64
 # On qualified Linux CLI hosts only, use TARGET=linux-x86_64 instead.
 BOOTSTRAP="clanker-ui-$VERSION-$TARGET"

@@ -17,9 +17,14 @@ class FakeElement {
     this.style = {
       opacity: '',
       custom: new Map(),
-      setProperty(key, value) { this.custom.set(key, String(value)); },
+      priorities: new Map(),
+      setProperty(key, value, priority = '') {
+        this.custom.set(key, String(value));
+        if (priority) this.priorities.set(key, priority); else this.priorities.delete(key);
+      },
       getPropertyValue(key) { return this.custom.get(key) ?? ''; },
-      removeProperty(key) { this.custom.delete(key); this[key] = ''; },
+      getPropertyPriority(key) { return this.priorities.get(key) ?? ''; },
+      removeProperty(key) { this.custom.delete(key); this.priorities.delete(key); this[key] = ''; },
     };
   }
   get className() { return this._className; }
@@ -110,16 +115,38 @@ function makeNumber(value, { motion = 'roll', duration = '320', direction = 'up'
   return { number, canonical };
 }
 function setup(value = '12', reducedMotion = false, options = {}) {
+  const { styleApi = true, ...numberOptions } = options;
   const media = {
     matches: reducedMotion, listeners: new Set(),
     addEventListener(_name, fn) { this.listeners.add(fn); },
     removeEventListener(_name, fn) { this.listeners.delete(fn); },
   };
+  const computedTransforms = new Map();
+  const flushes = [];
+  let number;
   const view = {
     Element: FakeElement,
     MutationObserver: FakeObserver,
     matchMedia: () => media,
-    getComputedStyle: () => ({ direction: 'ltr' }),
+    getComputedStyle: styleApi ? element => {
+      const inlineTransform = element.style?.getPropertyValue('transform') ?? '';
+      const transition = element.style?.getPropertyValue('transition') ?? '';
+      if (inlineTransform && transition === 'none') {
+        const activeStrips = number?.querySelectorAll('.cui-number__strip') ?? [element];
+        flushes.push({
+          transforms: activeStrips.map(strip => strip.style.getPropertyValue('transform')),
+          transitionsDisabled: activeStrips.every(strip => strip.style.getPropertyValue('transition') === 'none'),
+          connected: element.isConnected,
+        });
+      }
+      const digit = element.parentNode;
+      const target = digit?.style?.getPropertyValue('--cui-number-digit');
+      return {
+        direction: 'ltr', display: 'inline-grid', visibility: 'visible',
+        transform: inlineTransform || computedTransforms.get(element) ||
+          (target == null ? 'matrix(1, 0, 0, 1, 0, 0)' : `matrix(1, 0, 0, 1, 0, ${-Number(target) * 10})`),
+      };
+    } : undefined,
   };
   const doc = {
     nodeType: 9, defaultView: view, hidden: false, listeners: new Map(),
@@ -132,14 +159,30 @@ function setup(value = '12', reducedMotion = false, options = {}) {
   const root = new FakeElement('root');
   root.ownerDocument = doc;
   doc.documentElement.append(root);
-  const { number, canonical } = makeNumber(value, options);
+  const made = makeNumber(value, numberOptions);
+  number = made.number;
+  const { canonical } = made;
   number.ownerDocument = doc;
   root.append(number);
   const update = label => {
     number.setAttribute('data-cui-number-value', label);
     emit(root, [{ type: 'attributes', target: number }]);
   };
-  return { root, number, canonical, doc, media, view, update };
+  return { root, number, canonical, doc, media, view, computedTransforms, flushes, update };
+}
+function hostPatch(x, value, { direction = 'up', motion = 'roll', duration = '320' } = {}) {
+  x.number.id = 'stable-total';
+  const current = new FakeElement('section');
+  current.ownerDocument = x.doc;
+  x.root.replaceChildren(current);
+  current.append(x.number);
+  const incoming = new FakeElement('section');
+  const fresh = makeNumber(value, { direction, motion, duration });
+  fresh.number.id = 'stable-total';
+  incoming.append(fresh.number);
+  current.dispatchEvent({ type: 'cui:before-patch', bubbles: true, detail: { current, incoming } });
+  current.replaceChildren(...incoming.children);
+  return { current, fresh: fresh.number };
 }
 const odometer = number => number.querySelector('.cui-number__odometer');
 const columns = number => number.querySelectorAll('.cui-number__digit');
@@ -319,6 +362,101 @@ test('stable-id before-patch retains the owned node and updates its canonical va
   assert.equal(x.root.listeners.has('cui:before-patch'), true);
   cleanup();
   assert.equal(x.root.listeners.size, 0);
+});
+
+test('a host detach/reinsert resumes compatible strips from their captured visual matrices', async () => {
+  const x = setup('900K'), cleanup = install(x.root);
+  const originalRoot = x.number;
+  const originalOdometer = odometer(x.number);
+  const originalColumns = [...columns(x.number)];
+  const strips = originalColumns.map(column => column.querySelector('.cui-number__strip'));
+  const matrices = strips.map((strip, index) => `matrix(1, 0, 0, 1, 0, ${-23 - index})`);
+  strips.forEach((strip, index) => x.computedTransforms.set(strip, matrices[index]));
+
+  const { current } = hostPatch(x, '975K');
+  assert.equal(current.contains(originalRoot), true);
+  assert.equal(x.number, originalRoot);
+  assert.equal(odometer(x.number), originalOdometer);
+  assert.deepEqual(columns(x.number), originalColumns);
+  assert.equal(x.canonical.textContent, '975K');
+  assert.equal(x.flushes.length, 0, 'handoff waits until the host has replaced its children');
+
+  await Promise.resolve();
+  assert.deepEqual(x.flushes, [{ transforms: matrices, transitionsDisabled: true, connected: true }]);
+  assert.equal(odometer(x.number), originalOdometer);
+  assert.deepEqual(columns(x.number), originalColumns);
+  assert.ok(strips.every(strip => strip.style.getPropertyValue('transform') === ''));
+  assert.ok(strips.every(strip => strip.style.getPropertyValue('transition') === ''));
+  assert.equal(shownLabel(x.number), '975K');
+  cleanup();
+});
+
+test('only the latest of two synchronous host handoffs restores its captured position', async () => {
+  const x = setup('900K'), cleanup = install(x.root);
+  x.number.id = 'stable-total';
+  const strips = columns(x.number).map(column => column.querySelector('.cui-number__strip'));
+  strips.forEach(strip => x.computedTransforms.set(strip, 'matrix(1, 0, 0, 1, 0, -12)'));
+  hostPatch(x, '975K');
+  const latestMatrices = strips.map((_strip, index) => `matrix(1, 0, 0, 1, 0, ${-41 - index})`);
+  strips.forEach((strip, index) => x.computedTransforms.set(strip, latestMatrices[index]));
+  hostPatch(x, '478K');
+
+  await Promise.resolve();
+  assert.deepEqual(x.flushes, [{ transforms: latestMatrices, transitionsDisabled: true, connected: true }]);
+  assert.equal(x.canonical.textContent, '478K');
+  assert.equal(shownLabel(x.number), '478K');
+  cleanup();
+});
+
+test('cleanup, reduced motion and hidden-page snapping invalidate queued host handoffs', async () => {
+  for (const invalidate of ['cleanup', 'reduced', 'hidden', 'direction']) {
+    const x = setup('900K'), cleanup = install(x.root);
+    const oldStrips = columns(x.number).map(column => column.querySelector('.cui-number__strip'));
+    oldStrips.forEach(strip => x.computedTransforms.set(strip, 'matrix(1, 0, 0, 1, 0, -31)'));
+    hostPatch(x, '975K');
+
+    if (invalidate === 'cleanup') cleanup();
+    else if (invalidate === 'direction') hostPatch(x, '478K', { direction: 'down' });
+    else if (invalidate === 'reduced') {
+      x.media.matches = true;
+      for (const listener of x.media.listeners) listener();
+    } else {
+      x.doc.hidden = true;
+      x.doc.listeners.get('visibilitychange')();
+    }
+
+    await Promise.resolve();
+    assert.equal(x.flushes.length, 0, `${invalidate} must cancel the stale callback`);
+    if (invalidate === 'cleanup') assert.equal(odometer(x.number), null);
+    else {
+      assert.ok(oldStrips.every(strip => !strip.isConnected));
+      assert.ok(columns(x.number).every(column => {
+        const strip = column.querySelector('.cui-number__strip');
+        return strip.style.getPropertyValue('transform') === '' && strip.style.getPropertyValue('transition') === '';
+      }));
+    }
+    if (invalidate !== 'cleanup') cleanup();
+  }
+});
+
+test('incompatible patch shapes snap; missing style APIs keep normal updates without a handoff', async () => {
+  const incompatible = setup('900K'), cleanupIncompatible = install(incompatible.root);
+  const priorColumns = [...columns(incompatible.number)];
+  hostPatch(incompatible, '900M');
+  assert.notDeepEqual(columns(incompatible.number), priorColumns);
+  await Promise.resolve();
+  assert.equal(incompatible.flushes.length, 0);
+  cleanupIncompatible();
+
+  const noStyleApi = setup('900K', false, { styleApi: false });
+  const cleanupNoStyleApi = install(noStyleApi.root);
+  const originalColumns = [...columns(noStyleApi.number)];
+  hostPatch(noStyleApi, '975K');
+  await Promise.resolve();
+  assert.deepEqual(columns(noStyleApi.number), originalColumns);
+  assert.equal(noStyleApi.canonical.textContent, '975K');
+  assert.equal(noStyleApi.flushes.length, 0);
+  cleanupNoStyleApi();
 });
 
 test('removing an owned number or exact installer root removes its odometer and releases listeners', () => {
