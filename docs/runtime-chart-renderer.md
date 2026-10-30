@@ -18,7 +18,7 @@ The app owns data, sampling, domains, routes, accepted ranges, commands and dial
 1. Use a Platform host supporting generic presentation ABI 1. Older hosts
    do not admit `ui_scene`; updating the UI dependency does not update the host.
 2. Install the exact reviewed UI release through [`INSTALL.md`](INSTALL.md).
-   Release archives since 0.1.1 include `bin/clanker-ui`, `bin/clanker-chart-worker`,
+   Release archives since 0.1.1, including 0.2.1, include `bin/clanker-ui`, `bin/clanker-chart-worker`,
    the locked package and complete engine/dependency notices. The install and
    verifier never execute the worker. `manifest.json` and release metadata
    identify its ABI, bytes and contracts, not execution authority.
