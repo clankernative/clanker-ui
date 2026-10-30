@@ -5,26 +5,62 @@
 }
 
 .cui-number__canonical,
-.cui-number__roll {
+.cui-number__odometer {
   grid-area: 1 / 1;
 }
 
-.cui-number__roll {
+.cui-number:has(> .cui-number__odometer) > .cui-number__canonical {
+  opacity: 0;
+}
+
+.cui-number__odometer {
   pointer-events: none;
   user-select: none;
 }
 
-.cui-number__column {
-  display: inline-grid;
+.cui-number__digit {
+  position: relative;
+  display: inline-block;
   overflow: hidden;
   vertical-align: baseline;
+  transition: opacity var(--cui-number-duration, 320ms) cubic-bezier(.2,.8,.2,1);
 }
 
-.cui-number__column > span {
-  grid-area: 1 / 1;
+.cui-number__digit-sizer {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.cui-number__strip {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--cui-number-digit) * -10%));
+  transition: transform var(--cui-number-duration, 320ms) cubic-bezier(.2,.8,.2,1);
+}
+
+.cui-number__strip > span {
+  display: block;
+}
+
+@starting-style {
+  .cui-number__digit--entering {
+    opacity: 0;
+  }
+
+  .cui-number__digit--entering .cui-number__strip {
+    transform: translateY(0%);
+  }
+
+  .cui-number[data-cui-number-direction="down"] .cui-number__digit--entering .cui-number__strip {
+    transform: translateY(-90%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cui-number__roll { display: none; }
-  .cui-number__canonical { opacity: 1 !important; }
+  .cui-number__digit,
+  .cui-number__strip {
+    transition: none;
+  }
 }

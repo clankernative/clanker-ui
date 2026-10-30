@@ -1,10 +1,12 @@
 const SELECTOR = '[data-cui-component="number"]';
 const installations = new WeakMap();
 const leases = new WeakMap();
-const MOTION = { maxGlyphs: 64, maxDuration: 1000, easing: 'cubic-bezier(.2,.8,.2,1)' };
+const MOTION = { maxGlyphs: 64, maxDuration: 1000 };
+const DIGIT = /^[0-9]$/;
+const PRINTABLE_ASCII = /^[\x20-\x7e]*$/;
 
-// On update: publish canonical text immediately, roll old/new digit pairs together,
-// then remove the decorative layer. Initial renders and incompatible labels snap.
+// Number text is owned by the canonical span; the odometer is only a CSS-driven
+// visual projection. Existing digit columns are keyed by distance from the right.
 export function install(root = document) {
   const prior = installations.get(root);
   if (prior) return prior;
@@ -13,7 +15,7 @@ export function install(root = document) {
   const reduced = view?.matchMedia?.('(prefers-reduced-motion: reduce)');
   const owner = {};
   const owned = new Set();
-  const active = new Map();
+  const states = new Map();
   let stopped = false;
   const contains = node => node === root || !!root.contains?.(node);
   const elements = scope => [
@@ -21,24 +23,243 @@ export function install(root = document) {
     ...(scope.querySelectorAll?.(SELECTOR) ?? []),
   ];
 
-  function settle(el, label = el.getAttribute('data-cui-number-value')) {
-    const state = active.get(el);
-    if (state) {
-      active.delete(el);
-      for (const animation of state.animations) animation.cancel();
-      state.layer.remove();
-      if (state.canonical.style.opacity === '0') {
-        if (state.opacity) state.canonical.style.opacity = state.opacity;
-        else state.canonical.style.removeProperty('opacity');
+  function directionOf(el) {
+    return el.getAttribute('data-cui-number-direction') || 'up';
+  }
+
+  function durationOf(el) {
+    const raw = el.getAttribute('data-cui-number-duration');
+    const duration = raw == null ? 320 : Number(raw);
+    return Number.isInteger(duration) && duration >= 0 && duration <= MOTION.maxDuration
+      ? duration
+      : null;
+  }
+
+  function parsedLabel(label) {
+    const chars = Array.from(label);
+    const first = chars.findIndex(char => DIGIT.test(char));
+    if (first < 0) return null;
+    let last = chars.length - 1;
+    while (last >= first && !DIGIT.test(chars[last])) last--;
+    const prefix = chars.slice(0, first);
+    const core = chars.slice(first, last + 1);
+    const suffix = chars.slice(last + 1);
+    if (!/^[0-9]+(?:[,. ][0-9]+)*$/.test(core.join(''))) return null;
+    return { prefix, core, suffix, digitCount: core.filter(char => DIGIT.test(char)).length };
+  }
+
+  function separatorsByDigitsRight(parsed) {
+    const separators = new Map();
+    let digitsRight = 0;
+    for (let index = parsed.core.length - 1; index >= 0; index--) {
+      const char = parsed.core[index];
+      if (DIGIT.test(char)) digitsRight++;
+      else separators.set(digitsRight, char);
+    }
+    return separators;
+  }
+
+  function compatibleShapes(before, after) {
+    if (!before || !after || before.prefix.join('') !== after.prefix.join('') ||
+        before.suffix.join('') !== after.suffix.join('')) return false;
+    const left = separatorsByDigitsRight(before);
+    const right = separatorsByDigitsRight(after);
+    const sharedDigits = Math.min(before.digitCount, after.digitCount);
+    // A separator exactly at the edge of the shared digits belongs to an
+    // extra leading group; separators inside the shared part must match.
+    for (let digitsRight = 1; digitsRight < sharedDigits; digitsRight++) {
+      if (left.get(digitsRight) !== right.get(digitsRight)) return false;
+    }
+    return true;
+  }
+
+  function glyphRecords(label, parsed) {
+    if (!parsed) {
+      const chars = Array.from(label);
+      let rank = 0;
+      const records = new Array(chars.length);
+      for (let index = chars.length - 1; index >= 0; index--) {
+        const char = chars[index];
+        if (DIGIT.test(char)) records[index] = { key: `digit:${rank++}`, kind: 'digit', char };
+        else records[index] = { key: `text:${index}`, kind: 'text', char };
+      }
+      return records;
+    }
+
+    const core = new Array(parsed.core.length);
+    let digitsRight = 0;
+    for (let index = parsed.core.length - 1; index >= 0; index--) {
+      const char = parsed.core[index];
+      if (DIGIT.test(char)) {
+        core[index] = { key: `digit:${digitsRight++}`, kind: 'digit', char };
+      } else {
+        core[index] = { key: `separator:${digitsRight}`, kind: 'text', char };
       }
     }
-    const canonical = el.querySelector('.cui-number__canonical');
-    if (canonical && label != null) canonical.textContent = label;
+    return [
+      ...parsed.prefix.map((char, index) => ({ key: `prefix:${index}`, kind: 'text', char })),
+      ...core,
+      ...parsed.suffix.map((char, index) => ({ key: `suffix:${index}`, kind: 'text', char })),
+    ];
+  }
+
+  function digitIndex(char, direction) {
+    const value = Number(char);
+    return direction === 'down' ? 9 - value : value;
+  }
+
+  function configure(odometer, direction, duration) {
+    odometer.style.setProperty('--cui-number-duration', `${duration == null ? 0 : duration}ms`);
+  }
+
+  function makeGlyph(record, direction, entering = false) {
+    const node = doc.createElement('span');
+    if (record.kind === 'digit') {
+      node.className = entering
+        ? 'cui-number__digit cui-number__digit--entering'
+        : 'cui-number__digit';
+      node.style.setProperty('--cui-number-digit', String(entering
+        ? (direction === 'down' ? 9 : 0)
+        : digitIndex(record.char, direction)));
+      const sizer = doc.createElement('span');
+      sizer.className = 'cui-number__digit-sizer';
+      sizer.textContent = '0';
+      const strip = doc.createElement('span');
+      strip.className = 'cui-number__strip';
+      const digits = direction === 'down' ? '9876543210' : '0123456789';
+      for (const char of digits) {
+        const item = doc.createElement('span');
+        item.textContent = char;
+        strip.append(item);
+      }
+      node.append(sizer, strip);
+    } else {
+      node.className = 'cui-number__glyph';
+      node.textContent = record.char;
+    }
+    return node;
+  }
+
+  function makeOdometer(el, label, direction, duration) {
+    const odometer = doc.createElement('span');
+    odometer.className = 'cui-number__odometer';
+    odometer.setAttribute('aria-hidden', 'true');
+    configure(odometer, direction, duration);
+    const records = glyphRecords(label, parsedLabel(label));
+    const glyphs = new Map();
+    for (const record of records) {
+      const node = makeGlyph(record, direction);
+      odometer.append(node);
+      glyphs.set(record.key, { node, record });
+    }
+    const current = el.querySelector('.cui-number__odometer');
+    if (current) current.replaceWith(odometer);
+    else el.append(odometer);
+    return { odometer, glyphs };
+  }
+
+  function removeOdometer(state) {
+    state.odometer?.remove();
+    state.odometer = null;
+    state.glyphs = new Map();
+  }
+
+  function rebuild(el, state, label, direction, duration) {
+    const built = makeOdometer(el, label, direction, duration);
+    state.odometer = built.odometer;
+    state.glyphs = built.glyphs;
+  }
+
+  function updateCompatible(state, label, before, after, direction, duration) {
+    const records = glyphRecords(label, after);
+    const oldDigitCount = before.digitCount;
+    const nextGlyphs = new Map();
+    const ordered = [];
+    for (const record of records) {
+      const previous = state.glyphs.get(record.key);
+      const reusable = previous && previous.record.kind === record.kind &&
+        (record.kind === 'digit' || previous.record.char === record.char);
+      const entering = !reusable && record.kind === 'digit' && Number(record.key.slice(6)) >= oldDigitCount;
+      const node = reusable ? previous.node : makeGlyph(record, direction, entering);
+      ordered.push({ node, record });
+      nextGlyphs.set(record.key, { node, record });
+    }
+
+    const wanted = new Set(ordered.map(item => item.node));
+    for (const node of [...state.odometer.children]) {
+      if (!wanted.has(node)) node.remove();
+    }
+    let reference = null;
+    for (let index = ordered.length - 1; index >= 0; index--) {
+      const node = ordered[index].node;
+      if (node.parentNode !== state.odometer || node.nextSibling !== reference) {
+        state.odometer.insertBefore(node, reference);
+      }
+      reference = node;
+    }
+
+    configure(state.odometer, direction, duration);
+    for (const { node, record } of ordered) {
+      if (record.kind === 'digit') {
+        node.style.setProperty('--cui-number-digit', String(digitIndex(record.char, direction)));
+      }
+    }
+    state.glyphs = nextGlyphs;
+  }
+
+  function update(el) {
+    const state = states.get(el);
+    if (!state || leases.get(el) !== owner) return;
+    const label = el.getAttribute('data-cui-number-value');
+    if (label == null) return;
+
+    const oldLabel = state.label;
+    const oldMotion = state.motion;
+    const oldDirection = state.direction;
+    const motion = el.getAttribute('data-cui-number-motion');
+    const direction = directionOf(el);
+    const duration = durationOf(el);
+    const canonical = state.canonical;
+    canonical.textContent = label;
+    state.label = label;
+    state.motion = motion;
+    state.direction = direction;
+
+    if (motion !== 'roll') {
+      removeOdometer(state);
+      return;
+    }
+
+    if (!state.odometer) {
+      rebuild(el, state, label, direction, duration);
+      return;
+    }
+    if (oldLabel === label && oldMotion === motion && oldDirection === direction) {
+      configure(state.odometer, direction, duration);
+      return;
+    }
+
+    const before = parsedLabel(oldLabel ?? '');
+    const after = parsedLabel(label);
+    const asciiAndBounded = PRINTABLE_ASCII.test(oldLabel ?? '') && PRINTABLE_ASCII.test(label) &&
+      Array.from(oldLabel ?? '').length <= MOTION.maxGlyphs && Array.from(label).length <= MOTION.maxGlyphs;
+    const leftToRight = view?.getComputedStyle?.(el)?.direction !== 'rtl';
+    const canRetarget = oldMotion === 'roll' && oldDirection === direction &&
+      (direction === 'up' || direction === 'down') && duration != null && duration > 0 &&
+      !reduced?.matches && !doc.hidden && el.isConnected !== false && leftToRight &&
+      asciiAndBounded && compatibleShapes(before, after);
+
+    if (canRetarget) updateCompatible(state, label, before, after, direction, duration);
+    else rebuild(el, state, label, direction, duration);
   }
 
   function release(el) {
     if (leases.get(el) !== owner) return;
-    settle(el);
+    const state = states.get(el);
+    if (state) {
+      removeOdometer(state);
+      states.delete(el);
+    }
     leases.delete(el);
     owned.delete(el);
   }
@@ -46,111 +267,32 @@ export function install(root = document) {
   function scan(scope) {
     for (const el of elements(scope)) {
       if (!contains(el) || leases.has(el)) continue;
+      const canonical = el.querySelector('.cui-number__canonical');
+      if (!canonical) continue;
       leases.set(el, owner);
       owned.add(el);
-      settle(el);
+      const label = el.getAttribute('data-cui-number-value') ?? canonical.textContent;
+      const state = {
+        canonical,
+        label,
+        motion: el.getAttribute('data-cui-number-motion'),
+        direction: directionOf(el),
+        odometer: null,
+        glyphs: new Map(),
+      };
+      states.set(el, state);
+      canonical.textContent = label;
+      if (state.motion === 'roll') rebuild(el, state, label, state.direction, durationOf(el));
     }
   }
 
-  function roll(el) {
-    if (stopped || !contains(el) || !el.matches?.(SELECTOR)) return;
-    if (!leases.has(el)) { scan(el); return; }
-    if (leases.get(el) !== owner) return;
-    const label = el.getAttribute('data-cui-number-value');
-    const canonical = el.querySelector('.cui-number__canonical');
-    if (label == null || !canonical) { settle(el); return; }
-    const old = canonical.textContent;
-    settle(el, label);
-    const duration = Number(el.getAttribute('data-cui-number-duration'));
-    if (el.getAttribute('data-cui-number-motion') !== 'roll' || reduced?.matches || doc.hidden ||
-        el.isConnected === false || !Number.isInteger(duration) || duration <= 0 || duration > MOTION.maxDuration ||
-        !view?.Element?.prototype?.animate || !old || old.length > MOTION.maxGlyphs || label.length > MOTION.maxGlyphs ||
-        !/^[\x20-\x7e]*$/.test(old) || !/^[\x20-\x7e]*$/.test(label) ||
-        view?.getComputedStyle?.(el)?.direction === 'rtl') return;
-    if (old.length !== label.length) {
-      if (shapeChangeAllowed(old, label)) transitionWholeLabel(el, old, label, duration);
-      return;
+  function snapAll() {
+    for (const el of owned) {
+      const state = states.get(el);
+      if (!state) continue;
+      if (state.motion === 'roll') rebuild(el, state, state.label, state.direction, durationOf(el));
+      else removeOdometer(state);
     }
-    const changed = [];
-    for (let i = 0; i < label.length; i++) {
-      if (old[i] === label[i]) continue;
-      if (!/^[0-9]$/.test(old[i]) || !/^[0-9]$/.test(label[i])) {
-        if (suffixChangeAllowed(old, label)) transitionWholeLabel(el, old, label, duration);
-        return;
-      }
-      changed.push(i);
-    }
-    if (!changed.length) return;
-
-    const layer = doc.createElement('span');
-    layer.className = 'cui-number__roll';
-    layer.setAttribute('aria-hidden', 'true');
-    const pairs = [];
-    for (let i = 0; i < label.length; i++) {
-      const glyph = doc.createElement('span');
-      if (changed.includes(i)) {
-        glyph.className = 'cui-number__column';
-        const outgoing = doc.createElement('span');
-        const incoming = doc.createElement('span');
-        outgoing.textContent = old[i];
-        incoming.textContent = label[i];
-        glyph.append(outgoing, incoming);
-        pairs.push([outgoing, incoming]);
-      } else glyph.textContent = label[i];
-      layer.append(glyph);
-    }
-    const current = { layer, canonical, opacity: canonical.style.opacity, animations: [] };
-    active.set(el, current);
-    el.append(layer);
-    canonical.style.opacity = '0';
-    const finished = [];
-    try {
-      for (const [outgoing, incoming] of pairs) {
-        const upward = el.getAttribute('data-cui-number-direction') !== 'down';
-        for (const [glyph, from, to] of (upward ? [[outgoing, '0%', '-100%'], [incoming, '100%', '0%']] : [[outgoing, '0%', '100%'], [incoming, '-100%', '0%']])) {
-          const animation = glyph.animate(
-            [{ transform: `translateY(${from})` }, { transform: `translateY(${to})` }],
-            { duration, easing: MOTION.easing, fill: 'both' },
-          );
-          current.animations.push(animation);
-          finished.push(animation.finished.catch(() => undefined));
-        }
-      }
-    } catch { settle(el); return; }
-    Promise.all(finished).then(() => {
-      if (active.get(el) === current) settle(el);
-    });
-  }
-
-  function shapeChangeAllowed(old, label) {
-    return /^[0-9][0-9,. ]*$/.test(old) && /^[0-9][0-9,. ]*$/.test(label);
-  }
-
-  function suffixChangeAllowed(old, label) {
-    const before = old.match(/^([0-9][0-9,. ]*)([A-Za-z]{1,4})$/);
-    const after = label.match(/^([0-9][0-9,. ]*)([A-Za-z]{1,4})$/);
-    return !!before && !!after && before[1].replace(/[0-9]/g, '#') === after[1].replace(/[0-9]/g, '#') && before[2] !== after[2];
-  }
-
-  function transitionWholeLabel(el, old, label, duration) {
-    const canonical = el.querySelector('.cui-number__canonical');
-    if (!canonical) return;
-    const layer = doc.createElement('span');
-    layer.className = 'cui-number__roll cui-number__whole';
-    layer.setAttribute('aria-hidden', 'true');
-    layer.textContent = old;
-    const current = { layer, canonical, opacity: canonical.style.opacity, animations: [] };
-    active.set(el, current);
-    el.append(layer);
-    canonical.style.opacity = '0';
-    try {
-      const outgoing = layer.animate([{ opacity: 1, transform: 'translateY(0%)' }, { opacity: 0, transform: 'translateY(-18%)' }], { duration, easing: MOTION.easing, fill: 'both' });
-      const incoming = canonical.animate([{ opacity: 0, transform: 'translateY(18%)' }, { opacity: 1, transform: 'translateY(0%)' }], { duration, easing: MOTION.easing, fill: 'both' });
-      current.animations.push(outgoing, incoming);
-      Promise.all([outgoing.finished.catch(() => undefined), incoming.finished.catch(() => undefined)]).then(() => {
-        if (active.get(el) === current) settle(el, label);
-      });
-    } catch { settle(el, label); }
   }
 
   function beforePatch(event) {
@@ -165,6 +307,7 @@ export function install(root = document) {
         const value = fresh.getAttribute(name);
         if (value == null) old.removeAttribute(name); else old.setAttribute(name, value);
       }
+      update(old);
       fresh.replaceWith(old);
     }
   }
@@ -174,7 +317,7 @@ export function install(root = document) {
   const Observer = view?.MutationObserver;
   const observer = typeof Observer === 'function' ? new Observer(records => {
     for (const record of records) {
-      if (record.type === 'attributes') roll(record.target);
+      if (record.type === 'attributes') update(record.target);
       else for (const added of record.addedNodes ?? []) scan(added);
     }
     for (const el of owned) if (!contains(el)) release(el);
@@ -187,8 +330,8 @@ export function install(root = document) {
     if (!root.isConnected) cleanup();
   }) : null;
   lifetime?.observe(doc, { childList: true, subtree: true });
-  const onMotion = () => { if (reduced?.matches) for (const el of active.keys()) settle(el); };
-  const onVisibility = () => { if (doc.hidden) for (const el of active.keys()) settle(el); };
+  const onMotion = () => { if (reduced?.matches) snapAll(); };
+  const onVisibility = () => { if (doc.hidden) snapAll(); };
   reduced?.addEventListener?.('change', onMotion);
   doc.addEventListener?.('visibilitychange', onVisibility);
   function cleanup() {
@@ -199,7 +342,7 @@ export function install(root = document) {
     root.removeEventListener?.('cui:before-patch', beforePatch);
     reduced?.removeEventListener?.('change', onMotion);
     doc.removeEventListener?.('visibilitychange', onVisibility);
-    for (const el of owned) release(el);
+    for (const el of [...owned]) release(el);
     installations.delete(root);
   }
   installations.set(root, cleanup);

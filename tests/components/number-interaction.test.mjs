@@ -3,31 +3,64 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { install } from '../../packages/vanilla/components/number/interaction.js';
 
-// Deterministic DOM/WAAPI substitutes; these are not real-browser qualification.
+// Deterministic DOM substitute; CSS transition rendering is qualified separately
+// in the browser harness and is not simulated by these tests.
 class FakeElement {
   constructor(tag = 'span') {
     this.tagName = tag;
     this.attrs = new Map();
     this.children = [];
     this.parent = null;
-    this.style = { opacity: '', removeProperty(key) { this[key] = ''; } };
     this.nodeType = 1;
-    this.animations = [];
     this.listeners = new Map();
+    this._className = '';
+    this.style = {
+      opacity: '',
+      custom: new Map(),
+      setProperty(key, value) { this.custom.set(key, String(value)); },
+      getPropertyValue(key) { return this.custom.get(key) ?? ''; },
+      removeProperty(key) { this.custom.delete(key); this[key] = ''; },
+    };
+  }
+  get className() { return this._className; }
+  set className(value) { this._className = String(value); }
+  get parentNode() { return this.parent; }
+  get nextSibling() {
+    if (!this.parent) return null;
+    const siblings = this.parent.children;
+    return siblings[siblings.indexOf(this) + 1] ?? null;
   }
   matches(selector) {
-    if (selector.startsWith('.')) return (this.className ?? '').split(/\s+/).includes(selector.slice(1));
+    if (selector.startsWith('.')) return this.className.split(/\s+/).includes(selector.slice(1));
     return selector === '[data-cui-component="number"]' && this.getAttribute('data-cui-component') === 'number';
   }
   querySelector(selector) { return this.querySelectorAll(selector)[0] ?? null; }
   querySelectorAll(selector) {
     return this.children.flatMap(child => [...(child.matches(selector) ? [child] : []), ...child.querySelectorAll(selector)]);
   }
-  append(...children) {
-    for (const child of children) { child.remove(); child.parent = this; this.children.push(child); }
+  append(...children) { for (const child of children) this.insertBefore(child, null); }
+  insertBefore(node, reference) {
+    if (node === reference) return node;
+    if (node.parent === this && node.nextSibling === reference) return node;
+    node.remove();
+    const index = reference == null ? this.children.length : this.children.indexOf(reference);
+    if (index < 0) throw new Error('reference node is not a child');
+    node.parent = this;
+    this.children.splice(index, 0, node);
+    return node;
   }
-  replaceChildren(...children) { for (const child of [...this.children]) child.remove(); this.append(...children); }
-  replaceWith(node) { if (!this.parent) return; const parent = this.parent, index = parent.children.indexOf(this); this.remove(); node.remove(); node.parent = parent; parent.children.splice(index, 0, node); }
+  replaceChildren(...children) {
+    for (const child of [...this.children]) child.remove();
+    this.append(...children);
+  }
+  replaceWith(node) {
+    if (!this.parent) return;
+    const parent = this.parent;
+    const index = parent.children.indexOf(this);
+    node.remove();
+    this.remove();
+    parent.insertBefore(node, parent.children[index] ?? null);
+  }
   removeAttribute(key) { this.attrs.delete(key); }
   addEventListener(name, fn) { this.listeners.set(name, fn); }
   removeEventListener(name) { this.listeners.delete(name); }
@@ -45,18 +78,11 @@ class FakeElement {
   getAttribute(key) { return this.attrs.get(key) ?? null; }
   contains(node) { return this === node || this.children.some(child => child.contains(node)); }
   get isConnected() { return this.connected === true || (this.parent?.isConnected ?? false); }
-  animate(keyframes, options) {
-    let resolve, reject;
-    const finished = new Promise((a, b) => { resolve = a; reject = b; });
-    const animation = {
-      keyframes, options, finished, cancelled: false, finish: resolve,
-      cancel() { this.cancelled = true; reject(new Error('animation cancelled')); },
-    };
-    this.animations.push(animation);
-    return animation;
-  }
   get textContent() { return this._text ?? this.children.map(child => child.textContent).join(''); }
-  set textContent(value) { this._text = String(value); this.children = []; }
+  set textContent(value) {
+    for (const child of [...this.children]) child.remove();
+    this._text = String(value);
+  }
 }
 class FakeObserver {
   static instances = [];
@@ -68,11 +94,14 @@ class FakeObserver {
 function emit(root, records) {
   for (const observer of FakeObserver.instances) if (observer.target === root) observer.fire(records);
 }
-function makeNumber(value) {
+function makeNumber(value, { motion = 'roll', duration = '320', direction = 'up' } = {}) {
   const number = new FakeElement();
   for (const [key, val] of Object.entries({
-    'data-cui-component': 'number', 'data-cui-number-motion': 'roll',
-    'data-cui-number-duration': '320', 'data-cui-number-value': value,
+    'data-cui-component': 'number',
+    'data-cui-number-motion': motion,
+    'data-cui-number-duration': duration,
+    'data-cui-number-direction': direction,
+    'data-cui-number-value': value,
   })) number.setAttribute(key, val);
   const canonical = new FakeElement();
   canonical.className = 'cui-number__canonical';
@@ -80,13 +109,18 @@ function makeNumber(value) {
   number.append(canonical);
   return { number, canonical };
 }
-function setup(value = '12', reducedMotion = false) {
+function setup(value = '12', reducedMotion = false, options = {}) {
   const media = {
     matches: reducedMotion, listeners: new Set(),
     addEventListener(_name, fn) { this.listeners.add(fn); },
     removeEventListener(_name, fn) { this.listeners.delete(fn); },
   };
-  const view = { Element: FakeElement, MutationObserver: FakeObserver, matchMedia: () => media };
+  const view = {
+    Element: FakeElement,
+    MutationObserver: FakeObserver,
+    matchMedia: () => media,
+    getComputedStyle: () => ({ direction: 'ltr' }),
+  };
   const doc = {
     nodeType: 9, defaultView: view, hidden: false, listeners: new Map(),
     addEventListener(name, fn) { this.listeners.set(name, fn); },
@@ -98,134 +132,166 @@ function setup(value = '12', reducedMotion = false) {
   const root = new FakeElement('root');
   root.ownerDocument = doc;
   doc.documentElement.append(root);
-  const { number, canonical } = makeNumber(value);
+  const { number, canonical } = makeNumber(value, options);
   number.ownerDocument = doc;
   root.append(number);
   const update = label => {
     number.setAttribute('data-cui-number-value', label);
     emit(root, [{ type: 'attributes', target: number }]);
   };
-  return { root, number, canonical, doc, media, update };
+  return { root, number, canonical, doc, media, view, update };
 }
-const layer = number => number.querySelector('.cui-number__roll');
-const animations = number => layer(number)?.querySelectorAll('.cui-number__column').flatMap(column => column.children.flatMap(glyph => glyph.animations)) ?? [];
-const flush = () => new Promise(setImmediate);
+const odometer = number => number.querySelector('.cui-number__odometer');
+const columns = number => number.querySelectorAll('.cui-number__digit');
+function shownLabel(number) {
+  const direction = number.getAttribute('data-cui-number-direction');
+  return (odometer(number)?.children ?? []).map(node => {
+    if (!node.matches('.cui-number__digit')) return node.textContent;
+    const index = Number(node.style.getPropertyValue('--cui-number-digit'));
+    return String(direction === 'down' ? 9 - index : index);
+  }).join('');
+}
 
-test('first paint is static; changed digits roll old-to-new in clipped pairs without changing canonical meaning', () => {
+
+test('first paint stays static; roll roots acquire one aria-hidden odometer seeded without animation', () => {
   const x = setup('$1,204.50');
+  assert.equal(odometer(x.number), null, 'server markup starts with only canonical text');
   const cleanup = install(x.root);
-  assert.equal(layer(x.number), null);
-  x.update('$1,205.50');
-  assert.equal(x.canonical.textContent, '$1,205.50');
-  assert.equal(x.canonical.getAttribute('aria-hidden'), null);
-  assert.equal(layer(x.number).getAttribute('aria-hidden'), 'true');
-  const columns = layer(x.number).querySelectorAll('.cui-number__column');
-  assert.equal(columns.length, 1);
-  assert.deepEqual(columns[0].children.map(glyph => glyph.textContent), ['4', '5']);
-  const [outgoing, incoming] = animations(x.number);
-  assert.deepEqual(outgoing.keyframes, [{ transform: 'translateY(0%)' }, { transform: 'translateY(-100%)' }]);
-  assert.deepEqual(incoming.keyframes, [{ transform: 'translateY(100%)' }, { transform: 'translateY(0%)' }]);
-  assert.equal(incoming.options.duration, 320);
-  assert.deepEqual(outgoing.options, incoming.options);
+  assert.equal(x.canonical.textContent, '$1,204.50');
+  assert.equal(odometer(x.number).getAttribute('aria-hidden'), 'true');
+  assert.equal(shownLabel(x.number), '$1,204.50');
+  assert.equal(odometer(x.number).style.getPropertyValue('--cui-number-duration'), '320ms');
+  assert.equal(columns(x.number).some(node => node.matches('.cui-number__digit--entering')), false);
+  assert.equal(x.canonical.getAttribute('aria-live'), null);
+  assert.equal(odometer(x.number).getAttribute('aria-live'), null);
   cleanup();
-  assert.equal(layer(x.number), null);
-  assert.equal(x.canonical.style.opacity, '');
+  assert.equal(odometer(x.number), null);
 });
 
-test('completion removes decoration and interruption cannot restore a superseded label', async () => {
-  const x = setup();
-  const cleanup = install(x.root);
+test('roll odometer renders one column per digit and down direction reverses strip orientation', () => {
+  const up = setup('$4,201.8K'), cleanUp = install(up.root);
+  assert.equal(columns(up.number).length, 5);
+  assert.equal(shownLabel(up.number), '$4,201.8K');
+  const upStrip = columns(up.number)[0].querySelector('.cui-number__strip');
+  assert.equal(upStrip.children.map(node => node.textContent).join(''), '0123456789');
+  cleanUp();
+
+  const down = setup('42', false, { direction: 'down' }), cleanDown = install(down.root);
+  assert.equal(columns(down.number)[0].querySelector('.cui-number__strip').children.map(node => node.textContent).join(''), '9876543210');
+  assert.equal(shownLabel(down.number), '42');
+  cleanDown();
+});
+
+test('compatible updates retarget custom properties on the same column nodes', () => {
+  const x = setup('12'), cleanup = install(x.root);
+  const [tens, ones] = columns(x.number);
+  assert.equal(tens.style.getPropertyValue('--cui-number-digit'), '1');
+  assert.equal(ones.style.getPropertyValue('--cui-number-digit'), '2');
   x.update('13');
-  const first = animations(x.number);
-  x.update('14');
-  assert.ok(first.every(animation => animation.cancelled));
-  for (const animation of first) animation.finish();
-  await flush();
-  assert.equal(x.canonical.textContent, '14');
-  assert.equal(x.number.children.length, 2);
-  for (const animation of animations(x.number)) animation.finish();
-  await flush();
-  assert.equal(layer(x.number), null);
-  assert.equal(x.canonical.textContent, '14');
-  assert.equal(x.canonical.style.opacity, '');
+  assert.deepEqual(columns(x.number), [tens, ones]);
+  assert.equal(ones.style.getPropertyValue('--cui-number-digit'), '3');
+  assert.equal(x.canonical.textContent, '13');
+  assert.equal(shownLabel(x.number), '13');
   cleanup();
 });
 
-test('sign, grouping, separators, suffixes, unsupported glyphs, and long labels snap intact', () => {
+test('an update during a CSS transition retargets in place without replacing columns', () => {
+  const x = setup('100,200'), cleanup = install(x.root);
+  const original = [...columns(x.number)];
+  x.update('100,201');
+  const afterFirst = [...columns(x.number)];
+  x.update('100,209');
+  assert.deepEqual(afterFirst, original);
+  assert.deepEqual(columns(x.number), original, 'the interrupted roll retains every column node');
+  assert.equal(x.canonical.textContent, '100,209');
+  assert.equal(shownLabel(x.number), '100,209');
+  cleanup();
+});
+
+test('digit growth and shrink align from the right and keep the ones-place column', () => {
+  const x = setup('99,999'), cleanup = install(x.root);
+  const ones = columns(x.number).at(-1);
+  x.update('100,000');
+  assert.equal(columns(x.number).length, 6);
+  assert.equal(columns(x.number).at(-1), ones);
+  assert.equal(columns(x.number)[0].matches('.cui-number__digit--entering'), true);
+  assert.equal(shownLabel(x.number), '100,000');
+
+  const grouped = setup('999'), cleanGrouped = install(grouped.root);
+  const groupedOnes = columns(grouped.number).at(-1);
+  grouped.update('1,000');
+  assert.equal(columns(grouped.number).at(-1), groupedOnes);
+  assert.equal(shownLabel(grouped.number), '1,000');
+  grouped.update('999');
+  assert.equal(columns(grouped.number).length, 3, 'removed leading columns do not remain stale');
+  assert.equal(columns(grouped.number).at(-1), groupedOnes);
+  assert.equal(shownLabel(grouped.number), '999');
+  cleanup();
+  cleanGrouped();
+});
+
+test('incompatible prefixes, suffixes, separators and glyphs snap without extra label layers', () => {
   for (const [before, after] of [
-    ['-12', '+13'], ['1.2', '1,3'], ['€12', '€13'],
-    ['42', '7'.repeat(65)], ['1'.repeat(65), '2'.repeat(65)], ['12', '12'],
+    ['-12', '+13'], ['$12', '€13'], ['4.2K', '4.3M'], ['1.2', '1,3'],
+    ['12', '١٣'], ['12', '7'.repeat(65)],
   ]) {
     const x = setup(before), cleanup = install(x.root);
+    const previous = odometer(x.number);
     x.update(after);
     assert.equal(x.canonical.textContent, after);
-    assert.equal(layer(x.number), null, `${before} -> ${after} should snap`);
+    assert.notEqual(odometer(x.number), previous, `${before} -> ${after} rebuilds on snap`);
+    assert.equal(x.number.children.length, 2, 'canonical and one odometer are the only layers');
+    assert.equal(shownLabel(x.number), after);
+    assert.equal(odometer(x.number).getAttribute('aria-hidden'), 'true');
+    assert.doesNotMatch(odometer(x.number).className, /roll|whole/);
     cleanup();
   }
 });
 
-test('zero or invalid duration, disabled motion, RTL, absent APIs, and hidden pages stay canonical', () => {
+test('motion none returns to canonical; reduced motion, hidden pages and zero duration snap', () => {
+  const staticNumber = setup('12'), cleanStatic = install(staticNumber.root);
+  staticNumber.number.setAttribute('data-cui-number-motion', 'none');
+  staticNumber.update('13');
+  assert.equal(staticNumber.canonical.textContent, '13');
+  assert.equal(odometer(staticNumber.number), null);
+  cleanStatic();
+
   for (const configure of [
-    ...['0', '-1', '1.5', '1001', 'invalid'].map(value => x => x.number.setAttribute('data-cui-number-duration', value)),
-    x => x.number.setAttribute('data-cui-number-motion', 'none'),
-    x => { x.doc.defaultView.getComputedStyle = () => ({ direction: 'rtl' }); },
-    x => { x.doc.defaultView.Element = class {}; },
+    x => { x.media.matches = true; },
     x => { x.doc.hidden = true; },
+    x => x.number.setAttribute('data-cui-number-duration', '0'),
+    x => x.number.setAttribute('data-cui-number-duration', '1001'),
+    x => { x.view.getComputedStyle = () => ({ direction: 'rtl' }); },
   ]) {
-    const x = setup(), cleanup = install(x.root);
+    const x = setup('12'), cleanup = install(x.root);
+    const previous = columns(x.number)[0];
     configure(x);
     x.update('13');
     assert.equal(x.canonical.textContent, '13');
-    assert.equal(layer(x.number), null);
-    cleanup();
-  }
-});
-
-test('reduced motion and visibility changes cancel active animation immediately', () => {
-  const reduced = setup('12', true), disposeReduced = install(reduced.root);
-  reduced.update('13');
-  assert.equal(layer(reduced.number), null);
-  assert.equal(reduced.canonical.textContent, '13');
-  disposeReduced();
-  for (const reason of ['reduced', 'hidden']) {
-    const x = setup(), cleanup = install(x.root);
-    x.update('13');
-    const running = animations(x.number);
-    if (reason === 'reduced') {
-      x.media.matches = true;
-      for (const listener of x.media.listeners) listener();
-    } else {
-      x.doc.hidden = true;
-      x.doc.listeners.get('visibilitychange')();
+    assert.equal(shownLabel(x.number), '13');
+    assert.equal(columns(x.number)[0] === previous, false, 'ineligible updates rebuild immediately');
+    assert.equal(columns(x.number).some(node => node.matches('.cui-number__digit--entering')), false);
+    if (x.number.getAttribute('data-cui-number-duration') === '0') {
+      assert.equal(odometer(x.number).style.getPropertyValue('--cui-number-duration'), '0ms');
     }
-    assert.ok(running.every(animation => animation.cancelled));
-    assert.equal(layer(x.number), null);
-    assert.equal(x.canonical.textContent, '13');
     cleanup();
   }
 });
 
-test('removing a whole installer root cancels animation and releases observers and listeners', () => {
-  for (const installOnNumber of [false, true]) {
-    const x = setup(), root = installOnNumber ? x.number : x.root;
-    const cleanup = install(root);
-    x.number.setAttribute('data-cui-number-value', '13');
-    emit(root, [{ type: 'attributes', target: x.number }]);
-    const running = animations(x.number);
-    assert.equal(running.length, 2);
-    root.remove();
-    // The removed root receives no child-list notification of its own removal.
-    emit(x.doc, [{ type: 'childList', removedNodes: [root] }]);
-    assert.ok(running.every(animation => animation.cancelled));
-    assert.equal(layer(x.number), null);
-    assert.equal(x.media.listeners.size, 0);
-    assert.equal(x.doc.listeners.size, 0);
-    assert.ok(FakeObserver.instances.filter(observer => observer.target === root).every(observer => observer.disconnected));
-    cleanup();
-  }
+test('canonical text synchronously tracks every accepted value and reduced-motion changes snap current output', () => {
+  const x = setup('12'), cleanup = install(x.root);
+  x.update('13');
+  assert.equal(x.canonical.textContent, '13');
+  x.update('14');
+  assert.equal(x.canonical.textContent, '14');
+  x.media.matches = true;
+  for (const listener of x.media.listeners) listener();
+  assert.equal(x.canonical.textContent, '14');
+  assert.equal(shownLabel(x.number), '14');
+  cleanup();
 });
 
-test('before-patch preserves matching number node identity and animates the accepted value', () => {
+test('stable-id before-patch retains the owned node and updates its canonical value synchronously', () => {
   const x = setup('12'), cleanup = install(x.root);
   const original = x.number;
   original.id = 'stable-total';
@@ -239,123 +305,91 @@ test('before-patch preserves matching number node identity and animates the acce
   fresh.number.setAttribute('data-cui-operation', 'not-admitted');
   fresh.number.setAttribute('data-cui-number-evil', 'not-admitted');
   incomingRegion.append(fresh.number);
+  const oldColumns = [...columns(original)];
   currentRegion.dispatchEvent({ type: 'cui:before-patch', bubbles: true, detail: { current: currentRegion, incoming: incomingRegion } });
   assert.equal(incomingRegion.children[0], original);
-  assert.equal(original.id, 'stable-total');
   assert.equal(original.getAttribute('data-cui-number-value'), '13');
+  assert.equal(x.canonical.textContent, '13', 'canonical is current before the host replaceChildren call');
+  assert.deepEqual(columns(original), oldColumns);
+  assert.equal(shownLabel(original), '13');
   currentRegion.replaceChildren(...incomingRegion.children);
+  emit(x.root, [{ type: 'attributes', target: original }]);
   assert.equal(original.getAttribute('data-cui-operation'), null);
   assert.equal(original.getAttribute('data-cui-number-evil'), null);
-  emit(x.root, [{ type: 'attributes', target: original }]);
-  assert.equal(x.canonical.textContent, '13');
-  assert.equal(animations(original).length, 2);
+  assert.equal(x.root.listeners.has('cui:before-patch'), true);
   cleanup();
   assert.equal(x.root.listeners.size, 0);
 });
 
-test('shape and suffix changes use bounded whole-label transition; direction is explicit', () => {
-  for (const [before, after] of [['999', '1,000'], ['4.2K', '4.3M']]) {
-    const x = setup(before), cleanup = install(x.root);
-    x.update(after);
-    assert.equal(x.canonical.textContent, after);
-    assert.equal(layer(x.number).className, 'cui-number__roll cui-number__whole');
-    assert.equal(layer(x.number).getAttribute('aria-hidden'), 'true');
+test('removing an owned number or exact installer root removes its odometer and releases listeners', () => {
+  for (const installOnNumber of [false, true]) {
+    const x = setup('12');
+    const root = installOnNumber ? x.number : x.root;
+    const cleanup = install(root);
+    assert.ok(odometer(x.number));
+    root.remove();
+    emit(x.doc, [{ type: 'childList', removedNodes: [root] }]);
+    assert.equal(odometer(x.number), null);
+    assert.equal(x.media.listeners.size, 0);
+    assert.equal(x.doc.listeners.size, 0);
+    assert.ok(FakeObserver.instances.filter(observer => observer.target === root).every(observer => observer.disconnected));
     cleanup();
   }
+
   const x = setup('12'), cleanup = install(x.root);
-  x.number.setAttribute('data-cui-number-direction', 'down');
-  x.update('11');
-  assert.deepEqual(animations(x.number).map(a => a.keyframes), [
-    [{ transform: 'translateY(0%)' }, { transform: 'translateY(100%)' }],
-    [{ transform: 'translateY(-100%)' }, { transform: 'translateY(0%)' }],
-  ]);
+  x.number.remove();
+  emit(x.root, [{ type: 'childList', removedNodes: [x.number] }]);
+  assert.equal(odometer(x.number), null, 'detached owned children release their decoration');
   cleanup();
 });
 
-test('same-id replacement acquires its own lifetime and detached children release old decoration', () => {
+test('a replacement number with the same id receives a fresh lease after the old node is removed', () => {
   const x = setup('10'), cleanup = install(x.root);
-  x.number.setAttribute('id', 'same-id');
+  x.number.id = 'same-id';
   x.update('11');
-  const previous = animations(x.number);
+  const previous = x.number;
   const replacement = makeNumber('20');
-  replacement.number.setAttribute('id', 'same-id');
-  replacement.canonical.textContent = 'stale';
-  x.number.remove();
+  replacement.number.id = 'same-id';
+  previous.remove();
   x.root.append(replacement.number);
-  emit(x.root, [{ type: 'childList', removedNodes: [x.number], addedNodes: [replacement.number] }]);
-  assert.ok(previous.every(animation => animation.cancelled));
-  assert.equal(layer(x.number), null);
+  emit(x.root, [{ type: 'childList', removedNodes: [previous], addedNodes: [replacement.number] }]);
+  assert.equal(odometer(previous), null);
   assert.equal(replacement.canonical.textContent, '20');
   replacement.number.setAttribute('data-cui-number-value', '21');
   emit(x.root, [{ type: 'attributes', target: replacement.number }]);
   assert.equal(replacement.canonical.textContent, '21');
-  assert.equal(animations(replacement.number).length, 2);
+  assert.equal(shownLabel(replacement.number), '21');
   cleanup();
 });
 
-test('overlapping installations do not duplicate rolls or dispose another root’s animation', () => {
+test('install is idempotent and overlapping installers preserve lease ownership', () => {
   const x = setup();
-  const disposeInner = install(x.number), disposeOuter = install(x.root);
+  const inner = install(x.number);
+  assert.equal(install(x.number), inner);
+  const outer = install(x.root);
+  const original = [...columns(x.number)];
   x.number.setAttribute('data-cui-number-value', '13');
-  for (const root of [x.number, x.root]) emit(root, [{ type: 'attributes', target: x.number }]);
-  const running = animations(x.number);
-  assert.equal(running.length, 2);
-  disposeOuter();
-  assert.equal(animations(x.number).length, 2);
-  assert.ok(running.every(animation => !animation.cancelled));
-  disposeInner();
-  assert.ok(running.every(animation => animation.cancelled));
-  const cleanup = install(x.root);
-  x.update('14');
-  assert.equal(animations(x.number).length, 2);
-  x.canonical.style.opacity = '.4';
-  cleanup();
-  assert.equal(x.canonical.style.opacity, '.4', 'later application styles are not overwritten');
+  emit(x.number, [{ type: 'attributes', target: x.number }]);
+  emit(x.root, [{ type: 'attributes', target: x.number }]);
+  assert.deepEqual(columns(x.number), original);
+  outer();
+  assert.ok(odometer(x.number), 'the non-owning outer cleanup does not remove the inner lease');
+  inner();
+  assert.equal(odometer(x.number), null);
 });
 
-test('partially failed WAAPI startup cancels created animations without hiding the label', async () => {
-  const x = setup(), create = x.doc.createElement;
-  let calls = 0, first;
-  x.doc.createElement = tag => {
-    const el = create(tag);
-    el.animate = (...args) => {
-      if (++calls === 2) throw new Error('animation unavailable');
-      first = FakeElement.prototype.animate.apply(el, args);
-      return first;
-    };
-    return el;
-  };
-  const cleanup = install(x.root);
-  x.update('13');
-  await flush();
-  assert.equal(first.cancelled, true);
-  assert.equal(layer(x.number), null);
-  assert.equal(x.canonical.style.opacity, '');
-  assert.equal(x.canonical.textContent, '13');
-  cleanup();
-});
-
-test('installer is idempotent, cleans up safely without browser APIs, and can be reinstalled', () => {
-  const doc = { listeners: new Set(), addEventListener(_name, fn) { this.listeners.add(fn); }, removeEventListener(_name, fn) { this.listeners.delete(fn); } };
-  const root = { ownerDocument: doc, querySelectorAll: () => [] };
-  const cleanup = install(root);
-  assert.equal(install(root), cleanup);
-  cleanup(); cleanup();
-  assert.equal(doc.listeners.size, 0);
-  const second = install(root);
-  assert.notEqual(second, cleanup);
-  second();
-});
-
-test('static fallback remains canonical; clipping is declared and browser code owns no transport', async () => {
+test('static fallback and stylesheet keep canonical visible without JavaScript and use CSS only', async () => {
   const directory = new URL('../../packages/vanilla/components/number/', import.meta.url);
   const fixture = JSON.parse(await readFile(new URL('fixtures/static.json', directory), 'utf8'));
   assert.match(fixture.expectedHtml, /data-cui-number-motion="none"/);
   assert.match(fixture.expectedHtml, /class="cui-number__canonical">\$1,204\.50/);
-  assert.doesNotMatch(fixture.expectedHtml, /aria-live|__roll/);
+  assert.doesNotMatch(fixture.expectedHtml, /aria-live|__odometer/);
   const css = await readFile(new URL('styles.css', directory), 'utf8');
-  assert.match(css, /\.cui-number__column\s*\{[^}]*overflow:\s*hidden/);
+  assert.match(css, /:has\(> \.cui-number__odometer\)[\s\S]*?opacity:\s*0/);
+  assert.match(css, /transition:\s*transform var\(--cui-number-duration, 320ms\) cubic-bezier\(\.2,\.8,\.2,1\)/);
+  assert.match(css, /@starting-style/);
   assert.match(css, /prefers-reduced-motion/);
   const source = await readFile(new URL('interaction.js', directory), 'utf8');
+  assert.doesNotMatch(source, /\.animate\s*\(|Animation|transitionWholeLabel|cui-number__roll/);
   assert.doesNotMatch(source, /fetch\s*\(|XMLHttpRequest|WebSocket|data-cui-operation|dispatchEvent/);
 });
