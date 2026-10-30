@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Number host continuity diagnostic</title>
+  <link rel="stylesheet" href="../../../packages/vanilla/components/number/styles.css">
+</head>
+<body>
+  <main id="fixture">
+    <div id="current">
+      <span id="number-total" class="cui-number" data-cui-component="number" data-cui-number-motion="roll" data-cui-number-duration="900" data-cui-number-direction="up" data-cui-number-value="900K">
+        <span class="cui-number__canonical">900K</span>
+      </span>
+    </div>
+    <button id="update" type="button">Update to 975K</button>
+    <button id="retarget" type="button">Retarget to 478K</button>
+  </main>
+  <script type="module">
+    import { install } from '../../../packages/vanilla/components/number/interaction.js';
+
+    const fixture = document.querySelector('#fixture');
+    const current = document.querySelector('#current');
+    const number = document.querySelector('#number-total');
+    const transitions = [];
+    let patches = 0;
+    const record = event => {
+      if (transitions.length >= 24) transitions.shift();
+      transitions.push({
+        type: event.type,
+        property: event.propertyName,
+        connected: event.target.isConnected,
+        transform: getComputedStyle(event.target).transform,
+        patch: patches,
+      });
+    };
+    fixture.addEventListener('transitionrun', record);
+    fixture.addEventListener('transitionend', record);
+    install(fixture);
+
+    document.querySelector('#update').addEventListener('click', () => {
+      number.setAttribute('data-cui-number-value', '975K');
+    });
+    document.querySelector('#retarget').addEventListener('click', () => {
+      const incoming = document.createElement('div');
+      const replacement = document.createElement('span');
+      replacement.id = number.id;
+      replacement.className = number.className;
+      replacement.setAttribute('data-cui-component', 'number');
+      replacement.setAttribute('data-cui-number-motion', 'roll');
+      replacement.setAttribute('data-cui-number-duration', '900');
+      replacement.setAttribute('data-cui-number-direction', 'up');
+      replacement.setAttribute('data-cui-number-value', '478K');
+      const canonical = document.createElement('span');
+      canonical.className = 'cui-number__canonical';
+      canonical.textContent = '478K';
+      replacement.append(canonical);
+      incoming.append(replacement);
+
+      patches++;
+      current.dispatchEvent(new CustomEvent('cui:before-patch', {
+        bubbles: true,
+        detail: { current, incoming },
+      }));
+      current.replaceChildren(...incoming.childNodes);
+    });
+
+    globalThis.numberHostContinuity = Object.freeze({
+      read() {
+        return {
+          patches,
+          value: number.getAttribute('data-cui-number-value'),
+          connected: number.isConnected,
+          visible: !document.hidden && number.getClientRects().length > 0,
+          reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+          matrices: [...number.querySelectorAll('.cui-number__strip')].slice(0, 8).map(strip => ({
+            transform: getComputedStyle(strip).transform,
+            target: strip.parentElement.style.getPropertyValue('--cui-number-digit'),
+          })),
+          transitions: transitions.slice(),
+        };
+      },
+    });
+  </script>
+</body>
+</html>
