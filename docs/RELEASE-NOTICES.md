@@ -64,7 +64,11 @@ in the same closed `legal/NOTICES.txt` and adjacent release notices. Release 0.2
 adds no third-party Rust, JavaScript or font dependency: the `number` contract,
 its installer and the Metric/Form Field changes are project-authored MIT code,
 and the locked dependency graph and Rust 1.98.1 producer toolchain are
-unchanged from 0.1.1, so the reviewed `NOTICES.txt` is carried forward. Each target producer must use this reviewed toolchain inventory or
+unchanged from 0.1.1, so the reviewed `NOTICES.txt` is carried forward. Release
+0.2.1 likewise leaves the locked Rust dependency graph and Rust 1.98.1
+producer toolchain unchanged since 0.2.0; the Number changes are project-authored
+MIT code and add no third-party dependencies, so it carries forward the reviewed
+`NOTICES.txt`. Each target producer must use this reviewed toolchain inventory or
 refresh/review notices for its actual toolchain before distribution.
 
 Geist Sans/Mono remain under SIL OFL-1.1, with the existing Vercel/basement.studio
